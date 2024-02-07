@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function UploadBoard() {
   const [foodName, setFoodName] = useState('');
   const [description, setDescription] = useState('');
   const [ingredients, setIngredients] = useState(['']);
+  const navigate = useNavigate();
 
   const handleIngredientChange = (index, event) => {
     const newIngredients = [...ingredients];
@@ -19,6 +21,11 @@ function UploadBoard() {
     event.preventDefault();
     console.log({ foodName, description, ingredients });
   };
+  
+  const handleCancel = () => {
+    navigate(-1); 
+  };
+
 
   return (
     <div className="max-w-md mx-auto pt-16">
@@ -117,6 +124,7 @@ function UploadBoard() {
         <div className="flex space-x-2">
         <button
             type="button"
+            onClick={handleCancel} 
             className="flex-grow bg-gray-300 rounded-full p-2 hover:bg-gray-400"
           >
             취소
