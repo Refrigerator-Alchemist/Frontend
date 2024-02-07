@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Jua';
+  src: url('./fonts/Jua-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+:root {
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  background-color: #e9e9e9;
+  min-height: 100vh;
+  margin: 0;
+}
+
+body > div {
+  width: 100%;
+  max-width: 32rem;
+  background-color: white;
+  box-shadow: 0 1px 3px 0 rgb(181, 181, 181);
+}
