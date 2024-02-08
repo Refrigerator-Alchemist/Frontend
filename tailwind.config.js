@@ -16,5 +16,24 @@ module.exports = {
       },
     },
   },
-  plugins: [require('tailwindcss-textshadow')],
+  variants: {},
+  plugins: [
+    require('tailwindcss-textshadow'),
+    function ({ addUtilities }) {
+      const newUtilities = {
+        '.selected-icon::after': {
+          content: "''",
+          display: 'inline-block',
+          width: '0',
+          height: '0',
+          borderLeft: '5px solid transparent',
+          borderRight: '5px solid transparent',
+          borderTop: '10px solid #f8bb01',
+          position: 'absolute',
+          bottom: '-10px',
+        },
+      };
+      addUtilities(newUtilities, ['responsive', 'hover']);
+    },
+  ],
 };

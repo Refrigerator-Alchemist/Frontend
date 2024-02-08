@@ -10,7 +10,7 @@ export default function MainPage() {
     <div className="flex flex-col space-y-10">
       <div className="flex flex-col mt-12 justify-center items-center">
         <title className="relative flex flex-col items-center justify-center text-4xl font-bold mb-12">
-          <div className="absolute -mt-3 w-24 h-24 bg-orange-500 rounded-full opacity-50 drop-shadow-xl"></div>
+          <div className="absolute -top-10 -left-10 w-24 h-24 bg-orange-500 rounded-full opacity-50 drop-shadow-xl"></div>
           <div className="relative text-5xl z-10 mb-3 text-shadow-xl">
             What's in your
           </div>
@@ -33,15 +33,18 @@ export default function MainPage() {
           </p>
         </div>
         <Link
-          className="flex items-center text-white text-2xl p-5 font-bold font-jua transition ease-in-out delay-150 rounded-md bg-orange-300 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 ..."
+          className=" text-white text-2xl p-5 font-bold font-jua transition ease-in-out delay-150 rounded-md bg-orange-300 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 ..."
           onClick={() => {
             navigate('/usegpt');
             console.log('이동!');
           }}
         >
-          <span>
-            냉장고 연금술 시작 <FaReact />
-          </span>
+          <div className="flex items-center justify-center space-x-4">
+            <span>냉장고 연금술 시작</span>{' '}
+            <span>
+              <FaReact />
+            </span>
+          </div>
         </Link>
         <div>랭킹컴포넌트 + 클릭시 링크 : Link 안에 Ranking을 넣으면 됨</div>
       </div>
