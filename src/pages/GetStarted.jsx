@@ -12,7 +12,7 @@ export default function GetStarted() {
         <Name />
         <Logo className="mb-4" />
         <Link
-          className="text-white text-2xl p-5 font-bold font-jua transition ease-in-out delay-150 rounded-md bg-orange-300 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 ..."
+          className="text-white text-2xl p-5 font-bold font-jua transition ease-in-out delay-150 rounded-md bg-indigo-500 hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] duration-300 ..."
           onClick={() => {
             navigate('/main');
             console.log('이동!');

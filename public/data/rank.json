@@ -1,0 +1,25 @@
+{
+    "items": [
+        {
+            "rank": 1,
+            "thumbnail": "https://blog.kakaocdn.net/dn/dMg4A1/btqx6ZVdX0n/kKTF0MOw9OQ7Uv3PoTBLwK/img.jpg",
+            "name": "트러플 닭가슴 스테이크",
+            "ingredients": ["갈비살", "양파", "마늘소스"],
+            "likes": 32
+        },
+        {
+            "rank": 2,
+            "thumbnail": "https://mblogthumb-phinf.pstatic.net/MjAyMTAyMTNfMjQx/MDAxNjEzMjIyODg0OTQz.XfsZeLoRx8JFo16a0a9dKj597K4o7q2HVldz0UkIDLUg.ZFNk4ZcOK5CyKiq9y7b9TBjAbF0pN5HNZhLyQV9Cxggg.JPEG.kyakya_4001/SE-6863132b-06d9-41f9-8388-3bf32913c014.jpg?type=w800",
+            "name": "부추매콤라면",
+            "ingredients": ["라면", "부추", "대파"],
+            "likes": 32
+        },
+        {
+            "rank": 3,
+            "thumbnail": "https://img.khan.co.kr/lady/r/1100xX/2023/09/06/news-p.v1.20230906.8f0993f6426340fe90c978fc1352d69e.png",
+            "name": "계란말이김밥",
+            "ingredients": ["계란", "당근", "쪽파", "김"],
+            "likes": 32
+        }
+    ]
+}
