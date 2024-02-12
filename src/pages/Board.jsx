@@ -3,10 +3,12 @@ import searchicon from '../img/search.png'
 import writingicon from '../img/writing.png'
 import heartempty from '../img/heart-empty.jpg'
 import heartfilled from '../img/heart-filled.jpg'
+import { FaArrowLeft, FaHeart, FaRegHeart } from 'react-icons/fa';
 
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-
+import Ranking from '../components/Ranking';
+import Navigation from '../components/Navigation';
 
 const SearchBar = () => {
     return (
@@ -33,28 +35,36 @@ const SearchBar = () => {
     };
 
 
-  const RecipeCard = ({ postid, title, description, img, isLiked }) => {
-    const [liked, setLiked] = useState(isLiked); 
-  
-    const toggleLike = () => {
-      setLiked(!liked);
+    const RecipeCard = ({ postid, title, description, img, isLiked }) => {
+      const [liked, setLiked] = useState(false); 
+    
+      const toggleLike = (event) => {
+        event.stopPropagation(); 
+        setLiked(!liked); 
+      };
+    
+      return (
+        <div className="flex items-center bg-white mx-5 my-2 p-4 rounded-xl shadow">
+          <Link to={`/board/${postid}`} className="flex-grow flex">
+            <div className="flex-none w-20 h-20 rounded-xl border-2 border-gray-300 overflow-hidden">
+              <img className="w-full h-full object-cover" src={img} alt={title} />
+            </div>
+            <div className="px-4">
+              <h3 className="text-lg font-semibold">{title}</h3>
+              <p className="text-gray-500 text-sm">{description}</p>
+            </div>
+          </Link>
+          <button onClick={toggleLike} className="p-2">
+            {liked ? (
+              <FaHeart className="text-red-500 text-2xl" />
+            ) : (
+              <FaRegHeart className="text-2xl" />
+            )}
+          </button>
+        </div>
+      );
     };
-  
-    return (
-      <Link to={`/board/${postid}`} className="flex items-center bg-white mx-5 my-2 p-4 rounded-xl shadow">
-        <div className="flex-none w-20 h-20 rounded-xl border-2 border-gray-300 overflow-hidden">
-          <img className="w-full h-full object-cover" src={img} alt={title} />
-        </div>
-        <div className="flex-grow px-4">
-          <h3 className="text-lg font-semibold">{title}</h3>
-          <p className="text-gray-500 text-sm">{description}</p>
-        </div>
-        <button className="p-2" onClick={toggleLike}>
-          <img src={liked ? heartfilled : heartempty} alt="하트아이콘" className="w-6 h-6" />
-        </button>
-      </Link>
-    );
-  };
+    
   
   
 function Board(){
@@ -90,9 +100,10 @@ function Board(){
     </div>
 
 
-      <div className="my-2">
-        <h2 className="px-6 text-xl font-bold">Ranking</h2>
+      <div className="my-2 ml-6">
+        <h2 className="pl-0 pb-3 px-6 text-xl font-bold">Ranking</h2>
         {/* 랭킹 컴포넌트 */}
+        <Ranking/>
       </div>
 
       <div className="my-2">
@@ -107,6 +118,7 @@ function Board(){
           />
         ))}
       </div>
+      <Navigation />
     </div>
   );
 };
