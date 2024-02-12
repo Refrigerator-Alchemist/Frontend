@@ -12,6 +12,8 @@ import UploadBoard from './pages/UploadBoard';
 import LogIn from './pages/LogIn';
 import SignUp from './pages/SignUp';
 import ResetPassword from './pages/ResetPassword';
+import Mypage from './pages/Mypage';
+import Profile from './pages/Profile';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +29,8 @@ const router = createBrowserRouter([
       { path: '/login', element: <LogIn /> },
       { path: '/login/signup', element: <SignUp /> },
       { path: '/login/resetpw', element: <ResetPassword /> },
+      { path: '/mypage', element: <Mypage /> },
+      { path: '/profile', element: <Profile /> },
     ],
   },
 ]);
