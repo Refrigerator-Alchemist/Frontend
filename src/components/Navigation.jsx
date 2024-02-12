@@ -8,7 +8,7 @@ export default function Navigation() {
   // 게시판, 프로필 페이지 만들어지면 Link 기능 추가하기
   return (
     <footer
-      className="flex justify-center items-center bg-white p-4 rounded-t-3xl"
+      className="flex justify-center items-center bg-white p-4 rounded-t-3xl "
       style={{ boxShadow: '0px -10px 15px rgba(0, 0, 0, 0.1)' }}
     >
       <div
