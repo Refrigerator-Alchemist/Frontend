@@ -5,7 +5,7 @@ export default function Name() {
 
   return (
     <div className=" bg-main flex items-center justify-center">
-      <h1 className="text-6xl text-white font-bold">
+      <h1 className="text-5xl text-white font-bold">
         {letters.map((letter, index) => (
           <span
             key={index}

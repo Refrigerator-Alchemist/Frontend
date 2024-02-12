@@ -2,10 +2,12 @@ import { React, useState } from 'react';
 import { PiCookingPot, PiCookingPotFill } from 'react-icons/pi';
 import { GoHome, GoHomeFill } from 'react-icons/go';
 import { IoAccessibilityOutline, IoAccessibility } from 'react-icons/io5';
+import { useNavigate } from 'react-router-dom';
 
 export default function Navigation() {
   const [selected, setSelected] = useState('home');
-  // 게시판, 프로필 페이지 만들어지면 Link 기능 추가하기
+  const navigate = useNavigate();
+
   return (
     <footer
       className="flex justify-center items-center bg-white p-4 rounded-t-3xl"
@@ -13,7 +15,10 @@ export default function Navigation() {
     >
       <div
         style={{ position: 'relative' }}
-        onClick={() => setSelected('food')}
+        onClick={() => {
+          setSelected('food');
+          // navigate('/board');
+        }}
         className={`mx-12 text-4xl text-main cursor-pointer ${
           selected === 'food' ? 'selected-icon' : ''
         }`}
@@ -22,7 +27,10 @@ export default function Navigation() {
       </div>
       <div
         style={{ position: 'relative' }}
-        onClick={() => setSelected('home')}
+        onClick={() => {
+          setSelected('home');
+          navigate('/main');
+        }}
         className={`mx-12 text-4xl text-main cursor-pointer ${
           selected === 'home' ? 'selected-icon' : ''
         }`}
@@ -31,8 +39,11 @@ export default function Navigation() {
       </div>
       <div
         style={{ position: 'relative' }}
-        onClick={() => setSelected('profile')}
-        className={`mx-12 text-3xl text-main cursor-pointer ${
+        onClick={() => {
+          setSelected('profile');
+          navigate('/');
+        }}
+        className={`mx-12 text-4xl text-main cursor-pointer ${
           selected === 'profile' ? 'selected-icon' : ''
         }`}
       >
