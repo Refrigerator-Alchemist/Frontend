@@ -9,6 +9,10 @@ module.exports = {
 
       fontFamily: {
         jua: ['Jua', 'sans-serif'],
+        dongle: ['Dongle', 'sans-serif'],
+        undong: ['TTHakgyoansimUndongjangL'],
+        score: ['S-CoreDream-3Light'],
+        ansung: ['Ansungtangmyun-Bold'],
       },
 
       dropShadow: {
@@ -19,21 +23,32 @@ module.exports = {
   variants: {},
   plugins: [
     require('tailwindcss-textshadow'),
-    function ({ addUtilities }) {
-      const newUtilities = {
-        '.selected-icon::after': {
-          content: "''",
-          display: 'inline-block',
-          width: '0',
-          height: '0',
-          borderLeft: '5px solid transparent',
-          borderRight: '5px solid transparent',
-          borderTop: '10px solid #f8bb01',
+    function ({ addComponents }) {
+      const newComponents = {
+        '.selected-icon::before': {
+          content: '""',
           position: 'absolute',
-          bottom: '-10px',
+          bottom: '-15px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          borderLeft: '10px solid transparent',
+          borderRight: '10px solid transparent',
+          borderBottom: '10px solid #f8bb01',
+          zIndex: '1',
+        },
+        '.selected-icon::after': {
+          content: '""',
+          position: 'absolute',
+          bottom: '-15px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          borderLeft: '10px solid transparent',
+          borderRight: '10px solid transparent',
+          borderBottom: '10px solid #f8bb01',
+          zIndex: '2',
         },
       };
-      addUtilities(newUtilities, ['responsive', 'hover']);
+      addComponents(newComponents);
     },
   ],
 };

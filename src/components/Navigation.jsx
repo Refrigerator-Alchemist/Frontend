@@ -12,6 +12,7 @@ export default function Navigation() {
       style={{ boxShadow: '0px -10px 15px rgba(0, 0, 0, 0.1)' }}
     >
       <div
+        style={{ position: 'relative' }}
         onClick={() => setSelected('food')}
         className={`mx-12 text-4xl text-main cursor-pointer ${
           selected === 'food' ? 'selected-icon' : ''
@@ -20,6 +21,7 @@ export default function Navigation() {
         {selected === 'food' ? <PiCookingPotFill /> : <PiCookingPot />}
       </div>
       <div
+        style={{ position: 'relative' }}
         onClick={() => setSelected('home')}
         className={`mx-12 text-4xl text-main cursor-pointer ${
           selected === 'home' ? 'selected-icon' : ''
@@ -28,8 +30,9 @@ export default function Navigation() {
         {selected === 'home' ? <GoHomeFill /> : <GoHome />}
       </div>
       <div
+        style={{ position: 'relative' }}
         onClick={() => setSelected('profile')}
-        className={`mx-12 text-4xl text-main cursor-pointer ${
+        className={`mx-12 text-3xl text-main cursor-pointer ${
           selected === 'profile' ? 'selected-icon' : ''
         }`}
       >
