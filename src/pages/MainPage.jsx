@@ -43,7 +43,16 @@ export default function MainPage() {
         {/* // 클릭시 링크 : Link 안에 Ranking을 넣으면 됨 */}
         <Ranking />
       </div>
-      <Navigation />
+      <div
+        style={{
+          position: 'fixed',
+          bottom: '0',
+          width: '100%',
+          maxWidth: '32rem',
+        }}
+      >
+        <Navigation />
+      </div>
     </section>
   );
 }

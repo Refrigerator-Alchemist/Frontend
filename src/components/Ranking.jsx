@@ -6,9 +6,11 @@ function RankingItem({ rank, thumbnail, name, ingredients, likes }) {
   return (
     <li className="mb-4">
       <div className="drop-shadow-lg">
-        <div className="flex items-center space-x-7">
-          <div className="flex items-center">
-            <span className="font-undong">{rank}</span>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-7">
+            <div style={{ width: '30px' }}>
+              <span className="font-undong">{rank}</span>
+            </div>
             <img
               src={thumbnail}
               alt="썸네일"
@@ -16,12 +18,16 @@ function RankingItem({ rank, thumbnail, name, ingredients, likes }) {
               height="40px"
               className={rank === 1 ? 'ml-2' : 'ml-1'}
             />
+            <div className="flex flex-col">
+              <span className="font-score font-semibold">{name}</span>
+              <span className="font-score text-sm">
+                {ingredients.join(', ')}
+              </span>
+            </div>
           </div>
-          <div className="flex flex-col">
-            <span className="font-score font-semibold">{name}</span>
-            <span className="font-score text-sm">{ingredients.join(', ')}</span>
+          <div>
+            <span className="font-ansung text-md font-bold">{likes}❤️</span>
           </div>
-          <span className="font-ansung text-md font-bold">{likes}❤️</span>
         </div>
       </div>
     </li>
@@ -44,13 +50,13 @@ export default function Ranking() {
 
   return (
     <div
-      className="hover:cursor-pointer w-full my-4"
+      className="hover:cursor-pointer w-full px-4 my-4"
       onClick={() => {
         navigate('/board');
       }}
     >
       <div className="flex mb-1 justify-between">
-        <span className="font-undong font-bold">Ranking</span>
+        <span className="font-undong font-bold text-2xl">Ranking</span>
         <span className="font-score text-sm">인기많은 레시피를 볼까요?</span>
       </div>
       <ul>

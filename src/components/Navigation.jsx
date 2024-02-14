@@ -1,11 +1,12 @@
-import { React, useState } from 'react';
+import { React, useContext } from 'react';
 import { PiCookingPot, PiCookingPotFill } from 'react-icons/pi';
 import { GoHome, GoHomeFill } from 'react-icons/go';
 import { IoAccessibilityOutline, IoAccessibility } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
+import { NavigationContext } from '../context/NavigationContext';
 
 export default function Navigation() {
-  const [selected, setSelected] = useState('home');
+  const { selected, setSelected } = useContext(NavigationContext);
   const navigate = useNavigate();
 
   return (
@@ -17,7 +18,7 @@ export default function Navigation() {
         style={{ position: 'relative' }}
         onClick={() => {
           setSelected('food');
-          // navigate('/board');
+          navigate('/board');
         }}
         className={`mx-12 text-4xl text-main cursor-pointer ${
           selected === 'food' ? 'selected-icon' : ''
