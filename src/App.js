@@ -11,11 +11,14 @@
 
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import { NavigationProvider } from '../src/context/NavigationContext';
 
 export default function App() {
   return (
     <div>
-      <Outlet />
+      <NavigationProvider>
+        <Outlet />
+      </NavigationProvider>
     </div>
   );
 }
