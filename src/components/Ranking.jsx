@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 // 랭킹 박스 안 리스트 = 아이템
 function RankingItem({ rank, thumbnail, name, ingredients, likes }) {
   return (
-    <li className="mb-4">
+    <li className="mb-4 mt-2">
       <div className="drop-shadow-lg">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-7">
@@ -55,9 +55,11 @@ export default function Ranking() {
         navigate('/board');
       }}
     >
-      <div className="flex mb-1 justify-between">
+      <div className="flex justify-between">
         <span className="font-undong font-bold text-2xl">Ranking</span>
-        <span className="font-score text-sm">인기많은 레시피를 볼까요?</span>
+        <span className="flex flex-col justify-end font-score text-sm">
+          인기많은 레시피를 볼까요?
+        </span>
       </div>
       <ul>
         {items.map((item) => (
