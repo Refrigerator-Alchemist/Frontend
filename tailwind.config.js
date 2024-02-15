@@ -18,6 +18,11 @@ module.exports = {
       dropShadow: {
         '3xl': '14px 14px 11px -7px rgba(47,49,51,0.75)',
       },
+
+      backgroundImage: (theme) => ({
+        'rainbow-gradient':
+          'linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet)',
+      }),
     },
   },
   variants: {},
