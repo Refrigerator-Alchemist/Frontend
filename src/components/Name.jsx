@@ -9,7 +9,7 @@ export default function Name() {
         {letters.map((letter, index) => (
           <span
             key={index}
-            className={`inline-block animate-bounce delay-${index}00 font-`}
+            className={`inline-block animate-bounce delay-${index}00 font-ansung`}
             style={{ position: 'relative', top: '20px' }}
           >
             {letter}

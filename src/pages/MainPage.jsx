@@ -40,7 +40,6 @@ export default function MainPage() {
             </span>
           </div>
         </div>
-        {/* // 클릭시 링크 : Link 안에 Ranking을 넣으면 됨 */}
         <Ranking />
       </div>
       <div
