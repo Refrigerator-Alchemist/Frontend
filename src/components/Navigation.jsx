@@ -42,7 +42,7 @@ export default function Navigation() {
         style={{ position: 'relative' }}
         onClick={() => {
           setSelected('profile');
-          navigate('/');
+          navigate('/login');
         }}
         className={`mx-12 text-4xl text-main cursor-pointer ${
           selected === 'profile' ? 'selected-icon' : ''

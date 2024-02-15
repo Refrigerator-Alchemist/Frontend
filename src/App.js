@@ -15,10 +15,10 @@ import { NavigationProvider } from '../src/context/NavigationContext';
 
 export default function App() {
   return (
-    <div>
+    <section>
       <NavigationProvider>
         <Outlet />
       </NavigationProvider>
-    </div>
+    </section>
   );
 }
