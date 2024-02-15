@@ -28,7 +28,7 @@ export default function MainPage() {
           <p>먹기 전에 예쁘게 찍어서 자랑하는 걸 깜빡하지 마세요!</p>
         </div>
         <div
-          className=" text-white text-2xl p-5 mb-4 font-bold font-jua transition ease-in-out delay-150 rounded-md bg-main hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] duration-300 ..."
+          className=" text-white text-2xl p-5 mb-4 font-bold font-jua transition ease-in-out delay-150 rounded-md bg-main hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300 ..."
           onClick={() => {
             navigate('/usegpt');
           }}
