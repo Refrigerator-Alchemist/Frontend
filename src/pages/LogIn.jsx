@@ -12,17 +12,21 @@ export default function LogIn() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // API 통신 코드
+    // 이메일, 비밀번호 서버로 전송
   };
 
+  // 이메일에 @ 미포함시 재입력 하라는 문구가 인풋 아래에 뜨도록 after 속성 추가
+  // 그리고 value 초기화
+  // 로그인, 회원가입, 비밀번호 재설정에 모두 필요하므로 따로 모듈화 하기!
+
   // 로그인 실패 함수
-  // 로그인 버튼을 눌렀을 때 서버에서 다시 받아오는 데이터 중 '없는 이메일' 혹은 '비밀번호 틀림'이면
+  // 로그인 버튼을 눌렀을 때 서버로 요청해서 돌아오는 response를 받아와 '없는 이메일' '비밀번호 틀림'
   // alert로 띄워서 다시 로그인 하도록 만들어야 함
 
   const navigate = useNavigate();
 
   return (
-    <section className="flex flex-col items-center justify-between p-10 min-h-screen relative font-score">
+    <section className="relative flex flex-col items-center justify-between font-score p-8 min-h-screen">
       <div
         className="absolute top-5 left-5 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
         onClick={() => navigate('/main')}
@@ -43,7 +47,7 @@ export default function LogIn() {
               type="email"
               value={email}
               onChange={handleEmailChange}
-              className="w-full px-3 py-2 mt-1 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-3 mt-1 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="E-mail"
             />
           </div>
@@ -53,7 +57,7 @@ export default function LogIn() {
               type="password"
               value={password}
               onChange={handlePasswordChange}
-              className="w-full px-3 py-2 mt-1 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-3 mt-1 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="PW"
             />
           </div>
@@ -61,7 +65,7 @@ export default function LogIn() {
             onClick={() => navigate('/login/resetpw')}
             className="flex justify-end underline font-bold hover:cursor-pointer mb-4 "
           >
-            비밀번호 찾기
+            비밀번호 재설정
           </p>
           <button
             onClick={handleSubmit}

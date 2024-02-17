@@ -42,26 +42,33 @@ export default function ResetPassword() {
 
   const navigate = useNavigate();
 
+  // 이메일에 @ 미포함시 재입력 하라는 문구가 인풋 아래에 뜨도록 after 속성 추가
+  // 그리고 value 초기화
+  // 로그인, 회원가입, 비밀번호 재설정에 모두 필요하므로 따로 모듈화 하기!
+
+  // 비밀번호 재확인 함수 만들기
+  // 완료 버튼 위 인풋
+
   return (
     <section className="flex flex-col justify-center items-center min-h-screen px-10 relative">
       <div
         className="absolute top-5 left-5 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate(-1)}
+        onClick={() => navigate('/login')}
       >
         <FaArrowLeft />
       </div>
 
       <header className="flex flex-col items-center">
-        <h1 className="font-score text-3xl">비밀번호 재설정</h1>
+        <h1 className="font-score font-extrabold text-3xl">비밀번호 재설정</h1>
         <p className="font-score text-md text-gray-400 mt-2">
-          사용하시는 계정의 이메일을 입력해주세요
+          재설정할 계정의 이메일과 필수정보를 입력하세요
         </p>
       </header>
 
       <main className="mt-10">
         <form>
           <label className="mb-4 text-lg font-bold font-undong text-center ">
-            이메일 입력
+            이메일
           </label>
           <div className="flex">
             <input
@@ -77,7 +84,7 @@ export default function ResetPassword() {
 
         <form className="mt-6">
           <label className="mb-4 text-lg font-bold font-undong text-center">
-            인증번호 입력
+            인증번호
           </label>
           <div className="flex items-center">
             <inputs className="flex max-w-xs mt-2">
@@ -122,7 +129,7 @@ export default function ResetPassword() {
       <footer className="flex flex-col mt-16 w-full p-3">
         <form>
           <label className="mb-4 text-lg font-bold font-undong text-center">
-            새로운 비밀번호 입력
+            새로운 비밀번호
           </label>
           <div className="flex flex-col">
             <div className="flex">

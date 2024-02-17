@@ -1,17 +1,204 @@
-import React from 'react';
+import React, { useState } from 'react';
+import {
+  GoCheckCircle,
+  GoCheckCircleFill,
+  GoEye,
+  GoEyeClosed,
+} from 'react-icons/go';
+import { FaArrowLeft } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignUp() {
+  const [code, setCode] = useState(Array(6).fill(''));
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleChange = (element, index) => {
+    if (element.target.value) {
+      setCode([
+        ...code.slice(0, index),
+        element.target.value,
+        ...code.slice(index + 1),
+      ]);
+
+      if (index < 5) {
+        document.getElementById(`input${index + 1}`).focus();
+      }
+    }
+  };
+
+  const isPasswordValid = (password) => {
+    return (
+      /\d/.test(password) &&
+      /[ `!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/.test(password) &&
+      /[a-zA-Z]/.test(password)
+    );
+  };
+
+  const toggleShowPassword = (e) => {
+    e.preventDefault();
+    setShowPassword(!showPassword);
+  };
+
+  // 이메일에 @ 미포함시 재입력 하라는 문구가 인풋 아래에 뜨도록 after 속성 추가
+  // 그리고 value 초기화
+  // 로그인, 회원가입, 비밀번호 재설정에 모두 필요하므로 따로 모듈화 하기!
+
+  // 닉네임 중복 확인 함수 만들기
+  // 서버에서 사용되고 있는 닉네임이 있는지 조회해야함
+
+  // 비밀번호 재확인 함수 만들기
+  // 완료 버튼 위 인풋
+
+  const navigate = useNavigate();
+
   return (
-    <div>
-      <h1>새로운 가입</h1>
-      <h2>필수 정보를 입력해야 합니다</h2>
-      <input placeholder="이메일을 입력하세요" />
-      <input placeholder="비밀번호를 입력하세요" />
-      <span>비밀번호 설정 시 주의!</span>
-      <p>영문, 숫자, 특수문자를 최소 1자씩 사용</p>
-      <p>전체 글자 수가 최소 8자 이상</p>
-      <span>인증번호 입력</span>
-      <span>입력한 이메일에 발송된 인증번호를 입력해주세요.</span>
-    </div>
+    <section className="flex flex-col justify-center items-center min-h-screen px-10 relative">
+      <div
+        className="absolute top-5 left-5 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
+        onClick={() => navigate('/login')}
+      >
+        <FaArrowLeft />
+      </div>
+
+      <header className="flex flex-col items-center">
+        <h1 className="font-score font-extrabold text-3xl">신규 회원가입</h1>
+        <p className="font-score text-md text-gray-400 mt-2">
+          회원가입에 사용할 이메일과 필수 정보를 입력하세요
+        </p>
+      </header>
+
+      <main className="mt-10">
+        <form>
+          <label className="mb-4 text-md font-bold font-undong text-center ">
+            이메일 입력
+          </label>
+          <div className="flex">
+            <input
+              type="email"
+              className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="E-mail"
+            />
+            <button className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300">
+              인증번호 발송
+            </button>
+          </div>
+        </form>
+
+        <form className="mt-6">
+          <label className="mb-4 text-md font-bold font-undong text-center">
+            인증번호 입력
+          </label>
+          <div className="flex items-center">
+            <inputs className="flex max-w-xs mt-2">
+              {Array(6)
+                .fill('')
+                .map((_, index) => (
+                  <input
+                    key={index}
+                    id={`input${index}`}
+                    value={code[index]}
+                    type="tel"
+                    maxLength="1"
+                    placeholder="?"
+                    onChange={(e) => {
+                      if (
+                        e.target.value === '' ||
+                        (e.target.value.length === 1 && !isNaN(e.target.value))
+                      ) {
+                        handleChange(e, index);
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Backspace' || e.key === 'Delete') {
+                        setCode([
+                          ...code.slice(0, index),
+                          '',
+                          ...code.slice(index + 1),
+                        ]);
+                      }
+                    }}
+                    className="w-10 h-12 mx-1 text-center border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  />
+                ))}
+            </inputs>
+            <button className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300">
+              인증하기
+            </button>
+          </div>
+        </form>
+      </main>
+
+      <footer className="flex flex-col mt-6 w-full p-3">
+        <form>
+          <label className="mb-4 text-md font-bold font-undong text-center">
+            이름
+          </label>
+          <div className="flex">
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="닉네임 입력(최소 3자 이상)"
+              className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+            <button className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300">
+              중복 확인
+            </button>
+          </div>
+
+          <label className="mb-4 text-md font-bold font-undong text-center">
+            비밀번호 입력
+          </label>
+          <div className="flex flex-col">
+            <div className="flex">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="New PW"
+                className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+              <button
+                onClick={toggleShowPassword}
+                className="inline-block whitespace-nowrap h-12 ml-5 mt-2 rounded-xl font-score text-md"
+              >
+                {showPassword ? <GoEye /> : <GoEyeClosed />}
+              </button>
+            </div>
+            <ul className="mt-4 font-score">
+              <li className="mb-2 flex items-center">
+                <span role="img" aria-label="check" className="flex">
+                  {password.length >= 8 ? (
+                    <GoCheckCircleFill className="text-emerald" />
+                  ) : (
+                    <GoCheckCircle className="text-emerald" />
+                  )}
+                </span>{' '}
+                <span className="ml-3">
+                  최소 8자 이상의 비밀번호를 입력해주세요
+                </span>
+              </li>
+              <li className="mb-2 flex items-center">
+                <span role="img" aria-label="check" className="flex">
+                  {isPasswordValid(password) ? (
+                    <GoCheckCircleFill className="text-emerald" />
+                  ) : (
+                    <GoCheckCircle className="text-emerald" />
+                  )}
+                </span>{' '}
+                <span className="ml-3">
+                  영문, 숫자, 특수문자 각각 1자 이상을 포함해주세요
+                </span>
+              </li>
+            </ul>
+            <button className=" p-5 mx-40 mt-3 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300">
+              완료
+            </button>
+          </div>
+        </form>
+      </footer>
+    </section>
   );
 }
