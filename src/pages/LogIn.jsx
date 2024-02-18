@@ -5,19 +5,29 @@ import { FaArrowLeft } from 'react-icons/fa';
 
 export default function LogIn() {
   const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleEmailChange = (e) => setEmail(e.target.value);
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
   const handlePasswordChange = (e) => setPassword(e.target.value);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // 이메일, 비밀번호 서버로 전송
-  };
+    const pattern =
+      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
 
-  // 이메일에 @ 미포함시 재입력 하라는 문구가 인풋 아래에 뜨도록 after 속성 추가
-  // 그리고 value 초기화
-  // 로그인, 회원가입, 비밀번호 재설정에 모두 필요하므로 따로 모듈화 하기!
+    if (!pattern.test(email)) {
+      setEmailError('이메일 형식이 올바르지 않습니다.');
+      setEmail('');
+    } else {
+      setEmailError('');
+      console.log('로그인 성공');
+      // 데이터 전송 함수
+    }
+  };
 
   // 로그인 실패 함수
   // 로그인 버튼을 눌렀을 때 서버로 요청해서 돌아오는 response를 받아와 '없는 이메일' '비밀번호 틀림'
@@ -50,6 +60,13 @@ export default function LogIn() {
               className="w-full px-4 py-3 mt-1 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="E-mail"
             />
+            <p
+              className={`text-red-500 text-sm pl-3 mt-1 ${
+                emailError ? 'visible' : 'invisible'
+              }`}
+            >
+              {emailError || 'empty'}
+            </p>
           </div>
           <div className="mb-1">
             <label className="block text-gray-700 ml-3">비밀번호</label>
