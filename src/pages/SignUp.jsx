@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   GoCheckCircle,
   GoCheckCircleFill,
@@ -11,12 +11,16 @@ import { useNavigate } from 'react-router-dom';
 export default function SignUp() {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
-  const [code, setCode] = useState(Array(6).fill(''));
+  const [serverCode, setServerCode] = useState(null);
+  const [code, setCode] = useState(Array(4).fill(''));
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const [checkPassword, setCheckPassword] = useState('');
+  const [passwordMessage, setPasswordMessage] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleChange = (element, index) => {
+  // 인증번호 입력
+  const handleCodeChange = (element, index) => {
     if (element.target.value) {
       setCode([
         ...code.slice(0, index),
@@ -24,16 +28,30 @@ export default function SignUp() {
         ...code.slice(index + 1),
       ]);
 
-      if (index < 5) {
+      if (index < 3) {
         document.getElementById(`input${index + 1}`).focus();
       }
     }
   };
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
+  // 이메일 입력 값 저장
+  const handleEmailChange = (e) => setEmail(e.target.value);
+
+  // 이메일 유효성 검사
+  const isEmailVaild = (e) => {
+    e.preventDefault();
+    const pattern =
+      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+
+    if (!pattern.test(email)) {
+      setEmailError('이메일 형식이 올바르지 않습니다');
+      setEmail('');
+    } else {
+      setEmailError('');
+    }
   };
 
+  // 비밀번호 유효성 검사
   const isPasswordValid = (password) => {
     return (
       /\d/.test(password) &&
@@ -42,31 +60,38 @@ export default function SignUp() {
     );
   };
 
-  const isEmailVaild = (e) => {
-    e.preventDefault();
-    const pattern =
-      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
-
-    if (!pattern.test(email)) {
-      setEmailError('이메일 형식이 올바르지 않습니다.');
-      setEmail('');
+  // 비밀번호 재확인 함수 만들기 : 완료 버튼 위 인풋
+  const isSamePassword = () => {
+    if (password !== checkPassword) {
+      setPasswordMessage(false);
     } else {
-      setEmailError('');
+      setPasswordMessage(true);
     }
   };
 
+  useEffect(() => {
+    isSamePassword();
+  }, [checkPassword]);
+
+  // 서버에서 발송한 인증번호와 비교하는 함수: 인증번호 인풋 아래에 오입력시 안내 문구 추가
+  const isCodeVaild = () => {
+    const userCode = code.join('');
+
+    if (userCode !== serverCode) {
+      setCode('');
+      console.log('코드가 일치하지 않습니다');
+    } else {
+      console.log('코드가 일치합니다');
+    }
+  };
+
+  // 비밀번호 보기
   const toggleShowPassword = (e) => {
     e.preventDefault();
     setShowPassword(!showPassword);
   };
 
-  // 인증번호 일치여부 확인
-
-  // 닉네임 중복 확인 함수 만들기
-  // 서버에서 사용되고 있는 닉네임이 있는지 조회해야함
-
-  // 비밀번호 재확인 함수 만들기
-  // 완료 버튼 위 인풋
+  // 닉네임 중복 확인 함수 만들기 : 서버에서 사용되고 있는 닉네임이 있는지 조회
 
   const navigate = useNavigate();
 
@@ -79,14 +104,14 @@ export default function SignUp() {
         <FaArrowLeft />
       </div>
 
-      <header className="flex flex-col items-center">
+      <header className="flex flex-col items-center mt-10">
         <h1 className="font-score font-extrabold text-3xl">신규 회원가입</h1>
         <p className="font-score text-md text-gray-400 mt-2">
           회원가입에 사용할 이메일과 필수 정보를 입력하세요
         </p>
       </header>
 
-      <main className="mt-10">
+      <main className="mt-10 w-full px-2">
         <form>
           <label className="mb-4 text-md font-bold font-undong text-center ">
             이메일 입력
@@ -116,12 +141,12 @@ export default function SignUp() {
         </form>
 
         <form className="mt-6">
-          <label className="mb-4 text-md font-bold font-undong text-center">
+          <label className="mb-4 font-bold font-undong text-center text-md">
             인증번호 입력
           </label>
-          <div className="flex items-center">
+          <div className="flex items-center justify-between">
             <inputs className="flex max-w-xs mt-2">
-              {Array(6)
+              {Array(4)
                 .fill('')
                 .map((_, index) => (
                   <input
@@ -136,7 +161,7 @@ export default function SignUp() {
                         e.target.value === '' ||
                         (e.target.value.length === 1 && !isNaN(e.target.value))
                       ) {
-                        handleChange(e, index);
+                        handleCodeChange(e, index);
                       }
                     }}
                     onKeyDown={(e) => {
@@ -164,7 +189,7 @@ export default function SignUp() {
           <label className="mb-4 text-md font-bold font-undong text-center">
             이름
           </label>
-          <div className="flex">
+          <div className="flex mb-6">
             <input
               type="text"
               value={name}
@@ -196,7 +221,7 @@ export default function SignUp() {
                 {showPassword ? <GoEye /> : <GoEyeClosed />}
               </button>
             </div>
-            <ul className="mt-4 font-score">
+            <ul className="mt-4 mb-4 font-score">
               <li className="mb-2 flex items-center">
                 <span role="img" aria-label="check" className="flex">
                   {password.length >= 8 ? (
@@ -222,6 +247,33 @@ export default function SignUp() {
                 </span>
               </li>
             </ul>
+
+            <label className="flex mb-4 text-md font-bold font-undong text-center">
+              비밀번호 확인
+            </label>
+            <div className="flex">
+              <input
+                type="password"
+                value={checkPassword}
+                onChange={(e) => {
+                  setCheckPassword(e.target.value);
+                  isSamePassword();
+                }}
+                placeholder="한 번 더 입력하세요"
+                className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+            {passwordMessage !== null && (
+              <p
+                className={`text-sm pl-3 mt-1 ${
+                  passwordMessage ? 'text-green-500' : 'text-red-500'
+                }`}
+              >
+                {passwordMessage
+                  ? '비밀번호가 일치합니다'
+                  : '비밀번호가 일치하지 않습니다'}
+              </p>
+            )}
             <button className=" p-5 mx-40 mt-3 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300">
               완료
             </button>

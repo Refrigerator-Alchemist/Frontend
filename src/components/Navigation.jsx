@@ -9,6 +9,8 @@ export default function Navigation() {
   const { selected, setSelected } = useContext(NavigationContext);
   const navigate = useNavigate();
 
+  // 로그인 상태라면 profile을 누르면 /profile로 가야 함
+
   return (
     <footer
       className="flex justify-center items-center bg-white p-4 rounded-t-3xl "
