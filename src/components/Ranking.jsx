@@ -4,32 +4,29 @@ import { useNavigate } from 'react-router-dom';
 // 랭킹 박스 안 리스트 = 아이템
 function RankingItem({ rank, thumbnail, name, ingredients, likes }) {
   return (
-    <li className="mb-4 mt-2">
-      <div className="drop-shadow-lg">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-7">
-            <div style={{ width: '30px' }}>
-              <span className="font-undong">{rank}</span>
-            </div>
-            <img
-              src={thumbnail}
-              alt="썸네일"
-              width="60px"
-              height="40px"
-              className={rank === 1 ? 'ml-2' : 'ml-1'}
-            />
-            <div className="flex flex-col">
-              <span className="font-score font-semibold">{name}</span>
-              <span className="font-score text-sm">
-                {ingredients.join(', ')}
-              </span>
-            </div>
-          </div>
-          <div>
-            <span className="font-ansung text-md font-bold">{likes}❤️</span>
-          </div>
+    <li className="mb-4 mt-2 px-3">
+      <figure className="flex items-center justify-between drop-shadow-xl">
+        <div className="flex items-center justify-center space-x-10">
+          <rank style={{ width: '30px' }}>
+            <span className="font-undong">{rank}</span>
+          </rank>
+          <img
+            src={thumbnail}
+            alt="썸네일"
+            width="60px"
+            height="40px"
+            className="ml-1"
+          />
+          <name className="flex flex-col">
+            <span className="font-score font-semibold">{name}</span>
+            <span className="font-score text-sm">{ingredients.join(', ')}</span>
+          </name>
         </div>
-      </div>
+
+        <likes>
+          <span className="font-ansung text-md font-bold ml-5">{likes}❤️</span>
+        </likes>
+      </figure>
     </li>
   );
 }
@@ -49,8 +46,8 @@ export default function Ranking() {
   }, []);
 
   return (
-    <div
-      className="hover:cursor-pointer w-full px-4 my-4"
+    <article
+      className="hover:cursor-pointer w-full my-4 px-3"
       onClick={() => {
         navigate('/board');
       }}
@@ -61,11 +58,12 @@ export default function Ranking() {
           인기많은 레시피를 볼까요?
         </span>
       </div>
+
       <ul>
         {items.map((item) => (
           <RankingItem key={item.rank} {...item} />
         ))}
       </ul>
-    </div>
+    </article>
   );
 }
