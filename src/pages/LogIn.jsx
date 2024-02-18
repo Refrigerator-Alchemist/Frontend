@@ -2,31 +2,37 @@ import React, { useState } from 'react';
 import Logo from '../components/Logo';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
+import { GoEye, GoEyeClosed } from 'react-icons/go';
 
 export default function LogIn() {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
+  const handleEmailChange = (e) => setEmail(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
 
+  // 로그인 데이터 전송
   const handleSubmit = (e) => {
     e.preventDefault();
     const pattern =
       /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
 
     if (!pattern.test(email)) {
-      setEmailError('이메일 형식이 올바르지 않습니다.');
+      setEmailError('이메일 형식이 올바르지 않습니다');
       setEmail('');
     } else {
       setEmailError('');
       console.log('로그인 성공');
-      // 데이터 전송 함수
+      // 이메일과 비밀번호 정보를 JSON으로 변환하는 함수
     }
+  };
+
+  // 비밀번호 보기
+  const toggleShowPassword = (e) => {
+    e.preventDefault();
+    setShowPassword(!showPassword);
   };
 
   // 로그인 실패 함수
@@ -70,13 +76,21 @@ export default function LogIn() {
           </div>
           <div className="mb-1">
             <label className="block text-gray-700 ml-3">비밀번호</label>
-            <input
-              type="password"
-              value={password}
-              onChange={handlePasswordChange}
-              className="w-full px-4 py-3 mt-1 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              placeholder="PW"
-            />
+            <div className="flex">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={handlePasswordChange}
+                className="w-full px-4 py-3 mt-1 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                placeholder="PW"
+              />
+              <button
+                onClick={toggleShowPassword}
+                className="inline-block whitespace-nowrap h-12 ml-5 mt-2 rounded-xl font-score text-md"
+              >
+                {showPassword ? <GoEye /> : <GoEyeClosed />}
+              </button>
+            </div>
           </div>
           <p
             onClick={() => navigate('/login/resetpw')}
