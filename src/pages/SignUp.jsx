@@ -9,6 +9,8 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 export default function SignUp() {
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [code, setCode] = useState(Array(6).fill(''));
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
@@ -28,6 +30,10 @@ export default function SignUp() {
     }
   };
 
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
   const isPasswordValid = (password) => {
     return (
       /\d/.test(password) &&
@@ -36,14 +42,25 @@ export default function SignUp() {
     );
   };
 
+  const isEmailVaild = (e) => {
+    e.preventDefault();
+    const pattern =
+      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+
+    if (!pattern.test(email)) {
+      setEmailError('이메일 형식이 올바르지 않습니다.');
+      setEmail('');
+    } else {
+      setEmailError('');
+    }
+  };
+
   const toggleShowPassword = (e) => {
     e.preventDefault();
     setShowPassword(!showPassword);
   };
 
-  // 이메일에 @ 미포함시 재입력 하라는 문구가 인풋 아래에 뜨도록 after 속성 추가
-  // 그리고 value 초기화
-  // 로그인, 회원가입, 비밀번호 재설정에 모두 필요하므로 따로 모듈화 하기!
+  // 인증번호 일치여부 확인
 
   // 닉네임 중복 확인 함수 만들기
   // 서버에서 사용되고 있는 닉네임이 있는지 조회해야함
@@ -77,13 +94,25 @@ export default function SignUp() {
           <div className="flex">
             <input
               type="email"
+              value={email}
+              onChange={handleEmailChange}
               className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="E-mail"
             />
-            <button className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300">
+            <button
+              onClick={isEmailVaild}
+              className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
+            >
               인증번호 발송
             </button>
           </div>
+          <p
+            className={`text-red-500 text-sm pl-3 mt-1 ${
+              emailError ? 'visible' : 'invisible'
+            }`}
+          >
+            {emailError || 'empty'}
+          </p>
         </form>
 
         <form className="mt-6">
