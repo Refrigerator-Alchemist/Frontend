@@ -5,11 +5,11 @@ export default function Name() {
 
   return (
     <div className=" bg-main flex items-center justify-center">
-      <h1 className="text-5xl text-white font-bold">
+      <h1 className="text-6xl text-white font-bold">
         {letters.map((letter, index) => (
           <span
             key={index}
-            className={`inline-block animate-bounce delay-${index}00 font-ansung`}
+            className={`inline-block animate-bounce delay-${index}00 font-jua`}
             style={{ position: 'relative', top: '20px' }}
           >
             {letter}
