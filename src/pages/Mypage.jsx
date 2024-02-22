@@ -47,12 +47,14 @@ const RecipeCard = ({ postid, title, description, img, isLiked }) => {
 
   
     return (
-      <div className="bg-white h-auto text-black w-full">
-        <div
-          className="absolute top-5 left-5 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-          onClick={() => navigate('/board')}
-        >
-          <FaArrowLeft />
+      <div className="bg-white h-auto text-black ml-6 mr-6">
+        <div className="flex items-center">
+          <div
+            className="absolute top-5 left-45 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
+            onClick={() => navigate("/board")}
+          >
+            <FaArrowLeft />
+          </div>
         </div>
   
         <div className="flex bg-white mx-2 my-2 p-4 rounded-xl shadow">
@@ -117,15 +119,19 @@ function MyPage(){
     
   ];
 
+ 
   return (
-    <div className="Board">
-      <div className="flex flex-col items-center">
+    <div className="Board flex items-center justify-center ">
+      
+      <div className="flex flex-col items-center  overflow-hidden">
+        
         <div className="bg-gray-300 rounded-full h-40 w-40 mt-20"></div>
-        <h1 className="mt-5 text-xl font-semibold">user1</h1>
+      
+        <h1 className="mt-5 text-xl font-semibold text-center">user1</h1>
         <p className="mt-4 pb-12 px-6 text-center">한줄 자기소개</p>
-        {/* <span className="font-undong font-bold ml-8 text-2xl">Like</span> */}
+        {/* <span className="font-undong font-bold ml-8 text-2xl ">Recipe</span> */}
 
-        <div>
+        <div className="recipe-card-container "style={{ width: '120%' }}>
           {recipes.map((recipe, index) => (
             <RecipeCard
               key={index}
@@ -137,6 +143,9 @@ function MyPage(){
           ))}
         </div>
       </div>
+      <footer style={{position:'fixed',bottom:'0',width:'100%',maxWidth:'32rem',}}>
+      <Navigation />
+      </footer>
     </div>
   );
 }

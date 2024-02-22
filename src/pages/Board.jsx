@@ -47,7 +47,7 @@ const SearchBar = () => {
         <div className="flex-none w-20 h-20 rounded-xl border-2 border-gray-300 overflow-hidden">
           <img className="w-full h-full object-cover" src={img} alt={title} />
         </div>
-        <div className="px-4">
+        <div className="px-4 py-4">
           <h3 className="text-lg font-score font-semibold">{title}</h3>
           <p className="text-gray-500 text-sm font-score">{description}</p>
         </div>
@@ -136,9 +136,12 @@ function Board(){
           ))}
         </div>
       </div>
-
-        <Navigation />
+      <footer style={{position:'fixed',bottom:'0',width:'100%',maxWidth:'32rem',}}>
+      <Navigation />
+      </footer>
+       
       </div>
+      
   );
 }
 export default Board;
