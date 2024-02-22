@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   GoCheckCircle,
   GoCheckCircleFill,
@@ -9,11 +9,19 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 export default function ResetPassword() {
-  const [code, setCode] = useState(Array(6).fill(''));
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [serverCode, setServerCode] = useState(null);
+  const [code, setCode] = useState(Array(4).fill(''));
   const [password, setPassword] = useState('');
+  const [checkPassword, setCheckPassword] = useState('');
+  const [passwordMessage, setPasswordMessage] = useState(null); // 비밀번호 일치 여부
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleChange = (element, index) => {
+  // 백엔드로 보내야할 것 : 이메일, 소셜타임, 패스워드, 새로운 패스워드
+
+  // 인증번호 입력
+  const handleCodeChange = (element, index) => {
     if (element.target.value) {
       setCode([
         ...code.slice(0, index),
@@ -21,12 +29,30 @@ export default function ResetPassword() {
         ...code.slice(index + 1),
       ]);
 
-      if (index < 5) {
+      if (index < 3) {
         document.getElementById(`input${index + 1}`).focus();
       }
     }
   };
 
+  // 이메일 입력 값 저장
+  const handleEmailChange = (e) => setEmail(e.target.value);
+
+  // 이메일 유효성 검사
+  const isEmailVaild = (e) => {
+    e.preventDefault();
+    const pattern =
+      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+
+    if (!pattern.test(email)) {
+      setEmailError('이메일 형식이 올바르지 않습니다');
+      setEmail('');
+    } else {
+      setEmailError('');
+    }
+  };
+
+  // 비밀번호 유효성 검사
   const isPasswordValid = (password) => {
     return (
       /\d/.test(password) &&
@@ -35,6 +61,34 @@ export default function ResetPassword() {
     );
   };
 
+  // 비밀번호 재확인 함수 만들기 : 완료 버튼 위 인풋
+  const isSamePassword = () => {
+    if (password !== checkPassword) {
+      setPasswordMessage(false);
+    } else {
+      setPasswordMessage(true);
+    }
+  };
+
+  useEffect(() => {
+    isSamePassword();
+  }, [checkPassword]);
+
+  // 서버에서 발송한 인증번호와 비교하는 함수: 인증번호 인풋 아래에 오입력시 안내 문구 추가
+  const checkCode = () => {
+    const userCode = code.join('');
+
+    if (userCode !== serverCode) {
+      setCode('');
+      console.log('코드가 일치하지 않습니다');
+    } else {
+      console.log('코드가 일치합니다');
+    }
+  };
+
+  // 인증번호 시간 제한 설정
+
+  // 비밀번호 보기
   const toggleShowPassword = (e) => {
     e.preventDefault();
     setShowPassword(!showPassword);
@@ -46,42 +100,54 @@ export default function ResetPassword() {
     <section className="flex flex-col justify-center items-center min-h-screen px-10 relative">
       <div
         className="absolute top-5 left-5 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate(-1)}
+        onClick={() => navigate('/login')}
       >
         <FaArrowLeft />
       </div>
 
       <header className="flex flex-col items-center">
-        <h1 className="font-score text-3xl">비밀번호 재설정</h1>
+        <h1 className="font-score font-extrabold text-3xl">비밀번호 재설정</h1>
         <p className="font-score text-md text-gray-400 mt-2">
-          사용하시는 계정의 이메일을 입력해주세요
+          재설정할 계정의 이메일과 필수정보를 입력하세요
         </p>
       </header>
 
-      <main className="mt-10">
+      <main className="mt-10 w-full px-2">
         <form>
           <label className="mb-4 text-lg font-bold font-undong text-center ">
-            이메일 입력
+            이메일
           </label>
           <div className="flex">
             <input
               type="email"
+              value={email}
+              onChange={handleEmailChange}
               className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="E-mail"
             />
-            <button className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300">
+            <button
+              onClick={isEmailVaild}
+              className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
+            >
               인증번호 발송
             </button>
           </div>
+          <p
+            className={`text-red-500 text-sm pl-3 mt-1 ${
+              emailError ? 'visible' : 'invisible'
+            }`}
+          >
+            {emailError || 'empty'}
+          </p>
         </form>
 
         <form className="mt-6">
           <label className="mb-4 text-lg font-bold font-undong text-center">
-            인증번호 입력
+            인증번호
           </label>
-          <div className="flex items-center">
+          <div className="flex items-center justify-between">
             <inputs className="flex max-w-xs mt-2">
-              {Array(6)
+              {Array(4)
                 .fill('')
                 .map((_, index) => (
                   <input
@@ -96,7 +162,7 @@ export default function ResetPassword() {
                         e.target.value === '' ||
                         (e.target.value.length === 1 && !isNaN(e.target.value))
                       ) {
-                        handleChange(e, index);
+                        handleCodeChange(e, index);
                       }
                     }}
                     onKeyDown={(e) => {
@@ -119,12 +185,12 @@ export default function ResetPassword() {
         </form>
       </main>
 
-      <footer className="flex flex-col mt-16 w-full p-3">
+      <footer className="flex flex-col mt-10 w-full p-3">
         <form>
           <label className="mb-4 text-lg font-bold font-undong text-center">
-            새로운 비밀번호 입력
+            새로운 비밀번호
           </label>
-          <div className="flex flex-col">
+          <div className="flex flex-col mb-4">
             <div className="flex">
               <input
                 type={showPassword ? 'text' : 'password'}
@@ -166,11 +232,41 @@ export default function ResetPassword() {
                 </span>
               </li>
             </ul>
-            <button className=" p-5 mx-40 mt-3 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300">
-              완료
-            </button>
           </div>
         </form>
+
+        <form>
+          <label className="mb-4 text-lg font-bold font-undong text-center">
+            비밀번호 확인
+          </label>
+          <div className="flex">
+            <input
+              type="password"
+              value={checkPassword}
+              onChange={(e) => {
+                setCheckPassword(e.target.value);
+                isSamePassword();
+              }}
+              placeholder="한 번 더 입력하세요"
+              className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          {passwordMessage !== null && (
+            <p
+              className={`text-sm pl-3 mt-1 ${
+                passwordMessage ? 'text-green-500' : 'text-red-500'
+              }`}
+            >
+              {passwordMessage
+                ? '비밀번호가 일치합니다'
+                : '비밀번호가 일치하지 않습니다'}
+            </p>
+          )}
+        </form>
+
+        <button className=" p-5 mx-40 mt-3 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300">
+          완료
+        </button>
       </footer>
     </section>
   );

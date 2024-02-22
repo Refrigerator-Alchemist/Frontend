@@ -12,13 +12,16 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { NavigationProvider } from '../src/context/NavigationContext';
+import { LoginProvider } from './context/LoginContext';
 
 export default function App() {
   return (
     <section>
-      <NavigationProvider>
-        <Outlet />
-      </NavigationProvider>
+      <LoginProvider>
+        <NavigationProvider>
+          <Outlet />
+        </NavigationProvider>
+      </LoginProvider>
     </section>
   );
 }
