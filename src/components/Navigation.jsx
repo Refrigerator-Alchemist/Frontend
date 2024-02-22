@@ -1,13 +1,27 @@
-import { React, useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { PiCookingPot, PiCookingPotFill } from 'react-icons/pi';
 import { GoHome, GoHomeFill } from 'react-icons/go';
 import { IoAccessibilityOutline, IoAccessibility } from 'react-icons/io5';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { NavigationContext } from '../context/NavigationContext';
 
 export default function Navigation() {
   const { selected, setSelected } = useContext(NavigationContext);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const currentPath = location.pathname;
+
+    if (currentPath === '/board') {
+      setSelected('food');
+    } else if (currentPath === '/main') {
+      setSelected('home');
+    } else if (currentPath === '/login') {
+      setSelected('profile');
+    }
+  }, [location.pathname, setSelected]);
+
 
   return (
     <footer
