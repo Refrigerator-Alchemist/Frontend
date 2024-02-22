@@ -11,7 +11,7 @@ export default function Navigation() {
 
   return (
     <footer
-      className="flex justify-center items-center bg-white p-4 rounded-t-3xl "
+      className="sticky bottom-0 flex justify-center items-center bg-white p-4 rounded-t-3xl "
       style={{ boxShadow: '0px -10px 15px rgba(0, 0, 0, 0.1)' }}
     >
       <div
