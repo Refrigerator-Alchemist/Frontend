@@ -85,6 +85,10 @@ export default function SignUp() {
     }
   };
 
+  // 인증번호 시간 제한 설정
+
+  // 인증번호 재요청
+
   // 비밀번호 보기
   const toggleShowPassword = (e) => {
     e.preventDefault();

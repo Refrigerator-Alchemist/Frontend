@@ -18,6 +18,8 @@ export default function ResetPassword() {
   const [passwordMessage, setPasswordMessage] = useState(null); // 비밀번호 일치 여부
   const [showPassword, setShowPassword] = useState(false);
 
+  // 백엔드로 보내야할 것 : 이메일, 소셜타임, 패스워드, 새로운 패스워드
+
   // 인증번호 입력
   const handleCodeChange = (element, index) => {
     if (element.target.value) {
@@ -83,6 +85,8 @@ export default function ResetPassword() {
       console.log('코드가 일치합니다');
     }
   };
+
+  // 인증번호 시간 제한 설정
 
   // 비밀번호 보기
   const toggleShowPassword = (e) => {
