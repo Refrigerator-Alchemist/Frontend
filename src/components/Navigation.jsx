@@ -1,12 +1,14 @@
-import { React, useContext } from 'react';
+import React, { useContext } from 'react';
 import { PiCookingPot, PiCookingPotFill } from 'react-icons/pi';
 import { GoHome, GoHomeFill } from 'react-icons/go';
 import { IoAccessibilityOutline, IoAccessibility } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
+import { LoginContext } from '../context/LoginContext';
 import { NavigationContext } from '../context/NavigationContext';
 
 export default function Navigation() {
   const { selected, setSelected } = useContext(NavigationContext);
+  const { isLogin } = useContext(LoginContext);
   const navigate = useNavigate();
 
   // 로그인 상태라면 profile을 누르면 /profile로 가야 함
@@ -44,7 +46,7 @@ export default function Navigation() {
         style={{ position: 'relative' }}
         onClick={() => {
           setSelected('profile');
-          navigate('/login');
+          navigate(isLogin ? '/profile' : '/login');
         }}
         className={`mx-12 text-4xl text-main cursor-pointer ${
           selected === 'profile' ? 'selected-icon' : ''

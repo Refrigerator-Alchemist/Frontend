@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Logo from '../components/Logo';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
@@ -7,37 +7,47 @@ import { GoEye, GoEyeClosed } from 'react-icons/go';
 export default function LogIn() {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
+  const [emailValid, setEmailValid] = useState(false);
+
+  const [notAllow, setNotAllow] = useState(true);
+
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleEmailChange = (e) => setEmail(e.target.value);
-  const handlePasswordChange = (e) => setPassword(e.target.value);
-
-  // 로그인 데이터 전송
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  // 이메일 형식 & 비밀번호 입력 전까지 로그인 버튼 막기
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
     const pattern =
       /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
 
     if (!pattern.test(email)) {
       setEmailError('이메일 형식이 올바르지 않습니다');
-      setEmail('');
+      setEmailValid(false);
     } else {
       setEmailError('');
-      console.log('로그인 성공');
-      // 이메일과 비밀번호 정보를 JSON으로 변환하는 함수
+      setEmailValid(true);
     }
   };
 
+  useEffect(() => {
+    if (emailValid && password.length > 8) {
+      setNotAllow(false);
+      return;
+    }
+    setNotAllow(true);
+  }, [emailValid, password]);
+
+  // 이메일 유효성 검사 후 서버에 데이터 전송
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  };
+
   // 비밀번호 보기
+  const handlePasswordChange = (e) => setPassword(e.target.value);
   const toggleShowPassword = (e) => {
     e.preventDefault();
     setShowPassword(!showPassword);
   };
-
-  // 로그인 실패 함수
-  // 로그인 버튼을 눌렀을 때 서버로 요청해서 돌아오는 response를 받아와 '없는 이메일' '비밀번호 틀림'
-  // alert로 띄워서 다시 로그인 하도록 만들어야 함
 
   const navigate = useNavigate();
 
@@ -55,6 +65,7 @@ export default function LogIn() {
         <h1 className="text-3xl font-extrabold">로그인</h1>
       </header>
 
+      {/* 로그인 폼 */}
       <main>
         <form className="p-4 rounded-xl" style={{ width: '400px' }}>
           <div className="mb-4">
@@ -85,6 +96,7 @@ export default function LogIn() {
                 placeholder="PW"
               />
               <button
+                type="button"
                 onClick={toggleShowPassword}
                 className="inline-block whitespace-nowrap h-12 ml-5 mt-2 rounded-xl font-score text-md"
               >
@@ -94,13 +106,19 @@ export default function LogIn() {
           </div>
           <p
             onClick={() => navigate('/login/resetpw')}
-            className="flex justify-end underline font-bold hover:cursor-pointer mb-4 "
+            className="flex justify-end underline font-bold hover:cursor-pointer hover:text-red-500 mb-4 "
           >
             비밀번호 재설정
           </p>
           <button
-            onClick={handleSubmit}
-            className="w-full py-2 text-white bg-main rounded-3xl font-jua text-2xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
+            type="submit"
+            onSubmit={handleSubmit}
+            disabled={notAllow}
+            className={`w-full py-2 text-2xl font-jua transition ease-in-out duration-300 rounded-3xl ${
+              notAllow
+                ? 'bg-gray-500 text-black'
+                : 'bg-main text-white hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black'
+            }`}
           >
             로그인
           </button>
@@ -133,7 +151,7 @@ export default function LogIn() {
           <span>계정이 없으신가요?</span>
           <span
             onClick={() => navigate('/login/signup')}
-            className="underline font-bold hover:cursor-pointer ml-5"
+            className="underline font-bold hover:cursor-pointer hover:text-red-500 ml-5"
           >
             회원가입 하기
           </span>
