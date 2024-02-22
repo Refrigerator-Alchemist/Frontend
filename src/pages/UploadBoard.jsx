@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FaArrowLeft, FaHeart, FaRegHeart } from 'react-icons/fa';
 
 function UploadBoard() {
   const [foodName, setFoodName] = useState('');
@@ -28,12 +29,19 @@ function UploadBoard() {
 
 
   return (
-    <div className="max-w-md mx-auto pt-16">
-      <form onSubmit={handleSubmit} className="flex flex-col space-y-6">
+    <div className="pt-16">
+      <div
+        className="absolute top-5 left-42 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
+        onClick={() => navigate('/board')}
+      >
+        <FaArrowLeft />
+      </div>
+      <form onSubmit={handleSubmit} className="flex flex-col space-y-6 mx-auto p-8">
+
         <div className="form-group ">
           <label
             htmlFor="cover-photo"
-            className="block mb-2 text-sm font-medium text-gray-700"
+            className="block mt-4 mb-2 text-sm font-medium text-gray-700"
           >
             사진 추가하기
           </label>
@@ -131,7 +139,7 @@ function UploadBoard() {
           </button>
           <button
             type="submit"
-            className="flex-grow bg-yellow-400  text-white rounded-full p-2 hover:bg-yellow-500"
+            className="flex-grow bg-main  text-white rounded-full p-2 hover:bg-yellow-500"
           >
             올리기
           </button>

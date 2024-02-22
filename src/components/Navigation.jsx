@@ -1,21 +1,36 @@
-import React, { useContext } from 'react';
+
+import React, { useContext, useEffect } from 'react';
 import { PiCookingPot, PiCookingPotFill } from 'react-icons/pi';
 import { GoHome, GoHomeFill } from 'react-icons/go';
 import { IoAccessibilityOutline, IoAccessibility } from 'react-icons/io5';
-import { useNavigate } from 'react-router-dom';
-import { LoginContext } from '../context/LoginContext';
+import { useNavigate, useLocation } from 'react-router-dom';
+
 import { NavigationContext } from '../context/NavigationContext';
 
 export default function Navigation() {
   const { selected, setSelected } = useContext(NavigationContext);
   const { isLogin } = useContext(LoginContext);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const currentPath = location.pathname;
+
+    if (currentPath === '/board') {
+      setSelected('food');
+    } else if (currentPath === '/main') {
+      setSelected('home');
+    } else if (currentPath === '/login') {
+      setSelected('profile');
+    }
+  }, [location.pathname, setSelected]);
+
 
   // 로그인 상태라면 profile을 누르면 /profile로 가야 함
 
   return (
     <footer
-      className="flex justify-center items-center bg-white p-4 rounded-t-3xl "
+      className="sticky bottom-0 flex justify-center items-center bg-white p-4 rounded-t-3xl "
       style={{ boxShadow: '0px -10px 15px rgba(0, 0, 0, 0.1)' }}
     >
       <div
