@@ -3,7 +3,7 @@ import api from '../apis/api';
 // 로그인
 export const login = (email, password, socialType) =>
   api.post(
-    `/login?email=${email}&passwrod=${password}&socialType=${socialType}`
+    `/login?email=${email}&password=${password}&socialType=${socialType}`
   );
 
 // 사용자 정보

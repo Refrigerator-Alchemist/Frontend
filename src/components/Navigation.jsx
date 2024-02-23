@@ -1,4 +1,3 @@
-
 import React, { useContext, useEffect } from 'react';
 import { PiCookingPot, PiCookingPotFill } from 'react-icons/pi';
 import { GoHome, GoHomeFill } from 'react-icons/go';
@@ -6,6 +5,7 @@ import { IoAccessibilityOutline, IoAccessibility } from 'react-icons/io5';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import { NavigationContext } from '../context/NavigationContext';
+import { LoginContext } from '../context/LoginContext';
 
 export default function Navigation() {
   const { selected, setSelected } = useContext(NavigationContext);
@@ -24,7 +24,6 @@ export default function Navigation() {
       setSelected('profile');
     }
   }, [location.pathname, setSelected]);
-
 
   // 로그인 상태라면 profile을 누르면 /profile로 가야 함
 

@@ -19,22 +19,7 @@ export default function SignUp() {
   const [passwordMessage, setPasswordMessage] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
 
-  // 인증번호 입력
-  const handleCodeChange = (element, index) => {
-    if (element.target.value) {
-      setCode([
-        ...code.slice(0, index),
-        element.target.value,
-        ...code.slice(index + 1),
-      ]);
-
-      if (index < 3) {
-        document.getElementById(`input${index + 1}`).focus();
-      }
-    }
-  };
-
-  // 이메일 입력 값 저장
+  // 이메일 상태 저장
   const handleEmailChange = (e) => setEmail(e.target.value);
 
   // 이메일 유효성 검사
@@ -51,29 +36,22 @@ export default function SignUp() {
     }
   };
 
-  // 비밀번호 유효성 검사
-  const isPasswordValid = (password) => {
-    return (
-      /\d/.test(password) &&
-      /[ `!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/.test(password) &&
-      /[a-zA-Z]/.test(password)
-    );
-  };
+  // 인증번호 입력
+  const handleCodeChange = (element, index) => {
+    if (element.target.value) {
+      setCode([
+        ...code.slice(0, index),
+        element.target.value,
+        ...code.slice(index + 1),
+      ]);
 
-  // 비밀번호 재확인 함수 만들기 : 완료 버튼 위 인풋
-  const isSamePassword = () => {
-    if (password !== checkPassword) {
-      setPasswordMessage(false);
-    } else {
-      setPasswordMessage(true);
+      if (index < 3) {
+        document.getElementById(`input${index + 1}`).focus();
+      }
     }
   };
 
-  useEffect(() => {
-    isSamePassword();
-  }, [checkPassword]);
-
-  // 서버에서 발송한 인증번호와 비교하는 함수: 인증번호 인풋 아래에 오입력시 안내 문구 추가
+  // 인증번호 일치 확인
   const isCodeVaild = () => {
     const userCode = code.join('');
 
@@ -85,9 +63,34 @@ export default function SignUp() {
     }
   };
 
-  // 인증번호 시간 제한 설정
+  // 인증번호 만료 : 시간 제한
+  // 인증번호 재요청 : 실패나 만료시 버튼이 재요청으로 바뀌도록
 
-  // 인증번호 재요청
+  // 닉네임 중복 확인 함수 만들기 : 서버에서 사용되고 있는 닉네임이 있는지 조회
+
+  // 비밀번호 유효성 검사
+  const isPasswordValid = (password) => {
+    return (
+      /\d/.test(password) &&
+      /[ `!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/.test(password) &&
+      /[a-zA-Z]/.test(password)
+    );
+  };
+
+  // 비밀번호 확인 함수 만들기 : 완료 버튼 위 인풋
+  const isSamePassword = () => {
+    if (password && checkPassword) {
+      password !== checkPassword
+        ? setPasswordMessage(false)
+        : setPasswordMessage(true);
+    } else {
+      setPasswordMessage(null);
+    }
+  };
+
+  useEffect(() => {
+    isSamePassword();
+  }, [checkPassword]);
 
   // 비밀번호 보기
   const toggleShowPassword = (e) => {
@@ -95,12 +98,23 @@ export default function SignUp() {
     setShowPassword(!showPassword);
   };
 
-  // 닉네임 중복 확인 함수 만들기 : 서버에서 사용되고 있는 닉네임이 있는지 조회
+  // 서버에 회원가입 정보 전송 : 이메일, 이름, 패스워드
+  const onSignUp = (e) => {
+    e.preventDefault();
+
+    const userEmail = email;
+    const userName = name;
+    const userPassword = password;
+    const socialType = 'Refrigerator-Cleaner';
+
+    console.log(userEmail, userName, userPassword, socialType);
+  };
 
   const navigate = useNavigate();
 
   return (
     <section className="flex flex-col justify-center items-center min-h-screen px-10 relative">
+      {/* 뒤로가기 버튼 */}
       <div
         className="absolute top-5 left-5 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
         onClick={() => navigate('/login')}
@@ -108,6 +122,7 @@ export default function SignUp() {
         <FaArrowLeft />
       </div>
 
+      {/* 타이틀 */}
       <header className="flex flex-col items-center mt-10">
         <h1 className="font-score font-extrabold text-3xl">신규 회원가입</h1>
         <p className="font-score text-md text-gray-400 mt-2">
@@ -115,7 +130,9 @@ export default function SignUp() {
         </p>
       </header>
 
+      {/* 회원가입 정보 입력 */}
       <main className="mt-10 w-full px-2">
+        {/* 이메일 인증 */}
         <form>
           <label className="mb-4 text-md font-bold font-undong text-center ">
             이메일 입력
@@ -144,6 +161,7 @@ export default function SignUp() {
           </p>
         </form>
 
+        {/* 인증하기 */}
         <form className="mt-6">
           <label className="mb-4 font-bold font-undong text-center text-md">
             인증번호 입력
@@ -190,6 +208,7 @@ export default function SignUp() {
 
       <footer className="flex flex-col mt-6 w-full p-3">
         <form>
+          {/* 닉네임 입력 */}
           <label className="mb-4 text-md font-bold font-undong text-center">
             이름
           </label>
@@ -206,6 +225,7 @@ export default function SignUp() {
             </button>
           </div>
 
+          {/* 비밀번호 입력 */}
           <label className="mb-4 text-md font-bold font-undong text-center">
             비밀번호 입력
           </label>
@@ -252,6 +272,7 @@ export default function SignUp() {
               </li>
             </ul>
 
+            {/* 비밀번호 확인 */}
             <label className="flex mb-4 text-md font-bold font-undong text-center">
               비밀번호 확인
             </label>
@@ -278,8 +299,18 @@ export default function SignUp() {
                   : '비밀번호가 일치하지 않습니다'}
               </p>
             )}
-            <button className=" p-5 mx-40 mt-3 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300">
-              완료
+            <button
+              type="submit"
+              disabled={!passwordMessage}
+              className={`p-3 mx-20 mt-3 rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110  duration-300
+              ${
+                passwordMessage
+                  ? 'text-white bg-main hover:bg-[#15ed79] hover:text-black'
+                  : 'bg-gray-500 text-black'
+              }
+              `}
+            >
+              가입하기
             </button>
           </div>
         </form>
