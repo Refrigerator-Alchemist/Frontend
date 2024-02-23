@@ -51,7 +51,7 @@ export default function DeleteAccount() {
       </div>
 
       {/* 타이틀 */}
-      <h1 className="text-3xl font-extrabold mb-5">회원가입 탈퇴</h1>
+      <h1 className="text-3xl font-extrabold mb-5">회원 탈퇴</h1>
 
       {/* 비밀번호 입력 폼 */}
       <form className="flex flex-col items-center">
