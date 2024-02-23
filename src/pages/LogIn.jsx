@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Logo from '../components/Logo';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import { GoEye, GoEyeClosed } from 'react-icons/go';
+import { LoginContext } from '../context/LoginContext';
 
 export default function LogIn() {
   const [email, setEmail] = useState('');
@@ -14,9 +15,14 @@ export default function LogIn() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  // 이메일 형식 & 비밀번호 입력 전까지 로그인 버튼 막기
+  // 로그인 컨텍스트
+  const { login } = useContext(LoginContext);
+
+  // 이메일 상태 저장
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
+
+    // 이메일 유효성 검사 : '.com .net .org' 형식
     const pattern =
       /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
 
@@ -29,6 +35,7 @@ export default function LogIn() {
     }
   };
 
+  // 이메일 유효성 검사 통과 & 비밀번호 8자 이상 : 로그인 버튼 활성화
   useEffect(() => {
     if (emailValid && password.length > 8) {
       setNotAllow(false);
@@ -37,22 +44,31 @@ export default function LogIn() {
     setNotAllow(true);
   }, [emailValid, password]);
 
-  // 이메일 유효성 검사 후 서버에 데이터 전송
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-  };
-
-  // 비밀번호 보기
+  // 비밀번호 상태 저장
   const handlePasswordChange = (e) => setPassword(e.target.value);
+
+  // 비밀번호 표시
   const toggleShowPassword = (e) => {
     e.preventDefault();
     setShowPassword(!showPassword);
+  };
+
+  // 서버에 로그인 정보 전송 : 이메일, 패스워드, socialType
+  const onLogin = (e) => {
+    e.preventDefault();
+
+    const userEmail = email;
+    const userPassword = password;
+    const socialType = 'Refrigerator-Cleaner';
+
+    login(userEmail, userPassword, socialType);
   };
 
   const navigate = useNavigate();
 
   return (
     <section className="relative flex flex-col items-center justify-between font-score p-8 min-h-screen">
+      {/* 뒤로가기 버튼 */}
       <div
         className="absolute top-5 left-5 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
         onClick={() => navigate('/main')}
@@ -60,12 +76,13 @@ export default function LogIn() {
         <FaArrowLeft />
       </div>
 
+      {/* 로고, 타이틀 */}
       <header className="flex flex-col items-center justify-center">
         <Logo width="250px" height="250px" />
         <h1 className="text-3xl font-extrabold">로그인</h1>
       </header>
 
-      {/* 로그인 폼 */}
+      {/* 이메일, 비밀번호 입력 + 로그인 */}
       <main>
         <form className="p-4 rounded-xl" style={{ width: '400px' }}>
           <div className="mb-4">
@@ -94,6 +111,7 @@ export default function LogIn() {
                 onChange={handlePasswordChange}
                 className="w-full px-4 py-3 mt-1 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 placeholder="PW"
+                required
               />
               <button
                 type="button"
@@ -112,7 +130,9 @@ export default function LogIn() {
           </p>
           <button
             type="submit"
-            onSubmit={handleSubmit}
+            onSubmit={(e) => {
+              onLogin(e);
+            }}
             disabled={notAllow}
             className={`w-full py-2 text-2xl font-jua transition ease-in-out duration-300 rounded-3xl ${
               notAllow
@@ -125,7 +145,9 @@ export default function LogIn() {
         </form>
       </main>
 
+      {/* 신규 회원가입 */}
       <footer className="flex flex-col items-center mb-4">
+        {/* SNS 계정으로 가입 */}
         <p className="my-4 text-gray-400">SNS 간편 로그인</p>
         <figure className="flex mb-4">
           <img
@@ -147,6 +169,8 @@ export default function LogIn() {
             alt="naver"
           ></img>
         </figure>
+
+        {/* 이메일 회원가입 */}
         <div className="flex">
           <span>계정이 없으신가요?</span>
           <span

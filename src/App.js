@@ -12,7 +12,7 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { NavigationProvider } from '../src/context/NavigationContext';
-import { LoginProvider } from './context/LoginContext';
+import { LoginProvider } from '../src/context/LoginContext';
 
 export default function App() {
   return (
