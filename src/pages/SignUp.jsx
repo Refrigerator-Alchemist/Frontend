@@ -7,6 +7,7 @@ import {
 } from 'react-icons/go';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import * as auth from '../apis/auth';
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
@@ -33,6 +34,31 @@ export default function SignUp() {
       setEmail('');
     } else {
       setEmailError('');
+      requestServerCode();
+    }
+  };
+
+  // 이메일 인증번호 요청
+  const requestServerCode = async () => {
+    try {
+      const response = await fetch('서버 엔드포인트로 바꾸기', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!response.ok) {
+        throw new Error('서버에서 에러가 발생했습니다');
+      }
+
+      const data = await response.json();
+
+      // 서버에서 받은 인증번호를 상태에 저장
+      setServerCode(data.code); // code가 'authCode'라면 수정
+    } catch (error) {
+      console.error('인증번호 요청 중 에러 발생:', error);
     }
   };
 
@@ -98,6 +124,35 @@ export default function SignUp() {
     setShowPassword(!showPassword);
   };
 
+  // 회원가입 요청
+  const signup = async (form) => {
+    console.log(form);
+
+    let response;
+    let data;
+    try {
+      response = await auth.signup(form);
+    } catch (error) {
+      console.error(`${error}`);
+      console.error('회원가입 요청 중 에러가 발생하였습니다.');
+      return;
+    }
+
+    data = response.data;
+    const status = response.status;
+    console.log(`data : ${data}`);
+    console.log(`status : ${status}`);
+
+    if (status === 200) {
+      console.log('회원가입에 성공했습니다');
+      alert('회원가입에 성공했습니다');
+      navigate('/login');
+    } else {
+      console.log('회원가입에 실패했습니다');
+      alert('회원가입에 실패했습니다');
+    }
+  };
+
   // 서버에 회원가입 정보 전송 : 이메일, 이름, 패스워드
   const onSignUp = (e) => {
     e.preventDefault();
@@ -108,6 +163,8 @@ export default function SignUp() {
     const socialType = 'Refrigerator-Cleaner';
 
     console.log(userEmail, userName, userPassword, socialType);
+
+    signup({ userEmail, userName, userPassword, socialType });
   };
 
   const navigate = useNavigate();
@@ -301,6 +358,7 @@ export default function SignUp() {
             )}
             <button
               type="submit"
+              onSubmit={onSignUp}
               disabled={!passwordMessage}
               className={`p-3 mx-20 mt-3 rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110  duration-300
               ${

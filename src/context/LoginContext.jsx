@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import api from '../apis/api';
 import Cookies from 'js-cookie';
 import * as auth from '../apis/auth';
@@ -7,13 +7,13 @@ import { useNavigate } from 'react-router-dom';
 export const LoginContext = createContext();
 
 /**
- * 로그인
- * ✅ 로그인 체크
- * ✅ 로그인
- * ✅ 로그아웃
+ * 로그인 컨텍스트 : 전체 페이지에 로그인 상태를 전달
+ * 🔓 로그인
+ * ⚡ 로그인 체크
+ * ⚡ 로그인 세팅
  *
- * 🔓 로그인 세팅
- * 🔐 로그아웃 세팅
+ * 🔐 로그아웃
+ * ⚡ 로그아웃 세팅
  * */
 export const LoginProvider = ({ children }) => {
   /*
@@ -39,7 +39,7 @@ export const LoginProvider = ({ children }) => {
 
   // ----------------------- 로그인 -------------------------------
 
-  // 🔓 로그인
+  // 🔓 로그인 1️⃣
   const login = async (userEmail, password, socialType) => {
     console.log(`userEmail : ${userEmail}`);
     console.log(`password : ${password}`);
@@ -77,7 +77,7 @@ export const LoginProvider = ({ children }) => {
   };
 
   /*
-  ✅ 로그인 체크
+  ⚡ 로그인 체크 2️⃣
   - 쿠키에 JWT가 있는지 확인
   - JWT로 사용자 정보를 요청
    */
@@ -95,7 +95,7 @@ export const LoginProvider = ({ children }) => {
 
     // accessToken(JWT)이 있는 경우
     // ↪ App에 JWT 담기
-    api.defaults.headers.common.Authorization = `Bear ${accessToken}`;
+    api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
     // 사용자 정보 요청
     let response;
@@ -122,7 +122,7 @@ export const LoginProvider = ({ children }) => {
     loginSetting(data, accessToken);
   };
 
-  // ⚡ 로그인 세팅 : userData, accessToken(JWT)
+  // ⚡ 로그인 세팅 3️⃣ : userData, accessToken(JWT)
   const loginSetting = (userData, accessToken) => {
     const { no, userEmail } = userData;
 
@@ -130,7 +130,7 @@ export const LoginProvider = ({ children }) => {
     console.log(`userEmail : ${userEmail}`);
 
     // axios 객체의 header(Authorization : `Bear ${accessToken}`)
-    api.defaults.headers.common.Authorization = `Bear ${accessToken}`;
+    api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
     setIsLogin(true); // 로그인 여부 : true
 
@@ -140,6 +140,10 @@ export const LoginProvider = ({ children }) => {
 
     // 리다이렉트 : 토큰 만료 처리
   };
+
+  useEffect(() => {
+    loginCheck(); // 마운트 될때마다 로그인 체크
+  }, []);
 
   // ----------------------- 로그아웃 ------------------------------
 
