@@ -13,7 +13,6 @@ export default function Navigation() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // 라우팅으로 마운트가 일어날 때마다 저장된 값대로 네비게이션 표시
   useEffect(() => {
     const currentPath = location.pathname;
 
