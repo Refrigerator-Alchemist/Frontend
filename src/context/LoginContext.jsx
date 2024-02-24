@@ -3,6 +3,7 @@ import api from '../apis/api';
 import Cookies from 'js-cookie';
 import * as auth from '../apis/auth';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export const LoginContext = createContext();
 
@@ -43,7 +44,11 @@ export const LoginProvider = ({ children }) => {
     console.log(`socialType : ${socialType}`);
 
     try {
-      const response = await auth.login(userEmail, password, socialType);
+      const response = await axios.post('/login', {
+        userEmail,
+        password,
+        socialType,
+      });
       const data = response.data;
       const status = response.status;
       const headers = response.headers;
