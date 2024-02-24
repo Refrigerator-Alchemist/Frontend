@@ -4,10 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import { GoEye, GoEyeClosed } from 'react-icons/go';
 import axios from 'axios';
+import Kakao from '../components/Kakao';
 
 export default function LogIn() {
-  const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState('');
+  const [email, setEmail] = useState(''); // 이메일
+  const [emailError, setEmailError] = useState(''); // 이메일 유효성 검사
   const [emailValid, setEmailValid] = useState(false);
 
   const [notAllow, setNotAllow] = useState(true);
@@ -58,12 +59,22 @@ export default function LogIn() {
     const userPassword = password;
     const socialType = 'Refrigerator-Cleaner';
 
+    const URL = '/login';
+
     try {
-      const response = await axios.post('/login', {
-        userEmail,
-        userPassword,
-        socialType,
-      });
+      const response = await axios.post(
+        URL,
+        {
+          userEmail,
+          userPassword,
+          socialType,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
       const data = response.data;
       const status = response.status;
@@ -172,14 +183,7 @@ export default function LogIn() {
             src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-webinar-optimizing-for-success-google-business-webinar-13.png"
             alt="google"
           ></img>
-          <img
-            className="mx-3"
-            style={{ width: '45px', height: '45px' }}
-            src="https://cdn.imweb.me/upload/S201803255ab755f0896c9/d59972cd95aa1.png"
-            alt="kakaotalk"
-          >
-            {/* <Kakao /> */}
-          </img>
+          <Kakao />
           <img
             className="mx-3"
             style={{ width: '45px', height: '45px' }}
