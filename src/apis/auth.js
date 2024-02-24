@@ -2,9 +2,11 @@ import api from '../apis/api';
 
 // 로그인
 export const login = (email, password, socialType) =>
-  api.post(
-    `/login?email=${email}&password=${password}&socialType=${socialType}`
-  );
+  api.post('/login', {
+    email: email,
+    password: password,
+    socialType: socialType,
+  });
 
 // 사용자 정보
 export const info = (userEmail) => api.get(`/users/${userEmail}`);

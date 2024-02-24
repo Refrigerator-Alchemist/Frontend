@@ -18,7 +18,10 @@ export default function ResetPassword() {
   const [passwordMessage, setPasswordMessage] = useState(null); // 비밀번호 일치 여부
   const [showPassword, setShowPassword] = useState(false);
 
-  // 백엔드로 보내야할 것 : 이메일, 소셜타임, 패스워드, 새로운 패스워드
+  // 이메일 입력 값 저장
+  const handleEmailChange = (e) => setEmail(e.target.value);
+
+  // 서버에 존재하는 이메일인지 판단
 
   // 인증번호 입력
   const handleCodeChange = (element, index) => {
@@ -32,23 +35,6 @@ export default function ResetPassword() {
       if (index < 3) {
         document.getElementById(`input${index + 1}`).focus();
       }
-    }
-  };
-
-  // 이메일 입력 값 저장
-  const handleEmailChange = (e) => setEmail(e.target.value);
-
-  // 이메일 유효성 검사
-  const isEmailVaild = (e) => {
-    e.preventDefault();
-    const pattern =
-      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
-
-    if (!pattern.test(email)) {
-      setEmailError('이메일 형식이 올바르지 않습니다');
-      setEmail('');
-    } else {
-      setEmailError('');
     }
   };
 
@@ -74,20 +60,6 @@ export default function ResetPassword() {
     isSamePassword();
   }, [checkPassword]);
 
-  // 서버에서 발송한 인증번호와 비교하는 함수: 인증번호 인풋 아래에 오입력시 안내 문구 추가
-  const checkCode = () => {
-    const userCode = code.join('');
-
-    if (userCode !== serverCode) {
-      setCode('');
-      console.log('코드가 일치하지 않습니다');
-    } else {
-      console.log('코드가 일치합니다');
-    }
-  };
-
-  // 인증번호 시간 제한 설정
-
   // 비밀번호 보기
   const toggleShowPassword = (e) => {
     e.preventDefault();
@@ -98,6 +70,7 @@ export default function ResetPassword() {
 
   return (
     <section className="flex flex-col justify-center items-center min-h-screen px-10 relative">
+      {/* 뒤로가기 버튼 */}
       <div
         className="absolute top-5 left-5 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
         onClick={() => navigate('/login')}
@@ -105,6 +78,7 @@ export default function ResetPassword() {
         <FaArrowLeft />
       </div>
 
+      {/* 타이틀 */}
       <header className="flex flex-col items-center">
         <h1 className="font-score font-extrabold text-3xl">비밀번호 재설정</h1>
         <p className="font-score text-md text-gray-400 mt-2">
@@ -112,7 +86,9 @@ export default function ResetPassword() {
         </p>
       </header>
 
+      {/* 이메일 인증하기 */}
       <main className="mt-10 w-full px-2">
+        {/* 이메일 확인 후 인증요청*/}
         <form>
           <label className="mb-4 text-lg font-bold font-undong text-center ">
             이메일
@@ -123,12 +99,9 @@ export default function ResetPassword() {
               value={email}
               onChange={handleEmailChange}
               className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              placeholder="E-mail"
+              placeholder="이메일"
             />
-            <button
-              onClick={isEmailVaild}
-              className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
-            >
+            <button className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300">
               인증번호 발송
             </button>
           </div>
@@ -141,6 +114,7 @@ export default function ResetPassword() {
           </p>
         </form>
 
+        {/* 인증번호 확인 */}
         <form className="mt-6">
           <label className="mb-4 text-lg font-bold font-undong text-center">
             인증번호
@@ -185,6 +159,7 @@ export default function ResetPassword() {
         </form>
       </main>
 
+      {/* 비밀번호 재설정 */}
       <footer className="flex flex-col mt-10 w-full p-3">
         <form>
           <label className="mb-4 text-lg font-bold font-undong text-center">
@@ -196,7 +171,7 @@ export default function ResetPassword() {
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="New PW"
+                placeholder="비밀번호"
                 className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
               <button

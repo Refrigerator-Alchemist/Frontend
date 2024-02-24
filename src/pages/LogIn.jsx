@@ -24,7 +24,7 @@ export default function LogIn() {
 
     // 이메일 유효성 검사 : '.com .net .org' 형식
     const pattern =
-      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+      /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
     if (!pattern.test(email)) {
       setEmailError('이메일 형식이 올바르지 않습니다');
@@ -92,7 +92,7 @@ export default function LogIn() {
               value={email}
               onChange={handleEmailChange}
               className="w-full px-4 py-3 mt-1 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              placeholder="E-mail"
+              placeholder="이메일"
             />
             <p
               className={`text-red-500 text-sm pl-3 mt-1 ${
@@ -110,7 +110,7 @@ export default function LogIn() {
                 value={password}
                 onChange={handlePasswordChange}
                 className="w-full px-4 py-3 mt-1 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                placeholder="PW"
+                placeholder="비밀번호"
                 required
               />
               <button
@@ -161,7 +161,9 @@ export default function LogIn() {
             style={{ width: '45px', height: '45px' }}
             src="https://cdn.imweb.me/upload/S201803255ab755f0896c9/d59972cd95aa1.png"
             alt="kakaotalk"
-          ></img>
+          >
+            {/* <Kakao /> */}
+          </img>
           <img
             className="mx-3"
             style={{ width: '45px', height: '45px' }}

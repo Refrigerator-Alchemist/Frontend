@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import {
   GoCheckCircle,
   GoCheckCircleFill,
@@ -12,59 +13,71 @@ import * as auth from '../apis/auth';
 export default function SignUp() {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
-  const [serverCode, setServerCode] = useState(null);
+
+  const [serverCode, setServerCode] = useState(null); // 발급된 인증번호
   const [code, setCode] = useState(Array(4).fill(''));
+  const [codeIssuedTime, setCodeIssuedTime] = useState(null);
+  const [codeExpiryTime] = useState(5); // 제한시간 5분
+  const [verified, setVerified] = useState(false); // 이메일 인증 여부
+
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [checkPassword, setCheckPassword] = useState('');
   const [passwordMessage, setPasswordMessage] = useState(null);
+
   const [showPassword, setShowPassword] = useState(false);
 
-  // 이메일 상태 저장
+  // 1️⃣ 이메일 상태 저장
   const handleEmailChange = (e) => setEmail(e.target.value);
 
-  // 이메일 유효성 검사
+  // 2️⃣ 이메일 유효성 검사
   const isEmailVaild = (e) => {
     e.preventDefault();
     const pattern =
-      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+      /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
     if (!pattern.test(email)) {
       setEmailError('이메일 형식이 올바르지 않습니다');
       setEmail('');
     } else {
       setEmailError('');
-      requestServerCode();
+      requestServerCode(email);
     }
   };
 
-  // 이메일 인증번호 요청
-  const requestServerCode = async () => {
-    isEmailVaild();
-
+  // 3️⃣ 인증번호 요청
+  const requestServerCode = async (email) => {
     try {
-      const response = await fetch('서버 엔드포인트로 바꾸기', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
+      const response = await axios.post('서버의 엔드포인트 입력', { email });
 
-      if (!response.ok) {
-        throw new Error('서버에서 에러가 발생했습니다');
-      }
+      // 인증번호 저장 : 'authCode'라면 수정
+      setServerCode(response.data.code);
 
-      const data = await response.json();
-
-      // 서버에서 받은 인증번호를 상태에 저장
-      setServerCode(data.code); // code가 'authCode'라면 수정
+      // 인증번호 발급시간 저장
+      setCodeIssuedTime(new Date().getTime());
+      //
     } catch (error) {
-      console.error('인증번호 요청 중 에러 발생:', error);
+      console.error('인증번호 요청 중 에러 발생: ', error);
     }
   };
 
-  // 인증번호 입력
+  // 4️⃣ 인증번호 만료 확인
+  const isCodeExpired = () => {
+    // 현재 시간과 인증번호 발급 시간의 차이(분) 계산
+    const timeDifference = (new Date().getTime() - codeIssuedTime) / 1000 / 60;
+
+    // 인증번호가 만료되었는지 확인
+    if (timeDifference > codeExpiryTime) {
+      console.log('인증번호가 만료되었습니다');
+      alert('인증번호가 만료되었습니다');
+      return true;
+    } else {
+      console.log('인증번호가 유효합니다');
+      return false;
+    }
+  };
+
+  // 5️⃣ 인증번호 입력
   const handleCodeChange = (element, index) => {
     if (element.target.value) {
       setCode([
@@ -79,24 +92,45 @@ export default function SignUp() {
     }
   };
 
-  // 인증번호 일치 확인
+  // 6️⃣ 인증번호 검증
   const isCodeVaild = () => {
     const userCode = code.join('');
 
     if (userCode !== serverCode) {
       setCode('');
-      console.log('코드가 일치하지 않습니다');
+      alert('코드가 일치하지 않습니다');
     } else {
-      console.log('코드가 일치합니다');
+      setVerified(true);
+      setServerCode('');
+      alert('인증번호가 맞습니다');
     }
   };
 
-  // 인증번호 만료 : 시간 제한
-  // 인증번호 재요청 : 실패나 만료시 버튼이 재요청으로 바뀌도록
+  // 7️⃣ 닉네임 중복 확인
+  const checkNicknameDuplication = async (name) => {
+    try {
+      const response = await axios.post('서버 엔드포인트로 바꾸기', { name });
 
-  // 닉네임 중복 확인 함수 만들기 : 서버에서 사용되고 있는 닉네임이 있는지 조회
+      if (response.data.isDuplicated) {
+        console.log('이미 사용중인 닉네임입니다');
+      }
 
-  // 비밀번호 유효성 검사
+      // 닉네임 최소 글자 수
+      if (name.length < 3) {
+        console.log('닉네임은 최소 3자 이상 입력해주세요');
+      } else {
+        console.log('사용 가능한 닉네임입니다');
+      }
+    } catch (error) {
+      console.error('닉네임 중복 확인 중 에러 발생: ', error);
+    }
+  };
+
+  const handleCheckName = () => {
+    checkNicknameDuplication(name);
+  };
+
+  // 8️⃣ 비밀번호 유효성 검사
   const isPasswordValid = (password) => {
     return (
       /\d/.test(password) &&
@@ -105,12 +139,12 @@ export default function SignUp() {
     );
   };
 
-  // 비밀번호 확인 함수 만들기 : 완료 버튼 위 인풋
+  // 비밀번호 확인
   const isSamePassword = () => {
     if (password && checkPassword) {
       password !== checkPassword
         ? setPasswordMessage(false)
-        : setPasswordMessage(true);
+        : setPasswordMessage(true); // disabled 풀림
     } else {
       setPasswordMessage(null);
     }
@@ -203,13 +237,13 @@ export default function SignUp() {
                 value={email}
                 onChange={handleEmailChange}
                 className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                placeholder="E-mail"
+                placeholder="이메일"
               />
               <button
-                onClick={requestServerCode}
+                disabled={serverCode}
                 className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
               >
-                인증번호 발송
+                인증 요청
               </button>
             </div>
             <p
@@ -260,11 +294,8 @@ export default function SignUp() {
                     />
                   ))}
               </inputs>
-              <button
-                onClick={isCodeVaild}
-                className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
-              >
-                인증하기
+              <button className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300">
+                인증 확인
               </button>
             </div>
           </div>
@@ -281,10 +312,13 @@ export default function SignUp() {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="닉네임 입력(최소 3자 이상)"
+                placeholder="닉네임"
                 className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
-              <button className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300">
+              <button
+                onClick={handleCheckName}
+                className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
+              >
                 중복 확인
               </button>
             </div>
@@ -299,7 +333,7 @@ export default function SignUp() {
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="New PW"
+                  placeholder="비밀번호"
                   className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
                 <button
@@ -366,7 +400,7 @@ export default function SignUp() {
               <button
                 type="submit"
                 onSubmit={onSignUp}
-                disabled={!passwordMessage}
+                disabled={!passwordMessage && verified}
                 className={`p-3 mx-20 mt-3 rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110  duration-300
               ${
                 passwordMessage
