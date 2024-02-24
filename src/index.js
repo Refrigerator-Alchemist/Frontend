@@ -12,9 +12,9 @@ import UploadBoard from './pages/UploadBoard';
 import LogIn from './pages/LogIn';
 import SignUp from './pages/SignUp';
 import ResetPassword from './pages/ResetPassword';
-import DeleteAccount from './pages/DeleteAccount';
 import Mypage from './pages/Mypage';
 import Profile from './pages/Profile';
+import ManageAccount from './pages/ManageAccount';
 
 const router = createBrowserRouter([
   {
@@ -30,7 +30,7 @@ const router = createBrowserRouter([
       { path: '/login', element: <LogIn /> },
       { path: '/login/signup', element: <SignUp /> },
       { path: '/login/resetpw', element: <ResetPassword /> },
-      { path: '/deleteaccount', element: <DeleteAccount /> },
+      { path: '/manage', element: <ManageAccount /> },
       { path: '/mypage', element: <Mypage /> },
       { path: '/profile', element: <Profile /> },
     ],

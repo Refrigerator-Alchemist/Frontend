@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import * as auth from '../apis/auth';
 import { useContext } from 'react';
 import { LoginContext } from '../context/LoginContext';
+import ManageAccount from '../pages/ManageAccount';
 
 export const User = () => {
   const [userInfo, setUserInfo] = useState();
@@ -79,5 +80,13 @@ export const User = () => {
     getUserInfo();
   }, []);
 
-  return <div>{/* 탈퇴, 수정을 위해 사용 */}</div>;
+  return (
+    <div>
+      <ManageAccount
+        userInfo={userInfo}
+        updateUser={updateUser}
+        deleteUser={deleteUser}
+      />
+    </div>
+  );
 };
