@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import Logo from '../components/Logo';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import { GoEye, GoEyeClosed } from 'react-icons/go';
-import { LoginContext } from '../context/LoginContext';
+import axios from 'axios';
 
 export default function LogIn() {
   const [email, setEmail] = useState('');
@@ -14,9 +14,6 @@ export default function LogIn() {
 
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-
-  // 로그인 컨텍스트
-  const { login } = useContext(LoginContext);
 
   // 이메일 상태 저장
   const handleEmailChange = (e) => {
@@ -54,14 +51,33 @@ export default function LogIn() {
   };
 
   // 서버에 로그인 정보 전송 : 이메일, 패스워드, socialType
-  const onLogin = (e) => {
+  const onLogin = async (e) => {
     e.preventDefault();
 
     const userEmail = email;
     const userPassword = password;
     const socialType = 'Refrigerator-Cleaner';
 
-    login(userEmail, userPassword, socialType);
+    try {
+      const response = await axios.post('/login', {
+        userEmail,
+        userPassword,
+        socialType,
+      });
+
+      const data = response.data;
+      const status = response.status;
+      const headers = response.headers;
+      const authorization = headers.authorization;
+      const accessToken = authorization.replace('Bearer ', '');
+
+      console.log(`data : ${data}`);
+      console.log(`status ${status}`);
+      console.log(`headers ${headers}`);
+      console.log(`JWT : ${accessToken}`);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const navigate = useNavigate();
