@@ -72,6 +72,7 @@ function MyPage() {
   const [savedRecipes, setSavedRecipes] = useState([]);
   const [showSavedRecipes, setShowSavedRecipes] = useState(false);
   const navigate = useNavigate(); 
+  const [image, setImage] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
   const toggleLike = (recipeTitle) => {
     let newSavedRecipes;
     if (savedRecipes.includes(recipeTitle)) {
@@ -85,22 +86,32 @@ function MyPage() {
   return (
     <div className="Board flex items-center justify-center">
       <div className="flex flex-col items-center overflow-hidden">
-        <div className="bg-gray-300 rounded-full h-40 w-40 mt-20"></div>
+        <div className="bg-gray-300 rounded-full h-32 w-32 mt-20">
+          <img src={image} alt="프로필 사진" className="rounded-full h-32 w-32 object-cover" />
+        </div>
         <h1 className="mt-5 text-xl font-semibold text-center">user1</h1>
-        <p className="mt-4 pb-4 px-6 text-center">한줄 자기소개</p>
-<button 
+        <p className="mt-4 pb-4\2 px-6 text-center">한줄 자기소개</p>
+        <button 
           onClick={() => navigate('/profile')} 
           className="my-2 bg-white text-black py-2 px-4 rounded focus:outline-none focus:ring-2  focus:ring-opacity-50"
         >
           회원정보 수정
         </button>
 
-        <button 
-  onClick={() => setShowSavedRecipes(!showSavedRecipes)} 
-  className="my-2 bg-main text-white py-2 px-4 rounded focus:outline-none focus:ring-2  focus:ring-opacity-50"
->
-  {showSavedRecipes ? '좋아한 레시피 보기' : '저장된 레시피 보기'}
-</button>
+        <div className="flex">
+          <button 
+            onClick={() => setShowSavedRecipes(false)} 
+            className={`mx-1 py-2 px-4 rounded ${!showSavedRecipes ? 'bg-main text-white' : 'bg-gray-100 text-black'}`}
+          >
+            좋아한 레시피 보기
+          </button>
+          <button 
+            onClick={() => setShowSavedRecipes(true)} 
+            className={`mx-1 py-2 px-4 rounded ${showSavedRecipes ? 'bg-main text-white' : 'bg-gray-100 text-black'}`}
+          >
+            저장된 GPT 레시피 보기
+          </button>
+        </div>
 
         <div className="recipe-card-container" style={{ width: '120%' }}>
           {recipes
