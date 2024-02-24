@@ -29,9 +29,6 @@ export const LoginProvider = ({ children }) => {
   // 유저 정보
   const [userInfo, setUserInfo] = useState({});
 
-  // 이메일 저장
-  const [rememberUserEmail, setRememberUserEmail] = useState();
-
   // 페이지 이동
   const navigate = useNavigate();
 
@@ -51,12 +48,12 @@ export const LoginProvider = ({ children }) => {
       const status = response.status;
       const headers = response.headers;
       const authorization = headers.authorization;
-      const accessToken = authorization.replace('Bear ', '');
+      const accessToken = authorization.replace('Bearer ', '');
 
       console.log(`data : ${data}`);
       console.log(`status ${status}`);
       console.log(`headers ${headers}`);
-      console.log(`jwt : ${accessToken}`);
+      console.log(`JWT : ${accessToken}`);
 
       // 로그인 성공
       if (status === 200) {
@@ -129,7 +126,7 @@ export const LoginProvider = ({ children }) => {
     console.log(`no : ${no}`);
     console.log(`userEmail : ${userEmail}`);
 
-    // axios 객체의 header(Authorization : `Bear ${accessToken}`)
+    // axios 객체의 header(Authorization : `Bearer ${accessToken}`)
     api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
     setIsLogin(true); // 로그인 여부 : true

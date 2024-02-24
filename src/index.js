@@ -14,7 +14,7 @@ import SignUp from './pages/SignUp';
 import ResetPassword from './pages/ResetPassword';
 import Mypage from './pages/Mypage';
 import Profile from './pages/Profile';
-import ManageAccount from './pages/ManageAccount';
+import DeleteAccount from './pages/DeleteAccount';
 
 const router = createBrowserRouter([
   {
@@ -30,7 +30,7 @@ const router = createBrowserRouter([
       { path: '/login', element: <LogIn /> },
       { path: '/login/signup', element: <SignUp /> },
       { path: '/login/resetpw', element: <ResetPassword /> },
-      { path: '/manage', element: <ManageAccount /> },
+      { path: '/mypage/delete', element: <DeleteAccount /> },
       { path: '/mypage', element: <Mypage /> },
       { path: '/profile', element: <Profile /> },
     ],
