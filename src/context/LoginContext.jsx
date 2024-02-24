@@ -100,7 +100,7 @@ export const LoginProvider = ({ children }) => {
 
     // 로그인 실패 캐치
     try {
-      response = await auth.info();
+      response = await auth.info(accessToken);
     } catch (error) {
       console.log(`error : ${error}`);
       console.log(`status : ${response.status}`);
