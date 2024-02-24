@@ -9,7 +9,8 @@ export const login = (email, password, socialType) =>
   });
 
 // 사용자 정보
-export const info = (userEmail) => api.get(`/users/${userEmail}`);
+export const info = (accessToken) =>
+  api.get(`/users/me`, { headers: { Authorization: `Bearer ${accessToken}` } });
 
 // 회원가입
 export const signup = (data) => api.post(`/users`, data);
