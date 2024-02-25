@@ -5,11 +5,9 @@ import { IoAccessibilityOutline, IoAccessibility } from 'react-icons/io5';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import { NavigationContext } from '../context/NavigationContext';
-import { LoginContext } from '../context/LoginContext';
 
 export default function Navigation() {
   const { selected, setSelected } = useContext(NavigationContext);
-  const { isLogin } = useContext(LoginContext);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -24,6 +22,9 @@ export default function Navigation() {
       setSelected('profile');
     }
   }, [location.pathname, setSelected]);
+
+  // Context 만들어지면 isLogin일 때 'profile' 선택하면 /mypage로 라우팅
+  // navigate({ isLogin ? '/mypage' : '/login' })
 
   return (
     <footer
@@ -58,7 +59,7 @@ export default function Navigation() {
         style={{ position: 'relative' }}
         onClick={() => {
           setSelected('profile');
-          navigate(isLogin ? '/profile' : '/login');
+          navigate('/login');
         }}
         className={`mx-12 text-4xl text-main cursor-pointer ${
           selected === 'profile' ? 'selected-icon' : ''

@@ -1,27 +1,19 @@
-// import React from 'react';
-// import GetStarted from './pages/GetStarted';
-
-// export default function App() {
-//   return (
-//     <div>
-//       <GetStarted />
-//     </div>
-//   );
-// }
-
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { NavigationProvider } from '../src/context/NavigationContext';
-import { LoginProvider } from '../src/context/LoginContext';
+import { UserProvider } from './context/User';
+
+// UserProvider : 로그인, 회원가입 정보 상태 공유
+// NavigationProvider : 네비게이션바 상태 공유
 
 export default function App() {
   return (
     <section>
-      <LoginProvider>
+      <UserProvider>
         <NavigationProvider>
           <Outlet />
         </NavigationProvider>
-      </LoginProvider>
+      </UserProvider>
     </section>
   );
 }

@@ -9,7 +9,7 @@ import MainPage from './pages/MainPage';
 import Board from './pages/Board';
 import BoardDetail from './pages/BoardDetail';
 import UploadBoard from './pages/UploadBoard';
-import LogIn from './pages/LogIn';
+import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import ResetPassword from './pages/ResetPassword';
 import Mypage from './pages/Mypage';
@@ -19,7 +19,7 @@ import DeleteAccount from './pages/DeleteAccount';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />, // 처음 페이지 = Root.js와 같은 의미
+    element: <App />, // Root
     errorElement: <NotFound />, // 에러 페이지
     children: [
       { index: true, element: <GetStarted /> }, // 자식 페이지 중 기본 페이지
@@ -27,7 +27,7 @@ const router = createBrowserRouter([
       { path: '/board', element: <Board /> },
       { path: '/board/:postId', element: <BoardDetail /> }, // 쿼리로 포스트 id 식별
       { path: '/board/upload/:postId', element: <UploadBoard /> }, // 쿼리로 포스트 id 식별
-      { path: '/login', element: <LogIn /> },
+      { path: '/login', element: <Login /> },
       { path: '/login/signup', element: <SignUp /> },
       { path: '/login/resetpw', element: <ResetPassword /> },
       { path: '/mypage/delete', element: <DeleteAccount /> },
