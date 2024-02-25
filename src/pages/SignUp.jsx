@@ -8,29 +8,56 @@ import {
 } from 'react-icons/go';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import * as auth from '../apis/auth';
+import { useUserDispatch } from '../context/User';
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState('');
+  const [emailDuplicated, setEmailDuplicated] = useState(true);
+  const [emailError, setEmailError] = useState(''); // 로그인 오류 메세지
 
   const [serverCode, setServerCode] = useState(null); // 발급된 인증번호
-  const [code, setCode] = useState(Array(4).fill(''));
-  const [codeIssuedTime, setCodeIssuedTime] = useState(null);
-  const [codeExpiryTime] = useState(5); // 제한시간 5분
+  const [code, setCode] = useState(Array(4).fill('')); // 입력한 인증번호
+  const [codeIssuedTime, setCodeIssuedTime] = useState(null); // 인증번호 발급시간
   const [verified, setVerified] = useState(false); // 이메일 인증 여부
 
-  const [name, setName] = useState('');
+  const [userName, setUserName] = useState('');
+  const [nameDuplicated, setNameDuplicated] = useState(true);
+  const [nameError, setNameError] = useState(''); // 닉네임 오류 메세지
+
   const [password, setPassword] = useState('');
-  const [checkPassword, setCheckPassword] = useState('');
-  const [passwordMessage, setPasswordMessage] = useState(null);
+  const [checkPassword, setCheckPassword] = useState(''); // 비밀번호 확인
+  const [passwordMessage, setPasswordMessage] = useState(null); // 비밀번호 일치여부 안내 문구
 
   const [showPassword, setShowPassword] = useState(false);
+
+  const navigate = useNavigate();
+
+  const { signup } = useUserDispatch(); // 회원가입 dispatch
 
   // 1️⃣ 이메일 상태 저장
   const handleEmailChange = (e) => setEmail(e.target.value);
 
-  // 2️⃣ 이메일 유효성 검사
+  // 2️⃣ 이메일 중복 확인
+  const checkEmailDuplication = async (email) => {
+    try {
+      const response = await axios.post('http://localhost:8080/login/signup', {
+        email,
+      });
+
+      // response.data.isDuplicated : 중복이면 true로 반환 옴
+      if (response.data.isDuplicated) {
+        alert('이미 사용중인 이메일입니다');
+        setEmailDuplicated(true);
+      } else {
+        alert('사용 가능한 이메일입니다');
+        setEmailDuplicated(false);
+      }
+    } catch (error) {
+      console.error('이메일 중복 확인 중 에러 발생: ', error);
+    }
+  };
+
+  // 3️⃣ 이메일 유효성 검사 : 인증 요청 버튼
   const isEmailVaild = (e) => {
     e.preventDefault();
     const pattern =
@@ -45,12 +72,14 @@ export default function SignUp() {
     }
   };
 
-  // 3️⃣ 인증번호 요청
+  // 4️⃣ 인증번호 요청 : 인증 요청 버튼 (유효성 검사 통과 시 작동)
   const requestServerCode = async (email) => {
     try {
-      const response = await axios.post('서버의 엔드포인트 입력', { email });
+      const response = await axios.post('http://localhost:8080/login/signup', {
+        email,
+      });
 
-      // 인증번호 저장 : 'authCode'라면 수정
+      // 서버에서 받은 인증번호 저장
       setServerCode(response.data.code);
 
       // 인증번호 발급시간 저장
@@ -58,22 +87,6 @@ export default function SignUp() {
       //
     } catch (error) {
       console.error('인증번호 요청 중 에러 발생: ', error);
-    }
-  };
-
-  // 4️⃣ 인증번호 만료 확인
-  const isCodeExpired = () => {
-    // 현재 시간과 인증번호 발급 시간의 차이(분) 계산
-    const timeDifference = (new Date().getTime() - codeIssuedTime) / 1000 / 60;
-
-    // 인증번호가 만료되었는지 확인
-    if (timeDifference > codeExpiryTime) {
-      console.log('인증번호가 만료되었습니다');
-      alert('인증번호가 만료되었습니다');
-      return true;
-    } else {
-      console.log('인증번호가 유효합니다');
-      return false;
     }
   };
 
@@ -92,42 +105,86 @@ export default function SignUp() {
     }
   };
 
-  // 6️⃣ 인증번호 검증
-  const isCodeVaild = () => {
+  // 6️⃣ 인증번호 만료 여부 : 인증 확인 버튼
+  const isCodeExpired = () => {
+    // 현재 시간과 인증번호 발급 시간의 차이(분) 계산
+    const timeDifference = (new Date().getTime() - codeIssuedTime) / 1000 / 60;
+
+    // 인증번호가 만료되었는지 확인 : 5분
+    if (timeDifference > 5) {
+      console.log('인증번호가 만료되었습니다');
+      alert('인증번호가 만료되었습니다');
+      return true;
+    } else {
+      console.log('인증번호가 유효합니다');
+      isCodeVaild();
+      return false;
+    }
+  };
+
+  // 6️⃣-1 인증번호 검증 (인증번호 만료 확인 후 시행), 서버로 인증 여부 전송
+  const isCodeVaild = async () => {
     const userCode = code.join('');
 
     if (userCode !== serverCode) {
       setCode('');
-      alert('코드가 일치하지 않습니다');
+      alert('인증번호가 일치하지 않습니다');
     } else {
-      setVerified(true);
-      setServerCode('');
-      alert('인증번호가 맞습니다');
+      try {
+        // 서버에 인증 완료 상태 전송
+        const response = await axios.post(
+          'http://localhost:8080/login/signup',
+          {
+            email: email, // 사용자 이메일
+            code: userCode, // 사용자가 입력한 인증번호
+          }
+        );
+
+        if (response.data.success) {
+          // 서버에서 성공 응답을 받았을 경우
+          setVerified(true); // 인증 완료
+          setServerCode('');
+          alert('인증 완료!');
+        } else {
+          alert('인증 실패: ' + response.data.message);
+        }
+      } catch (error) {
+        console.error('인증 완료 상태 전송 중 에러 발생: ', error);
+      }
     }
   };
 
-  // 7️⃣ 닉네임 중복 확인
-  const checkNicknameDuplication = async (name) => {
+  // 7️⃣ 닉네임 유효성 검사
+  const isNameValid = () => {
+    const pattern = /^[가-힣]{2,}|[A-Za-z]{3,}$/;
+
+    if (!pattern.test(userName)) {
+      setNameError('이메일 형식이 올바르지 않습니다');
+      setUserName('');
+    } else {
+      setNameError('');
+      checkNameDuplication();
+    }
+  };
+
+  // 7️⃣-1 닉네임 중복 확인 : 중복 확인 버튼
+  const checkNameDuplication = async (userName) => {
     try {
-      const response = await axios.post('서버 엔드포인트로 바꾸기', { name });
+      const response = await axios.post('http://localhost:8080/login/signup', {
+        userName,
+      });
 
       if (response.data.isDuplicated) {
         console.log('이미 사용중인 닉네임입니다');
-      }
-
-      // 닉네임 최소 글자 수
-      if (name.length < 3) {
-        console.log('닉네임은 최소 3자 이상 입력해주세요');
+        setNameDuplicated(true);
+        setUserName('');
       } else {
         console.log('사용 가능한 닉네임입니다');
+        setNameDuplicated(false);
       }
     } catch (error) {
       console.error('닉네임 중복 확인 중 에러 발생: ', error);
     }
-  };
-
-  const handleCheckName = () => {
-    checkNicknameDuplication(name);
   };
 
   // 8️⃣ 비밀번호 유효성 검사
@@ -139,7 +196,7 @@ export default function SignUp() {
     );
   };
 
-  // 비밀번호 확인
+  // 9️⃣ 비밀번호 확인
   const isSamePassword = () => {
     if (password && checkPassword) {
       password !== checkPassword
@@ -152,7 +209,7 @@ export default function SignUp() {
 
   useEffect(() => {
     isSamePassword();
-  }, [checkPassword]);
+  });
 
   // 비밀번호 보기
   const toggleShowPassword = (e) => {
@@ -160,50 +217,11 @@ export default function SignUp() {
     setShowPassword(!showPassword);
   };
 
-  // 회원가입 요청
-  const signup = async (form) => {
-    console.log(form);
-
-    let response;
-    let data;
-    try {
-      response = await auth.signup(form);
-    } catch (error) {
-      console.error(`${error}`);
-      console.error('회원가입 요청 중 에러가 발생하였습니다.');
-      return;
-    }
-
-    data = response.data;
-    const status = response.status;
-    console.log(`data : ${data}`);
-    console.log(`status : ${status}`);
-
-    if (status === 200) {
-      console.log('회원가입에 성공했습니다');
-      alert('회원가입에 성공했습니다');
-      navigate('/login');
-    } else {
-      console.log('회원가입에 실패했습니다');
-      alert('회원가입에 실패했습니다');
-    }
-  };
-
-  // 서버에 회원가입 정보 전송 : 이메일, 이름, 패스워드
+  // 🔟 서버에 회원가입 정보 (이메일, 이름, 패스워드, 소셜타입) 전송 : 회원가입 버튼
   const onSignUp = (e) => {
     e.preventDefault();
-
-    const userEmail = email;
-    const userName = name;
-    const userPassword = password;
-    const socialType = 'Refrigerator-Cleaner';
-
-    console.log(userEmail, userName, userPassword, socialType);
-
-    signup({ userEmail, userName, userPassword, socialType });
+    signup(email, password, userName, 'Refrigerator-Cleaner');
   };
-
-  const navigate = useNavigate();
 
   return (
     <section className="flex flex-col justify-center items-center min-h-screen px-10 relative">
@@ -224,27 +242,40 @@ export default function SignUp() {
       </header>
 
       {/* 회원가입 정보 입력 */}
-      <form>
+      <form onSubmit={onSignUp}>
         <main className="mt-10 w-full px-2">
-          {/* 이메일 인증 */}
+          {/* 이메일 중복 확인 & 인증 요청 */}
           <div>
             <label className="mb-4 text-md font-bold font-undong text-center ">
               이메일 입력
             </label>
-            <div className="flex">
+            <div className="flex items-center">
               <input
                 type="email"
                 value={email}
                 onChange={handleEmailChange}
-                className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-4 h-20 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 placeholder="이메일"
               />
-              <button
-                disabled={serverCode}
-                className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
-              >
-                인증 요청
-              </button>
+              <div>
+                <button
+                  onClick={checkEmailDuplication}
+                  className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
+                >
+                  중복 확인
+                </button>
+                <button
+                  disabled={emailDuplicated}
+                  onClick={isEmailVaild}
+                  className={`inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 ${
+                    emailDuplicated
+                      ? 'text-white bg-main hover:bg-[#15ed79] hover:text-black duration-300'
+                      : 'bg-gray-500 text-black'
+                  }`}
+                >
+                  인증 요청
+                </button>
+              </div>
             </div>
             <p
               className={`text-red-500 text-sm pl-3 mt-1 ${
@@ -255,7 +286,7 @@ export default function SignUp() {
             </p>
           </div>
 
-          {/* 인증하기 */}
+          {/* 인증 확인 */}
           <div className="mt-6">
             <label className="mb-4 font-bold font-undong text-center text-md">
               인증번호 입력
@@ -294,7 +325,10 @@ export default function SignUp() {
                     />
                   ))}
               </inputs>
-              <button className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300">
+              <button
+                onClick={isCodeExpired}
+                className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
+              >
                 인증 확인
               </button>
             </div>
@@ -310,13 +344,13 @@ export default function SignUp() {
             <div className="flex mb-6">
               <input
                 type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
                 placeholder="닉네임"
                 className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
               <button
-                onClick={handleCheckName}
+                onClick={isNameValid}
                 className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
               >
                 중복 확인
@@ -371,7 +405,7 @@ export default function SignUp() {
               </ul>
 
               {/* 비밀번호 확인 */}
-              <label className="flex mb-4 text-md font-bold font-undong text-center">
+              <label className="flex mb-2 text-md font-bold font-undong text-center">
                 비밀번호 확인
               </label>
               <div className="flex">
@@ -386,21 +420,24 @@ export default function SignUp() {
                   className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
-              {passwordMessage !== null && (
-                <p
-                  className={`text-sm pl-3 mt-1 ${
-                    passwordMessage ? 'text-green-500' : 'text-red-500'
-                  }`}
-                >
-                  {passwordMessage
-                    ? '비밀번호가 일치합니다'
-                    : '비밀번호가 일치하지 않습니다'}
-                </p>
-              )}
+              <p
+                className={`text-sm pl-3 mt-1 ${
+                  passwordMessage === null
+                    ? ''
+                    : passwordMessage
+                    ? 'text-green-500'
+                    : 'text-red-500'
+                }`}
+              >
+                {passwordMessage === null
+                  ? '\u00A0'
+                  : passwordMessage
+                  ? '비밀번호가 일치합니다'
+                  : '비밀번호가 일치하지 않습니다'}
+              </p>
               <button
                 type="submit"
-                onSubmit={onSignUp}
-                disabled={!passwordMessage && verified}
+                disabled={verified && !passwordMessage} // 이메일 인증 완료 && 비밀번호 확인 일치
                 className={`p-3 mx-20 mt-3 rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110  duration-300
               ${
                 passwordMessage

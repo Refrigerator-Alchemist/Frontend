@@ -3,20 +3,24 @@ import Logo from '../components/Logo';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import { GoEye, GoEyeClosed } from 'react-icons/go';
-import axios from 'axios';
-import Kakao from '../components/Kakao';
+import { Kakao, Naver, Google } from '../components/SnsLogin';
+import { useUserDispatch } from '../context/User';
 
-export default function LogIn() {
-  const [email, setEmail] = useState(''); // 이메일
-  const [emailError, setEmailError] = useState(''); // 이메일 유효성 검사
-  const [emailValid, setEmailValid] = useState(false);
-
-  const [notAllow, setNotAllow] = useState(true);
+export default function Login() {
+  const [email, setEmail] = useState('');
+  const [emailValid, setEmailValid] = useState(false); // 이메일 유효성 검사
+  const [emailError, setEmailError] = useState(''); // 로그인 오류 메세지
 
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  // 이메일 상태 저장
+  const [notAllow, setNotAllow] = useState(true); // 로그인 disabled on/off
+
+  const { login } = useUserDispatch(); // 로그인 dispatch
+
+  const navigate = useNavigate();
+
+  // 1️⃣ 이메일 입력값 저장
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
 
@@ -33,7 +37,22 @@ export default function LogIn() {
     }
   };
 
-  // 이메일 유효성 검사 통과 & 비밀번호 8자 이상 : 로그인 버튼 활성화
+  // 2️⃣ 비밀번호 입력값 저장
+  const handlePasswordChange = (e) => setPassword(e.target.value);
+
+  // 비밀번호 사용자에게 표시
+  const toggleShowPassword = (e) => {
+    e.preventDefault();
+    setShowPassword(!showPassword);
+  };
+
+  // 3️⃣ 서버에 로그인 정보 (이메일, 패스워드, socialType) 전송 : 로그인 버튼
+  const onLogin = (e) => {
+    e.preventDefault();
+    login(email, password, 'Refrigerator-Cleaner');
+  };
+
+  // 로그인 버튼 활성화
   useEffect(() => {
     if (emailValid && password.length > 8) {
       setNotAllow(false);
@@ -41,57 +60,6 @@ export default function LogIn() {
     }
     setNotAllow(true);
   }, [emailValid, password]);
-
-  // 비밀번호 상태 저장
-  const handlePasswordChange = (e) => setPassword(e.target.value);
-
-  // 비밀번호 표시
-  const toggleShowPassword = (e) => {
-    e.preventDefault();
-    setShowPassword(!showPassword);
-  };
-
-  // 서버에 로그인 정보 전송 : 이메일, 패스워드, socialType
-  const onLogin = async (e) => {
-    e.preventDefault();
-
-    const userEmail = email;
-    const userPassword = password;
-    const socialType = 'Refrigerator-Cleaner';
-
-    const URL = '/login';
-
-    try {
-      const response = await axios.post(
-        URL,
-        {
-          userEmail,
-          userPassword,
-          socialType,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-
-      const data = response.data;
-      const status = response.status;
-      const headers = response.headers;
-      const authorization = headers.authorization;
-      const accessToken = authorization.replace('Bearer ', '');
-
-      console.log(`data : ${data}`);
-      console.log(`status ${status}`);
-      console.log(`headers ${headers}`);
-      console.log(`JWT : ${accessToken}`);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const navigate = useNavigate();
 
   return (
     <section className="relative flex flex-col items-center justify-between font-score p-8 min-h-screen">
@@ -111,7 +79,11 @@ export default function LogIn() {
 
       {/* 이메일, 비밀번호 입력 + 로그인 */}
       <main>
-        <form className="p-4 rounded-xl" style={{ width: '400px' }}>
+        <form
+          className="p-4 rounded-xl"
+          style={{ width: '400px' }}
+          onSubmit={onLogin}
+        >
           <div className="mb-4">
             <label className="block text-gray-700 ml-3">이메일</label>
             <input
@@ -120,6 +92,7 @@ export default function LogIn() {
               onChange={handleEmailChange}
               className="w-full px-4 py-3 mt-1 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="이메일"
+              required
             />
             <p
               className={`text-red-500 text-sm pl-3 mt-1 ${
@@ -157,9 +130,6 @@ export default function LogIn() {
           </p>
           <button
             type="submit"
-            onSubmit={(e) => {
-              onLogin(e);
-            }}
             disabled={notAllow}
             className={`w-full py-2 text-2xl font-jua transition ease-in-out duration-300 rounded-3xl ${
               notAllow
@@ -177,19 +147,9 @@ export default function LogIn() {
         {/* SNS 계정으로 가입 */}
         <p className="my-4 text-gray-400">SNS 간편 로그인</p>
         <figure className="flex mb-4">
-          <img
-            className="mx-3"
-            style={{ width: '45px', height: '45px' }}
-            src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-webinar-optimizing-for-success-google-business-webinar-13.png"
-            alt="google"
-          ></img>
+          <Google />
           <Kakao />
-          <img
-            className="mx-3"
-            style={{ width: '45px', height: '45px' }}
-            src="https://clova-phinf.pstatic.net/MjAxODAzMjlfOTIg/MDAxNTIyMjg3MzM3OTAy.WkiZikYhauL1hnpLWmCUBJvKjr6xnkmzP99rZPFXVwgg.mNH66A47eL0Mf8G34mPlwBFKP0nZBf2ZJn5D4Rvs8Vwg.PNG/image.png"
-            alt="naver"
-          ></img>
+          <Naver />
         </figure>
 
         {/* 이메일 회원가입 */}
