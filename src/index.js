@@ -9,7 +9,7 @@ import MainPage from './pages/MainPage';
 import Board from './pages/Board';
 import BoardDetail from './pages/BoardDetail';
 import UploadBoard from './pages/UploadBoard';
-import Login from './pages/Login';
+import Login from './pages/LogIn';
 import SignUp from './pages/SignUp';
 import ResetPassword from './pages/ResetPassword';
 import Mypage from './pages/Mypage';
