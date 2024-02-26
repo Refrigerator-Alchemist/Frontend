@@ -2,6 +2,10 @@ import React, { useReducer, createContext, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+// 서버 주소 : http://localhost:8080
+// 로그인 /login
+// 회원가입 /login/signup
+
 // 초기 상태 정의
 const initialState = {
   user: null,
@@ -89,6 +93,7 @@ export const UserProvider = ({ children }) => {
         console.log(response.headers.authorization); // undefined getItem
         console.log('로그인 되었습니다!');
 
+        // 로컬 스토리지에 유저 데이터 저장
         localStorage.setItem('Authorization', response.headers.authorization);
         localStorage.setItem('uid', response.data.id);
         localStorage.setItem('username', response.data.name);
