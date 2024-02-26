@@ -39,10 +39,18 @@ export default function SignUp() {
 
   // 2️⃣ 이메일 중복 확인
   const checkEmailDuplication = async (email) => {
+    if (!email) {
+      alert('이메일을 입력해주세요');
+      return;
+    }
+
     try {
-      const response = await axios.post('http://localhost:8080/login/signup', {
-        email,
-      });
+      const response = await axios.post(
+        'http://localhost:8080/login/signup/checkemail',
+        {
+          email,
+        }
+      );
 
       // response.data.isDuplicated : 중복이면 true로 반환 옴
       if (response.data.isDuplicated) {
@@ -75,9 +83,12 @@ export default function SignUp() {
   // 4️⃣ 인증번호 요청 : 인증 요청 버튼 (유효성 검사 통과 시 작동)
   const requestServerCode = async (email) => {
     try {
-      const response = await axios.post('http://localhost:8080/login/signup', {
-        email,
-      });
+      const response = await axios.post(
+        'http://localhost:8080/login/signup/requestcode',
+        {
+          email,
+        }
+      );
 
       // 서버에서 받은 인증번호 저장
       setServerCode(response.data.code);
@@ -116,11 +127,9 @@ export default function SignUp() {
     if (timeDifference > 5) {
       console.log('인증번호가 만료되었습니다');
       alert('인증번호가 만료되었습니다');
-      return true;
     } else {
       console.log('인증번호가 유효합니다');
       isCodeVaild(e);
-      return false;
     }
   };
 
@@ -137,7 +146,7 @@ export default function SignUp() {
       try {
         // 서버에 인증 완료 상태 전송
         const response = await axios.post(
-          'http://localhost:8080/login/signup',
+          'http://localhost:8080/login/signup/checkcode',
           {
             email: email,
             code: userCode,
@@ -176,9 +185,12 @@ export default function SignUp() {
   // 7️⃣-1 닉네임 중복 확인 (닉네임 유효성 검사 통과 시 작동)
   const checkNameDuplication = async (userName) => {
     try {
-      const response = await axios.post('http://localhost:8080/login/signup', {
-        userName,
-      });
+      const response = await axios.post(
+        'http://localhost:8080/login/signup/checkname',
+        {
+          userName,
+        }
+      );
 
       if (response.data.isDuplicated) {
         console.log('이미 사용중인 닉네임입니다');
@@ -486,11 +498,11 @@ export default function SignUp() {
               <button
                 type="submit"
                 disabled={
-                  nameDuplicated &&
-                  emailDuplicated &&
-                  !verified &&
+                  nameDuplicated === true &&
+                  emailDuplicated === true &&
+                  verified === false &&
                   password.length < 8 &&
-                  !isPasswordValid(password) &&
+                  isPasswordValid(password) === false &&
                   !passwordMessage
                 }
                 className={`p-3 mx-20 mt-3 rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110  duration-300

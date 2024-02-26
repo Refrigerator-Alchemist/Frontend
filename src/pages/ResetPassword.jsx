@@ -10,7 +10,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 export default function ResetPassword() {
-  const [email, setEmail] = useState(''); // 사용자의 이메일
+  const [email, setEmail] = useState(null); // 사용자의 이메일
   const [emailError, setEmailError] = useState(''); // 이메일 존재 여부 판단
 
   const [serverCode, setServerCode] = useState(null); // 발급된 인증번호
@@ -24,30 +24,60 @@ export default function ResetPassword() {
 
   const [showPassword, setShowPassword] = useState(false);
 
+  const navigate = useNavigate();
+
   // 1️⃣ 이메일 입력값 저장
   const handleEmailChange = (e) => setEmail(e.target.value);
 
   // 2️⃣ 서버에 존재하는 이메일인지 확인 : 인증 요청 버튼
   const checkEmailExists = async (email) => {
-    try {
-      const response = await axios.post('http://localhost:8080/checkEmail', {
-        email,
-      });
+    if (!email) {
+      alert('이메일을 입력해주세요');
+      return;
+    }
 
-      if (response.data.exists) {
-        console.log('이메일이 존재합니다');
-        return true;
+    try {
+      const response = await axios.post(
+        'http://localhost:8080/login/resetpw/checkemail',
+        {
+          email,
+        }
+      );
+
+      if (!response.data.exists) {
+        setEmailError('존재하지 않는 이메일입니다');
       } else {
-        console.log('이메일이 존재하지 않습니다');
-        setEmailError('이메일이 존재하지 않습니다');
-        return false;
+        // 이메일 존재 할 때 통과
+        setEmailError('');
+        requestServerCode(email);
       }
     } catch (error) {
       console.error('이메일 존재 확인 중 에러 발생: ', error);
     }
   };
 
-  // 인증번호 입력
+  // 3️⃣ 인증번호 요청 : 인증 요청 버튼 (이메일 중복 확인 후 동작)
+  const requestServerCode = async (email) => {
+    try {
+      const response = await axios.post(
+        'http://localhost:8080/login/resetpw/requestcode',
+        {
+          email,
+        }
+      );
+
+      // 서버에서 받은 인증번호 저장
+      setServerCode(response.data.code);
+
+      // 인증번호 발급시간 저장
+      setCodeIssuedTime(new Date().getTime());
+      //
+    } catch (error) {
+      console.error('인증번호 요청 중 에러 발생: ', error);
+    }
+  };
+
+  // 4️⃣ 인증번호 입력
   const handleCodeChange = (element, index) => {
     if (element.target.value) {
       setCode([
@@ -62,7 +92,60 @@ export default function ResetPassword() {
     }
   };
 
-  // 비밀번호 유효성 검사
+  // 5️⃣ 인증번호 만료 여부 : 인증 확인 버튼
+  const isCodeExpired = (e) => {
+    e.preventDefault();
+
+    // 현재 시간과 인증번호 발급 시간의 차이(분) 계산
+    const timeDifference = (new Date().getTime() - codeIssuedTime) / 1000 / 60;
+
+    // 인증번호가 만료되었는지 확인 : 5분
+    if (timeDifference > 5) {
+      console.log('인증번호가 만료되었습니다');
+      alert('인증번호가 만료되었습니다');
+      return true;
+    } else {
+      console.log('인증번호가 유효합니다');
+      isCodeVaild(e);
+      return false;
+    }
+  };
+
+  // 6️⃣ 인증번호 검증 (인증번호 만료 확인 후 시행)
+  const isCodeVaild = async (e) => {
+    e.preventDefault();
+
+    const userCode = code.join('');
+
+    if (userCode !== serverCode) {
+      setCode('');
+      alert('인증번호가 일치하지 않습니다');
+    } else {
+      try {
+        // 서버에 인증 완료 상태 전송
+        const response = await axios.post(
+          'http://localhost:8080/login/resetpw/checkcode',
+          {
+            email: email,
+            code: userCode,
+          }
+        );
+
+        if (response.data.success) {
+          // 서버에서 성공 응답을 받았을 경우
+          setVerified(true); // 인증 완료
+          setServerCode('');
+          alert('인증 완료!');
+        } else {
+          alert('인증 실패: ' + response.data.message);
+        }
+      } catch (error) {
+        console.error('인증 완료 상태 전송 중 에러 발생: ', error);
+      }
+    }
+  };
+
+  // 7️⃣ 비밀번호 유효성 검사
   const isPasswordValid = (password) => {
     return (
       /\d/.test(password) &&
@@ -71,12 +154,14 @@ export default function ResetPassword() {
     );
   };
 
-  // 비밀번호 재확인 함수 만들기 : 완료 버튼 위 인풋
+  // 8️⃣ 비밀번호 확인 (e.preventDefault 설정 X)
   const isSamePassword = () => {
-    if (password !== checkPassword) {
-      setPasswordMessage(false);
+    if (password && checkPassword) {
+      password !== checkPassword
+        ? setPasswordMessage(false)
+        : setPasswordMessage(true); // disabled 풀림
     } else {
-      setPasswordMessage(true);
+      setPasswordMessage(null);
     }
   };
 
@@ -90,7 +175,30 @@ export default function ResetPassword() {
     setShowPassword(!showPassword);
   };
 
-  const navigate = useNavigate();
+  // 9️⃣ 서버에 새롭게 설정한 비밀번호를 전송해서 저장하기 : 재설정하기 버튼
+  const resetPassword = async (email, password) => {
+    try {
+      const response = await axios.post(
+        'http://localhost:8080/login/resetpw/confirmpw',
+        {
+          email,
+          password,
+        }
+      );
+
+      if (response.data.success) {
+        console.log('비밀번호가 성공적으로 재설정되었습니다');
+        alert('비밀번호가 성공적으로 재설정되었습니다');
+      } else {
+        console.log(
+          '비밀번호 재설정에 실패하였습니다: ' + response.data.message
+        );
+        alert('비밀번호 재설정에 실패하였습니다: ' + response.data.message);
+      }
+    } catch (error) {
+      console.error('비밀번호 재설정 중 에러 발생: ', error);
+    }
+  };
 
   return (
     <section className="flex flex-col justify-center items-center min-h-screen px-8 relative">
@@ -106,11 +214,11 @@ export default function ResetPassword() {
       <header className="flex flex-col items-center">
         <h1 className="font-score font-extrabold text-3xl">비밀번호 재설정</h1>
         <p className="font-score text-md text-gray-400 mt-2">
-          재설정할 계정의 이메일과 필수정보를 입력하세요
+          재설정할 계정의 이메일과 필수 정보를 입력하세요
         </p>
       </header>
 
-      <form>
+      <form onSubmit={resetPassword}>
         {/* 이메일 인증하기 */}
         <main className="mt-10 w-full px-2">
           {/* 이메일 확인 후 인증요청*/}
@@ -126,7 +234,10 @@ export default function ResetPassword() {
                 className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 placeholder="이메일"
               />
-              <button className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300">
+              <button
+                onClick={checkEmailExists}
+                className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
+              >
                 인증 요청
               </button>
             </div>
@@ -178,8 +289,11 @@ export default function ResetPassword() {
                     />
                   ))}
               </inputs>
-              <button className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300">
-                인증하기
+              <button
+                onClick={isCodeExpired}
+                className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
+              >
+                인증 확인
               </button>
             </div>
           </div>
@@ -207,32 +321,6 @@ export default function ResetPassword() {
                   {showPassword ? <GoEye /> : <GoEyeClosed />}
                 </button>
               </div>
-              <ul className="mt-4 font-score">
-                <li className="mb-2 flex items-center">
-                  <span role="img" aria-label="check" className="flex">
-                    {password.length >= 8 ? (
-                      <GoCheckCircleFill className="text-emerald" />
-                    ) : (
-                      <GoCheckCircle className="text-emerald" />
-                    )}
-                  </span>{' '}
-                  <span className="ml-3">
-                    최소 8자 이상의 비밀번호를 입력해주세요
-                  </span>
-                </li>
-                <li className="mb-2 flex items-center">
-                  <span role="img" aria-label="check" className="flex">
-                    {isPasswordValid(password) ? (
-                      <GoCheckCircleFill className="text-emerald" />
-                    ) : (
-                      <GoCheckCircle className="text-emerald" />
-                    )}
-                  </span>{' '}
-                  <span className="ml-3">
-                    영문, 숫자, 특수문자 각각 1자 이상을 포함해주세요
-                  </span>
-                </li>
-              </ul>
             </div>
           </div>
 
@@ -252,21 +340,76 @@ export default function ResetPassword() {
                 className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
-            {passwordMessage !== null && (
-              <p
-                className={`text-sm pl-3 mt-1 ${
-                  passwordMessage ? 'text-green-500' : 'text-red-500'
-                }`}
-              >
-                {passwordMessage
-                  ? '비밀번호가 일치합니다'
-                  : '비밀번호가 일치하지 않습니다'}
-              </p>
-            )}
+            <p
+              className={`text-sm pl-3 mt-1 ${
+                passwordMessage === null
+                  ? ''
+                  : passwordMessage
+                  ? 'text-green-500'
+                  : 'text-red-500'
+              }`}
+            >
+              {passwordMessage === null
+                ? '\u00A0'
+                : passwordMessage
+                ? '비밀번호가 일치합니다'
+                : '비밀번호가 일치하지 않습니다'}
+            </p>
           </div>
 
-          <button className=" p-5 mx-40 mt-3 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300">
-            완료
+          <ul className="mt-4 font-score">
+            <li className="mb-2 flex items-center">
+              <span role="img" aria-label="check" className="flex">
+                {verified ? (
+                  <GoCheckCircleFill className="text-emerald" />
+                ) : (
+                  <GoCheckCircle className="text-emerald" />
+                )}
+              </span>{' '}
+              <span className="ml-3">이메일 인증 완료</span>
+            </li>
+            <li className="mb-2 flex items-center">
+              <span role="img" aria-label="check" className="flex">
+                {password.length >= 8 ? (
+                  <GoCheckCircleFill className="text-emerald" />
+                ) : (
+                  <GoCheckCircle className="text-emerald" />
+                )}
+              </span>{' '}
+              <span className="ml-3">
+                최소 8자 이상의 비밀번호를 입력해주세요
+              </span>
+            </li>
+            <li className="mb-2 flex items-center">
+              <span role="img" aria-label="check" className="flex">
+                {isPasswordValid(password) ? (
+                  <GoCheckCircleFill className="text-emerald" />
+                ) : (
+                  <GoCheckCircle className="text-emerald" />
+                )}
+              </span>{' '}
+              <span className="ml-3">
+                영문, 숫자, 특수문자 각각 1자 이상을 포함해주세요
+              </span>
+            </li>
+          </ul>
+          <button
+            type="submit"
+            disabled={
+              verified === false &&
+              password.length < 8 &&
+              isPasswordValid(password) === false &&
+              !passwordMessage
+            }
+            className={`p-3 mx-20 mt-3 rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110  duration-300
+              ${
+                passwordMessage
+                  ? 'text-white bg-main hover:bg-[#15ed79] hover:text-black'
+                  : 'bg-gray-500 text-black'
+              }
+              `}
+          >
+            재설정하기
           </button>
         </footer>
       </form>

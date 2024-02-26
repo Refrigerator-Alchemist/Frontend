@@ -103,6 +103,7 @@ export const UserProvider = ({ children }) => {
           uid: response.data.id,
           username: response.data.name,
           email: response.data.email,
+          socialType: socialType, // SNS로그인 or 이메일 로그인
         };
 
         dispatch({ type: SET_USER, user });
