@@ -39,6 +39,7 @@
 }
 
 :root {
+  overflow-y: scroll;
 }
 
 body {

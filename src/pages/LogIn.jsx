@@ -62,7 +62,7 @@ export default function Login() {
   }, [emailValid, password]);
 
   return (
-    <section className="relative flex flex-col items-center justify-between font-score p-8 min-h-screen">
+    <section className="relative flex flex-col items-center justify-center font-score min-h-screen">
       {/* 뒤로가기 버튼 */}
       <div
         className="absolute top-5 left-5 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
