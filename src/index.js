@@ -15,6 +15,7 @@ import ResetPassword from './pages/ResetPassword';
 import Mypage from './pages/Mypage';
 import Profile from './pages/Profile';
 import DeleteAccount from './pages/DeleteAccount';
+import GptSearch from './pages/GptSearch';
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,7 @@ const router = createBrowserRouter([
       { path: '/mypage/delete', element: <DeleteAccount /> },
       { path: '/mypage', element: <Mypage /> },
       { path: '/profile', element: <Profile /> },
+      { path: '/gptsearch', element: <GptSearch /> },
     ],
   },
 ]);
