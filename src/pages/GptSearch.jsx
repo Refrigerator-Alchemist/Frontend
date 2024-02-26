@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
+import axios from 'axios';
 
 const TagInput = () => {
   const [tags, setTags] = useState([]);
@@ -24,6 +25,24 @@ const TagInput = () => {
   const handleDelete = (indexToDelete) => {
     setTags(tags.filter((_, index) => index !== indexToDelete));
   };
+
+  const handleNextButtonClick = () => {
+    const ingredientsMap = {
+      "ingredients": [] // 처음에는 비어있는 배열로 설정
+    };
+  
+    axios.post('http://localhost:3000/recipe/recommend', {
+      ingredientsMap: ingredientsMap
+    })
+    .then(response => {
+      console.log('서버 응답:', response);
+      navigate('/next-page');
+    })
+    .catch(error => {
+      console.error('서버 요청 에러:', error);
+    });
+  };
+  
 
   return (
     <div className="bg-white min-h-screen px-4 py-8 flex flex-col">
@@ -60,9 +79,10 @@ const TagInput = () => {
         </div>
       </div>
       <div className="w-full max-w-xs mx-auto pb-8">
-        <button
+      <button
           className="transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer text-white font-bold py-2 px-4 rounded w-full"
           type="button"
+          onClick={handleNextButtonClick} 
         >
           다음
         </button>
