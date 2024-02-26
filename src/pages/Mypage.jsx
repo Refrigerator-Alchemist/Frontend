@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaArrowLeft, FaHeart, FaRegHeart } from 'react-icons/fa';
 import Navigation from '../components/Navigation';
-
+import axios from 'axios';
 const RecipeCard = ({ postid, title, description, img, isLiked, onToggleLike }) => {
   return (
     <div className="bg-white h-auto text-black ml-6 mr-6">
@@ -25,54 +25,56 @@ const RecipeCard = ({ postid, title, description, img, isLiked, onToggleLike }) 
 };
 
 function MyPage() {
-  const [recipes, setRecipes] = useState([
+  // const [recipes, setRecipes] = useState([
 
-      {
-        rank: 1,
-        thumbnail: "https://img.khan.co.kr/lady/r/1100xX/2023/09/06/news-p.v1.20230906.8f0993f6426340fe90c978fc1352d69e.png",
-        title: "계란말이김밥",
-        ingredients: ["계란", "당근", "쪽파", "김"],
-        likes: 47,
-        description: `간단한 설명`, 
-      },
+  //     {
+  //       rank: 1,
+  //       thumbnail: "https://img.khan.co.kr/lady/r/1100xX/2023/09/06/news-p.v1.20230906.8f0993f6426340fe90c978fc1352d69e.png",
+  //       title: "계란말이김밥",
+  //       ingredients: ["계란", "당근", "쪽파", "김"],
+  //       likes: 47,
+  //       description: `간단한 설명`, 
+  //     },
       
-      {
-        title: "Vegetable Curry",
-        description: "potato, Lettuce",
-        img: "",
-        isLiked: true,
-      },
-      {
-        title: "Vegetable Curry",
-        description: "potato, Lettuce",
-        img: "",
-        isLiked: true,
-      },
-      {
-        title: "Vegetable Curry",
-        description: "potato, Lettuce",
-        img: "",
-        isLiked: true,
-      },
-      {
-        title: "Vegetable Curry",
-        description: "potato, Lettuce",
-        img: "",
-        isLiked: true,
-      },
-      {
-        title: "Vegetable Curry",
-        description: "potato, Lettuce",
-        img: "",
-        isLiked: true,
-      },
+  //     {
+  //       title: "Vegetable Curry",
+  //       description: "potato, Lettuce",
+  //       img: "",
+  //       isLiked: true,
+  //     },
+  //     {
+  //       title: "Vegetable Curry",
+  //       description: "potato, Lettuce",
+  //       img: "",
+  //       isLiked: true,
+  //     },
+  //     {
+  //       title: "Vegetable Curry",
+  //       description: "potato, Lettuce",
+  //       img: "",
+  //       isLiked: true,
+  //     },
+  //     {
+  //       title: "Vegetable Curry",
+  //       description: "potato, Lettuce",
+  //       img: "",
+  //       isLiked: true,
+  //     },
+  //     {
+  //       title: "Vegetable Curry",
+  //       description: "potato, Lettuce",
+  //       img: "",
+  //       isLiked: true,
+  //     },
  
-  ]);
+  // ]);
 
+  const [recipes, setRecipes] = useState([]);
   const [savedRecipes, setSavedRecipes] = useState([]);
   const [showSavedRecipes, setShowSavedRecipes] = useState(false);
   const navigate = useNavigate(); 
   const [image, setImage] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
+  
   const toggleLike = (recipeTitle) => {
     let newSavedRecipes;
     if (savedRecipes.includes(recipeTitle)) {
@@ -82,6 +84,26 @@ function MyPage() {
     }
     setSavedRecipes(newSavedRecipes);
   };
+
+  useEffect(() => {
+    if (showSavedRecipes) { //저장 레시피
+      axios.get('http://localhost:3000/서버주소 ')
+        .then(response => {
+          setRecipes(response.data); 
+        })
+        .catch(error => {
+          console.error('서버 요청 에러 내용:', error);
+        });
+    } else { //좋아한 레시피 
+      axios.get('http://localhost:3000/서버주소')
+        .then(response => {
+          setRecipes(response.data); 
+        })
+        .catch(error => {
+          console.error('서버 요청 에러 내용:', error);
+        });
+    }
+  }, [showSavedRecipes]); 
 
   return (
     <div className="Board flex items-center justify-center">
