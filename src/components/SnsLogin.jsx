@@ -59,4 +59,3 @@ export const Naver = () => {
 };
 
 // 로그인 상태 저장 - LoginContext
-// localhost:3000/main 리다이렉트 처리
