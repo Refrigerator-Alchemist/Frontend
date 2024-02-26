@@ -35,7 +35,7 @@ export default function MainPage() {
         <button
           className=" flex items-center justify-center space-x-4 text-white text-2xl p-5 mb-4 font-bold font-jua transition ease-in-out rounded-md bg-main hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300 ..."
           onClick={() => {
-            navigate('/usegpt');
+            navigate('/gptsearch');
           }}
         >
           <span>냉장고 연금술 시작</span>{' '}
