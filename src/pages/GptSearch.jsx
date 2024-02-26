@@ -27,20 +27,13 @@ const TagInput = () => {
   };
 
   const handleNextButtonClick = () => {
-    const ingredientsMap = {
-      "ingredients": [] // 처음에는 비어있는 배열로 설정
-    };
-  
-    axios.post('http://localhost:3000/recipe/recommend', {
-      ingredientsMap: ingredientsMap
-    })
-    .then(response => {
-      console.log('서버 응답:', response);
-      navigate('/next-page');
-    })
-    .catch(error => {
-      console.error('서버 요청 에러:', error);
-    });
+    axios.post('http://localhost:3000/recipe/recommend', { ingredients: tags })
+      .then(response => {
+        console.log(response.data); 
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
   };
   
 
