@@ -51,7 +51,8 @@ export const UserProvider = ({ children }) => {
         },
         {
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json;charset=UTF-8',
+            Accept: 'application/json', //현재 서버한테 보내는 데이터 타입
           },
         }
       )
@@ -98,6 +99,7 @@ export const UserProvider = ({ children }) => {
         localStorage.setItem('uid', response.data.id);
         localStorage.setItem('username', response.data.name);
         localStorage.setItem('email', response.data.email);
+        localStorage.setItem('socialType', response.data.socialType); // 소셜 로그인 or 이메일 로그인
 
         let user = {
           uid: response.data.id,
@@ -108,7 +110,7 @@ export const UserProvider = ({ children }) => {
 
         dispatch({ type: SET_USER, user });
         window.alert('로그인 되었습니다!');
-        navigate('/main');
+        navigate('/main'); // 메인페이지 리다이렉트
       })
       .catch((error) => {
         console.log(error);
