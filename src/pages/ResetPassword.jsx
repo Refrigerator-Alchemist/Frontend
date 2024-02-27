@@ -37,12 +37,9 @@ export default function ResetPassword() {
     }
 
     try {
-      const response = await axios.post(
-        'http://localhost:8080/login/resetpw/checkemail',
-        {
-          email,
-        }
-      );
+      const response = await axios.post('http://localhost:8080/send-email', {
+        email,
+      });
 
       if (!response.data.exists) {
         setEmailError('존재하지 않는 이메일입니다');
@@ -59,12 +56,9 @@ export default function ResetPassword() {
   // 3️⃣ 인증번호 요청 : 인증 요청 버튼 (이메일 중복 확인 후 동작)
   const requestServerCode = async (email) => {
     try {
-      const response = await axios.post(
-        'http://localhost:8080/login/resetpw/requestcode',
-        {
-          email,
-        }
-      );
+      const response = await axios.post('http://localhost:8080/send-email', {
+        email,
+      });
 
       // 서버에서 받은 인증번호 저장
       setServerCode(response.data.code);
@@ -124,7 +118,7 @@ export default function ResetPassword() {
       try {
         // 서버에 인증 완료 상태 전송
         const response = await axios.post(
-          'http://localhost:8080/login/resetpw/checkcode',
+          'http://localhost:8080/verify-email',
           {
             email: email,
             code: userCode,
@@ -178,13 +172,10 @@ export default function ResetPassword() {
   // 9️⃣ 서버에 새롭게 설정한 비밀번호를 전송해서 저장하기 : 재설정하기 버튼
   const resetPassword = async (email, password) => {
     try {
-      const response = await axios.post(
-        'http://localhost:8080/login/resetpw/confirmpw',
-        {
-          email,
-          password,
-        }
-      );
+      const response = await axios.post('http://localhost:8080/confirmpw', {
+        email,
+        password,
+      });
 
       if (response.data.success) {
         console.log('비밀번호가 성공적으로 재설정되었습니다');
