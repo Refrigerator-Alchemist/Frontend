@@ -63,7 +63,7 @@ export default function SignUp() {
         alert('이미 사용중인 이메일입니다');
         setEmailDuplicated(true);
       } else {
-        alert('사용 가능한 이메일입니다. 인증번호가 발송되었습니다.');
+        alert('인증번호가 발송되었습니다');
         setEmailDuplicated(false);
 
         // 서버에서 받은 인증번호 저장
