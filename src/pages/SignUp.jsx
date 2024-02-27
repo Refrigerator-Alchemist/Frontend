@@ -57,6 +57,7 @@ export default function SignUp() {
     try {
       const response = await axios.post('http://localhost:8080/send-email', {
         email,
+        emailType: 'sign-up',
       });
 
       if (response.data.isDuplicated) {
@@ -469,10 +470,10 @@ export default function SignUp() {
                   isPasswordValid(password) === false &&
                   !passwordMessage
                 }
-                className={`p-3 mx-20 mt-3 rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110  duration-300
+                className={`p-3 mx-20 mt-3 rounded-3xl font-jua text-xl transition ease-in-out   duration-300
               ${
                 passwordMessage
-                  ? 'text-white bg-main hover:bg-[#15ed79] hover:text-black'
+                  ? 'text-white bg-main hover:bg-[#15ed79] hover:text-black hover:cursor-pointer hover:-translate-y-1 hover:scale-110'
                   : 'bg-gray-500 text-black'
               }
               `}

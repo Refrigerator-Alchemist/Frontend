@@ -36,7 +36,7 @@ export const UserProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const navigate = useNavigate();
 
-  // 회원가입
+  // 📝 회원가입
   const signup = (email, password, username, socialType) => {
     const URL = 'http://localhost:8080/login/signup';
 
@@ -68,7 +68,28 @@ export const UserProvider = ({ children }) => {
       });
   };
 
-  // 로그인
+  // 🚫 회원탈퇴
+  const deleteUser = async () => {
+    const URL = 'http://localhost:8080/mypage/delete-user';
+
+    try {
+      // 서버에 회원탈퇴 요청
+      await axios.delete(URL, {
+        headers: {
+          Authorization: localStorage.getItem('Authorization'), // 인증 토큰
+        },
+      });
+
+      // 로그아웃 처리
+      logout();
+
+      alert('회원탈퇴가 완료되었습니다.');
+    } catch (error) {
+      console.error('회원탈퇴 요청 중 에러 발생: ', error);
+    }
+  };
+
+  // 🔐 로그인
   const login = (email, password, socialType) => {
     const URL = 'http://localhost:8080/login';
 
@@ -118,12 +139,30 @@ export const UserProvider = ({ children }) => {
       });
   };
 
+  //🔓 로그아웃
+  const logout = () => {
+    // 로컬 스토리지에서 유저 데이터 삭제
+    localStorage.removeItem('Authorization');
+    localStorage.removeItem('uid');
+    localStorage.removeItem('username');
+    localStorage.removeItem('email');
+    localStorage.removeItem('socialType');
+
+    // 유저 상태 초기화
+    dispatch({ type: SET_USER, user: null });
+
+    // 메인 페이지로 리다이렉트
+    navigate('/main');
+  };
+
   // Context value에 login과 signup 함수를 포함
   const value = {
     state,
     dispatch,
     login,
     signup,
+    logout,
+    deleteUser,
   };
 
   return (
