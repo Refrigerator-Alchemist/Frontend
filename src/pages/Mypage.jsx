@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaArrowLeft, FaHeart, FaRegHeart } from 'react-icons/fa';
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import Navigation from '../components/Navigation';
 import axios from 'axios';
-const RecipeCard = ({ postid, title, description, img, isLiked, onToggleLike }) => {
+import { useUserDispatch } from '../context/User';
+
+const RecipeCard = ({
+  postid,
+  title,
+  description,
+  img,
+  isLiked,
+  onToggleLike,
+}) => {
   return (
     <div className="bg-white h-auto text-black ml-6 mr-6">
       <div className="flex bg-white mx-2 my-2 p-4 rounded-xl shadow">
@@ -17,7 +26,11 @@ const RecipeCard = ({ postid, title, description, img, isLiked, onToggleLike }) 
           </div>
         </Link>
         <button onClick={onToggleLike} className="p-2">
-          {isLiked ? <FaHeart className="text-red-500 text-2xl" /> : <FaRegHeart className="text-2xl" />}
+          {isLiked ? (
+            <FaHeart className="text-red-500 text-2xl" />
+          ) : (
+            <FaRegHeart className="text-2xl" />
+          )}
         </button>
       </div>
     </div>
@@ -33,9 +46,9 @@ function MyPage() {
   //       title: "계란말이김밥",
   //       ingredients: ["계란", "당근", "쪽파", "김"],
   //       likes: 47,
-  //       description: `간단한 설명`, 
+  //       description: `간단한 설명`,
   //     },
-      
+
   //     {
   //       title: "Vegetable Curry",
   //       description: "potato, Lettuce",
@@ -66,19 +79,21 @@ function MyPage() {
   //       img: "",
   //       isLiked: true,
   //     },
- 
+
   // ]);
 
   const [recipes, setRecipes] = useState([]);
   const [savedRecipes, setSavedRecipes] = useState([]);
   const [showSavedRecipes, setShowSavedRecipes] = useState(false);
-  const navigate = useNavigate(); 
-  const [image, setImage] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
-  
+  const navigate = useNavigate();
+  const [image, setImage] = useState(
+    'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
+  );
+
   const toggleLike = (recipeTitle) => {
     let newSavedRecipes;
     if (savedRecipes.includes(recipeTitle)) {
-      newSavedRecipes = savedRecipes.filter(title => title !== recipeTitle);
+      newSavedRecipes = savedRecipes.filter((title) => title !== recipeTitle);
     } else {
       newSavedRecipes = [...savedRecipes, recipeTitle];
     }
@@ -86,50 +101,88 @@ function MyPage() {
   };
 
   useEffect(() => {
-    if (showSavedRecipes) { //저장 레시피
-      axios.get('http://localhost:3000/서버주소 ')
-        .then(response => {
-          setRecipes(response.data); 
+    if (showSavedRecipes) {
+      //저장 레시피
+      axios
+        .get('http://localhost:3000/서버주소 ')
+        .then((response) => {
+          setRecipes(response.data);
         })
-        .catch(error => {
+        .catch((error) => {
           console.error('서버 요청 에러 내용:', error);
         });
-    } else { //좋아한 레시피 
-      axios.get('http://localhost:3000/서버주소')
-        .then(response => {
-          setRecipes(response.data); 
+    } else {
+      //좋아한 레시피
+      axios
+        .get('http://localhost:3000/서버주소')
+        .then((response) => {
+          setRecipes(response.data);
         })
-        .catch(error => {
+        .catch((error) => {
           console.error('서버 요청 에러 내용:', error);
         });
     }
-  }, [showSavedRecipes]); 
+  }, [showSavedRecipes]);
+
+  // 창욱 comment : 로그아웃 함수랑 회원 탈퇴 라우팅 넣어둘게요~
+  const { logout } = useUserDispatch();
 
   return (
     <div className="Board flex items-center justify-center">
       <div className="flex flex-col items-center overflow-hidden">
+        {/* 회원탈퇴, 로그아웃 */}
+        <div className="flex justify-end w-full mt-2 space-x-2">
+          <button
+            className="text-gray-300"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate('/mypage/delete-user');
+            }}
+          >
+            회원 탈퇴
+          </button>
+          <button
+            className="outline-none font-semibold underline underline-offset-2 hover:text-red-500"
+            onClick={(e) => {
+              e.preventDefault();
+              logout();
+            }}
+          >
+            로그아웃
+          </button>
+        </div>
         <div className="bg-gray-300 rounded-full h-32 w-32 mt-20">
-          <img src={image} alt="프로필 사진" className="rounded-full h-32 w-32 object-cover" />
+          <img
+            src={image}
+            alt="프로필 사진"
+            className="rounded-full h-32 w-32 object-cover"
+          />
         </div>
         <h1 className="mt-5 text-xl font-semibold text-center">user1</h1>
         <p className="mt-4 pb-4\2 px-6 text-center">한줄 자기소개</p>
-        <button 
-          onClick={() => navigate('/profile')} 
+        <button
+          onClick={() => navigate('/profile')}
           className="my-2 bg-white text-black py-2 px-4 rounded focus:outline-none focus:ring-2  focus:ring-opacity-50"
         >
           회원정보 수정
         </button>
 
         <div className="flex">
-          <button 
-            onClick={() => setShowSavedRecipes(false)} 
-            className={`mx-1 py-2 px-4 rounded ${!showSavedRecipes ? 'bg-main text-white' : 'bg-gray-100 text-black'}`}
+          <button
+            onClick={() => setShowSavedRecipes(false)}
+            className={`mx-1 py-2 px-4 rounded ${
+              !showSavedRecipes
+                ? 'bg-main text-white'
+                : 'bg-gray-100 text-black'
+            }`}
           >
             좋아한 레시피 보기
           </button>
-          <button 
-            onClick={() => setShowSavedRecipes(true)} 
-            className={`mx-1 py-2 px-4 rounded ${showSavedRecipes ? 'bg-main text-white' : 'bg-gray-100 text-black'}`}
+          <button
+            onClick={() => setShowSavedRecipes(true)}
+            className={`mx-1 py-2 px-4 rounded ${
+              showSavedRecipes ? 'bg-main text-white' : 'bg-gray-100 text-black'
+            }`}
           >
             저장된 GPT 레시피 보기
           </button>
@@ -137,7 +190,10 @@ function MyPage() {
 
         <div className="recipe-card-container" style={{ width: '120%' }}>
           {recipes
-            .filter(recipe => !showSavedRecipes || savedRecipes.includes(recipe.title))
+            .filter(
+              (recipe) =>
+                !showSavedRecipes || savedRecipes.includes(recipe.title)
+            )
             .map((recipe, index) => (
               <RecipeCard
                 key={index}
@@ -150,7 +206,14 @@ function MyPage() {
             ))}
         </div>
       </div>
-      <footer style={{position:'fixed',bottom:'0',width:'100%',maxWidth:'32rem'}}>
+      <footer
+        style={{
+          position: 'fixed',
+          bottom: '0',
+          width: '100%',
+          maxWidth: '32rem',
+        }}
+      >
         <Navigation />
       </footer>
     </div>
