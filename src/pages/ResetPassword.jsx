@@ -8,6 +8,7 @@ import {
 } from 'react-icons/go';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { useUserDispatch } from '../context/User';
 
 export default function ResetPassword() {
   const [email, setEmail] = useState(null); // 사용자의 이메일
@@ -26,54 +27,44 @@ export default function ResetPassword() {
 
   const navigate = useNavigate();
 
+  const { resetPassword } = useUserDispatch();
+
+  const socialType = 'Refrigerator-Cleaner';
+
   // 1️⃣ 이메일 입력값 저장
   const handleEmailChange = (e) => setEmail(e.target.value);
 
-  // 2️⃣ 서버에 존재하는 이메일인지 확인 : 인증 요청 버튼
-  const checkEmailExists = async (email) => {
+  // 4️⃣ '이메일 존재 확인'과 '인증번호 요청'을 통합하는 함수
+  const handleEmailVerification = async (e) => {
+    e.preventDefault();
+
     if (!email) {
       alert('이메일을 입력해주세요');
       return;
     }
 
     try {
-      const response = await axios.post(
-        'http://localhost:8080/login/resetpw/checkemail',
-        {
-          email,
-        }
-      );
+      let response = await axios.post('http://localhost:8080/send-email', {
+        email,
+        emailType: 'reset-password',
+        socialType,
+      });
 
       if (!response.data.exists) {
         setEmailError('존재하지 않는 이메일입니다');
       } else {
-        // 이메일 존재 할 때 통과
         setEmailError('');
-        requestServerCode(email);
+
+        // 서버에서 받은 인증번호 저장
+        setServerCode(response.data.code);
+
+        // 인증번호 발급시간 저장
+        setCodeIssuedTime(new Date().getTime());
+
+        alert('인증번호가 발송되었습니다');
       }
     } catch (error) {
-      console.error('이메일 존재 확인 중 에러 발생: ', error);
-    }
-  };
-
-  // 3️⃣ 인증번호 요청 : 인증 요청 버튼 (이메일 중복 확인 후 동작)
-  const requestServerCode = async (email) => {
-    try {
-      const response = await axios.post(
-        'http://localhost:8080/login/resetpw/requestcode',
-        {
-          email,
-        }
-      );
-
-      // 서버에서 받은 인증번호 저장
-      setServerCode(response.data.code);
-
-      // 인증번호 발급시간 저장
-      setCodeIssuedTime(new Date().getTime());
-      //
-    } catch (error) {
-      console.error('인증번호 요청 중 에러 발생: ', error);
+      console.error('이메일 존재 확인 및 인증번호 요청 중 에러 발생: ', error);
     }
   };
 
@@ -124,10 +115,11 @@ export default function ResetPassword() {
       try {
         // 서버에 인증 완료 상태 전송
         const response = await axios.post(
-          'http://localhost:8080/login/resetpw/checkcode',
+          'http://localhost:8080/verify-email',
           {
             email: email,
             code: userCode,
+            socialType,
           }
         );
 
@@ -176,28 +168,9 @@ export default function ResetPassword() {
   };
 
   // 9️⃣ 서버에 새롭게 설정한 비밀번호를 전송해서 저장하기 : 재설정하기 버튼
-  const resetPassword = async (email, password) => {
-    try {
-      const response = await axios.post(
-        'http://localhost:8080/login/resetpw/confirmpw',
-        {
-          email,
-          password,
-        }
-      );
-
-      if (response.data.success) {
-        console.log('비밀번호가 성공적으로 재설정되었습니다');
-        alert('비밀번호가 성공적으로 재설정되었습니다');
-      } else {
-        console.log(
-          '비밀번호 재설정에 실패하였습니다: ' + response.data.message
-        );
-        alert('비밀번호 재설정에 실패하였습니다: ' + response.data.message);
-      }
-    } catch (error) {
-      console.error('비밀번호 재설정 중 에러 발생: ', error);
-    }
+  const onReset = (e) => {
+    e.preventDefault();
+    resetPassword(email, password, socialType);
   };
 
   return (
@@ -218,7 +191,7 @@ export default function ResetPassword() {
         </p>
       </header>
 
-      <form onSubmit={resetPassword}>
+      <form onSubmit={onReset}>
         {/* 이메일 인증하기 */}
         <main className="mt-10 w-full px-2">
           {/* 이메일 확인 후 인증요청*/}
@@ -235,7 +208,7 @@ export default function ResetPassword() {
                 placeholder="이메일"
               />
               <button
-                onClick={checkEmailExists}
+                onClick={handleEmailVerification}
                 className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
               >
                 인증 요청
@@ -401,10 +374,10 @@ export default function ResetPassword() {
               isPasswordValid(password) === false &&
               !passwordMessage
             }
-            className={`p-3 mx-20 mt-3 rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110  duration-300
+            className={`p-3 mx-20 mt-3 rounded-3xl font-jua text-xl transition ease-in-out duration-300
               ${
                 passwordMessage
-                  ? 'text-white bg-main hover:bg-[#15ed79] hover:text-black'
+                  ? 'text-white bg-main hover:bg-[#15ed79] hover:text-black hover:cursor-pointer hover:-translate-y-1 hover:scale-110'
                   : 'bg-gray-500 text-black'
               }
               `}

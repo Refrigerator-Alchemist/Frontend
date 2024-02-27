@@ -20,6 +20,8 @@ export default function Login() {
 
   const navigate = useNavigate();
 
+  const socialType = 'Refrigerator-Cleaner';
+
   // 1️⃣ 이메일 입력값 저장
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -49,7 +51,7 @@ export default function Login() {
   // 3️⃣ 서버에 로그인 정보 (이메일, 패스워드, socialType) 전송 : 로그인 버튼
   const onLogin = (e) => {
     e.preventDefault();
-    login(email, password, 'Refrigerator-Cleaner');
+    login(email, password, socialType);
   };
 
   // 로그인 버튼 활성화

@@ -14,8 +14,8 @@ import SignUp from './pages/SignUp';
 import ResetPassword from './pages/ResetPassword';
 import Mypage from './pages/Mypage';
 import Profile from './pages/Profile';
-import DeleteAccount from './pages/DeleteAccount';
 import GptSearch from './pages/GptSearch';
+import DeleteUser from './pages/DeleteUser';
 
 const router = createBrowserRouter([
   {
@@ -24,17 +24,17 @@ const router = createBrowserRouter([
     errorElement: <NotFound />, // 에러 페이지
     children: [
       { index: true, element: <GetStarted /> }, // 자식 페이지 중 기본 페이지
-      { path: '/main', element: <MainPage /> },
-      { path: '/board', element: <Board /> },
+      { path: '/main', element: <MainPage /> }, // 메인
+      { path: '/board', element: <Board /> }, // 게시판
       { path: '/board/:postId', element: <BoardDetail /> }, // 쿼리로 포스트 id 식별
       { path: '/board/upload/:postId', element: <UploadBoard /> }, // 쿼리로 포스트 id 식별
-      { path: '/login', element: <Login /> },
-      { path: '/login/signup', element: <SignUp /> },
-      { path: '/login/resetpw', element: <ResetPassword /> },
-      { path: '/mypage/delete', element: <DeleteAccount /> },
-      { path: '/mypage', element: <Mypage /> },
-      { path: '/profile', element: <Profile /> },
-      { path: '/gptsearch', element: <GptSearch /> },
+      { path: '/login', element: <Login /> }, // 로그인 페이지
+      { path: '/login/signup', element: <SignUp /> }, // 회원 가입
+      { path: '/login/resetpw', element: <ResetPassword /> }, // 비밀번호 재설정
+      { path: '/mypage/delete-user', element: <DeleteUser /> }, // 회원 탈퇴
+      { path: '/mypage', element: <Mypage /> }, // 마이페이지 - 내 피드
+      { path: '/profile', element: <Profile /> }, // 프로필 수정
+      { path: '/gptsearch', element: <GptSearch /> }, // 냉장고 연금술사 : 재료 입력
     ],
   },
 ]);

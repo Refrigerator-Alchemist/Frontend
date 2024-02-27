@@ -34,74 +34,54 @@ export default function SignUp() {
 
   const { signup } = useUserDispatch(); // 회원가입 dispatch
 
+  const socialType = 'Refrigerator-Cleaner';
+
   // 1️⃣ 이메일 상태 저장
   const handleEmailChange = (e) => setEmail(e.target.value);
 
-  // 2️⃣ 이메일 중복 확인
-  const checkEmailDuplication = async (email) => {
-    if (!email) {
-      alert('이메일을 입력해주세요');
-      return;
-    }
-
-    try {
-      const response = await axios.post(
-        'http://localhost:8080/login/signup/checkemail',
-        {
-          email,
-        }
-      );
-
-      // response.data.isDuplicated : 중복이면 true로 반환 옴
-      if (response.data.isDuplicated) {
-        alert('이미 사용중인 이메일입니다');
-        setEmailDuplicated(true);
-      } else {
-        alert('사용 가능한 이메일입니다');
-        setEmailDuplicated(false);
-      }
-    } catch (error) {
-      console.error('이메일 중복 확인 중 에러 발생: ', error);
-    }
-  };
-
-  // 3️⃣ 이메일 유효성 검사 : 인증 요청 버튼
-  const isEmailVaild = (e) => {
+  // 2️⃣ 인증 요청 버튼
+  const handleEmailVerification = async (e) => {
     e.preventDefault();
+
+    // 이메일 유효성 검사
     const pattern =
       /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
     if (!pattern.test(email)) {
       setEmailError('이메일 형식이 올바르지 않습니다');
       setEmail('');
-    } else {
-      setEmailError('');
-      requestServerCode(email);
+      return;
     }
-  };
 
-  // 4️⃣ 인증번호 요청 : 인증 요청 버튼 (유효성 검사 통과 시 작동)
-  const requestServerCode = async (email) => {
+    setEmailError('');
+
+    // 이메일 중복 확인 & 인증번호 요청
     try {
-      const response = await axios.post(
-        'http://localhost:8080/login/signup/requestcode',
-        {
-          email,
-        }
-      );
+      const response = await axios.post('http://localhost:8080/send-email', {
+        email,
+        emailType: 'sign-up',
+        socialType,
+      });
 
-      // 서버에서 받은 인증번호 저장
-      setServerCode(response.data.code);
+      if (response.data.isDuplicated) {
+        alert('이미 사용중인 이메일입니다');
+        setEmailDuplicated(true);
+      } else {
+        alert('인증번호가 발송되었습니다');
+        setEmailDuplicated(false);
 
-      // 인증번호 발급시간 저장
-      setCodeIssuedTime(new Date().getTime());
-      //
+        // 서버에서 받은 인증번호 저장
+        setServerCode(response.data.code);
+
+        // 인증번호 발급시간 저장
+        setCodeIssuedTime(new Date().getTime());
+      }
     } catch (error) {
-      console.error('인증번호 요청 중 에러 발생: ', error);
+      console.error('이메일 중복 확인 및 인증번호 요청 중 에러 발생: ', error);
     }
   };
 
-  // 5️⃣ 인증번호 입력
+  // 3️⃣ 인증번호 입력
   const handleCodeChange = (element, index) => {
     if (element.target.value) {
       setCode([
@@ -116,7 +96,7 @@ export default function SignUp() {
     }
   };
 
-  // 6️⃣ 인증번호 만료 여부 : 인증 확인 버튼
+  // 4️⃣ 인증번호 만료 여부 : 인증 확인 버튼
   const isCodeExpired = (e) => {
     e.preventDefault();
 
@@ -133,7 +113,7 @@ export default function SignUp() {
     }
   };
 
-  // 6️⃣-1 인증번호 검증 (인증번호 만료 확인 후 시행)
+  // 5️⃣ 인증번호 검증 (인증번호 만료 확인 후 시행)
   const isCodeVaild = async (e) => {
     e.preventDefault();
 
@@ -146,10 +126,11 @@ export default function SignUp() {
       try {
         // 서버에 인증 완료 상태 전송
         const response = await axios.post(
-          'http://localhost:8080/login/signup/checkcode',
+          'http://localhost:8080/verify-email',
           {
             email: email,
             code: userCode,
+            socialType,
           }
         );
 
@@ -167,7 +148,7 @@ export default function SignUp() {
     }
   };
 
-  // 7️⃣ 닉네임 유효성 검사 : 중복 확인 버튼
+  // 6️⃣ 닉네임 유효성 검사 : 중복 확인 버튼
   const isNameValid = (e) => {
     e.preventDefault();
 
@@ -182,11 +163,11 @@ export default function SignUp() {
     }
   };
 
-  // 7️⃣-1 닉네임 중복 확인 (닉네임 유효성 검사 통과 시 작동)
+  // 7️⃣ 닉네임 중복 확인 (닉네임 유효성 검사 통과 시 작동)
   const checkNameDuplication = async (userName) => {
     try {
       const response = await axios.post(
-        'http://localhost:8080/login/signup/checkname',
+        'http://localhost:8080/verify-nickname',
         {
           userName,
         }
@@ -238,7 +219,7 @@ export default function SignUp() {
   // 🔟 서버에 회원가입 정보 (이메일, 이름, 패스워드, 소셜타입) 전송 : 회원가입 버튼
   const onSignUp = (e) => {
     e.preventDefault();
-    signup(email, password, userName, 'Refrigerator-Cleaner');
+    signup(email, password, userName, socialType);
   };
 
   return (
@@ -272,26 +253,14 @@ export default function SignUp() {
                 type="email"
                 value={email}
                 onChange={handleEmailChange}
-                className="w-full px-4 h-20 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 placeholder="이메일"
               />
               <div>
-                {/* 중복 확인 */}
-                <button
-                  onClick={checkEmailDuplication}
-                  className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
-                >
-                  중복 확인
-                </button>
                 {/* 인증 요청 */}
                 <button
-                  disabled={emailDuplicated}
-                  onClick={isEmailVaild}
-                  className={`inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 ${
-                    emailDuplicated
-                      ? 'text-white bg-main hover:bg-[#15ed79] hover:text-black duration-300'
-                      : 'bg-gray-500 text-black'
-                  }`}
+                  onClick={handleEmailVerification}
+                  className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
                 >
                   인증 요청
                 </button>
@@ -311,7 +280,7 @@ export default function SignUp() {
             <label className="mb-4 font-bold font-undong text-center text-md">
               인증번호 입력
             </label>
-            <div className="flex items-center justify-between pr-6">
+            <div className="flex items-center justify-between">
               <inputs className="flex max-w-xs mt-2">
                 {Array(4)
                   .fill('')
@@ -361,7 +330,7 @@ export default function SignUp() {
             <label className="mb-4 text-md font-bold font-undong text-center">
               닉네임
             </label>
-            <div className="flex flex-col mb-6 justify-between pr-5">
+            <div className="flex flex-col mb-6 justify-between">
               <div className="flex">
                 <input
                   type="text"
@@ -505,10 +474,10 @@ export default function SignUp() {
                   isPasswordValid(password) === false &&
                   !passwordMessage
                 }
-                className={`p-3 mx-20 mt-3 rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110  duration-300
+                className={`p-3 mx-20 mt-3 rounded-3xl font-jua text-xl transition ease-in-out   duration-300
               ${
                 passwordMessage
-                  ? 'text-white bg-main hover:bg-[#15ed79] hover:text-black'
+                  ? 'text-white bg-main hover:bg-[#15ed79] hover:text-black hover:cursor-pointer hover:-translate-y-1 hover:scale-110'
                   : 'bg-gray-500 text-black'
               }
               `}
