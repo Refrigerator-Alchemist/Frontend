@@ -58,4 +58,4 @@ export const Naver = () => {
   );
 };
 
-// 로그인 상태 저장 - LoginContext
+// 로그인 상태 저장 - UserStateContext, UserDispatchContext에 저장

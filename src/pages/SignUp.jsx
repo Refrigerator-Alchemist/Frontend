@@ -257,7 +257,7 @@ export default function SignUp() {
                   onClick={handleEmailVerification}
                   className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
                 >
-                  중복 확인
+                  인증 요청
                 </button>
               </div>
             </div>
@@ -275,7 +275,7 @@ export default function SignUp() {
             <label className="mb-4 font-bold font-undong text-center text-md">
               인증번호 입력
             </label>
-            <div className="flex items-center justify-between pr-6">
+            <div className="flex items-center justify-between">
               <inputs className="flex max-w-xs mt-2">
                 {Array(4)
                   .fill('')
@@ -325,7 +325,7 @@ export default function SignUp() {
             <label className="mb-4 text-md font-bold font-undong text-center">
               닉네임
             </label>
-            <div className="flex flex-col mb-6 justify-between pr-5">
+            <div className="flex flex-col mb-6 justify-between">
               <div className="flex">
                 <input
                   type="text"
