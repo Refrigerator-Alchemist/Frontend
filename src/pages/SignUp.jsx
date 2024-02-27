@@ -34,6 +34,8 @@ export default function SignUp() {
 
   const { signup } = useUserDispatch(); // 회원가입 dispatch
 
+  const socialType = 'Refrigerator-Cleaner';
+
   // 1️⃣ 이메일 상태 저장
   const handleEmailChange = (e) => setEmail(e.target.value);
 
@@ -58,6 +60,7 @@ export default function SignUp() {
       const response = await axios.post('http://localhost:8080/send-email', {
         email,
         emailType: 'sign-up',
+        socialType,
       });
 
       if (response.data.isDuplicated) {
@@ -127,6 +130,7 @@ export default function SignUp() {
           {
             email: email,
             code: userCode,
+            socialType,
           }
         );
 
@@ -215,7 +219,7 @@ export default function SignUp() {
   // 🔟 서버에 회원가입 정보 (이메일, 이름, 패스워드, 소셜타입) 전송 : 회원가입 버튼
   const onSignUp = (e) => {
     e.preventDefault();
-    signup(email, password, userName, 'Refrigerator-Cleaner');
+    signup(email, password, userName, socialType);
   };
 
   return (

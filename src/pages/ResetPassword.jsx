@@ -8,6 +8,7 @@ import {
 } from 'react-icons/go';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { useUserDispatch } from '../context/User';
 
 export default function ResetPassword() {
   const [email, setEmail] = useState(null); // 사용자의 이메일
@@ -26,6 +27,10 @@ export default function ResetPassword() {
 
   const navigate = useNavigate();
 
+  const { resetPassword } = useUserDispatch();
+
+  const socialType = 'Refrigerator-Cleaner';
+
   // 1️⃣ 이메일 입력값 저장
   const handleEmailChange = (e) => setEmail(e.target.value);
 
@@ -42,6 +47,7 @@ export default function ResetPassword() {
       let response = await axios.post('http://localhost:8080/send-email', {
         email,
         emailType: 'reset-password',
+        socialType,
       });
 
       if (!response.data.exists) {
@@ -113,6 +119,7 @@ export default function ResetPassword() {
           {
             email: email,
             code: userCode,
+            socialType,
           }
         );
 
@@ -161,28 +168,9 @@ export default function ResetPassword() {
   };
 
   // 9️⃣ 서버에 새롭게 설정한 비밀번호를 전송해서 저장하기 : 재설정하기 버튼
-  const resetPassword = async (email, password) => {
-    try {
-      const response = await axios.post(
-        'http://localhost:8080/reset-password',
-        {
-          email,
-          password,
-        }
-      );
-
-      if (response.data.success) {
-        console.log('비밀번호가 성공적으로 재설정되었습니다');
-        alert('비밀번호가 성공적으로 재설정되었습니다');
-      } else {
-        console.log(
-          '비밀번호 재설정에 실패하였습니다: ' + response.data.message
-        );
-        alert('비밀번호 재설정에 실패하였습니다: ' + response.data.message);
-      }
-    } catch (error) {
-      console.error('비밀번호 재설정 중 에러 발생: ', error);
-    }
+  const onReset = (e) => {
+    e.preventDefault();
+    resetPassword(email, password, socialType);
   };
 
   return (
@@ -203,7 +191,7 @@ export default function ResetPassword() {
         </p>
       </header>
 
-      <form onSubmit={resetPassword}>
+      <form onSubmit={onReset}>
         {/* 이메일 인증하기 */}
         <main className="mt-10 w-full px-2">
           {/* 이메일 확인 후 인증요청*/}

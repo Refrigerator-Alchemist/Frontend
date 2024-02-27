@@ -155,6 +155,32 @@ export const UserProvider = ({ children }) => {
     navigate('/main');
   };
 
+  // 🔄 비밀번호 재설정
+  const resetPassword = async (email, password, socialType) => {
+    try {
+      const response = await axios.post(
+        'http://localhost:8080/reset-password',
+        {
+          email,
+          password,
+          socialType,
+        }
+      );
+
+      if (response.data.success) {
+        console.log('비밀번호가 성공적으로 재설정되었습니다');
+        alert('비밀번호가 성공적으로 재설정되었습니다');
+      } else {
+        console.log(
+          '비밀번호 재설정에 실패하였습니다: ' + response.data.message
+        );
+        alert('비밀번호 재설정에 실패하였습니다: ' + response.data.message);
+      }
+    } catch (error) {
+      console.error('비밀번호 재설정 중 에러 발생: ', error);
+    }
+  };
+
   // Context value에 login과 signup 함수를 포함
   const value = {
     state,
@@ -163,6 +189,7 @@ export const UserProvider = ({ children }) => {
     signup,
     logout,
     deleteUser,
+    resetPassword,
   };
 
   return (
