@@ -98,50 +98,52 @@ export const UserProvider = ({ children }) => {
 
   // ✅ 이메일 인증 확인
   const checkCodeVerification = async (email, code, socialType) => {
-    // 현재 시간과 인증번호 발급 시간의 차이
-    const timeDifference = (new Date().getTime() - codeIssuedTime) / 1000 / 60;
-    // 10분 유효
-    if (timeDifference > 10) {
-      console.log('인증번호가 만료되었습니다');
-      alert('인증번호가 만료되었습니다');
+    const NO_SERVER_CODE_ERROR = '발급된 인증번호가 없습니다';
+    const NO_CODE_ERROR = '인증번호를 입력해주세요';
+    const EXPIRED_CODE_ERROR = '인증번호가 만료되었습니다';
+    const INVALID_CODE_ERROR = '인증번호가 일치하지 않습니다';
+
+    // 발급 확인, 인증번호 입력 확인
+    if (!serverCode) {
+      alert(NO_SERVER_CODE_ERROR);
+      return;
+    } else if (!code) {
+      alert(NO_CODE_ERROR);
       return;
     }
 
-    console.log('인증번호가 유효합니다');
+    // 인증번호 유효 시간 : 10분
+    const timeDifference = (new Date().getTime() - codeIssuedTime) / 1000 / 60;
 
-    const userCode = code.join('');
-
-    if (!userCode) {
-      alert('인증번호를 입력해주세요');
+    if (timeDifference > 10) {
+      console.log(EXPIRED_CODE_ERROR);
+      alert(EXPIRED_CODE_ERROR);
       return;
-    } else {
-      if (userCode !== serverCode) {
-        alert('인증번호가 일치하지 않습니다');
-        return;
-      }
+    }
 
-      try {
-        // 서버에 인증 완료 상태 전송
-        const response = await axios.post(
-          'http://localhost:8080/verify-email',
-          {
-            email: email,
-            userCode,
-            socialType,
-          }
-        );
+    if (code !== serverCode) {
+      alert(INVALID_CODE_ERROR);
+      return;
+    }
 
-        if (response.data.success) {
-          // 서버에서 성공 응답을 받았을 경우
-          setVerified(true); // 인증 완료
-          setServerCode('');
-          alert('인증 완료!');
-        } else {
-          alert('인증 실패: ' + response.data.message);
-        }
-      } catch (error) {
-        console.error('인증 완료 상태 전송 중 에러 발생: ', error);
+    try {
+      // 서버에 인증 완료 상태 전송
+      const response = await axios.post('http://localhost:8080/verify-email', {
+        email: email,
+        code,
+        socialType,
+      });
+
+      if (response.data.success) {
+        // 서버에서 성공 응답을 받았을 경우
+        setVerified(true); // 인증 완료
+        setServerCode('');
+        alert('인증 완료!');
+      } else {
+        alert('인증 실패: ' + response.data.message);
       }
+    } catch (error) {
+      console.error('인증 완료 상태 전송 중 에러 발생: ', error);
     }
   };
 

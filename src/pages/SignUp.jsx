@@ -10,15 +10,15 @@ import { useNavigate } from 'react-router-dom';
 import { useUserDispatch } from '../context/User';
 
 export default function SignUp() {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(''); // 이메일
   const [emailError, setEmailError] = useState(''); // 로그인 오류 메세지
 
-  const [code, setCode] = useState(Array(4).fill('')); // 입력한 인증번호
+  const [code, setCode] = useState(''); // 입력한 인증번호
 
-  const [userName, setUserName] = useState('');
+  const [userName, setUserName] = useState(''); // 닉네임
   const [nameError, setNameError] = useState(''); // 닉네임 오류 메세지
 
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState(''); // 비밀번호
   const [checkPassword, setCheckPassword] = useState(''); // 비밀번호 확인
   const [passwordMessage, setPasswordMessage] = useState(null); // 비밀번호 일치여부 안내 문구
 
@@ -47,6 +47,7 @@ export default function SignUp() {
   // 2️⃣ 인증요청
   const onRequest = async (e) => {
     e.preventDefault();
+    console.log(`입력한 이메일 : ${email}`);
 
     const pattern =
       /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
@@ -62,26 +63,15 @@ export default function SignUp() {
     requestEmailForSignUp(email, emailType, socialType);
   };
 
-  // 3️⃣ 인증번호 입력값 저장 - code
-  const handleCodeChange = (element, index) => {
-    const value = element.target.value;
-    if (value && !isNaN(value)) {
-      setCode([...code.slice(0, index), value, ...code.slice(index + 1)]);
-
-      if (index < 3) {
-        document.getElementById(`input${index + 1}`).focus();
-      }
-    }
-  };
-
-  // 4️⃣ 인증 확인
+  // 3️⃣ 인증 확인
   const onCheckCode = (e) => {
     e.preventDefault();
+    console.log(`입력한 인증번호 : ${code}`);
 
     checkCodeVerification(email, code, socialType);
   };
 
-  // 5️⃣ 닉네임 중복 확인
+  // 4️⃣ 닉네임 중복 확인
   const onCheckName = (e) => {
     e.preventDefault();
 
@@ -96,7 +86,7 @@ export default function SignUp() {
     }
   };
 
-  // 6️⃣ 비밀번호 유효성 검사
+  // 5️⃣ 비밀번호 유효성 검사
   const isPasswordValid = (password) => {
     return (
       /\d/.test(password) &&
@@ -105,7 +95,7 @@ export default function SignUp() {
     );
   };
 
-  // 7️⃣ 비밀번호 확인 (e.preventDefault 설정 X)
+  // 6️⃣ 비밀번호 확인 (e.preventDefault 설정 X)
   const isSamePassword = () => {
     if (password && checkPassword) {
       password !== checkPassword
@@ -126,7 +116,7 @@ export default function SignUp() {
     setShowPassword(!showPassword);
   };
 
-  // 8️⃣ 회원가입
+  // 7️⃣ 회원가입
   const onSignUp = (e) => {
     e.preventDefault();
     signup(email, password, userName, socialType);
@@ -192,37 +182,22 @@ export default function SignUp() {
             </label>
             <div className="flex items-center justify-between">
               <div className="flex max-w-xs mt-2">
-                {Array(4)
-                  .fill('')
-                  .map((_, index) => (
-                    <input
-                      key={index}
-                      id={`input${index}`}
-                      value={code[index]}
-                      type="tel"
-                      maxLength="1"
-                      placeholder="?"
-                      onChange={(e) => {
-                        if (
-                          e.target.value === '' ||
-                          (e.target.value.length === 1 &&
-                            !isNaN(e.target.value))
-                        ) {
-                          handleCodeChange(e, index);
-                        }
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Backspace' || e.key === 'Delete') {
-                          setCode([
-                            ...code.slice(0, index),
-                            '',
-                            ...code.slice(index + 1),
-                          ]);
-                        }
-                      }}
-                      className="w-10 h-12 mx-1 text-center border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    />
-                  ))}
+                <input
+                  id="input"
+                  value={code}
+                  type="tel"
+                  maxLength="4"
+                  placeholder="????"
+                  onChange={(e) => {
+                    if (
+                      e.target.value === '' ||
+                      (!isNaN(e.target.value) && e.target.value.length <= 4)
+                    ) {
+                      setCode(e.target.value);
+                    }
+                  }}
+                  className="w-40 h-12 mx-1 text-center border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
               </div>
               <button
                 onClick={onCheckCode}
@@ -374,6 +349,7 @@ export default function SignUp() {
                   </span>
                 </li>
               </ul>
+              {/* 가입하기 */}
               <button
                 type="submit"
                 disabled={
