@@ -83,12 +83,9 @@ export default function SignUp() {
 
   // 3️⃣ 인증번호 입력값 저장
   const handleCodeChange = (element, index) => {
-    if (element.target.value) {
-      setCode([
-        ...code.slice(0, index),
-        element.target.value,
-        ...code.slice(index + 1),
-      ]);
+    const value = element.target.value;
+    if (value && !isNaN(value)) {
+      setCode([...code.slice(0, index), value, ...code.slice(index + 1)]);
 
       if (index < 3) {
         document.getElementById(`input${index + 1}`).focus();
@@ -99,7 +96,7 @@ export default function SignUp() {
   // 4️⃣ 인증번호 만료 여부 및 검증 : 인증 확인 버튼
   const handleCodeVerification = async (e) => {
     e.preventDefault();
-    console.log(code);
+    console.log(code.join('')); // join 테스트 : 통과
 
     // 현재 시간과 인증번호 발급 시간의 차이(분) 계산
     const timeDifference = (new Date().getTime() - codeIssuedTime) / 1000 / 60;
@@ -120,7 +117,6 @@ export default function SignUp() {
       return;
     } else {
       if (userCode !== serverCode) {
-        setCode('');
         alert('인증번호가 일치하지 않습니다');
         return;
       }

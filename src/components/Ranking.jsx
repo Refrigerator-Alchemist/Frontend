@@ -17,10 +17,10 @@ function RankingItem({ rank, thumbnail, name, ingredients, likes }) {
             height="40px"
             className="ml-1"
           />
-          <name className="flex flex-col">
+          <div className="flex flex-col">
             <span className="font-score font-semibold">{name}</span>
             <span className="font-score text-sm">{ingredients.join(', ')}</span>
-          </name>
+          </div>
         </div>
 
         <div>
