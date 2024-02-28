@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import {
   GoCheckCircle,
   GoCheckCircleFill,
@@ -12,12 +11,8 @@ import { useUserDispatch } from '../context/User';
 
 export default function ResetPassword() {
   const [email, setEmail] = useState(null); // 사용자의 이메일
-  const [emailError, setEmailError] = useState(''); // 이메일 존재 여부 판단
 
-  const [serverCode, setServerCode] = useState(null); // 발급된 인증번호
   const [code, setCode] = useState(Array(4).fill('')); // 입력한 인증번호
-  const [codeIssuedTime, setCodeIssuedTime] = useState(null); // 인증번호 발급시간
-  const [verified, setVerified] = useState(false); // 이메일 인증 여부
 
   const [password, setPassword] = useState(''); // 새로운 비밀번호
   const [checkPassword, setCheckPassword] = useState(''); // 비밀번호 확인
@@ -27,15 +22,24 @@ export default function ResetPassword() {
 
   const navigate = useNavigate();
 
-  const { resetPassword } = useUserDispatch();
+  const {
+    resetPassword, // 재설정하기
+    requestEmailForReset, // 인증 요청
+    emailExists, // 이메일 존재 여부 판단
+    checkCodeVerification, // 인증 확인
+    verified, // 인증 여부
+  } = useUserDispatch();
 
+  const emailType = 'reset-password';
   const socialType = 'Refrigerator-Cleaner';
 
-  // 1️⃣ 이메일 입력값 저장
+  /**-----------------------------------------상태, 상수---------------------------------------------*/
+
+  // 1️⃣ 이메일 저장
   const handleEmailChange = (e) => setEmail(e.target.value);
 
-  // 2️⃣ 서버에 이메일 존재하는지 확인 ▶ 인증번호 발급
-  const handleEmailVerification = async (e) => {
+  // 2️⃣ 인증 요청
+  const onRequest = async (e) => {
     e.preventDefault();
 
     if (!email) {
@@ -43,32 +47,10 @@ export default function ResetPassword() {
       return;
     }
 
-    try {
-      let response = await axios.post('http://localhost:8080/send-email', {
-        email,
-        emailType: 'reset-password',
-        socialType,
-      });
-
-      if (!response.data.exists) {
-        setEmailError('존재하지 않는 이메일입니다');
-        alert('존재하지 않는 이메일입니다');
-      } else {
-        setEmailError('');
-
-        // 서버에서 받은 인증번호 저장
-        setServerCode(response.data.code);
-
-        // 인증번호 발급시간 저장
-        setCodeIssuedTime(new Date().getTime());
-        alert('인증번호가 발송되었습니다');
-      }
-    } catch (error) {
-      console.error('이메일 존재 확인 및 인증번호 요청 중 에러 발생: ', error);
-    }
+    requestEmailForReset(email, emailType, socialType);
   };
 
-  // 3️⃣ 인증번호 입력값 저장
+  // 3️⃣ 인증번호 입력값 저장 - code
   const handleCodeChange = (element, index) => {
     const value = element.target.value;
     if (value && !isNaN(value)) {
@@ -80,57 +62,11 @@ export default function ResetPassword() {
     }
   };
 
-  // 4️⃣ 인증번호 만료 여부 및 검증 : 인증 확인 버튼
-  const handleCodeVerification = async (e) => {
+  // 4️⃣ 인증 확인
+  const onCheck = async (e) => {
     e.preventDefault();
-    console.log(code.join('')); // join 테스트 : 통과
 
-    // 현재 시간과 인증번호 발급 시간의 차이(분) 계산
-    const timeDifference = (new Date().getTime() - codeIssuedTime) / 1000 / 60;
-
-    // 인증번호가 만료되었는지 확인 : 10분
-    if (timeDifference > 10) {
-      console.log('인증번호가 만료되었습니다');
-      alert('인증번호가 만료되었습니다');
-      return;
-    }
-
-    console.log('인증번호가 유효합니다');
-
-    const userCode = code.join('');
-
-    if (!userCode) {
-      alert('인증번호를 입력해주세요');
-      return;
-    } else {
-      if (userCode !== serverCode) {
-        alert('인증번호가 일치하지 않습니다');
-        return;
-      }
-
-      try {
-        // 서버에 인증 완료 상태 전송
-        const response = await axios.post(
-          'http://localhost:8080/verify-email',
-          {
-            email: email,
-            code: userCode,
-            socialType,
-          }
-        );
-
-        if (response.data.success) {
-          // 서버에서 성공 응답을 받았을 경우
-          setVerified(true); // 인증 완료
-          setServerCode('');
-          alert('인증 완료!');
-        } else {
-          alert('인증 실패: ' + response.data.message);
-        }
-      } catch (error) {
-        console.error('인증 완료 상태 전송 중 에러 발생: ', error);
-      }
-    }
+    checkCodeVerification(email, code, socialType);
   };
 
   // 5️⃣ 비밀번호 유효성 검사
@@ -163,7 +99,7 @@ export default function ResetPassword() {
     setShowPassword(!showPassword);
   };
 
-  // 7️⃣ 서버에 새롭게 설정한 비밀번호를 전송해서 저장하기 : 재설정하기 버튼
+  // 7️⃣ 재설정하기
   const onReset = (e) => {
     e.preventDefault();
     resetPassword(email, password, socialType);
@@ -204,7 +140,7 @@ export default function ResetPassword() {
                 placeholder="이메일"
               />
               <button
-                onClick={handleEmailVerification}
+                onClick={onRequest}
                 className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
               >
                 인증 요청
@@ -212,10 +148,10 @@ export default function ResetPassword() {
             </div>
             <p
               className={`text-red-500 text-sm pl-3 mt-1 ${
-                emailError ? 'visible' : 'invisible'
+                emailExists ? 'visible' : 'invisible'
               }`}
             >
-              {emailError || 'empty'}
+              {emailExists || 'empty'}
             </p>
           </div>
 
@@ -259,7 +195,7 @@ export default function ResetPassword() {
                   ))}
               </div>
               <button
-                onClick={handleCodeVerification}
+                onClick={onCheck}
                 className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
               >
                 인증 확인

@@ -1,12 +1,12 @@
-import React, { useReducer, createContext, useContext } from 'react';
+import React, { useState, useReducer, createContext, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 // 서버 주소 : http://localhost:8080
-// 로그인 /login
-// 회원가입 /login/signup
+// 로그인 path : /login
+// 회원가입 : /login/signup
 
-// 초기 상태 정의
+// 유저 초기 상태 정의
 const initialState = {
   user: null,
 };
@@ -33,10 +33,141 @@ const UserDispatchContext = createContext();
 
 // Provider 컴포넌트 정의
 export const UserProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState); // 유저 정보
+
+  const [emailExists, setEmailExists] = useState(false); // 회원가입 시 이메일 중복 여부
+  const [serverCode, setServerCode] = useState(null); // 발급된 인증번호
+  const [codeIssuedTime, setCodeIssuedTime] = useState(null); // 인증번호 발급시간
+  const [verified, setVerified] = useState(false); // 이메일 인증 여부
+
+  const [nameDuplicated, setNameDuplicated] = useState(true); // 닉네임 중복 여부
+
   const navigate = useNavigate();
 
-  // 📝 회원가입
+  // 📧 이메일 인증 요청 (회원가입용)
+  const requestEmailForSignUp = async (email, emailType, socialType) => {
+    const URL = 'http://localhost:8080/send-email';
+
+    try {
+      const response = await axios.post(URL, {
+        email,
+        emailType,
+        socialType,
+      });
+
+      // 이메일 중복 아닐 시 발급
+      if (response.data.exists) {
+        setEmailExists(true);
+        alert('이미 서버에 존재하는 이메일입니다');
+      } else {
+        setEmailExists(false);
+        setServerCode(response.data.code);
+        setCodeIssuedTime(new Date().getTime());
+        alert('인증번호가 발송되었습니다');
+      }
+    } catch (error) {
+      console.error('이메일 인증번호 요청 중 에러 발생: ', error);
+    }
+  };
+
+  // 📧 이메일 인증 요청 (비밀번호 재설정용)
+  const requestEmailForReset = async (email, emailType, socialType) => {
+    const URL = 'http://localhost:8080/send-email';
+
+    try {
+      const response = await axios.post(URL, {
+        email,
+        emailType,
+        socialType,
+      });
+
+      // 이메일 존재시 발급
+      if (response.data.exists) {
+        setEmailExists(true);
+        setServerCode(response.data.code);
+        setCodeIssuedTime(new Date().getTime());
+        alert('인증번호가 발송되었습니다');
+      } else {
+        setEmailExists(false);
+        alert('존재하지 않는 이메일입니다');
+      }
+    } catch (error) {
+      console.error('이메일 인증번호 요청 중 에러 발생: ', error);
+    }
+  };
+
+  // ✅ 이메일 인증 확인
+  const checkCodeVerification = async (email, code, socialType) => {
+    // 현재 시간과 인증번호 발급 시간의 차이
+    const timeDifference = (new Date().getTime() - codeIssuedTime) / 1000 / 60;
+    // 10분 유효
+    if (timeDifference > 10) {
+      console.log('인증번호가 만료되었습니다');
+      alert('인증번호가 만료되었습니다');
+      return;
+    }
+
+    console.log('인증번호가 유효합니다');
+
+    const userCode = code.join('');
+
+    if (!userCode) {
+      alert('인증번호를 입력해주세요');
+      return;
+    } else {
+      if (userCode !== serverCode) {
+        alert('인증번호가 일치하지 않습니다');
+        return;
+      }
+
+      try {
+        // 서버에 인증 완료 상태 전송
+        const response = await axios.post(
+          'http://localhost:8080/verify-email',
+          {
+            email: email,
+            userCode,
+            socialType,
+          }
+        );
+
+        if (response.data.success) {
+          // 서버에서 성공 응답을 받았을 경우
+          setVerified(true); // 인증 완료
+          setServerCode('');
+          alert('인증 완료!');
+        } else {
+          alert('인증 실패: ' + response.data.message);
+        }
+      } catch (error) {
+        console.error('인증 완료 상태 전송 중 에러 발생: ', error);
+      }
+    }
+  };
+
+  // ❓ 닉네임 중복 확인
+  const checkNameDuplication = async (userName) => {
+    try {
+      const response = await axios.post(
+        'http://localhost:8080/verify-nickname',
+        {
+          userName,
+        }
+      );
+
+      if (response.data.isDuplicated) {
+        console.log('이미 사용중인 닉네임입니다');
+        setNameDuplicated(true);
+      } else {
+        console.log('사용 가능한 닉네임입니다');
+        setNameDuplicated(false);
+      }
+    } catch (error) {
+      console.error('닉네임 중복 확인 중 에러 발생: ', error);
+    }
+  };
+
+  // 📝 회원가입 ---------------------------------------------------------------
   const signup = (email, password, username, socialType) => {
     const URL = 'http://localhost:8080/login/signup';
 
@@ -68,12 +199,11 @@ export const UserProvider = ({ children }) => {
       });
   };
 
-  // 🚫 회원탈퇴
+  // 🚫 회원탈퇴 ---------------------------------------------------------------
   const deleteUser = async () => {
     const URL = 'http://localhost:8080/mypage/delete-user';
 
     try {
-      // 서버에 회원탈퇴 요청
       await axios.delete(URL, {
         headers: {
           Authorization: localStorage.getItem('Authorization'), // 인증 토큰
@@ -89,7 +219,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // 🔐 로그인
+  // 🔐 로그인 ---------------------------------------------------------------
   const login = (email, password, socialType) => {
     const URL = 'http://localhost:8080/login';
 
@@ -139,7 +269,7 @@ export const UserProvider = ({ children }) => {
       });
   };
 
-  //🔓 로그아웃
+  //🔓 로그아웃 ---------------------------------------------------------------
   const logout = () => {
     // 로컬 스토리지에서 유저 데이터 삭제
     localStorage.removeItem('Authorization');
@@ -155,7 +285,7 @@ export const UserProvider = ({ children }) => {
     navigate('/main');
   };
 
-  // 🔄 비밀번호 재설정
+  // 🔄 비밀번호 재설정 ---------------------------------------------------------------
   const resetPassword = async (email, password, socialType) => {
     try {
       const response = await axios.post(
@@ -181,15 +311,25 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // Context value에 login과 signup 함수를 포함
+  // Context value
   const value = {
     state,
     dispatch,
     login,
-    signup,
     logout,
+    signup,
     deleteUser,
     resetPassword,
+    requestEmailForSignUp,
+    requestEmailForReset,
+    setEmailExists,
+    emailExists,
+    checkCodeVerification,
+    verified,
+    setVerified,
+    checkNameDuplication,
+    nameDuplicated,
+    setNameDuplicated,
   };
 
   return (

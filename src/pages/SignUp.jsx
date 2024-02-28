@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import {
   GoCheckCircle,
   GoCheckCircleFill,
@@ -12,16 +11,11 @@ import { useUserDispatch } from '../context/User';
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
-  const [emailDuplicated, setEmailDuplicated] = useState(true);
   const [emailError, setEmailError] = useState(''); // 로그인 오류 메세지
 
-  const [serverCode, setServerCode] = useState(null); // 발급된 인증번호
   const [code, setCode] = useState(Array(4).fill('')); // 입력한 인증번호
-  const [codeIssuedTime, setCodeIssuedTime] = useState(null); // 인증번호 발급시간
-  const [verified, setVerified] = useState(false); // 이메일 인증 여부
 
   const [userName, setUserName] = useState('');
-  const [nameDuplicated, setNameDuplicated] = useState(true);
   const [nameError, setNameError] = useState(''); // 닉네임 오류 메세지
 
   const [password, setPassword] = useState('');
@@ -32,18 +26,28 @@ export default function SignUp() {
 
   const navigate = useNavigate();
 
-  const { signup } = useUserDispatch(); // 회원가입 dispatch
+  const {
+    signup, // 가입하기
+    requestEmailForSignUp, // 인증요청
+    emailExists, // 이메일 중복 확인
+    checkCodeVerification, // 인증확인
+    verified, // 인증 여부
+    checkNameDuplication, // 닉네임 중복 확인
+    nameDuplicated, // 중복 여부
+  } = useUserDispatch();
 
+  const emailType = 'sign-up';
   const socialType = 'Refrigerator-Cleaner';
 
-  // 1️⃣ 이메일 상태 저장
+  /**-----------------------------------------상태, 상수---------------------------------------------*/
+
+  // 1️⃣ 이메일 저장
   const handleEmailChange = (e) => setEmail(e.target.value);
 
-  // 2️⃣ 인증 요청 버튼
-  const handleEmailVerification = async (e) => {
+  // 2️⃣ 인증요청
+  const onRequest = async (e) => {
     e.preventDefault();
 
-    // 이메일 유효성 검사
     const pattern =
       /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
@@ -55,33 +59,10 @@ export default function SignUp() {
 
     setEmailError('');
 
-    // 이메일 중복 확인 & 인증번호 요청
-    try {
-      const response = await axios.post('http://localhost:8080/send-email', {
-        email,
-        emailType: 'sign-up',
-        socialType,
-      });
-
-      if (response.data.isDuplicated) {
-        alert('이미 사용중인 이메일입니다');
-        setEmailDuplicated(true);
-      } else {
-        alert('인증번호가 발송되었습니다');
-        setEmailDuplicated(false);
-
-        // 서버에서 받은 인증번호 저장
-        setServerCode(response.data.code);
-
-        // 인증번호 발급시간 저장
-        setCodeIssuedTime(new Date().getTime());
-      }
-    } catch (error) {
-      console.error('이메일 중복 확인 및 인증번호 요청 중 에러 발생: ', error);
-    }
+    requestEmailForSignUp(email, emailType, socialType);
   };
 
-  // 3️⃣ 인증번호 입력값 저장
+  // 3️⃣ 인증번호 입력값 저장 - code
   const handleCodeChange = (element, index) => {
     const value = element.target.value;
     if (value && !isNaN(value)) {
@@ -93,61 +74,15 @@ export default function SignUp() {
     }
   };
 
-  // 4️⃣ 인증번호 만료 여부 및 검증 : 인증 확인 버튼
-  const handleCodeVerification = async (e) => {
+  // 4️⃣ 인증 확인
+  const onCheckCode = (e) => {
     e.preventDefault();
-    console.log(code.join('')); // join 테스트 : 통과
 
-    // 현재 시간과 인증번호 발급 시간의 차이(분) 계산
-    const timeDifference = (new Date().getTime() - codeIssuedTime) / 1000 / 60;
-
-    // 인증번호가 만료되었는지 확인 : 10분
-    if (timeDifference > 10) {
-      console.log('인증번호가 만료되었습니다');
-      alert('인증번호가 만료되었습니다');
-      return;
-    }
-
-    console.log('인증번호가 유효합니다');
-
-    const userCode = code.join('');
-
-    if (!userCode) {
-      alert('인증번호를 입력해주세요');
-      return;
-    } else {
-      if (userCode !== serverCode) {
-        alert('인증번호가 일치하지 않습니다');
-        return;
-      }
-
-      try {
-        // 서버에 인증 완료 상태 전송
-        const response = await axios.post(
-          'http://localhost:8080/verify-email',
-          {
-            email: email,
-            code: userCode,
-            socialType,
-          }
-        );
-
-        if (response.data.success) {
-          // 서버에서 성공 응답을 받았을 경우
-          setVerified(true); // 인증 완료
-          setServerCode('');
-          alert('인증 완료!');
-        } else {
-          alert('인증 실패: ' + response.data.message);
-        }
-      } catch (error) {
-        console.error('인증 완료 상태 전송 중 에러 발생: ', error);
-      }
-    }
+    checkCodeVerification(email, code, socialType);
   };
 
-  // 5️⃣6️⃣ 닉네임 유효성 검사 : 중복 확인 버튼
-  const isNameValid = (e) => {
+  // 5️⃣ 닉네임 중복 확인
+  const onCheckName = (e) => {
     e.preventDefault();
 
     const pattern = /^[가-힣]{2,}|[A-Za-z]{3,}$/;
@@ -161,30 +96,7 @@ export default function SignUp() {
     }
   };
 
-  // 7️⃣ 닉네임 중복 확인 (닉네임 유효성 검사 통과 시 작동)
-  const checkNameDuplication = async (userName) => {
-    try {
-      const response = await axios.post(
-        'http://localhost:8080/verify-nickname',
-        {
-          userName,
-        }
-      );
-
-      if (response.data.isDuplicated) {
-        console.log('이미 사용중인 닉네임입니다');
-        setNameDuplicated(true);
-        setUserName('');
-      } else {
-        console.log('사용 가능한 닉네임입니다');
-        setNameDuplicated(false);
-      }
-    } catch (error) {
-      console.error('닉네임 중복 확인 중 에러 발생: ', error);
-    }
-  };
-
-  // 8️⃣ 비밀번호 유효성 검사
+  // 6️⃣ 비밀번호 유효성 검사
   const isPasswordValid = (password) => {
     return (
       /\d/.test(password) &&
@@ -193,7 +105,7 @@ export default function SignUp() {
     );
   };
 
-  // 9️⃣ 비밀번호 확인 (e.preventDefault 설정 X)
+  // 7️⃣ 비밀번호 확인 (e.preventDefault 설정 X)
   const isSamePassword = () => {
     if (password && checkPassword) {
       password !== checkPassword
@@ -214,7 +126,7 @@ export default function SignUp() {
     setShowPassword(!showPassword);
   };
 
-  // 🔟 서버에 회원가입 정보 (이메일, 이름, 패스워드, 소셜타입) 전송 : 회원가입 버튼
+  // 8️⃣ 회원가입
   const onSignUp = (e) => {
     e.preventDefault();
     signup(email, password, userName, socialType);
@@ -257,7 +169,7 @@ export default function SignUp() {
               <div>
                 {/* 인증 요청 */}
                 <button
-                  onClick={handleEmailVerification}
+                  onClick={onRequest}
                   className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
                 >
                   인증 요청
@@ -313,7 +225,7 @@ export default function SignUp() {
                   ))}
               </div>
               <button
-                onClick={handleCodeVerification}
+                onClick={onCheckCode}
                 className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
               >
                 인증 확인
@@ -337,9 +249,9 @@ export default function SignUp() {
                   placeholder="닉네임"
                   className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
-
+                {/* 중복확인 */}
                 <button
-                  onClick={isNameValid}
+                  onClick={onCheckName}
                   className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
                 >
                   중복 확인
@@ -409,10 +321,10 @@ export default function SignUp() {
               <ul className="mt-4 mb-4 font-score">
                 <li className="mb-2 flex items-center">
                   <span role="img" aria-label="check" className="flex">
-                    {!emailDuplicated ? (
-                      <GoCheckCircleFill className="text-emerald" />
-                    ) : (
+                    {emailExists ? (
                       <GoCheckCircle className="text-emerald" />
+                    ) : (
+                      <GoCheckCircleFill className="text-emerald" />
                     )}
                   </span>{' '}
                   <span className="ml-3">이메일 사용 가능</span>
@@ -465,9 +377,9 @@ export default function SignUp() {
               <button
                 type="submit"
                 disabled={
-                  nameDuplicated === true &&
-                  emailDuplicated === true &&
+                  emailExists === true &&
                   verified === false &&
+                  nameDuplicated === true &&
                   password.length < 8 &&
                   isPasswordValid(password) === false &&
                   !passwordMessage
