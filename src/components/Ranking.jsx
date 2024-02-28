@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 // 컴포넌트 안 개별 아이템
 function RankingItem({ rank, thumbnail, name, ingredients, likes }) {
   return (
-    <li className="mb-4 mt-2 px-3 hover:scale-110">
+    <li className="mb-4 mt-2 px-3 transition transform hover:scale-110 ease-in-out duration-300">
       <figure className="flex items-center justify-between drop-shadow-xl">
         <div className="flex items-center justify-center space-x-10">
           <div style={{ width: '30px' }}>
