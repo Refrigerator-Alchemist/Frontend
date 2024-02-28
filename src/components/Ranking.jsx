@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// 랭킹 박스 안 리스트 = 아이템
+// 컴포넌트 안 개별 아이템
 function RankingItem({ rank, thumbnail, name, ingredients, likes }) {
   return (
-    <li className="mb-4 mt-2 px-3">
+    <li className="mb-4 mt-2 px-3 hover:scale-110">
       <figure className="flex items-center justify-between drop-shadow-xl">
         <div className="flex items-center justify-center space-x-10">
           <div style={{ width: '30px' }}>
@@ -31,8 +31,7 @@ function RankingItem({ rank, thumbnail, name, ingredients, likes }) {
   );
 }
 
-// 랭킹 박스
-// API로부터 데이터를 받아와서 리스트에 props로 전달
+// 랭킹 컴포넌트
 export default function Ranking() {
   const [items, setItems] = useState([]);
   const navigate = useNavigate();
@@ -49,7 +48,7 @@ export default function Ranking() {
     <article
       className="hover:cursor-pointer w-full my-4 px-3"
       onClick={() => {
-        navigate('/board');
+        navigate('/ranking');
       }}
     >
       <div className="flex justify-between">

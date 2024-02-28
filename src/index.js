@@ -17,6 +17,7 @@ import Profile from './pages/Profile';
 import GptSearch from './pages/GptSearch';
 import DeleteUser from './pages/DeleteUser';
 import GptResult from './pages/GptResult';
+import BoardRanking from './pages/BoardRanking';
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,7 @@ const router = createBrowserRouter([
       { path: '/board', element: <Board /> }, // 게시판
       { path: '/board/:postId', element: <BoardDetail /> }, // 쿼리로 포스트 id 식별
       { path: '/board/upload/:postId', element: <UploadBoard /> }, // 쿼리로 포스트 id 식별
+      { path: '/ranking', element: <BoardRanking /> }, // 탑 5 랭킹
       { path: '/login', element: <Login /> }, // 로그인 페이지
       { path: '/login/signup', element: <SignUp /> }, // 회원 가입
       { path: '/login/resetpw', element: <ResetPassword /> }, // 비밀번호 재설정
