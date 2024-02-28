@@ -34,7 +34,7 @@ export default function ResetPassword() {
   // 1️⃣ 이메일 입력값 저장
   const handleEmailChange = (e) => setEmail(e.target.value);
 
-  // 4️⃣ '이메일 존재 확인'과 '인증번호 요청'을 통합하는 함수
+  // 4️⃣ 서버에 이메일 존재하는지 확인 ▶ 인증번호 발급
   const handleEmailVerification = async (e) => {
     e.preventDefault();
 
@@ -52,6 +52,7 @@ export default function ResetPassword() {
 
       if (!response.data.exists) {
         setEmailError('존재하지 않는 이메일입니다');
+        alert('존재하지 않는 이메일입니다');
       } else {
         setEmailError('');
 
@@ -60,7 +61,6 @@ export default function ResetPassword() {
 
         // 인증번호 발급시간 저장
         setCodeIssuedTime(new Date().getTime());
-
         alert('인증번호가 발송되었습니다');
       }
     } catch (error) {
@@ -68,7 +68,7 @@ export default function ResetPassword() {
     }
   };
 
-  // 4️⃣ 인증번호 입력
+  // 4️⃣ 인증번호 입력값 저장
   const handleCodeChange = (element, index) => {
     if (element.target.value) {
       setCode([
@@ -90,15 +90,13 @@ export default function ResetPassword() {
     // 현재 시간과 인증번호 발급 시간의 차이(분) 계산
     const timeDifference = (new Date().getTime() - codeIssuedTime) / 1000 / 60;
 
-    // 인증번호가 만료되었는지 확인 : 5분
-    if (timeDifference > 5) {
+    // 인증번호가 만료되었는지 확인 : 10분
+    if (timeDifference > 10) {
       console.log('인증번호가 만료되었습니다');
       alert('인증번호가 만료되었습니다');
-      return true;
     } else {
       console.log('인증번호가 유효합니다');
       isCodeVaild(e);
-      return false;
     }
   };
 
@@ -107,6 +105,10 @@ export default function ResetPassword() {
     e.preventDefault();
 
     const userCode = code.join('');
+
+    if (!userCode) {
+      alert('인증번호를 입력해주세요');
+    }
 
     if (userCode !== serverCode) {
       setCode('');
