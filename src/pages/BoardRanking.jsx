@@ -15,7 +15,7 @@ export default function BoardRanking() {
         <FaArrowLeft />
       </div>
 
-      <h1 className="text-2xl font-extrabold">Top 5🔥</h1>
+      <h1 className="text-5xl font-extrabold mb-10">Top 5🔥</h1>
       <Ranking />
     </section>
   );
