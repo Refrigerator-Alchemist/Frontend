@@ -81,7 +81,7 @@ export default function SignUp() {
     }
   };
 
-  // 3️⃣ 인증번호 입력
+  // 3️⃣ 인증번호 입력값 저장
   const handleCodeChange = (element, index) => {
     if (element.target.value) {
       setCode([
@@ -118,6 +118,10 @@ export default function SignUp() {
     e.preventDefault();
 
     const userCode = code.join('');
+
+    if (!userCode) {
+      alert('인증번호를 입력해주세요');
+    }
 
     if (userCode !== serverCode) {
       setCode('');
