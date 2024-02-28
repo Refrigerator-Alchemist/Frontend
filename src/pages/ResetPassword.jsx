@@ -34,7 +34,7 @@ export default function ResetPassword() {
   // 1️⃣ 이메일 입력값 저장
   const handleEmailChange = (e) => setEmail(e.target.value);
 
-  // 4️⃣ 서버에 이메일 존재하는지 확인 ▶ 인증번호 발급
+  // 2️⃣ 서버에 이메일 존재하는지 확인 ▶ 인증번호 발급
   const handleEmailVerification = async (e) => {
     e.preventDefault();
 
@@ -68,7 +68,7 @@ export default function ResetPassword() {
     }
   };
 
-  // 4️⃣ 인증번호 입력값 저장
+  // 3️⃣ 인증번호 입력값 저장
   const handleCodeChange = (element, index) => {
     if (element.target.value) {
       setCode([
@@ -83,9 +83,10 @@ export default function ResetPassword() {
     }
   };
 
-  // 5️⃣ 인증번호 만료 여부 : 인증 확인 버튼
-  const isCodeExpired = (e) => {
+  // 4️⃣ 인증번호 만료 여부 및 검증 : 인증 확인 버튼
+  const handleCodeVerification = async (e) => {
     e.preventDefault();
+    console.log(code);
 
     // 현재 시간과 인증번호 발급 시간의 차이(분) 계산
     const timeDifference = (new Date().getTime() - codeIssuedTime) / 1000 / 60;
@@ -94,26 +95,23 @@ export default function ResetPassword() {
     if (timeDifference > 10) {
       console.log('인증번호가 만료되었습니다');
       alert('인증번호가 만료되었습니다');
-    } else {
-      console.log('인증번호가 유효합니다');
-      isCodeVaild(e);
+      return;
     }
-  };
 
-  // 6️⃣ 인증번호 검증 (인증번호 만료 확인 후 시행)
-  const isCodeVaild = async (e) => {
-    e.preventDefault();
+    console.log('인증번호가 유효합니다');
 
     const userCode = code.join('');
 
     if (!userCode) {
       alert('인증번호를 입력해주세요');
-    }
-
-    if (userCode !== serverCode) {
-      setCode('');
-      alert('인증번호가 일치하지 않습니다');
+      return;
     } else {
+      if (userCode !== serverCode) {
+        setCode('');
+        alert('인증번호가 일치하지 않습니다');
+        return;
+      }
+
       try {
         // 서버에 인증 완료 상태 전송
         const response = await axios.post(
@@ -139,7 +137,7 @@ export default function ResetPassword() {
     }
   };
 
-  // 7️⃣ 비밀번호 유효성 검사
+  // 5️⃣ 비밀번호 유효성 검사
   const isPasswordValid = (password) => {
     return (
       /\d/.test(password) &&
@@ -148,7 +146,7 @@ export default function ResetPassword() {
     );
   };
 
-  // 8️⃣ 비밀번호 확인 (e.preventDefault 설정 X)
+  // 6️⃣ 비밀번호 확인 (e.preventDefault 설정 X)
   const isSamePassword = () => {
     if (password && checkPassword) {
       password !== checkPassword
@@ -169,7 +167,7 @@ export default function ResetPassword() {
     setShowPassword(!showPassword);
   };
 
-  // 9️⃣ 서버에 새롭게 설정한 비밀번호를 전송해서 저장하기 : 재설정하기 버튼
+  // 7️⃣ 서버에 새롭게 설정한 비밀번호를 전송해서 저장하기 : 재설정하기 버튼
   const onReset = (e) => {
     e.preventDefault();
     resetPassword(email, password, socialType);
@@ -231,7 +229,7 @@ export default function ResetPassword() {
               인증번호
             </label>
             <div className="flex items-center justify-between">
-              <inputs className="flex max-w-xs mt-2">
+              <div className="flex max-w-xs mt-2">
                 {Array(4)
                   .fill('')
                   .map((_, index) => (
@@ -263,9 +261,9 @@ export default function ResetPassword() {
                       className="w-10 h-12 mx-1 text-center border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     />
                   ))}
-              </inputs>
+              </div>
               <button
-                onClick={isCodeExpired}
+                onClick={handleCodeVerification}
                 className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
               >
                 인증 확인

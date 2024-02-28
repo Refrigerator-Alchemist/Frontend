@@ -96,37 +96,35 @@ export default function SignUp() {
     }
   };
 
-  // 4️⃣ 인증번호 만료 여부 : 인증 확인 버튼
-  const isCodeExpired = (e) => {
+  // 4️⃣ 인증번호 만료 여부 및 검증 : 인증 확인 버튼
+  const handleCodeVerification = async (e) => {
     e.preventDefault();
+    console.log(code);
 
     // 현재 시간과 인증번호 발급 시간의 차이(분) 계산
     const timeDifference = (new Date().getTime() - codeIssuedTime) / 1000 / 60;
 
-    // 인증번호가 만료되었는지 확인 : 5분
-    if (timeDifference > 5) {
+    // 인증번호가 만료되었는지 확인 : 10분
+    if (timeDifference > 10) {
       console.log('인증번호가 만료되었습니다');
       alert('인증번호가 만료되었습니다');
-    } else {
-      console.log('인증번호가 유효합니다');
-      isCodeVaild(e);
+      return;
     }
-  };
 
-  // 5️⃣ 인증번호 검증 (인증번호 만료 확인 후 시행)
-  const isCodeVaild = async (e) => {
-    e.preventDefault();
+    console.log('인증번호가 유효합니다');
 
     const userCode = code.join('');
 
     if (!userCode) {
       alert('인증번호를 입력해주세요');
-    }
-
-    if (userCode !== serverCode) {
-      setCode('');
-      alert('인증번호가 일치하지 않습니다');
+      return;
     } else {
+      if (userCode !== serverCode) {
+        setCode('');
+        alert('인증번호가 일치하지 않습니다');
+        return;
+      }
+
       try {
         // 서버에 인증 완료 상태 전송
         const response = await axios.post(
@@ -152,7 +150,7 @@ export default function SignUp() {
     }
   };
 
-  // 6️⃣ 닉네임 유효성 검사 : 중복 확인 버튼
+  // 5️⃣6️⃣ 닉네임 유효성 검사 : 중복 확인 버튼
   const isNameValid = (e) => {
     e.preventDefault();
 
@@ -285,7 +283,7 @@ export default function SignUp() {
               인증번호 입력
             </label>
             <div className="flex items-center justify-between">
-              <inputs className="flex max-w-xs mt-2">
+              <div className="flex max-w-xs mt-2">
                 {Array(4)
                   .fill('')
                   .map((_, index) => (
@@ -317,9 +315,9 @@ export default function SignUp() {
                       className="w-10 h-12 mx-1 text-center border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     />
                   ))}
-              </inputs>
+              </div>
               <button
-                onClick={isCodeExpired}
+                onClick={handleCodeVerification}
                 className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
               >
                 인증 확인

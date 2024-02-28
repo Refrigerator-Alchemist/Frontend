@@ -7,9 +7,9 @@ function RankingItem({ rank, thumbnail, name, ingredients, likes }) {
     <li className="mb-4 mt-2 px-3">
       <figure className="flex items-center justify-between drop-shadow-xl">
         <div className="flex items-center justify-center space-x-10">
-          <rank style={{ width: '30px' }}>
+          <div style={{ width: '30px' }}>
             <span className="font-undong">{rank}</span>
-          </rank>
+          </div>
           <img
             src={thumbnail}
             alt="썸네일"
@@ -23,9 +23,9 @@ function RankingItem({ rank, thumbnail, name, ingredients, likes }) {
           </name>
         </div>
 
-        <likes>
+        <div>
           <span className="font-ansung text-md font-bold ml-5">{likes}❤️</span>
-        </likes>
+        </div>
       </figure>
     </li>
   );
