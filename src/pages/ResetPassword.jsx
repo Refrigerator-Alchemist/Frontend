@@ -10,9 +10,9 @@ import { useNavigate } from 'react-router-dom';
 import { useUserDispatch } from '../context/User';
 
 export default function ResetPassword() {
-  const [email, setEmail] = useState(null); // 사용자의 이메일
+  const [email, setEmail] = useState(''); // 이메일
 
-  const [code, setCode] = useState(Array(4).fill('')); // 입력한 인증번호
+  const [code, setCode] = useState(''); // 입력한 인증번호
 
   const [password, setPassword] = useState(''); // 새로운 비밀번호
   const [checkPassword, setCheckPassword] = useState(''); // 비밀번호 확인
@@ -41,6 +41,7 @@ export default function ResetPassword() {
   // 2️⃣ 인증 요청
   const onRequest = async (e) => {
     e.preventDefault();
+    console.log(`입력한 이메일 : ${email}`);
 
     if (!email) {
       alert('이메일을 입력해주세요');
@@ -50,26 +51,15 @@ export default function ResetPassword() {
     requestEmailForReset(email, emailType, socialType);
   };
 
-  // 3️⃣ 인증번호 입력값 저장 - code
-  const handleCodeChange = (element, index) => {
-    const value = element.target.value;
-    if (value && !isNaN(value)) {
-      setCode([...code.slice(0, index), value, ...code.slice(index + 1)]);
-
-      if (index < 3) {
-        document.getElementById(`input${index + 1}`).focus();
-      }
-    }
-  };
-
-  // 4️⃣ 인증 확인
+  // 3️⃣ 인증 확인
   const onCheck = async (e) => {
     e.preventDefault();
+    console.log(`입력한 인증번호 : ${code}`);
 
     checkCodeVerification(email, code, socialType);
   };
 
-  // 5️⃣ 비밀번호 유효성 검사
+  // 4️⃣ 비밀번호 유효성 검사
   const isPasswordValid = (password) => {
     return (
       /\d/.test(password) &&
@@ -78,7 +68,7 @@ export default function ResetPassword() {
     );
   };
 
-  // 6️⃣ 비밀번호 확인 (e.preventDefault 설정 X)
+  // 5️⃣ 비밀번호 확인 (e.preventDefault 설정 X)
   const isSamePassword = () => {
     if (password && checkPassword) {
       password !== checkPassword
@@ -99,7 +89,7 @@ export default function ResetPassword() {
     setShowPassword(!showPassword);
   };
 
-  // 7️⃣ 재설정하기
+  // 6️⃣ 재설정하기
   const onReset = (e) => {
     e.preventDefault();
     resetPassword(email, password, socialType);
@@ -126,7 +116,7 @@ export default function ResetPassword() {
       <form onSubmit={onReset}>
         {/* 이메일 인증하기 */}
         <main className="mt-10 w-full px-2">
-          {/* 이메일 확인 후 인증요청*/}
+          {/* 이메일 확인 후 인증 요청*/}
           <div>
             <label className="mb-4 text-lg font-bold font-undong text-center ">
               이메일
@@ -155,44 +145,29 @@ export default function ResetPassword() {
             </p>
           </div>
 
-          {/* 인증번호 확인 */}
+          {/* 인증 확인 */}
           <div className="mt-6">
             <label className="mb-4 text-lg font-bold font-undong text-center">
               인증번호
             </label>
             <div className="flex items-center justify-between">
               <div className="flex max-w-xs mt-2">
-                {Array(4)
-                  .fill('')
-                  .map((_, index) => (
-                    <input
-                      key={index}
-                      id={`input${index}`}
-                      value={code[index]}
-                      type="tel"
-                      maxLength="1"
-                      placeholder="?"
-                      onChange={(e) => {
-                        if (
-                          e.target.value === '' ||
-                          (e.target.value.length === 1 &&
-                            !isNaN(e.target.value))
-                        ) {
-                          handleCodeChange(e, index);
-                        }
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Backspace' || e.key === 'Delete') {
-                          setCode([
-                            ...code.slice(0, index),
-                            '',
-                            ...code.slice(index + 1),
-                          ]);
-                        }
-                      }}
-                      className="w-10 h-12 mx-1 text-center border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    />
-                  ))}
+                <input
+                  id="input"
+                  value={code}
+                  type="tel"
+                  maxLength="4"
+                  placeholder="????"
+                  onChange={(e) => {
+                    if (
+                      e.target.value === '' ||
+                      (!isNaN(e.target.value) && e.target.value.length <= 4)
+                    ) {
+                      setCode(e.target.value);
+                    }
+                  }}
+                  className="w-40 h-12 mx-1 text-center border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
               </div>
               <button
                 onClick={onCheck}
