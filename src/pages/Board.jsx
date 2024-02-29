@@ -24,13 +24,13 @@ const SearchBar = ({ onSearch }) => {
 };
 
   
-  const WriteButton = () => {
-    return (
-        <Link to="/board/upload/:postId" className="ml-4 flex items-center justify-center rounded-full bg-white p-4 shadow" >
-          <img src={writingicon} alt="쓰기아이콘" className="w-6 h-6" style={{ opacity: 0.7 }} />
-        </Link>
-      );
-    };
+const WriteButton = () => {
+  return (
+    <Link to="/board/upload" className="ml-4 flex items-center justify-center rounded-full bg-white p-4 shadow write-button transition-transform duration-200 hover:scale-110">
+      <img src={writingicon} alt="쓰기아이콘" className="w-6 h-6" style={{ opacity: 0.7 }} />
+    </Link>
+  );
+};
 
 
     const RecipeCard = ({ postid, title, description, img, isLiked }) => {
@@ -87,24 +87,7 @@ function Board() {
   //     img: "",
   //     isLiked: true,
   //   },
-  //   {
-  //     title: "Vegetable Curry",
-  //     description: "potato, Lettuce",
-  //     img: "",
-  //     isLiked: true,
-  //   },
-  //   {
-  //     title: "Vegetable Curry",
-  //     description: "potato, Lettuce",
-  //     img: "",
-  //     isLiked: true,
-  //   },
-  //   {
-  //     title: "Vegetable Curry",
-  //     description: "potato, Lettuce",
-  //     img: "",
-  //     isLiked: true,
-  //   },
+  //  
     
   // ]);
 
@@ -119,11 +102,14 @@ function Board() {
         const formattedData = response.data.map(item => ({
           title: item.title,
           ingredients: item.ingredients,
+          description: item.description,
+          img: item.thumbnail,
+          isLiked: false,
         }));
         setRecipes(formattedData);
       })
       .catch(error => {
-        console.error('Error', error);
+        console.error('Error내용:', error);
       });
   }, []);
 
@@ -152,11 +138,12 @@ function Board() {
 
       {isSearching ? (
         <div className="my-2">
-          <span className="font-undong font-bold ml-8 text-2xl">Search Results</span>
-          {searchResults.map((recipe, index) => (
+          <span className="font-undong font-bold ml-8 text-2xl">
+            Search Results
+          </span>
+          {searchResults.map((recipe) => (
             <RecipeCard
-              key={index}
-              postid={index} 
+              key={recipe.postid}
               title={recipe.title}
               description={recipe.description}
               img={recipe.thumbnail}
@@ -171,9 +158,9 @@ function Board() {
           </div>
           <div className="my-2">
             <span className="font-undong font-bold ml-8 text-2xl">Recipe</span>
-            {recipes.map((recipe, index) => (
+            {recipes.map((recipe) => (
               <RecipeCard
-                key={index}
+                key={recipe.postid}
                 title={recipe.title}
                 description={recipe.description}
                 img={recipe.img}
@@ -184,7 +171,14 @@ function Board() {
         </>
       )}
 
-      <footer style={{position:'fixed',bottom:'0',width:'100%',maxWidth:'32rem'}}>
+      <footer
+        style={{
+          position: "fixed",
+          bottom: "0",
+          width: "100%",
+          maxWidth: "32rem",
+        }}
+      >
         <Navigation />
       </footer>
     </div>

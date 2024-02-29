@@ -29,7 +29,7 @@ const router = createBrowserRouter([
       { path: '/main', element: <MainPage /> }, // 메인
       { path: '/board', element: <Board /> }, // 게시판
       { path: '/board/:postId', element: <BoardDetail /> }, // 쿼리로 포스트 id 식별
-      { path: '/board/upload/:postId', element: <UploadBoard /> }, // 쿼리로 포스트 id 식별
+      { path: '/board/upload', element: <UploadBoard /> }, 
       { path: '/ranking', element: <BoardRanking /> }, // 탑 5 랭킹
       { path: '/login', element: <Login /> }, // 로그인 페이지
       { path: '/login/signup', element: <SignUp /> }, // 회원 가입
