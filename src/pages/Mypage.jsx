@@ -25,13 +25,13 @@ const RecipeCard = ({
             <p className="text-gray-500 text-sm font-score">{description}</p>
           </div>
         </Link>
-        <button onClick={onToggleLike} className="p-2">
+        {/* <button onClick={onToggleLike} className="p-2">
           {isLiked ? (
             <FaHeart className="text-red-500 text-2xl" />
           ) : (
             <FaRegHeart className="text-2xl" />
           )}
-        </button>
+        </button> */}
       </div>
     </div>
   );
@@ -109,7 +109,7 @@ function MyPage() {
           setRecipes(response.data);
         })
         .catch((error) => {
-          console.error('서버 요청 에러 내용:', error);
+          console.error('에러 내용:', error);
         });
     } else {
       //좋아한 레시피
@@ -119,11 +119,12 @@ function MyPage() {
           setRecipes(response.data);
         })
         .catch((error) => {
-          console.error('서버 요청 에러 내용:', error);
+          console.error('에러 내용:', error);
         });
     }
   }, [showSavedRecipes]);
 
+ 
   // 창욱 comment : 로그아웃 함수랑 회원 탈퇴 라우팅 넣어둘게요~
   const { logout } = useUserDispatch();
 
@@ -133,7 +134,7 @@ function MyPage() {
         {/* 회원탈퇴, 로그아웃 */}
         <div className="flex justify-end w-full mt-2 space-x-2">
           <button
-            className="text-gray-300"
+            className="font-score text-gray-300"
             onClick={(e) => {
               e.preventDefault();
               navigate('/mypage/delete-user');
@@ -142,7 +143,7 @@ function MyPage() {
             회원 탈퇴
           </button>
           <button
-            className="outline-none font-semibold underline underline-offset-2 hover:text-red-500"
+            className="font-score outline-none font-semibold underline underline-offset-2 hover:text-red-500"
             onClick={(e) => {
               e.preventDefault();
               logout();
@@ -158,19 +159,20 @@ function MyPage() {
             className="rounded-full h-32 w-32 object-cover"
           />
         </div>
-        <h1 className="mt-5 text-xl font-semibold text-center">user1</h1>
-        <p className="mt-4 pb-4\2 px-6 text-center">한줄 자기소개</p>
+        <h1 className="font-score mt-5 text-xl font-semibold text-center">user1</h1>
+        <p className="font-score mt-4 pb-4\2 px-6 text-center">한줄 자기소개</p>
         <button
-          onClick={() => navigate('/profile')}
-          className="my-2 bg-white text-black py-2 px-4 rounded focus:outline-none focus:ring-2  focus:ring-opacity-50"
-        >
-          회원정보 수정
-        </button>
+  onClick={() => navigate('/profile')}
+  className="font-score my-2 bg-white text-gray-400 py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-opacity-50 underline"
+>
+  회원정보 수정
+</button>
+
 
         <div className="flex">
           <button
             onClick={() => setShowSavedRecipes(false)}
-            className={`mx-1 py-2 px-4 rounded ${
+            className={`font-score mx-1 py-2 px-4 rounded ${
               !showSavedRecipes
                 ? 'bg-main text-white'
                 : 'bg-gray-100 text-black'
@@ -180,7 +182,7 @@ function MyPage() {
           </button>
           <button
             onClick={() => setShowSavedRecipes(true)}
-            className={`mx-1 py-2 px-4 rounded ${
+            className={`font-score mx-1 py-2 px-4 rounded ${
               showSavedRecipes ? 'bg-main text-white' : 'bg-gray-100 text-black'
             }`}
           >
@@ -197,6 +199,7 @@ function MyPage() {
             .map((recipe, index) => (
               <RecipeCard
                 key={index}
+                id={recipe.id}
                 title={recipe.title}
                 description={recipe.description}
                 img={recipe.thumbnail}

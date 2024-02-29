@@ -16,7 +16,7 @@ export default function Navigation() {
   useEffect(() => {
     const currentPath = location.pathname;
 
-    if (currentPath === '/board') {
+    if (currentPath === '/board' || currentPath.startsWith('/board/')) {
       setSelected('food');
     } else if (currentPath === '/main') {
       setSelected('home');
@@ -24,7 +24,6 @@ export default function Navigation() {
       setSelected('profile');
     }
   }, [location.pathname, setSelected]);
-
   return (
     <footer
       className="sticky bottom-0 flex justify-center items-center bg-white p-4 rounded-t-3xl "

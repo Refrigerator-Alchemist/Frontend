@@ -108,7 +108,7 @@ const fetchRecipeTitle = async () => {
             <div className="md:flex">
               <div className="w-full p-4 pt-8">
                 <div className="border-b-2 border-gray-100 py-2">
-                  <h1 className="text-2xl font-bold text-gray-800 text-center">{title}</h1>
+                  <h1 className="font-score text-2xl font-bold text-gray-800 text-center">{title}</h1>
                   
                 </div>
                 <div className="py-4">
@@ -116,26 +116,26 @@ const fetchRecipeTitle = async () => {
 
                 </div>
                 <div className="recipebox p-4 bg-gray-100 rounded-lg overflow-y-auto max-h-96">
-                  <h2 className="text-lg font-bold text-gray-700">재료</h2>
+                  <h2 className="font-score text-lg font-bold text-gray-700">재료</h2>
                   <ul className="py-2">
                     {ingredients.map((ingredient, index) => (
-                      <li key={index} className="text-gray-600">{ingredient}</li>
+                      <li key={index} className="font-score text-gray-600">{ingredient}</li>
                     ))}
                   </ul>
-                  <h2 className="text-lg font-bold text-gray-700 mt-4">만드는 방법</h2>
+                  <h2 className="font-score text-lg font-bold text-gray-700 mt-4">만드는 방법</h2>
                   <ol className="list-decimal list-inside">
                     {steps.map((step, index) => (
-                      <li key={index} className="text-gray-600">{step}</li>
+                      <li key={index} className="font-score text-gray-600">{step}</li>
                     ))}
                   </ol>
                 </div>
                 
                 <div className="fixed bottom-5 left-0 right-0 px-6">
   <div className="mx-auto flex gap-14" style={{ maxWidth: '400px' }}>
-    <button className="bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-8 rounded-full" onClick={() => navigate('/gptsearch')}>
+    <button className="font-score bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-8 rounded-full" onClick={() => navigate('/gptsearch')}>
       다시 할래요
     </button>
-    <button className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-8 rounded-full" onClick={() => navigate('/mypage')}>
+    <button className="font-score bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-8 rounded-full" onClick={() => navigate('/mypage')}>
       저장할래요
     </button>
   </div>
