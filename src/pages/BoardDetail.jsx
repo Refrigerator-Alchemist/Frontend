@@ -1,19 +1,36 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft, FaHeart, FaRegHeart } from 'react-icons/fa';
 import Navigation from '../components/Navigation';
+import axios from 'axios';
 
 const BoardDetail = () => {
-  const [isLiked, setIsLiked] = useState(false); 
+  const [postData, setPostData] = useState({});
+  const [isLiked, setIsLiked] = useState(false);
+  const { postId } = useParams(); 
   const navigate = useNavigate();
 
-  const postData = {
-    rank: 1,
-    thumbnail: "https://img.khan.co.kr/lady/r/1100xX/2023/09/06/news-p.v1.20230906.8f0993f6426340fe90c978fc1352d69e.png",
-    title: "계란말이김밥 - 페이지 미완 ",
-    ingredients: ["계란", "당근", "쪽파", "김"],
-    likes: 47,
-    description: `간단한 설명`, 
+  useEffect(() => {
+
+    const fetchPostData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/board/${postId}`);
+        setPostData(response.data);
+      } catch (error) {
+        console.error('Error 내용:', error);
+      }
+    };
+
+    fetchPostData();
+  }, [postId]);
+
+  const handleLikeClick = async () => {
+    setIsLiked(!isLiked);
+    try { 
+      await axios.post(`서버주소/board/${postId}/like`, { liked: !isLiked });
+    } catch (error) {
+      console.error('Error 내용:', error);
+    }
   };
 
   return (
@@ -31,25 +48,35 @@ const BoardDetail = () => {
           className="mt-10 mb-4 w-80 h-60 object-cover rounded-lg mx-auto sm:w-80"
         />
 
-        <div className="flex flex-col items-center">
-          <h2 className="font-score text-2xl font-bold mt-4">
-            {postData.title}
-          </h2>
+        <div className="flex flex-col items-center mt-8">
+          <div className="flex items-center gap-4">
+            <h2 className="font-score text-2xl font-bold">
+              {postData.title}
+            </h2>
+            <button onClick={handleLikeClick} className="ml-2">
+              {isLiked ? (
+                <FaHeart className="text-red-500 text-2xl" />
+              ) : (
+                <FaRegHeart className="text-2xl" />
+              )}
+            </button>
+          </div>
           <div className="font-score text-sm text-gray-500 my-2">
-            {postData.ingredients.join(" · ")}
+            {postData.ingredients ? postData.ingredients.join(" · ") : ""}
           </div>
           <p className="text-gray-700 font-score">{postData.description}</p>
-          <button onClick={() => setIsLiked(!isLiked)} className="mt-4">
-            {isLiked ? (
-              <FaHeart className="text-red-500 text-2xl" />
-            ) : (
-              <FaRegHeart className="text-2xl" />
-            )}
-          </button>
         </div>
-
-        <div></div>
       </div>
+      <footer
+        style={{
+          position: "fixed",
+          bottom: "0",
+          width: "100%",
+          maxWidth: "32rem",
+        }}
+      >
+        <Navigation />
+      </footer>
     </>
   );
 }
