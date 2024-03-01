@@ -89,8 +89,10 @@ export default function SignUp() {
   // 5️⃣ 비밀번호 유효성 검사
   const isPasswordValid = (password) => {
     return (
+      password.length >= 8 &&
+      password.length <= 15 &&
       /\d/.test(password) &&
-      /[ `!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/.test(password) &&
+      /[!@#$%^&*]/.test(password) &&
       /[a-zA-Z]/.test(password)
     );
   };
@@ -333,7 +335,7 @@ export default function SignUp() {
                     )}
                   </span>{' '}
                   <span className="ml-3">
-                    최소 8자 이상의 비밀번호를 입력해주세요
+                    8자 이상 15자 이하의 비밀번호를 입력해주세요
                   </span>
                 </li>
                 <li className="mb-2 flex items-center">
@@ -356,7 +358,7 @@ export default function SignUp() {
                   emailExists === true &&
                   verified === false &&
                   nameDuplicated === true &&
-                  password.length < 8 &&
+                  (password.length < 8 || password.length > 15) &&
                   isPasswordValid(password) === false &&
                   !passwordMessage
                 }
