@@ -14,15 +14,15 @@ const TagInput = () => {
   };
 
   const handleInputKeyDown = (e) => {
-    if (e.key === 'Enter' && inputValue) {
+    if (e.key === 'Enter' && inputValue.trim() !== '') {
       addTag();
       e.preventDefault();
     }
   };
 
   const addTag = () => {
-    if (inputValue && !tags.includes(inputValue)) {
-      setTags([...tags, inputValue]);
+    if (inputValue.trim() !== '' && !tags.includes(inputValue.trim())) {
+      setTags([...tags, inputValue.trim()]);
       setInputValue('');
     }
     inputRef.current.focus(); 
@@ -34,14 +34,26 @@ const TagInput = () => {
   };
 
   const handleNextButtonClick = () => {
-    navigate("/gptresult");
-    axios.post('http://localhost:3000/recipe/recommend', { ingredients: tags })
-      .then(response => {
-        console.log(response.data); 
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+    if (tags.length === 0) {
+      return;
+    }
+    
+    axios.post('http://172.30.1.89:8080/recipe/recommend', {
+      ingredients: tags // 입력한 재료를 담고 있는 리스트
+    })
+    .then(response => {
+      console.log(response.data); 
+      navigate('/gptresult')
+    })
+    .catch(error => {
+      if (error.response) {
+        console.error('Error 내용:', error.response.data);
+      } else if (error.request) {
+        console.error('서버 응답 없음:', error.request);
+      } else {
+        console.error('에러 메시지:', error.message);
+      }
+    });
   };
 
   return (

@@ -10,12 +10,13 @@ function UploadBoard() {
   const navigate = useNavigate();
   const fileInput = useRef(null);
 
+
   const handleIngredientChange = (index, event) => {
-    const newIngredients = [...ingredients];
-    newIngredients[index] = event.target.value;
+    const newIngredients = [...ingredients]; 
+    newIngredients[index] = event.target.value; 
     setIngredients(newIngredients);
   };
-
+  
   const addIngredientField = () => {
     setIngredients([...ingredients, '']);
   };
@@ -27,17 +28,21 @@ function UploadBoard() {
     formData.append('image', fileInput.current.files[0]);
     formData.append('foodName', foodName);
     formData.append('description', description);
-    ingredients.forEach((ingredient, index) => {
-      formData.append(`ingredient${index + 1}`, ingredient);
+    
+    
+     ingredients.forEach((ingredient, index) => {
+      if (ingredient.trim() !== '') {
+        formData.append(`ingredient${index + 1}`, ingredient);
+      }
     });
 
     try {
-      const response = await axios.post('서버주소', formData, {
+      const response =  axios.post('http://172.30.1.30:8080/writeTest', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log(response.data); 
+      console.log(response.data); // 모달띄우기 작성 성공됐다는 
       navigate('/mypage'); 
     } catch (error) {
       console.error('에러 내용:', error);

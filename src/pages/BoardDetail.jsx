@@ -10,21 +10,8 @@ const BoardDetail = () => {
   const { postId } = useParams(); 
   const navigate = useNavigate();
 
-  useEffect(() => {
 
-    const fetchPostData = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3000/board/${postId}`);
-        setPostData(response.data);
-      } catch (error) {
-        console.error('Error 내용:', error);
-      }
-    };
-
-    fetchPostData();
-  }, [postId]);
-
-  const handleLikeClick = async () => {
+  const handleLikeClick = async () => {  // 하트 유무 미완성 
     setIsLiked(!isLiked);
     try { 
       await axios.post(`서버주소/board/${postId}/like`, { liked: !isLiked });
