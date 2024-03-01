@@ -30,7 +30,7 @@ export const Google = () => {
         <img
           className="mx-3 hover:scale-110"
           style={{ width: '45px', height: '45px' }}
-          src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-webinar-optimizing-for-success-google-business-webinar-13.png"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/2048px-Google_%22G%22_logo.svg.png"
           alt="google"
         ></img>
       </button>
