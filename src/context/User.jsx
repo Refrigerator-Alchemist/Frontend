@@ -54,6 +54,7 @@ export const UserProvider = ({ children }) => {
         emailType,
         socialType,
       });
+      console.log(response.data); // 콘솔에서 데이터 확인
 
       // 이메일 중복 아닐 시 발급
       if (response.data.exists) {
@@ -64,6 +65,7 @@ export const UserProvider = ({ children }) => {
         setServerCode(response.data.code);
         setCodeIssuedTime(new Date().getTime());
         alert('인증번호가 발송되었습니다');
+        console.log(`발급된 인증번호 : ${serverCode}`);
       }
     } catch (error) {
       console.error('이메일 인증번호 요청 중 에러 발생: ', error);
@@ -80,6 +82,7 @@ export const UserProvider = ({ children }) => {
         emailType,
         socialType,
       });
+      console.log(response.data); // 콘솔에서 데이터 확인
 
       // 이메일 존재시 발급
       if (response.data.exists) {
@@ -87,6 +90,7 @@ export const UserProvider = ({ children }) => {
         setServerCode(response.data.code);
         setCodeIssuedTime(new Date().getTime());
         alert('인증번호가 발송되었습니다');
+        console.log(`발급된 인증번호 : ${serverCode}`);
       } else {
         setEmailExists(false);
         alert('존재하지 않는 이메일입니다');
