@@ -125,7 +125,7 @@ export default function Login() {
             </div>
           </div>
           <p
-            onClick={() => navigate('/login/resetpw')}
+            onClick={() => navigate('/reset-password')}
             className="flex justify-end underline font-bold hover:cursor-pointer hover:text-red-500 mb-4 "
           >
             비밀번호 재설정
@@ -158,7 +158,7 @@ export default function Login() {
         <div className="flex">
           <span>계정이 없으신가요?</span>
           <span
-            onClick={() => navigate('/login/signup')}
+            onClick={() => navigate('/signup')}
             className="underline font-bold hover:cursor-pointer hover:text-red-500 ml-5"
           >
             회원가입 하기
