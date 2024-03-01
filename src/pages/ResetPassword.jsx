@@ -196,7 +196,7 @@ export default function ResetPassword() {
                 />
                 <button
                   onClick={toggleShowPassword}
-                  className="inline-block whitespace-nowrap h-12 ml-5 mt-2 rounded-xl font-score text-md"
+                  className="inline-block whitespace-nowrap h-12 ml-5 mt-2 rounded-xl font-score text-md hover:text-red-500"
                 >
                   {showPassword ? <GoEye /> : <GoEyeClosed />}
                 </button>

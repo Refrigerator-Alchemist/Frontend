@@ -65,7 +65,7 @@ export const UserProvider = ({ children }) => {
       } else {
         setEmailExists(false);
         setRandomNum(response.data.randomNum);
-        setSendTime(new Date.toISOString()); // 발급 시간 저장
+        setSendTime(new Date()); // 발급 시간 저장
         setExpireTime(response.data.expireTime); // 만료 시간 저장
         alert('인증번호가 발송되었습니다');
         console.log(`발급된 인증번호 : ${randomNum}`);
@@ -91,7 +91,7 @@ export const UserProvider = ({ children }) => {
       if (response.data.exists) {
         setEmailExists(true);
         setRandomNum(response.data.randomNum);
-        setSendTime(new Date.toISOString()); // 발급 시간 저장
+        setSendTime(new Date()); // 발급 시간 저장
         setExpireTime(response.data.expireTime); // 만료 시간 저장
         alert('인증번호가 발송되었습니다');
         console.log(`발급된 인증번호 : ${randomNum}`);
@@ -275,6 +275,7 @@ export const UserProvider = ({ children }) => {
           uid: response.data.id,
           nickName: response.data.name,
           email: response.data.email,
+          password,
           socialType: socialType, // SNS로그인 or 이메일 로그인
         };
 
