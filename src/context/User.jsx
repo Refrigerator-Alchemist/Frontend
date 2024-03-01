@@ -37,7 +37,7 @@ export const UserProvider = ({ children }) => {
 
   const [emailExists, setEmailExists] = useState(false); // 회원가입 시 이메일 중복 여부
 
-  const [serverCode, setServerCode] = useState(null); // 발급된 인증번호
+  const [randomNum, setRandomNum] = useState(null); // 발급된 인증번호
   const [sendTime, setSendTime] = useState(null); // 인증번호 발급시간
   const [expireTime, setExpireTime] = useState(null); // 인증번호 만료시간
   const [verified, setVerified] = useState(false); // 이메일 인증 여부
@@ -64,11 +64,11 @@ export const UserProvider = ({ children }) => {
         alert('이미 서버에 존재하는 이메일입니다');
       } else {
         setEmailExists(false);
-        setServerCode(response.data.randomNum);
+        setRandomNum(response.data.randomNum);
         setSendTime(response.data.sendTime);
         setExpireTime(response.data.expireTime);
         alert('인증번호가 발송되었습니다');
-        console.log(`발급된 인증번호 : ${serverCode}`);
+        console.log(`발급된 인증번호 : ${randomNum}`);
       }
     } catch (error) {
       console.error('이메일 인증번호 요청 중 에러 발생: ', error);
@@ -90,11 +90,11 @@ export const UserProvider = ({ children }) => {
       // 이메일 존재시 발급
       if (response.data.exists) {
         setEmailExists(true);
-        setServerCode(response.data.randomNum);
+        setRandomNum(response.data.randomNum);
         setSendTime(response.data.sendTime);
         setExpireTime(response.data.expireTime);
         alert('인증번호가 발송되었습니다');
-        console.log(`발급된 인증번호 : ${serverCode}`);
+        console.log(`발급된 인증번호 : ${randomNum}`);
       } else {
         setEmailExists(false);
         alert('존재하지 않는 이메일입니다');
@@ -111,17 +111,17 @@ export const UserProvider = ({ children }) => {
     private String inputNum : 사용자가 입력한 인증번호
     private LocalDateTime sendTime : 발급시간
     private LocalDateTime expireTime : 만료시간 */
-  const checkCodeVerification = async (email, code, socialType) => {
+  const checkCodeVerification = async (email, inputNum, socialType) => {
     const NO_SERVER_CODE_ERROR = '발급된 인증번호가 없습니다';
     const NO_CODE_ERROR = '인증번호를 입력해주세요';
     const EXPIRED_CODE_ERROR = '인증번호가 만료되었습니다';
     const INVALID_CODE_ERROR = '인증번호가 일치하지 않습니다';
 
     // 발급 확인, 인증번호 입력 확인
-    if (!serverCode) {
+    if (!randomNum) {
       alert(NO_SERVER_CODE_ERROR);
       return;
-    } else if (!code) {
+    } else if (!inputNum) {
       alert(NO_CODE_ERROR);
       return;
     }
@@ -135,7 +135,7 @@ export const UserProvider = ({ children }) => {
       return;
     }
 
-    if (code !== serverCode) {
+    if (inputNum !== randomNum) {
       alert(INVALID_CODE_ERROR);
       return;
     }
@@ -143,9 +143,9 @@ export const UserProvider = ({ children }) => {
     try {
       // 서버에 인증 완료 상태 전송
       const response = await axios.post('http://localhost:8080/verify-email', {
-        email: email,
-        inputNum: code,
-        randomNum: serverCode,
+        email,
+        inputNum,
+        randomNum,
         socialType,
         sendTime,
         expireTime,
@@ -154,7 +154,7 @@ export const UserProvider = ({ children }) => {
       if (response.data.success) {
         // 서버에서 성공 응답을 받았을 경우
         setVerified(true); // 인증 완료
-        setServerCode('');
+        setRandomNum('');
         alert('인증 완료!');
       } else {
         alert('인증 실패: ' + response.data.message);
@@ -165,12 +165,12 @@ export const UserProvider = ({ children }) => {
   };
 
   // ❓ 닉네임 중복 확인
-  const checkNameDuplication = async (userName) => {
+  const checkNameDuplication = async (nickName) => {
     try {
       const response = await axios.post(
         'http://localhost:8080/verify-nickname',
         {
-          userName,
+          nickName,
         }
       );
 
