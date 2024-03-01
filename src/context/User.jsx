@@ -324,14 +324,12 @@ export const UserProvider = ({ children }) => {
         }
       );
 
-      if (response.data.success) {
+      if (response.status === 204) {
         console.log('비밀번호가 성공적으로 재설정되었습니다');
         alert('비밀번호가 성공적으로 재설정되었습니다');
       } else {
-        console.log(
-          '비밀번호 재설정에 실패하였습니다: ' + response.data.message
-        );
-        alert('비밀번호 재설정에 실패하였습니다: ' + response.data.message);
+        console.log('비밀번호 재설정에 실패하였습니다');
+        alert('비밀번호 재설정에 실패하였습니다');
       }
     } catch (error) {
       console.error('비밀번호 재설정 중 에러 발생: ', error);
