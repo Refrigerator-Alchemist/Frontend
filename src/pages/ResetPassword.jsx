@@ -12,7 +12,7 @@ import { useUserDispatch } from '../context/User';
 export default function ResetPassword() {
   const [email, setEmail] = useState(''); // 이메일
 
-  const [code, setCode] = useState(''); // 입력한 인증번호
+  const [inputNum, setInputNum] = useState(''); // 입력한 인증번호
 
   const [password, setPassword] = useState(''); // 새로운 비밀번호
   const [rePassword, setRePassword] = useState(''); // 비밀번호 확인
@@ -54,9 +54,9 @@ export default function ResetPassword() {
   // 3️⃣ 인증 확인
   const onCheck = async (e) => {
     e.preventDefault();
-    console.log(`입력한 인증번호 : ${code}`);
+    console.log(`입력한 인증번호 : ${inputNum}`);
 
-    checkCodeVerification(email, code, socialType);
+    checkCodeVerification(email, inputNum, socialType);
   };
 
   // 4️⃣ 비밀번호 유효성 검사
@@ -154,7 +154,7 @@ export default function ResetPassword() {
               <div className="flex max-w-xs mt-2">
                 <input
                   id="input"
-                  value={code}
+                  value={inputNum}
                   type="tel"
                   maxLength="4"
                   placeholder="????"
@@ -163,7 +163,7 @@ export default function ResetPassword() {
                       e.target.value === '' ||
                       (!isNaN(e.target.value) && e.target.value.length <= 4)
                     ) {
-                      setCode(e.target.value);
+                      setInputNum(e.target.value);
                     }
                   }}
                   className="w-40 h-12 mx-1 text-center border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"

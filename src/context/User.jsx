@@ -59,7 +59,7 @@ export const UserProvider = ({ children }) => {
       console.log(response.data); // 콘솔에서 데이터 확인
 
       // 이메일 중복 아닐 시 발급
-      if (response.data.exists) {
+      if (response.data) {
         setEmailExists(true);
         alert('이미 서버에 존재하는 이메일입니다');
       } else {
@@ -88,7 +88,7 @@ export const UserProvider = ({ children }) => {
       console.log(response.data); // 콘솔에서 데이터 확인
 
       // 이메일 존재시 발급
-      if (response.data.exists) {
+      if (response.data) {
         setEmailExists(true);
         setRandomNum(response.data.randomNum);
         setSendTime(new Date()); // 발급 시간 저장
@@ -111,7 +111,12 @@ export const UserProvider = ({ children }) => {
     private String inputNum : 사용자가 입력한 인증번호
     private LocalDateTime sendTime : 발급시간
     private LocalDateTime expireTime : 만료시간 */
-  const checkCodeVerification = async (email, inputNum, socialType) => {
+  const checkCodeVerification = async (
+    email,
+    inputNum,
+    emailType,
+    socialType
+  ) => {
     const NO_SERVER_CODE_ERROR = '발급된 인증번호가 없습니다';
     const NO_CODE_ERROR = '인증번호를 입력해주세요';
     const EXPIRED_CODE_ERROR = '인증번호가 만료되었습니다';
@@ -144,8 +149,9 @@ export const UserProvider = ({ children }) => {
       // 서버에 인증 완료 상태 전송
       const response = await axios.post('http://localhost:8080/verify-email', {
         email,
-        inputNum,
         randomNum,
+        inputNum,
+        emailType,
         socialType,
         sendTime,
         expireTime,
