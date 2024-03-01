@@ -4,7 +4,30 @@ import axios from 'axios';
 
 // 서버 주소 : http://localhost:8080
 // 로그인 path : /login
-// 회원가입 : /login/signup
+// 회원가입 : /signup
+// 비밀번호 재설정 : /reset-password
+
+// 📀 토큰 처리
+// axios 인스턴스 생성
+const instance = axios.create({
+  baseURL: 'http://localhost:8080',
+});
+
+// 요청 인터셉터 추가
+instance.interceptors.request.use(
+  function (config) {
+    // 토큰이 있는 경우 Authorization 헤더에 토큰 추가
+    const token = localStorage.getItem('Authorization-Access');
+    if (token) {
+      config.headers.Authorization = 'Bearer ' + token;
+    }
+    return config;
+  },
+  function (error) {
+    // 요청 실패 처리
+    return Promise.reject(error);
+  }
+);
 
 // 유저 초기 상태 정의
 const initialState = {
@@ -51,7 +74,7 @@ export const UserProvider = ({ children }) => {
     const URL = 'http://localhost:8080/send-email';
 
     try {
-      const response = await axios.post(URL, {
+      const response = await instance.post(URL, {
         email,
         emailType,
         socialType,
@@ -80,7 +103,7 @@ export const UserProvider = ({ children }) => {
     const URL = 'http://localhost:8080/send-email';
 
     try {
-      const response = await axios.post(URL, {
+      const response = await instance.post(URL, {
         email,
         emailType,
         socialType,
@@ -147,15 +170,18 @@ export const UserProvider = ({ children }) => {
 
     try {
       // 서버에 인증 완료 상태 전송
-      const response = await axios.post('http://localhost:8080/verify-email', {
-        email,
-        randomNum,
-        inputNum,
-        emailType,
-        socialType,
-        sendTime,
-        expireTime,
-      });
+      const response = await instance.post(
+        'http://localhost:8080/verify-email',
+        {
+          email,
+          randomNum,
+          inputNum,
+          emailType,
+          socialType,
+          sendTime,
+          expireTime,
+        }
+      );
 
       if (response.status === 204) {
         // 서버에서 성공 응답을 받았을 경우
@@ -173,7 +199,7 @@ export const UserProvider = ({ children }) => {
   // ❓ 닉네임 중복 확인
   const checkNameDuplication = async (nickName) => {
     try {
-      const response = await axios.post(
+      const response = await instance.post(
         'http://localhost:8080/verify-nickname',
         {
           nickName,
@@ -196,7 +222,7 @@ export const UserProvider = ({ children }) => {
   const signup = (email, password, nickName, socialType) => {
     const URL = 'http://localhost:8080/signup';
 
-    axios
+    instance
       .post(
         URL,
         {
@@ -229,7 +255,7 @@ export const UserProvider = ({ children }) => {
     const URL = 'http://localhost:8080/delete-user';
 
     try {
-      await axios.delete(URL, {
+      await instance.delete(URL, {
         headers: {
           Authorization: localStorage.getItem('Authorization'), // 인증 토큰
         },
@@ -248,7 +274,7 @@ export const UserProvider = ({ children }) => {
   const login = (email, password, socialType) => {
     const URL = 'http://localhost:8080/login';
 
-    axios
+    instance
       .post(
         URL,
         {
@@ -271,7 +297,14 @@ export const UserProvider = ({ children }) => {
         console.log('로그인 되었습니다!');
 
         // 로컬 스토리지에 유저 데이터 저장
-        localStorage.setItem('Authorization', response.headers.authorization);
+        localStorage.setItem(
+          'Authorization-Access',
+          response.headers['authorization-access']
+        );
+        localStorage.setItem(
+          'Authorization-Refresh',
+          response.headers['authorization-refresh']
+        );
         localStorage.setItem('uid', response.data.id);
         localStorage.setItem('nickName', response.data.name);
         localStorage.setItem('email', response.data.email);
@@ -298,7 +331,8 @@ export const UserProvider = ({ children }) => {
   //🔓 로그아웃 ---------------------------------------------------------------
   const logout = () => {
     // 로컬 스토리지에서 유저 데이터 삭제
-    localStorage.removeItem('Authorization');
+    localStorage.removeItem('Authorization-Access');
+    localStorage.removeItem('Authorization-Refresh');
     localStorage.removeItem('uid');
     localStorage.removeItem('nickName');
     localStorage.removeItem('email');
@@ -314,7 +348,7 @@ export const UserProvider = ({ children }) => {
   // 🔄 비밀번호 재설정 ---------------------------------------------------------------
   const resetPassword = async (email, password, rePassword, socialType) => {
     try {
-      const response = await axios.post(
+      const response = await instance.post(
         'http://localhost:8080/reset-password',
         {
           email,
@@ -334,6 +368,8 @@ export const UserProvider = ({ children }) => {
     } catch (error) {
       console.error('비밀번호 재설정 중 에러 발생: ', error);
     }
+
+    navigate('/login');
   };
 
   // Context value
