@@ -151,7 +151,7 @@ export const UserProvider = ({ children }) => {
         expireTime,
       });
 
-      if (response.data.success) {
+      if (response.status === 204) {
         // 서버에서 성공 응답을 받았을 경우
         setVerified(true); // 인증 완료
         setRandomNum('');
@@ -188,7 +188,7 @@ export const UserProvider = ({ children }) => {
 
   // 📝 회원가입 ---------------------------------------------------------------
   const signup = (email, password, nickName, socialType) => {
-    const URL = 'http://localhost:8080/login/signup';
+    const URL = 'http://localhost:8080/signup';
 
     axios
       .post(
@@ -220,7 +220,7 @@ export const UserProvider = ({ children }) => {
 
   // 🚫 회원탈퇴 ---------------------------------------------------------------
   const deleteUser = async () => {
-    const URL = 'http://localhost:8080/mypage/delete-user';
+    const URL = 'http://localhost:8080/delete-user';
 
     try {
       await axios.delete(URL, {
