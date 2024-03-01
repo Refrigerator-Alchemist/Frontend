@@ -15,7 +15,7 @@ export default function ResetPassword() {
   const [code, setCode] = useState(''); // 입력한 인증번호
 
   const [password, setPassword] = useState(''); // 새로운 비밀번호
-  const [checkPassword, setCheckPassword] = useState(''); // 비밀번호 확인
+  const [rePassword, setRePassword] = useState(''); // 비밀번호 확인
   const [passwordMessage, setPasswordMessage] = useState(null); // 비밀번호 일치여부 안내 문구
 
   const [showPassword, setShowPassword] = useState(false);
@@ -70,8 +70,8 @@ export default function ResetPassword() {
 
   // 5️⃣ 비밀번호 확인 (e.preventDefault 설정 X)
   const isSamePassword = () => {
-    if (password && checkPassword) {
-      password !== checkPassword
+    if (password && rePassword) {
+      password !== rePassword
         ? setPasswordMessage(false)
         : setPasswordMessage(true); // disabled 풀림
     } else {
@@ -92,7 +92,7 @@ export default function ResetPassword() {
   // 6️⃣ 재설정하기
   const onReset = (e) => {
     e.preventDefault();
-    resetPassword(email, password, socialType);
+    resetPassword(email, password, rePassword, socialType);
   };
 
   return (
@@ -211,9 +211,9 @@ export default function ResetPassword() {
             <div className="flex">
               <input
                 type="password"
-                value={checkPassword}
+                value={rePassword}
                 onChange={(e) => {
-                  setCheckPassword(e.target.value);
+                  setRePassword(e.target.value);
                   isSamePassword();
                 }}
                 placeholder="한 번 더 입력하세요"

@@ -36,8 +36,10 @@ export const UserProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState); // 유저 정보
 
   const [emailExists, setEmailExists] = useState(false); // 회원가입 시 이메일 중복 여부
+
   const [serverCode, setServerCode] = useState(null); // 발급된 인증번호
-  const [codeIssuedTime, setCodeIssuedTime] = useState(null); // 인증번호 발급시간
+  const [sendTime, setSendTime] = useState(null); // 인증번호 발급시간
+  const [expireTime, setExpireTime] = useState(null); // 인증번호 만료시간
   const [verified, setVerified] = useState(false); // 이메일 인증 여부
 
   const [nameDuplicated, setNameDuplicated] = useState(true); // 닉네임 중복 여부
@@ -62,8 +64,9 @@ export const UserProvider = ({ children }) => {
         alert('이미 서버에 존재하는 이메일입니다');
       } else {
         setEmailExists(false);
-        setServerCode(response.data.code);
-        setCodeIssuedTime(new Date().getTime());
+        setServerCode(response.data.randomNum);
+        setSendTime(response.data.sendTime);
+        setExpireTime(response.data.expireTime);
         alert('인증번호가 발송되었습니다');
         console.log(`발급된 인증번호 : ${serverCode}`);
       }
@@ -87,8 +90,9 @@ export const UserProvider = ({ children }) => {
       // 이메일 존재시 발급
       if (response.data.exists) {
         setEmailExists(true);
-        setServerCode(response.data.code);
-        setCodeIssuedTime(new Date().getTime());
+        setServerCode(response.data.randomNum);
+        setSendTime(response.data.sendTime);
+        setExpireTime(response.data.expireTime);
         alert('인증번호가 발송되었습니다');
         console.log(`발급된 인증번호 : ${serverCode}`);
       } else {
@@ -101,6 +105,12 @@ export const UserProvider = ({ children }) => {
   };
 
   // ✅ 이메일 인증 확인
+  /* private String email : 이메일
+    private String socialType : 소셜타입
+    private String randomNum : 발급된 인증번호
+    private String inputNum : 사용자가 입력한 인증번호
+    private LocalDateTime sendTime : 발급시간
+    private LocalDateTime expireTime : 만료시간 */
   const checkCodeVerification = async (email, code, socialType) => {
     const NO_SERVER_CODE_ERROR = '발급된 인증번호가 없습니다';
     const NO_CODE_ERROR = '인증번호를 입력해주세요';
@@ -116,8 +126,8 @@ export const UserProvider = ({ children }) => {
       return;
     }
 
-    // 인증번호 유효 시간 : 10분
-    const timeDifference = (new Date().getTime() - codeIssuedTime) / 1000 / 60;
+    // 인증번호 유효 시간 : 10분 - 수정하기
+    const timeDifference = (expireTime - sendTime) / 1000 / 60;
 
     if (timeDifference > 10) {
       console.log(EXPIRED_CODE_ERROR);
@@ -134,8 +144,11 @@ export const UserProvider = ({ children }) => {
       // 서버에 인증 완료 상태 전송
       const response = await axios.post('http://localhost:8080/verify-email', {
         email: email,
-        code,
+        inputNum: code,
+        randomNum: serverCode,
         socialType,
+        sendTime,
+        expireTime,
       });
 
       if (response.data.success) {
@@ -174,7 +187,7 @@ export const UserProvider = ({ children }) => {
   };
 
   // 📝 회원가입 ---------------------------------------------------------------
-  const signup = (email, password, username, socialType) => {
+  const signup = (email, password, nickName, socialType) => {
     const URL = 'http://localhost:8080/login/signup';
 
     axios
@@ -183,7 +196,7 @@ export const UserProvider = ({ children }) => {
         {
           email: email,
           password: password,
-          username: username,
+          nickName: nickName,
           socialType: socialType,
         },
         {
@@ -254,13 +267,13 @@ export const UserProvider = ({ children }) => {
         // 로컬 스토리지에 유저 데이터 저장
         localStorage.setItem('Authorization', response.headers.authorization);
         localStorage.setItem('uid', response.data.id);
-        localStorage.setItem('username', response.data.name);
+        localStorage.setItem('nickName', response.data.name);
         localStorage.setItem('email', response.data.email);
         localStorage.setItem('socialType', response.data.socialType); // 소셜 로그인 or 이메일 로그인
 
         let user = {
           uid: response.data.id,
-          username: response.data.name,
+          nickName: response.data.name,
           email: response.data.email,
           socialType: socialType, // SNS로그인 or 이메일 로그인
         };
@@ -280,7 +293,7 @@ export const UserProvider = ({ children }) => {
     // 로컬 스토리지에서 유저 데이터 삭제
     localStorage.removeItem('Authorization');
     localStorage.removeItem('uid');
-    localStorage.removeItem('username');
+    localStorage.removeItem('nickName');
     localStorage.removeItem('email');
     localStorage.removeItem('socialType');
 
@@ -292,13 +305,14 @@ export const UserProvider = ({ children }) => {
   };
 
   // 🔄 비밀번호 재설정 ---------------------------------------------------------------
-  const resetPassword = async (email, password, socialType) => {
+  const resetPassword = async (email, password, rePassword, socialType) => {
     try {
       const response = await axios.post(
         'http://localhost:8080/reset-password',
         {
           email,
           password,
+          rePassword,
           socialType,
         }
       );

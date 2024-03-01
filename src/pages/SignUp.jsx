@@ -13,9 +13,9 @@ export default function SignUp() {
   const [email, setEmail] = useState(''); // 이메일
   const [emailError, setEmailError] = useState(''); // 로그인 오류 메세지
 
-  const [code, setCode] = useState(''); // 입력한 인증번호
+  const [inputNum, setInputNum] = useState(''); // 입력한 인증번호
 
-  const [userName, setUserName] = useState(''); // 닉네임
+  const [nickName, setNickName] = useState(''); // 닉네임
   const [nameError, setNameError] = useState(''); // 닉네임 오류 메세지
 
   const [password, setPassword] = useState(''); // 비밀번호
@@ -66,9 +66,9 @@ export default function SignUp() {
   // 3️⃣ 인증 확인
   const onCheckCode = (e) => {
     e.preventDefault();
-    console.log(`입력한 인증번호 : ${code}`);
+    console.log(`입력한 인증번호 : ${inputNum}`);
 
-    checkCodeVerification(email, code, socialType);
+    checkCodeVerification(email, inputNum, socialType);
   };
 
   // 4️⃣ 닉네임 중복 확인
@@ -77,12 +77,12 @@ export default function SignUp() {
 
     const pattern = /^[가-힣]{2,}|[A-Za-z]{3,}$/;
 
-    if (!pattern.test(userName)) {
+    if (!pattern.test(nickName)) {
       setNameError('한글은 최소 2글자, 영문은 최소 3글자 이상 입력하세요');
-      setUserName('');
+      setNickName('');
     } else {
       setNameError('');
-      checkNameDuplication(userName);
+      checkNameDuplication(nickName);
     }
   };
 
@@ -119,7 +119,7 @@ export default function SignUp() {
   // 7️⃣ 회원가입
   const onSignUp = (e) => {
     e.preventDefault();
-    signup(email, password, userName, socialType);
+    signup(email, password, nickName, socialType);
   };
 
   return (
@@ -184,7 +184,7 @@ export default function SignUp() {
               <div className="flex max-w-xs mt-2">
                 <input
                   id="input"
-                  value={code}
+                  value={inputNum}
                   type="tel"
                   maxLength="4"
                   placeholder="????"
@@ -193,7 +193,7 @@ export default function SignUp() {
                       e.target.value === '' ||
                       (!isNaN(e.target.value) && e.target.value.length <= 4)
                     ) {
-                      setCode(e.target.value);
+                      setInputNum(e.target.value);
                     }
                   }}
                   className="w-40 h-12 mx-1 text-center border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -219,8 +219,8 @@ export default function SignUp() {
               <div className="flex">
                 <input
                   type="text"
-                  value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
+                  value={nickName}
+                  onChange={(e) => setNickName(e.target.value)}
                   placeholder="닉네임"
                   className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
