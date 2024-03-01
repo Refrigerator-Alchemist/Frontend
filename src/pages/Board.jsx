@@ -65,53 +65,33 @@ const WriteButton = () => {
   
   
 function Board() {
-  // const [recipes, setRecipes] = useState([
-  //   {
-  //     rank: 1,
-  //     thumbnail: "https://img.khan.co.kr/lady/r/1100xX/2023/09/06/news-p.v1.20230906.8f0993f6426340fe90c978fc1352d69e.png",
-  //     title: "계란말이김밥",
-  //     ingredients: ["계란", "당근", "쪽파", "김"],
-  //     likes: 47,
-  //     description: `간단한 설명`, 
-  //   },
-    
-  //   {
-  //     title: "Vegetable Curry",
-  //     description: "potato, Lettuce",
-  //     img: "",
-  //     isLiked: true,
-  //   },
-  //   {
-  //     title: "Vegetable Curry",
-  //     description: "potato, Lettuce",
-  //     img: "",
-  //     isLiked: true,
-  //   },
-  //  
-    
-  // ]);
-
+  
 
   const [recipes, setRecipes] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
-    axios.get('http://172.30.1.89:8080/board/apiTest')
+    axios.get('http://172.30.1.30:8080/board/apiTest')
       .then(response => {
-        const formattedData = response.data.map(item => ({
-          title: item.title,
-          ingredients: item.ingredients,
-          description: item.description,
-          img: item.thumbnail,
-          isLiked: false,
-        }));
-        setRecipes(formattedData);
+        if (response.data && Array.isArray(response.data.items)) {
+          const formattedData = response.data.items.map(item => ({
+            postid: item.ID,
+            title: item.title,
+            description: item.Recipe,
+            img: item.thumbnail, 
+            isLiked: item.likeCount > 0, //0보다크면 하트 눌러진상태 
+          }));
+          setRecipes(formattedData);
+        } else {
+          console.error('에러 내용1:', response.data);
+        }
       })
       .catch(error => {
-        console.error('Error내용:', error);
+        console.error('에러 내용2:', error);
       });
   }, []);
+  
 
 
 
