@@ -20,7 +20,7 @@ export default function Navigation() {
       setSelected('food');
     } else if (currentPath === '/main') {
       setSelected('home');
-    } else if (currentPath === '/login') {
+    } else if (currentPath === '/login'|| currentPath.startsWith('/mypage')) {
       setSelected('profile');
     }
   }, [location.pathname, setSelected]);

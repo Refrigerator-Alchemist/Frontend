@@ -33,10 +33,10 @@ const WriteButton = () => {
 };
 
 
-    const RecipeCard = ({ postid, title, description, img, isLiked }) => {
-      const [liked, setLiked] = useState(false); 
+const RecipeCard = ({ postid, title, description, img, isLiked }) => {
+    const [liked, setLiked] = useState(false); 
     
-      const toggleLike = (event) => {
+    const toggleLike = (event) => {
         event.stopPropagation(); 
         setLiked(!liked); 
       };
