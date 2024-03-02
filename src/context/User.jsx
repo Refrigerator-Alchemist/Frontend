@@ -1,9 +1,6 @@
 import React, { useState, useReducer, createContext, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import LOGO_GOOGLE from '../img/logo_google.png';
-import LOGO_KAKAO from '../img/logo_kakao.png';
-import LOGO_NAVER from '../img/logo_naver.png';
 
 /*
 🚚
@@ -390,9 +387,6 @@ export const UserProvider = ({ children }) => {
     checkNameDuplication,
     nameDuplicated,
     setNameDuplicated,
-    Kakao,
-    Naver,
-    Google,
   };
 
   return (
@@ -402,72 +396,6 @@ export const UserProvider = ({ children }) => {
       </UserStateContext.Provider>
     </UserDispatchContext.Provider>
   );
-};
-
-// 🟡 카카오
-export const Kakao = (e) => {
-  e.preventDefault();
-  const kakaoURL = `http://localhost:8080/oauth2/authorization/kakao`;
-  const handleLogin = () => {
-    const loginWindow = window.open(kakaoURL, '_blank', 'width=600,height=500');
-    // 0.5초마다 로그인 확인
-    const loginChecker = setInterval(function () {
-      if (loginWindow.closed) {
-        clearInterval(loginChecker);
-        if (localStorage.getItem('access_token')) {
-          window.location.href = '/main';
-        }
-      }
-    }, 500);
-  };
-
-  handleLogin();
-};
-
-// 🔴 구글
-export const Google = (e) => {
-  e.preventDefault();
-
-  const googleURL = `http://localhost:8080/oauth2/authorization/google`;
-  const handleLogin = () => {
-    const loginWindow = window.open(
-      googleURL,
-      '_blank',
-      'width=600,height=500'
-    );
-    // 0.5초마다 로그인 확인
-    const loginChecker = setInterval(function () {
-      if (loginWindow.closed) {
-        clearInterval(loginChecker);
-        if (localStorage.getItem('access_token')) {
-          window.location.href = '/main';
-        }
-      }
-    }, 500);
-  };
-
-  handleLogin();
-};
-
-// 🟢 네이버
-export const Naver = (e) => {
-  e.preventDefault();
-
-  const naverURL = `http://localhost:8080/oauth2/authorization/naver`;
-  const handleLogin = () => {
-    const loginWindow = window.open(naverURL, '_blank', 'width=600,height=500');
-    // 0.5초마다 로그인 확인
-    const loginChecker = setInterval(function () {
-      if (loginWindow.closed) {
-        clearInterval(loginChecker);
-        if (localStorage.getItem('access_token')) {
-          window.location.href = '/main';
-        }
-      }
-    }, 500);
-  };
-
-  handleLogin();
 };
 
 // 다른 컴포넌트에서 UserState 컨텍스트 사용 가능
