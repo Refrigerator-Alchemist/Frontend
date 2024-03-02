@@ -3,7 +3,7 @@ import Logo from '../components/Logo';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import { GoEye, GoEyeClosed } from 'react-icons/go';
-import { Kakao, Naver, Google } from '../components/SnsLogin';
+import { Kakao, Naver, Google } from '../context/User';
 import { useUserDispatch } from '../context/User';
 
 export default function Login() {
