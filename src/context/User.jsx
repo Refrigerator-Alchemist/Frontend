@@ -399,6 +399,9 @@ export const UserProvider = ({ children }) => {
     <UserDispatchContext.Provider value={value}>
       <UserStateContext.Provider value={state}>
         {children}
+        <Kakao />
+        <Google />
+        <Naver />
       </UserStateContext.Provider>
     </UserDispatchContext.Provider>
   );
