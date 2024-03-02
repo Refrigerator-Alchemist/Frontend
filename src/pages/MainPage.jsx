@@ -52,7 +52,7 @@ export default function MainPage() {
           position: 'fixed',
           bottom: '0',
           width: '100%',
-          maxWidth: '32rem',
+          maxWidth: '31rem',
         }}
       >
         <Navigation />

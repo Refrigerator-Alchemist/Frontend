@@ -58,8 +58,8 @@ function MyPage() {
       try {
         const response = await axios.get(
           showSavedRecipes
-            ? 'http://172.30.1.30:8080/board/myLike' // 좋아요누른  
-            : 'http://172.30.1.30:8080/recipe/myRecipe'  //저장한 
+            ? 'http://172.30.1.30:8080/board/myLike' // 좋아요누른
+            : 'http://172.30.1.30:8080/recipe/myRecipe' //저장한
         );
         if (response.data && Array.isArray(response.data.items)) {
           const formattedData = response.data.items.map((item) => ({
@@ -113,7 +113,9 @@ function MyPage() {
             className="rounded-full h-32 w-32 object-cover"
           />
         </div>
-        <h1 className="font-score mt-5 text-xl font-semibold text-center">user1</h1>
+        <h1 className="font-score mt-5 text-xl font-semibold text-center">
+          user1
+        </h1>
         <p className="font-score mt-4 pb-4\2 px-6 text-center">한줄 자기소개</p>
         <button
           onClick={() => navigate('/profile')}
@@ -162,7 +164,7 @@ function MyPage() {
           position: 'fixed',
           bottom: '0',
           width: '100%',
-          maxWidth: '32rem',
+          maxWidth: '31rem',
         }}
       >
         <Navigation />
