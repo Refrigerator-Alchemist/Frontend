@@ -1,7 +1,21 @@
+import LOGO_GOOGLE from '../img/logo_google.png';
+import LOGO_KAKAO from '../img/logo_kakao.png';
+import LOGO_NAVER from '../img/logo_naver.png';
+
+// 카카오
 export const Kakao = () => {
   const kakaoURL = `http://localhost:8080/oauth2/authorization/kakao`;
   const handleLogin = () => {
-    window.location.href = kakaoURL;
+    const loginWindow = window.open(kakaoURL, '_blank', 'width=600,height=500');
+    // 0.5초마다 로그인 확인
+    const loginChecker = setInterval(function () {
+      if (loginWindow.closed) {
+        clearInterval(loginChecker);
+        if (localStorage.getItem('access_token')) {
+          window.location.href = '/main';
+        }
+      }
+    }, 500);
   };
 
   return (
@@ -10,7 +24,7 @@ export const Kakao = () => {
         <img
           className="mx-3 hover:scale-110"
           style={{ width: '45px', height: '45px' }}
-          src="https://cdn.imweb.me/upload/S201803255ab755f0896c9/d59972cd95aa1.png"
+          src={LOGO_KAKAO}
           alt="kakaotalk"
         ></img>
       </button>
@@ -18,10 +32,24 @@ export const Kakao = () => {
   );
 };
 
+// 구글
 export const Google = () => {
   const googleURL = `http://localhost:8080/oauth2/authorization/google`;
   const handleLogin = () => {
-    window.location.href = googleURL;
+    const loginWindow = window.open(
+      googleURL,
+      '_blank',
+      'width=600,height=500'
+    );
+    // 0.5초마다 로그인 확인
+    const loginChecker = setInterval(function () {
+      if (loginWindow.closed) {
+        clearInterval(loginChecker);
+        if (localStorage.getItem('access_token')) {
+          window.location.href = '/main';
+        }
+      }
+    }, 500);
   };
 
   return (
@@ -30,7 +58,7 @@ export const Google = () => {
         <img
           className="mx-3 hover:scale-110"
           style={{ width: '45px', height: '45px' }}
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/2048px-Google_%22G%22_logo.svg.png"
+          src={LOGO_GOOGLE}
           alt="google"
         ></img>
       </button>
@@ -38,10 +66,20 @@ export const Google = () => {
   );
 };
 
+// 네이버
 export const Naver = () => {
   const naverURL = `http://localhost:8080/oauth2/authorization/naver`;
   const handleLogin = () => {
-    window.location.href = naverURL;
+    const loginWindow = window.open(naverURL, '_blank', 'width=600,height=500');
+    // 0.5초마다 로그인 확인
+    const loginChecker = setInterval(function () {
+      if (loginWindow.closed) {
+        clearInterval(loginChecker);
+        if (localStorage.getItem('access_token')) {
+          window.location.href = '/main';
+        }
+      }
+    }, 500);
   };
 
   return (
@@ -50,12 +88,10 @@ export const Naver = () => {
         <img
           className="mx-3 hover:scale-110"
           style={{ width: '45px', height: '45px' }}
-          src="https://clova-phinf.pstatic.net/MjAxODAzMjlfOTIg/MDAxNTIyMjg3MzM3OTAy.WkiZikYhauL1hnpLWmCUBJvKjr6xnkmzP99rZPFXVwgg.mNH66A47eL0Mf8G34mPlwBFKP0nZBf2ZJn5D4Rvs8Vwg.PNG/image.png"
+          src={LOGO_NAVER}
           alt="naver"
         ></img>
       </button>
     </>
   );
 };
-
-// 로그인 상태 저장 - UserStateContext, UserDispatchContext에 저장

@@ -299,9 +299,9 @@ export default function SignUp() {
                 <li className="mb-2 flex items-center">
                   <span role="img" aria-label="check" className="flex">
                     {emailExists ? (
-                      <GoCheckCircle className="text-emerald" />
-                    ) : (
                       <GoCheckCircleFill className="text-emerald" />
+                    ) : (
+                      <GoCheckCircle className="text-emerald" />
                     )}
                   </span>{' '}
                   <span className="ml-3">이메일 사용 가능</span>
