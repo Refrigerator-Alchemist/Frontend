@@ -399,16 +399,14 @@ export const UserProvider = ({ children }) => {
     <UserDispatchContext.Provider value={value}>
       <UserStateContext.Provider value={state}>
         {children}
-        <Kakao />
-        <Google />
-        <Naver />
       </UserStateContext.Provider>
     </UserDispatchContext.Provider>
   );
 };
 
 // 🟡 카카오
-export const Kakao = () => {
+export const Kakao = (e) => {
+  e.preventDefault();
   const kakaoURL = `http://localhost:8080/oauth2/authorization/kakao`;
   const handleLogin = () => {
     const loginWindow = window.open(kakaoURL, '_blank', 'width=600,height=500');
@@ -423,22 +421,13 @@ export const Kakao = () => {
     }, 500);
   };
 
-  return (
-    <>
-      <button onClick={handleLogin}>
-        <img
-          className="mx-3 hover:scale-110"
-          style={{ width: '45px', height: '45px' }}
-          src={LOGO_KAKAO}
-          alt="kakaotalk"
-        ></img>
-      </button>
-    </>
-  );
+  handleLogin();
 };
 
 // 🔴 구글
-export const Google = () => {
+export const Google = (e) => {
+  e.preventDefault();
+
   const googleURL = `http://localhost:8080/oauth2/authorization/google`;
   const handleLogin = () => {
     const loginWindow = window.open(
@@ -457,22 +446,13 @@ export const Google = () => {
     }, 500);
   };
 
-  return (
-    <>
-      <button onClick={handleLogin}>
-        <img
-          className="mx-3 hover:scale-110"
-          style={{ width: '45px', height: '45px' }}
-          src={LOGO_GOOGLE}
-          alt="google"
-        ></img>
-      </button>
-    </>
-  );
+  handleLogin();
 };
 
 // 🟢 네이버
-export const Naver = () => {
+export const Naver = (e) => {
+  e.preventDefault();
+
   const naverURL = `http://localhost:8080/oauth2/authorization/naver`;
   const handleLogin = () => {
     const loginWindow = window.open(naverURL, '_blank', 'width=600,height=500');
@@ -487,18 +467,7 @@ export const Naver = () => {
     }, 500);
   };
 
-  return (
-    <>
-      <button onClick={handleLogin}>
-        <img
-          className="mx-3 hover:scale-110"
-          style={{ width: '45px', height: '45px' }}
-          src={LOGO_NAVER}
-          alt="naver"
-        ></img>
-      </button>
-    </>
-  );
+  handleLogin();
 };
 
 // 다른 컴포넌트에서 UserState 컨텍스트 사용 가능
