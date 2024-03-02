@@ -1,23 +1,25 @@
 import React, { useState, useReducer, createContext, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
-// 서버 주소 : http://localhost:8080
-// 로그인 path : /login
-// 회원가입 : /signup
-// 비밀번호 재설정 : /reset-password
+/*
+🚚
+서버 로컬 : http://localhost:8080
+PATH(엔드포인트)
+로그인 : /login
+회원가입 : /signup
+비밀번호 재설정 : /reset-password
+*/
 
 // 📀 토큰 처리
-// axios 인스턴스 생성
 const instance = axios.create({
   baseURL: 'http://localhost:8080',
 });
 
-// 요청 인터셉터 추가
+// 요청 인터셉터
 instance.interceptors.request.use(
   function (config) {
-    const accessToken = localStorage.getItem('Authorization-Access'); // 액세스
-    const refreshToken = localStorage.getItem('Authorization-Refresh'); // 리프레쉬
+    const accessToken = localStorage.getItem('Authorization-Access');
+    const refreshToken = localStorage.getItem('Authorization-Refresh');
     if (accessToken) {
       config.headers['Authorization-Access'] = 'Bearer ' + accessToken;
     }
@@ -28,7 +30,6 @@ instance.interceptors.request.use(
   },
 
   function (error) {
-    // 요청 실패 처리
     return Promise.reject(error);
   }
 );
@@ -54,11 +55,10 @@ const reducer = (state, action) => {
   }
 };
 
-// Context 생성
+// 컨텍스트 & 컨텍스트 프로바이더
 const UserStateContext = createContext();
 const UserDispatchContext = createContext();
 
-// Provider 컴포넌트 정의
 export const UserProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState); // 유저 정보
 
@@ -75,7 +75,7 @@ export const UserProvider = ({ children }) => {
 
   // 📧 이메일 인증 요청 (회원가입용)
   const requestEmailForSignUp = async (email, emailType, socialType) => {
-    const URL = 'http://localhost:8080/send-email';
+    const URL = 'http://localhost:8080/auth/send-email';
 
     try {
       const response = await instance.post(URL, {
@@ -83,9 +83,8 @@ export const UserProvider = ({ children }) => {
         emailType,
         socialType,
       });
-      console.log(response.data); // 콘솔에서 데이터 확인
 
-      // 이메일 중복 아닐 시 발급
+      // 이메일 중복 아니어야 발급
       if (response.data) {
         setEmailExists(true);
         alert('이미 서버에 존재하는 이메일입니다');
@@ -95,7 +94,6 @@ export const UserProvider = ({ children }) => {
         setSendTime(new Date()); // 발급 시간 저장
         setExpireTime(response.data.expireTime); // 만료 시간 저장
         alert('인증번호가 발송되었습니다');
-        console.log(`발급된 인증번호 : ${randomNum}`);
       }
     } catch (error) {
       console.error('이메일 인증번호 요청 중 에러 발생: ', error);
@@ -104,7 +102,7 @@ export const UserProvider = ({ children }) => {
 
   // 📧 이메일 인증 요청 (비밀번호 재설정용)
   const requestEmailForReset = async (email, emailType, socialType) => {
-    const URL = 'http://localhost:8080/send-email';
+    const URL = 'http://localhost:8080/auth/send-email';
 
     try {
       const response = await instance.post(URL, {
@@ -112,16 +110,14 @@ export const UserProvider = ({ children }) => {
         emailType,
         socialType,
       });
-      console.log(response.data); // 콘솔에서 데이터 확인
 
-      // 이메일 존재시 발급
+      // 이메일 존재해야 발급
       if (response.data) {
         setEmailExists(true);
         setRandomNum(response.data.randomNum);
-        setSendTime(new Date()); // 발급 시간 저장
-        setExpireTime(response.data.expireTime); // 만료 시간 저장
+        setSendTime(new Date()); //
+        setExpireTime(response.data.expireTime);
         alert('인증번호가 발송되었습니다');
-        console.log(`발급된 인증번호 : ${randomNum}`);
       } else {
         setEmailExists(false);
         alert('존재하지 않는 이메일입니다');
@@ -149,7 +145,7 @@ export const UserProvider = ({ children }) => {
     const EXPIRED_CODE_ERROR = '인증번호가 만료되었습니다';
     const INVALID_CODE_ERROR = '인증번호가 일치하지 않습니다';
 
-    // 발급 확인, 인증번호 입력 확인
+    // 발급 여부 확인 + 인증번호 입력여부 확인
     if (!randomNum) {
       alert(NO_SERVER_CODE_ERROR);
       return;
@@ -158,11 +154,10 @@ export const UserProvider = ({ children }) => {
       return;
     }
 
-    // 인증번호 유효 시간 : 10분 - 수정하기
+    // 인증 유효 시간 10분
     const timeDifference = (expireTime - sendTime) / 1000 / 60;
 
     if (timeDifference > 10) {
-      console.log(EXPIRED_CODE_ERROR);
       alert(EXPIRED_CODE_ERROR);
       return;
     }
@@ -173,9 +168,8 @@ export const UserProvider = ({ children }) => {
     }
 
     try {
-      // 서버에 인증 완료 상태 전송
       const response = await instance.post(
-        'http://localhost:8080/verify-email',
+        'http://localhost:8080/auth/verify-email',
         {
           email,
           randomNum,
@@ -188,8 +182,7 @@ export const UserProvider = ({ children }) => {
       );
 
       if (response.status === 204) {
-        // 서버에서 성공 응답을 받았을 경우
-        setVerified(true); // 인증 완료
+        setVerified(true);
         setRandomNum('');
         alert('인증 완료!');
       } else {
@@ -204,17 +197,15 @@ export const UserProvider = ({ children }) => {
   const checkNameDuplication = async (nickName) => {
     try {
       const response = await instance.post(
-        'http://localhost:8080/verify-nickname',
+        'http://localhost:8080/auth/verify-nickname',
         {
           nickName,
         }
       );
 
       if (response.data.isDuplicated) {
-        console.log('이미 사용중인 닉네임입니다');
         setNameDuplicated(true);
       } else {
-        console.log('사용 가능한 닉네임입니다');
         setNameDuplicated(false);
       }
     } catch (error) {
@@ -224,7 +215,7 @@ export const UserProvider = ({ children }) => {
 
   // 📝 회원가입 ---------------------------------------------------------------
   const signup = (email, password, nickName, socialType) => {
-    const URL = 'http://localhost:8080/signup';
+    const URL = 'http://localhost:8080/auth/signup';
 
     instance
       .post(
@@ -238,13 +229,12 @@ export const UserProvider = ({ children }) => {
         {
           headers: {
             'Content-Type': 'application/json;charset=UTF-8',
-            Accept: 'application/json', //현재 서버한테 보내는 데이터 타입
+            Accept: 'application/json',
           },
         }
       )
       .then((result) => {
-        console.log(result);
-        console.log('회원가입 요청 성공');
+        console.log(`회원가입 요청 성공 : ${result}`);
         window.alert('회원가입이 완료되었습니다!');
         navigate('/login');
       })
@@ -256,12 +246,15 @@ export const UserProvider = ({ children }) => {
 
   // 🚫 회원탈퇴 ---------------------------------------------------------------
   const deleteUser = async () => {
-    const URL = 'http://localhost:8080/delete-user';
+    const URL = 'http://localhost:8080/auth/delete-user';
 
     try {
       await instance.delete(URL, {
         headers: {
-          Authorization: localStorage.getItem('Authorization'), // 인증 토큰
+          'authorization-access': localStorage.getItem('Authorization-Access'),
+          'authorization-refresh': localStorage.getItem(
+            'Authorization-Refresh'
+          ),
         },
       });
 
@@ -276,7 +269,7 @@ export const UserProvider = ({ children }) => {
 
   // 🔐 로그인 ---------------------------------------------------------------
   const login = (email, password, socialType) => {
-    const URL = 'http://localhost:8080/login';
+    const URL = 'http://localhost:8080/auth/login';
 
     instance
       .post(
@@ -289,15 +282,15 @@ export const UserProvider = ({ children }) => {
         {
           headers: {
             'Content-Type': 'application/json;charset=UTF-8',
-            Accept: 'application/json', //현재 서버한테 보내는 데이터 타입
+            Accept: 'application/json',
             'Access-Control-Allow-Origin': '*',
           },
         }
       )
       .then((response) => {
         console.log(response);
-        console.log(response.data); // body 데이터
-        console.log(response.headers.authorization); // undefined getItem
+        console.log(response.data);
+        console.log(response.headers.authorization);
         console.log('로그인 되었습니다!');
 
         // 로컬 스토리지에 유저 데이터 저장
@@ -312,7 +305,7 @@ export const UserProvider = ({ children }) => {
         localStorage.setItem('uid', response.data.id);
         localStorage.setItem('nickName', response.data.name);
         localStorage.setItem('email', response.data.email);
-        localStorage.setItem('socialType', response.data.socialType); // 소셜 로그인 or 이메일 로그인
+        localStorage.setItem('socialType', response.data.socialType);
 
         let user = {
           uid: response.data.id,
@@ -324,7 +317,7 @@ export const UserProvider = ({ children }) => {
 
         dispatch({ type: SET_USER, user });
         window.alert('로그인 되었습니다!');
-        navigate('/main'); // 메인페이지 리다이렉트
+        navigate('/main');
       })
       .catch((error) => {
         console.log(error);
@@ -342,7 +335,7 @@ export const UserProvider = ({ children }) => {
     localStorage.removeItem('email');
     localStorage.removeItem('socialType');
 
-    // 유저 상태 초기화
+    // 클라이언트에서 저장 중이던 유저 상태 초기화
     dispatch({ type: SET_USER, user: null });
 
     // 메인 페이지로 리다이렉트
@@ -353,7 +346,7 @@ export const UserProvider = ({ children }) => {
   const resetPassword = async (email, password, rePassword, socialType) => {
     try {
       const response = await instance.post(
-        'http://localhost:8080/reset-password',
+        'http://localhost:8080/auth/reset-password',
         {
           email,
           password,
@@ -363,10 +356,8 @@ export const UserProvider = ({ children }) => {
       );
 
       if (response.status === 204) {
-        console.log('비밀번호가 성공적으로 재설정되었습니다');
         alert('비밀번호가 성공적으로 재설정되었습니다');
       } else {
-        console.log('비밀번호 재설정에 실패하였습니다');
         alert('비밀번호 재설정에 실패하였습니다');
       }
     } catch (error) {
@@ -376,7 +367,7 @@ export const UserProvider = ({ children }) => {
     navigate('/login');
   };
 
-  // Context value
+  // 컨텍스트 value
   const value = {
     state,
     dispatch,
@@ -406,7 +397,7 @@ export const UserProvider = ({ children }) => {
   );
 };
 
-// UserState 컨텍스트 사용
+// 다른 컴포넌트에서 UserState 컨텍스트 사용 가능
 export const useUserState = () => {
   const context = useContext(UserStateContext);
   if (!context) {
@@ -415,7 +406,7 @@ export const useUserState = () => {
   return context;
 };
 
-// UserDispatch 컨텍스트 사용
+// 다른 컴포넌트에서 UserDispatch 컨텍스트 사용 가능
 export const useUserDispatch = () => {
   const context = useContext(UserDispatchContext);
   if (!context) {
