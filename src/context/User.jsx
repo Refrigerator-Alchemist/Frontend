@@ -63,7 +63,7 @@ const UserDispatchContext = createContext();
 export const UserProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState); // 유저 정보
 
-  const [emailExists, setEmailExists] = useState(false); // 회원가입 시 이메일 중복 여부
+  const [emailExists, setEmailExists] = useState(true); // 회원가입 시 이메일 중복 여부
 
   const [randomNum, setRandomNum] = useState(null); // 발급된 인증번호
   const [sendTime, setSendTime] = useState(null); // 인증번호 발급시간
@@ -85,15 +85,16 @@ export const UserProvider = ({ children }) => {
         socialType,
       });
 
-      // 이메일 중복 아니어야 발급
-      if (response.data) {
+      // 이메일 중복 아니어야 발급 : false
+      // response.data X -> .data.exists
+      if (response.data.exists) {
         setEmailExists(true);
         alert('이미 서버에 존재하는 이메일입니다');
       } else {
         setEmailExists(false);
         setRandomNum(response.data.randomNum);
-        setSendTime(new Date()); // 발급 시간 저장
-        setExpireTime(response.data.expireTime); // 만료 시간 저장
+        setSendTime(new Date());
+        setExpireTime(response.data.expireTime);
         alert('인증번호가 발송되었습니다');
       }
     } catch (error) {
@@ -112,7 +113,7 @@ export const UserProvider = ({ children }) => {
         socialType,
       });
 
-      // 이메일 존재해야 발급
+      // 이메일 존재해야 발급 : true
       if (response.data) {
         setEmailExists(true);
         setRandomNum(response.data.randomNum);
