@@ -298,7 +298,7 @@ export default function SignUp() {
               <ul className="mt-4 mb-4 font-score">
                 <li className="mb-2 flex items-center">
                   <span role="img" aria-label="check" className="flex">
-                    {emailExists ? (
+                    {!emailExists ? (
                       <GoCheckCircleFill className="text-emerald" />
                     ) : (
                       <GoCheckCircle className="text-emerald" />
@@ -362,7 +362,7 @@ export default function SignUp() {
                   isPasswordValid(password) === false &&
                   !passwordMessage
                 }
-                className={`p-3 mx-20 mt-3 rounded-3xl font-jua text-xl transition ease-in-out   duration-300
+                className={`p-3 mx-20 mt-3 rounded-3xl font-jua text-xl transition ease-in-out duration-300
               ${
                 passwordMessage
                   ? 'text-white bg-main hover:bg-[#15ed79] hover:text-black hover:cursor-pointer hover:-translate-y-1 hover:scale-110'

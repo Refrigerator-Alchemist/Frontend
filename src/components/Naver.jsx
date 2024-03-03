@@ -14,6 +14,8 @@ export const Naver = () => {
     }, 500);
   };
 
+  // window.close() 추가
+
   return (
     <>
       <button onClick={handleLogin}>
