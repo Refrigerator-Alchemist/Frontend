@@ -386,6 +386,16 @@ export const UserProvider = ({ children }) => {
         if (token) {
           console.log(`SNS 서버에서 받아온 토큰 : ${token}`);
           alert(`SNS 서버에서 받아온 토큰 : ${token}`);
+
+          // 서버에서 준 헤더의 name: 'socialId'를 지정
+          const socialId =
+            loginWindow.document.getElementsByName('socialId')[0].content;
+          localStorage.setItem('socialId', socialId);
+          // user에 저장
+          let user = {
+            uid: socialId,
+          };
+          dispatch({ type: SET_USER, user });
           navigate('/main');
         }
       }
@@ -407,6 +417,15 @@ export const UserProvider = ({ children }) => {
         if (token) {
           console.log(`SNS 서버에서 받아온 토큰 : ${token}`);
           alert(`SNS 서버에서 받아온 토큰 : ${token}`);
+          // 서버에서 준 헤더의 name: 'socialId'를 지정
+          const socialId =
+            loginWindow.document.getElementsByName('socialId')[0].content;
+          localStorage.setItem('socialId', socialId);
+          // user에 저장
+          let user = {
+            uid: socialId,
+          };
+          dispatch({ type: SET_USER, user });
           navigate('/main');
         }
       }
@@ -424,6 +443,15 @@ export const UserProvider = ({ children }) => {
         if (token) {
           console.log(`SNS 서버에서 받아온 토큰 : ${token}`);
           alert(`SNS 서버에서 받아온 토큰 : ${token}`);
+          // 서버에서 준 헤더의 name: 'socialId'를 지정
+          const socialId =
+            loginWindow.document.getElementsByName('socialId')[0].content;
+          localStorage.setItem('socialId', socialId);
+          // user에 저장
+          let user = {
+            uid: socialId,
+          };
+          dispatch({ type: SET_USER, user });
           navigate('/main');
         }
       }
