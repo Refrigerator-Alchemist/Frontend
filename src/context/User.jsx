@@ -72,6 +72,11 @@ export const UserProvider = ({ children }) => {
 
   const [nameDuplicated, setNameDuplicated] = useState(true); // 닉네임 중복 여부
 
+  // SNS 로그인 엔드 포인트
+  const googleURL = `http://localhost:8080/oauth2/authorization/google`;
+  const kakaoURL = `http://localhost:8080/oauth2/authorization/kakao`;
+  const naverURL = `http://localhost:8080/oauth2/authorization/naver`;
+
   const navigate = useNavigate();
 
   // 📧 이메일 인증 요청 (회원가입용)
@@ -369,6 +374,62 @@ export const UserProvider = ({ children }) => {
     navigate('/login');
   };
 
+  // 🟡 카카오 --------------------------------------------------
+  const kakaoLogin = () => {
+    // 새 창 열기
+    const loginWindow = window.open(kakaoURL, '_blank', 'width=800,height=600');
+
+    const loginChecker = setInterval(function () {
+      if (loginWindow && !loginWindow.closed) {
+        clearInterval(loginChecker);
+        const token = localStorage.getItem('access_token');
+        if (token) {
+          console.log(`SNS 서버에서 받아온 토큰 : ${token}`);
+          alert(`SNS 서버에서 받아온 토큰 : ${token}`);
+          navigate('/main');
+        }
+      }
+    }, 500);
+  };
+
+  // 🔴 구글 ----------------------------------------------------
+  const googleLogin = () => {
+    const loginWindow = window.open(
+      googleURL,
+      '_blank',
+      'width=800,height=600'
+    );
+
+    const loginChecker = setInterval(function () {
+      if (loginWindow && !loginWindow.closed) {
+        clearInterval(loginChecker);
+        const token = localStorage.getItem('access_token');
+        if (token) {
+          console.log(`SNS 서버에서 받아온 토큰 : ${token}`);
+          alert(`SNS 서버에서 받아온 토큰 : ${token}`);
+          navigate('/main');
+        }
+      }
+    }, 500);
+  };
+
+  // 🟢 네이버 --------------------------------------------------
+  const naverLogin = () => {
+    const loginWindow = window.open(naverURL, '_blank', 'width=800,height=600');
+
+    const loginChecker = setInterval(function () {
+      if (loginWindow && !loginWindow.closed) {
+        clearInterval(loginChecker);
+        const token = localStorage.getItem('access_token');
+        if (token) {
+          console.log(`SNS 서버에서 받아온 토큰 : ${token}`);
+          alert(`SNS 서버에서 받아온 토큰 : ${token}`);
+          navigate('/main');
+        }
+      }
+    }, 500);
+  };
+
   // 컨텍스트 value
   const value = {
     state,
@@ -388,6 +449,9 @@ export const UserProvider = ({ children }) => {
     checkNameDuplication,
     nameDuplicated,
     setNameDuplicated,
+    kakaoLogin,
+    googleLogin,
+    naverLogin,
   };
 
   return (

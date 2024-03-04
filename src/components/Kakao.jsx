@@ -8,13 +8,12 @@ export const Kakao = () => {
       if (loginWindow && !loginWindow.closed) {
         clearInterval(loginChecker);
         if (localStorage.getItem('access_token')) {
+          loginWindow.close();
           window.location.href = '/main';
         }
       }
     }, 500);
   };
-
-  // window.close() 추가
 
   return (
     <>
