@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import { GoEye, GoEyeClosed } from 'react-icons/go';
 import { useUserDispatch } from '../context/User';
-import { Google } from '../components/Google';
-import { Naver } from '../components/Naver';
-import { Kakao } from '../components/Kakao';
+import LOGO_GOOGLE from '../img/logo_google.png';
+import LOGO_KAKAO from '../img/logo_kakao.png';
+import LOGO_NAVER from '../img/logo_naver.png';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -18,7 +18,7 @@ export default function Login() {
 
   const [notAllow, setNotAllow] = useState(true); // 로그인 disabled on/off
 
-  const { login } = useUserDispatch(); // 로그인 dispatch
+  const { login, kakaoLogin, googleLogin, naverLogin } = useUserDispatch(); // 로그인 dispatch
 
   const navigate = useNavigate();
 
@@ -151,9 +151,30 @@ export default function Login() {
         {/* SNS 계정으로 가입 */}
         <p className="my-4 text-gray-400">SNS 간편 로그인</p>
         <figure className="flex mb-4">
-          <Google />
-          <Kakao />
-          <Naver />
+          <button onClick={googleLogin}>
+            <img
+              className="mx-3 hover:scale-110"
+              style={{ width: '45px', height: '45px' }}
+              src={LOGO_GOOGLE}
+              alt="google"
+            ></img>
+          </button>
+          <button onClick={kakaoLogin}>
+            <img
+              className="mx-3 hover:scale-110"
+              style={{ width: '45px', height: '45px' }}
+              src={LOGO_KAKAO}
+              alt="kakaotalk"
+            ></img>
+          </button>
+          <button onClick={naverLogin}>
+            <img
+              className="mx-3 hover:scale-110"
+              style={{ width: '45px', height: '45px' }}
+              src={LOGO_NAVER}
+              alt="naver"
+            ></img>
+          </button>
         </figure>
 
         {/* 이메일 회원가입 */}
