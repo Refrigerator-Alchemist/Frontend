@@ -9,7 +9,7 @@ import { useUserState } from '../context/User';
 
 export default function Navigation() {
   const { selected, setSelected } = useContext(NavigationContext);
-  const { user } = useUserState();
+  const { user } = useUserState(); // user가 있어야 로그인 상태
   const navigate = useNavigate();
   const location = useLocation();
 

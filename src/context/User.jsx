@@ -375,87 +375,90 @@ export const UserProvider = ({ children }) => {
   };
 
   // 🟡 카카오 --------------------------------------------------
-  const kakaoLogin = () => {
-    // 새 창 열기
-    const loginWindow = window.open(kakaoURL, '_blank', 'width=800,height=600');
+  const kakaoLogin = async () => {
+    try {
+      const response = await instance.get(kakaoURL);
 
-    const loginChecker = setInterval(function () {
-      if (loginWindow && !loginWindow.closed) {
-        clearInterval(loginChecker);
-        const token = localStorage.getItem('access_token');
-        if (token) {
-          console.log(`SNS 서버에서 받아온 토큰 : ${token}`);
-          alert(`SNS 서버에서 받아온 토큰 : ${token}`);
+      if (response.status === 200) {
+        // 로컬 스토리지에 유저 데이터 저장
+        localStorage.setItem('socialId', response.headers['socialId']);
+        localStorage.setItem(
+          'Authorization-Access',
+          response.headers['Authorization-Access']
+        );
+        localStorage.setItem(
+          'Authorization-Refresh',
+          response.headers['Authorization-Refresh']
+        );
 
-          // 서버에서 준 헤더의 name: 'socialId'를 지정
-          const socialId =
-            loginWindow.document.getElementsByName('socialId')[0].content;
-          localStorage.setItem('socialId', socialId);
-          // user에 저장
-          let user = {
-            uid: socialId,
-          };
-          dispatch({ type: SET_USER, user });
-          navigate('/main');
-        }
+        let user = {
+          uid: response.headers['socialId'],
+        };
+        dispatch({ type: SET_USER, user });
+        navigate('/login-success');
       }
-    }, 500);
+    } catch (error) {
+      console.error(error);
+      alert('서버가 연결되어있지 않거나, 오류가 발생했습니다');
+    }
   };
 
   // 🔴 구글 ----------------------------------------------------
-  const googleLogin = () => {
-    const loginWindow = window.open(
-      googleURL,
-      '_blank',
-      'width=800,height=600'
-    );
+  const googleLogin = async () => {
+    try {
+      const response = await instance.get(googleURL);
 
-    const loginChecker = setInterval(function () {
-      if (loginWindow && !loginWindow.closed) {
-        clearInterval(loginChecker);
-        const token = localStorage.getItem('access_token');
-        if (token) {
-          console.log(`SNS 서버에서 받아온 토큰 : ${token}`);
-          alert(`SNS 서버에서 받아온 토큰 : ${token}`);
-          // 서버에서 준 헤더의 name: 'socialId'를 지정
-          const socialId =
-            loginWindow.document.getElementsByName('socialId')[0].content;
-          localStorage.setItem('socialId', socialId);
-          // user에 저장
-          let user = {
-            uid: socialId,
-          };
-          dispatch({ type: SET_USER, user });
-          navigate('/main');
-        }
+      if (response.status === 200) {
+        // 로컬 스토리지에 유저 데이터 저장
+        localStorage.setItem('socialId', response.headers['socialId']);
+        localStorage.setItem(
+          'Authorization-Access',
+          response.headers['Authorization-Access']
+        );
+        localStorage.setItem(
+          'Authorization-Refresh',
+          response.headers['Authorization-Refresh']
+        );
+
+        let user = {
+          uid: response.headers['socialId'],
+        };
+        dispatch({ type: SET_USER, user });
+        navigate('/login-success');
       }
-    }, 500);
+    } catch (error) {
+      console.error(error);
+      alert('서버가 연결되어있지 않거나, 오류가 발생했습니다');
+    }
   };
 
   // 🟢 네이버 --------------------------------------------------
-  const naverLogin = () => {
-    const loginWindow = window.open(naverURL, '_blank', 'width=800,height=600');
+  const naverLogin = async () => {
+    try {
+      const response = await instance.get(naverURL);
 
-    const loginChecker = setInterval(function () {
-      if (loginWindow && !loginWindow.closed) {
-        clearInterval(loginChecker);
-        const token = localStorage.getItem('access_token');
-        if (token) {
-          console.log(`SNS 서버에서 받아온 토큰 : ${token}`);
-          alert(`SNS 서버에서 받아온 토큰 : ${token}`);
-          // 서버에서 준 헤더의 name: 'socialId'를 지정
-          const socialId =
-            loginWindow.document.getElementsByName('socialId')[0].content;
-          localStorage.setItem('socialId', socialId);
-          // user에 저장
-          let user = {
-            uid: socialId,
-          };
-          dispatch({ type: SET_USER, user });
-          navigate('/main');
-        }
+      if (response.status === 200) {
+        // 로컬 스토리지에 유저 데이터 저장
+        localStorage.setItem('socialId', response.headers['socialId']);
+        localStorage.setItem(
+          'Authorization-Access',
+          response.headers['Authorization-Access']
+        );
+        localStorage.setItem(
+          'Authorization-Refresh',
+          response.headers['Authorization-Refresh']
+        );
+
+        let user = {
+          uid: response.headers['socialId'],
+        };
+        dispatch({ type: SET_USER, user });
+        navigate('/login-success');
       }
-    }, 500);
+    } catch (error) {
+      console.error(error);
+      alert('서버가 연결되어있지 않거나, 오류가 발생했습니다');
+    }
   };
 
   // 컨텍스트 value
