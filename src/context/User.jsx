@@ -375,90 +375,21 @@ export const UserProvider = ({ children }) => {
   };
 
   // 🟡 카카오 --------------------------------------------------
-  const kakaoLogin = async () => {
-    try {
-      const response = await instance.get(kakaoURL);
-
-      if (response.status === 200) {
-        // 로컬 스토리지에 유저 데이터 저장
-        localStorage.setItem('socialId', response.headers['socialId']);
-        localStorage.setItem(
-          'Authorization-Access',
-          response.headers['Authorization-Access']
-        );
-        localStorage.setItem(
-          'Authorization-Refresh',
-          response.headers['Authorization-Refresh']
-        );
-
-        let user = {
-          uid: response.headers['socialId'],
-        };
-        dispatch({ type: SET_USER, user });
-        navigate('/login-success');
-      }
-    } catch (error) {
-      console.error(error);
-      alert('서버가 연결되어있지 않거나, 오류가 발생했습니다');
-    }
+  const kakaoLogin = () => {
+    window.location.href = kakaoURL;
+    console.log('카카오 로그인 페이지 접속');
   };
 
   // 🔴 구글 ----------------------------------------------------
   const googleLogin = async () => {
-    try {
-      const response = await instance.get(googleURL);
-
-      if (response.status === 200) {
-        // 로컬 스토리지에 유저 데이터 저장
-        localStorage.setItem('socialId', response.headers['socialId']);
-        localStorage.setItem(
-          'Authorization-Access',
-          response.headers['Authorization-Access']
-        );
-        localStorage.setItem(
-          'Authorization-Refresh',
-          response.headers['Authorization-Refresh']
-        );
-
-        let user = {
-          uid: response.headers['socialId'],
-        };
-        dispatch({ type: SET_USER, user });
-        navigate('/login-success');
-      }
-    } catch (error) {
-      console.error(error);
-      alert('서버가 연결되어있지 않거나, 오류가 발생했습니다');
-    }
+    window.location.href = googleURL;
+    console.log('구글 로그인 페이지 접속');
   };
 
   // 🟢 네이버 --------------------------------------------------
   const naverLogin = async () => {
-    try {
-      const response = await instance.get(naverURL);
-
-      if (response.status === 200) {
-        // 로컬 스토리지에 유저 데이터 저장
-        localStorage.setItem('socialId', response.headers['socialId']);
-        localStorage.setItem(
-          'Authorization-Access',
-          response.headers['Authorization-Access']
-        );
-        localStorage.setItem(
-          'Authorization-Refresh',
-          response.headers['Authorization-Refresh']
-        );
-
-        let user = {
-          uid: response.headers['socialId'],
-        };
-        dispatch({ type: SET_USER, user });
-        navigate('/login-success');
-      }
-    } catch (error) {
-      console.error(error);
-      alert('서버가 연결되어있지 않거나, 오류가 발생했습니다');
-    }
+    window.location.href = naverURL;
+    console.log('네이버 로그인 페이지 접속');
   };
 
   // 컨텍스트 value
