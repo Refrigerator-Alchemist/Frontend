@@ -16,7 +16,7 @@ export default function LoginSuccess() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/login-success');
+        const response = await axios.get('http://localhost:3000/login-success');
 
         if (response.status === 200) {
           // 응답 헤더에서 데이터 추출
