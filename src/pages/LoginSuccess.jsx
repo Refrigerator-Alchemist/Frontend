@@ -1,26 +1,58 @@
 import React, { useEffect, useState } from 'react';
-import { useUserState } from '../context/User.jsx';
+import { useUserState, useUserDispatch } from '../context/User.jsx';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export default function LoginSuccess() {
   const [accessToken, setAccessToken] = useState(''); // 액세스 토큰
   const [refreshToken, setRefreshToken] = useState(''); // 리프레시 토큰
-  const [socialId, setSocialId] = useState(''); // SNS ID
+  const [socialId, setSocialId] = useState(''); // 소셜 ID
+  const user = useUserState(); // 유저 정보
 
-  const user = useUserState(); // user 상태 가져오기
+  const dispatch = useUserDispatch();
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    setAccessToken(localStorage.getItem('Authorization-Access'));
-    setRefreshToken(localStorage.getItem('Authorization-Refresh'));
-    setSocialId(localStorage.getItem('socialId'));
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/login-success');
 
-    console.log(`Access Token: ${accessToken}`);
-    console.log(`Refresh Token: ${refreshToken}`);
-    console.log(`socialId: ${socialId}`);
-    console.log(`사용자의 ID : ${user.uid}`);
-  }, []);
+        if (response.status === 200) {
+          // 응답 헤더에서 데이터 추출
+          const socialId = response.headers['socialId'];
+          const accessToken = response.headers['Authorization-Access'];
+          const refreshToken = response.headers['Authorization-Refresh'];
+
+          // 로컬 스토리지에 데이터 저장
+          localStorage.setItem('socialId', socialId);
+          localStorage.setItem('Authorization-Access', accessToken);
+          localStorage.setItem('Authorization-Refresh', refreshToken);
+
+          // return 문에서 사용하기 위해 상태 저장
+          setSocialId(socialId);
+          setAccessToken(accessToken);
+          setRefreshToken(refreshToken);
+
+          console.log(`socialId: ${socialId}`);
+          console.log(`Access Token: ${accessToken}`);
+          console.log(`Refresh Token: ${refreshToken}`);
+
+          // user에 저장
+          let user = {
+            uid: socialId,
+          };
+
+          dispatch({ type: 'SET_USER', user }); //
+        }
+      } catch (error) {
+        console.error(error);
+        alert('서버에서 데이터를 보내지 않았습니다!');
+      }
+    };
+
+    fetchData();
+  }, [dispatch]);
 
   return (
     <section>
