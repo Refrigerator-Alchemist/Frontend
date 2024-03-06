@@ -84,7 +84,7 @@ const Profile = () => {
         <FaArrowLeft />
       </div>
       <div className="text-center mt-20">
-      <h2 className="font-score text-xl font-semibold mt-1 mb-8">나의 프로필 수정</h2>
+      {/* <h2 className="font-score text-xl font-semibold mt-1 mb-8">나의 프로필 수정</h2> */}
         <div className="inline-block rounded-full bg-gray-200 h-32 w-32 relative">
           <img src={image} alt="프로필 사진" className="rounded-full h-32 w-32 object-cover" />
           <input

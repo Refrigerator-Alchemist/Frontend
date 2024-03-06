@@ -25,13 +25,13 @@ const RecipeCard = ({
             <p className="text-gray-500 text-sm font-score">{description}</p>
           </div>
         </Link>
-        <button onClick={onToggleLike} className="p-2">
+        {/* <button onClick={onToggleLike} className="p-2">
           {isLiked ? (
             <FaHeart className="text-red-500 text-2xl" />
           ) : (
             <FaRegHeart className="text-2xl" />
           )}
-        </button>
+        </button> */}
       </div>
     </div>
   );
@@ -58,8 +58,8 @@ function MyPage() {
       try {
         const response = await axios.get(
           showSavedRecipes
-            ? 'http://172.30.1.30:8080/board/myLike' // 좋아요누른
-            : 'http://172.30.1.30:8080/recipe/myRecipe' //저장한
+            ? 'http://172.30.1.30:8080/board/myLike' // 좋아요누른  
+            : 'http://172.30.1.30:8080/board/myList'  //저장한 
         );
         if (response.data && Array.isArray(response.data.items)) {
           const formattedData = response.data.items.map((item) => ({
@@ -133,7 +133,7 @@ function MyPage() {
                 : 'bg-gray-100 text-black'
             }`}
           >
-            저장된 GPT 레시피 보기
+            내가 쓴 레시피 보기
           </button>
           <button
             onClick={() => setShowSavedRecipes(true)}
@@ -174,3 +174,5 @@ function MyPage() {
 }
 
 export default MyPage;
+
+
