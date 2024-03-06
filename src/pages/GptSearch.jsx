@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
+import { MdHistory } from "react-icons/md";
 import axios from 'axios';
 
 const TagInput = () => {
@@ -71,11 +72,11 @@ const TagInput = () => {
         <div className="flex items-center border-b border-gray-300 mb-4">
           <input
             type="text"
-            ref={inputRef} 
+            ref={inputRef}
             value={inputValue}
             onChange={handleInputChange}
             onKeyDown={handleInputKeyDown}
-            placeholder="무엇을 넣으시겠어요?  ↲" 
+            placeholder="무엇을 넣으시겠어요?  ↲"
             className="font-score  appearance-none bg-transparent border-none w-full text-gray-700 py-4 px-2 leading-tight focus:outline-none"
           />
           <button
@@ -103,6 +104,10 @@ const TagInput = () => {
         </div>
       </div>
       <div className="w-full max-w-xs mx-auto pb-8">
+        <Link to={`/board`} className='font-score text-grey '>
+          <MdHistory />
+          <h1>GPT History</h1>
+        </Link>
         <button
           className=" font-score transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer text-white font-bold py-2 px-4 rounded w-full"
           type="button"
