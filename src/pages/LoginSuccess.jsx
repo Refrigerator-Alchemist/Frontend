@@ -4,41 +4,49 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 export default function LoginSuccess() {
-  const [accessToken, setAccessToken] = useState(''); // 액세스 토큰
-  const [refreshToken, setRefreshToken] = useState(''); // 리프레시 토큰
-  const [socialId, setSocialId] = useState(''); // 소셜 ID
-  const user = useUserState(); // 유저 정보
+  const [socialId, setSocialId] = useState('');
+  const [accessToken, setAccessToken] = useState('');
+  const [refreshToken, setRefreshToken] = useState('');
+  const user = useUserState();
 
   const dispatch = useUserDispatch();
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const getData = async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const socialType = urlParams.get('socialType');
+      const code = urlParams.get('code');
+
+      // code 뒷 부분에 Auth토큰, socialId 둘다 붙어서 온다고 함
+      // 분리해서 매핑하는 처리와 토큰과 socialId만 저장하도록 해야함
       try {
-        const response = await axios.get('http://localhost:3000/login-success');
+        const response = await axios.get(
+          `http://localhost:8080/login/oauth2/code/${socialType}?code=${code}`
+        );
+
+        console.log(`소셜 타입(서비스명) : ${socialType}`);
+        console.log(`코드 : ${code}`);
 
         if (response.status === 200) {
-          // 응답 헤더에서 데이터 추출
           const socialId = response.headers['socialId'];
           const accessToken = response.headers['Authorization-Access'];
           const refreshToken = response.headers['Authorization-Refresh'];
 
-          // 로컬 스토리지에 데이터 저장
           localStorage.setItem('socialId', socialId);
           localStorage.setItem('Authorization-Access', accessToken);
           localStorage.setItem('Authorization-Refresh', refreshToken);
 
-          // return 문에서 사용하기 위해 상태 저장
           setSocialId(socialId);
           setAccessToken(accessToken);
           setRefreshToken(refreshToken);
 
-          console.log(`socialId: ${socialId}`);
-          console.log(`Access Token: ${accessToken}`);
-          console.log(`Refresh Token: ${refreshToken}`);
+          console.log(`소셜 ID : ${socialId}`);
+          console.log(`액세스 토큰 : ${accessToken}`);
+          console.log(`리프레시 토큰 : ${refreshToken}`);
 
-          // user에 저장
+          // ▶ 유저 데이터 저장
           let user = {
             uid: socialId,
           };
@@ -47,11 +55,11 @@ export default function LoginSuccess() {
         }
       } catch (error) {
         console.error(error);
-        alert('서버에서 데이터를 보내지 않았습니다!');
+        alert('로그인 실패. 🥵🥶🥵🥶🥵🥶다음 기회에ㅋ🥵🥶');
       }
     };
 
-    fetchData();
+    getData();
   }, [dispatch]);
 
   return (
@@ -61,16 +69,16 @@ export default function LoginSuccess() {
           <h1 className="text-4xl">
             로그인에 성공했을 때 볼 수 있는 화면입니다!
           </h1>
-          <span>{`SNS 서버의 액세스 토큰 : ${accessToken}`}</span>
-          <span>{`SNS 서버의 리프레시 토큰 : ${refreshToken}`}</span>
-          <span>{`socialId : ${socialId}`}</span>
-          <span>{`사용자의 ID : ${user.uid}`}</span>
-          <button onClick={navigate('/main')}>메인페이지</button>
+          <span>{`액세스 토큰 : ${accessToken}`}</span>
+          <span>{`리프레시 토큰 : ${refreshToken}`}</span>
+          <span>{`소셜 ID : ${socialId}`}</span>
+          <span>{`사용자 ID (소셜 ID와 동일) : ${user.uid}`}</span>
+          <button onClick={navigate('/main')}>메인페이지 이동</button>
         </div>
       ) : (
         <div>
           <h1>로그인에 실패했거나, 문제가 있습니다😅</h1>
-          <button onClick={navigate('/login')}>다시 로그인</button>
+          <button onClick={navigate('/login')}>다시 로그인 시도</button>
         </div>
       )}
     </section>
