@@ -104,16 +104,20 @@ const TagInput = () => {
         </div>
       </div>
       <div className="w-full max-w-xs mx-auto pb-8">
-        <Link to={`/board`} className='font-score text-grey '>
-          <MdHistory />
-          <h1>GPT History</h1>
-        </Link>
-        <button
-          className=" font-score transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer text-white font-bold py-2 px-4 rounded w-full"
-          type="button"
-          onClick={handleNextButtonClick}
-        >
-          다음
+  <button
+    className="flex justify-center font-score transition ease-in-out delay-150 text-black bg-white hover:bg-white hover:scale-125 hover:cursor-pointer font-bold py-2 px-4 rounded w-full mb-4"
+    type="button"
+    onClick={() => navigate('/history')}
+  >
+    <MdHistory className="mr-2" />
+    GPT History
+  </button>
+  <button
+    className="font-score transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer text-white font-bold py-2 px-4 rounded w-full"
+    type="button"
+    onClick={handleNextButtonClick}
+  >
+    다음
         </button>
       </div>
     </div>
