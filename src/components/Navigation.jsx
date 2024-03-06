@@ -9,7 +9,7 @@ import { useUserState } from '../context/User';
 
 export default function Navigation() {
   const { selected, setSelected } = useContext(NavigationContext);
-  const { user } = useUserState();
+  const { user } = useUserState(); // user가 있어야 로그인 상태
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -26,7 +26,7 @@ export default function Navigation() {
   }, [location.pathname, setSelected]);
   return (
     <footer
-      className="sticky bottom-0 flex justify-center items-center bg-white p-4 rounded-t-3xl "
+      className="sticky bottom-0 flex justify-center items-center bg-white p-5 rounded-t-3xl"
       style={{ boxShadow: '0px -10px 15px rgba(0, 0, 0, 0.1)' }}
     >
       <div

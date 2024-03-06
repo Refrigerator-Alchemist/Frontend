@@ -15,7 +15,8 @@ export default function BoardRanking() {
         <FaArrowLeft />
       </div>
 
-      <h1 className="text-5xl font-extrabold mb-10">Top 5🔥</h1>
+      <h1 className="text-4xl font-extrabold mb-3">가장 좋아요를 많이 받은</h1>
+      <h1 className="text-4xl font-extrabold mb-20">인기 게시물 TOP 3🔥</h1>
       <Ranking />
     </section>
   );

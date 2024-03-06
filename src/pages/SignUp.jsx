@@ -89,8 +89,10 @@ export default function SignUp() {
   // 5️⃣ 비밀번호 유효성 검사
   const isPasswordValid = (password) => {
     return (
+      password.length >= 8 &&
+      password.length <= 15 &&
       /\d/.test(password) &&
-      /[ `!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/.test(password) &&
+      /[!@#$%^&*]/.test(password) &&
       /[a-zA-Z]/.test(password)
     );
   };
@@ -296,10 +298,10 @@ export default function SignUp() {
               <ul className="mt-4 mb-4 font-score">
                 <li className="mb-2 flex items-center">
                   <span role="img" aria-label="check" className="flex">
-                    {emailExists ? (
-                      <GoCheckCircle className="text-emerald" />
-                    ) : (
+                    {!emailExists ? (
                       <GoCheckCircleFill className="text-emerald" />
+                    ) : (
+                      <GoCheckCircle className="text-emerald" />
                     )}
                   </span>{' '}
                   <span className="ml-3">이메일 사용 가능</span>
@@ -333,7 +335,7 @@ export default function SignUp() {
                     )}
                   </span>{' '}
                   <span className="ml-3">
-                    최소 8자 이상의 비밀번호를 입력해주세요
+                    8자 이상 15자 이하의 비밀번호를 입력해주세요
                   </span>
                 </li>
                 <li className="mb-2 flex items-center">
@@ -356,11 +358,11 @@ export default function SignUp() {
                   emailExists === true &&
                   verified === false &&
                   nameDuplicated === true &&
-                  password.length < 8 &&
+                  (password.length < 8 || password.length > 15) &&
                   isPasswordValid(password) === false &&
                   !passwordMessage
                 }
-                className={`p-3 mx-20 mt-3 rounded-3xl font-jua text-xl transition ease-in-out   duration-300
+                className={`p-3 mx-20 mt-3 rounded-3xl font-jua text-xl transition ease-in-out duration-300
               ${
                 passwordMessage
                   ? 'text-white bg-main hover:bg-[#15ed79] hover:text-black hover:cursor-pointer hover:-translate-y-1 hover:scale-110'
