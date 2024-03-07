@@ -19,8 +19,8 @@ const instance = axios.create({
 // ❕ 요청 인터셉터 : 토큰 업데이트
 instance.interceptors.request.use(
   function (config) {
-    const accessToken = localStorage.getItem('Authorization-Access');
-    const refreshToken = localStorage.getItem('Authorization-Refresh');
+    const accessToken = localStorage.getItem('accessToken');
+    const refreshToken = localStorage.getItem('refreshToken');
     if (accessToken) {
       config.headers['Authorization-Access'] = 'Bearer ' + accessToken;
     }
@@ -95,13 +95,13 @@ export const UserProvider = ({ children }) => {
       // status === 409 로 판단하기
       if (response.data.exists) {
         setEmailExists(true);
-        alert('이미 서버에 존재하는 이메일입니다');
+        window.alert('이미 서버에 존재하는 이메일입니다');
       } else {
         setEmailExists(false);
         setRandomNum(response.data.randomNum);
         setSendTime(new Date());
         setExpireTime(response.data.expireTime);
-        alert('인증번호가 발송되었습니다');
+        window.alert('인증번호가 발송되었습니다');
       }
     } catch (error) {
       console.error('이메일 인증번호 요청 중 에러 발생: ', error);
@@ -125,10 +125,10 @@ export const UserProvider = ({ children }) => {
         setRandomNum(response.data.randomNum);
         setSendTime(new Date()); //
         setExpireTime(response.data.expireTime);
-        alert('인증번호가 발송되었습니다');
+        window.alert('인증번호가 발송되었습니다');
       } else {
         setEmailExists(false);
-        alert('존재하지 않는 이메일입니다');
+        window.alert('존재하지 않는 이메일입니다');
       }
     } catch (error) {
       console.error('이메일 인증번호 요청 중 에러 발생: ', error);
@@ -149,10 +149,10 @@ export const UserProvider = ({ children }) => {
 
     // ▶ 발급 여부 확인, 인증번호 입력여부 확인
     if (!randomNum) {
-      alert(NO_SERVER_CODE_ERROR);
+      window.alert(NO_SERVER_CODE_ERROR);
       return;
     } else if (!inputNum) {
-      alert(NO_CODE_ERROR);
+      window.alert(NO_CODE_ERROR);
       return;
     }
 
@@ -160,12 +160,12 @@ export const UserProvider = ({ children }) => {
     const timeDifference = (expireTime - sendTime) / 1000 / 60;
 
     if (timeDifference > 10) {
-      alert(EXPIRED_CODE_ERROR);
+      window.alert(EXPIRED_CODE_ERROR);
       return;
     }
 
     if (inputNum !== randomNum) {
-      alert(INVALID_CODE_ERROR);
+      window.alert(INVALID_CODE_ERROR);
       return;
     }
 
@@ -186,9 +186,9 @@ export const UserProvider = ({ children }) => {
       if (response.status === 204) {
         setVerified(true);
         setRandomNum('');
-        alert('인증 완료!');
+        window.alert('인증 완료!');
       } else {
-        alert('인증 실패: ' + response.data.message);
+        window.alert('인증 실패: ' + response.data.message);
       }
     } catch (error) {
       console.error('인증 완료 상태 전송 중 에러 발생: ', error);
@@ -253,17 +253,15 @@ export const UserProvider = ({ children }) => {
     try {
       await instance.delete(URL, {
         headers: {
-          'authorization-access': localStorage.getItem('Authorization-Access'),
-          'authorization-refresh': localStorage.getItem(
-            'Authorization-Refresh'
-          ),
+          'authorization-access': localStorage.getItem('accessToken'),
+          'authorization-refresh': localStorage.getItem('refreshToken'),
         },
       });
 
       // ▶ 로그아웃 처리
       logout();
 
-      alert('회원탈퇴가 완료되었습니다.');
+      window.alert('회원탈퇴가 완료되었습니다.');
     } catch (error) {
       console.error('회원탈퇴 요청 중 에러 발생: ', error);
     }
@@ -296,11 +294,11 @@ export const UserProvider = ({ children }) => {
 
         // ▶ 유저 데이터 저장
         localStorage.setItem(
-          'Authorization-Access',
+          'accessToken',
           response.headers['authorization-access']
         );
         localStorage.setItem(
-          'Authorization-Refresh',
+          'refreshToken',
           response.headers['authorization-refresh']
         );
         localStorage.setItem('uid', response.data.id);
@@ -329,19 +327,37 @@ export const UserProvider = ({ children }) => {
 
   //🔓 로그아웃 ---------------------------------------------------------------
   const logout = () => {
-    // ▶ 유저 데이터 삭제
-    localStorage.removeItem('Authorization-Access');
-    localStorage.removeItem('Authorization-Refresh');
-    localStorage.removeItem('uid');
-    localStorage.removeItem('nickName');
-    localStorage.removeItem('email');
-    localStorage.removeItem('socialType');
+    // post로 토큰 보내고 204 받아와서 삭제하기
+    const URL = 'http://localhost:8080/auth/token/logout';
+    const accessToken = localStorage.getItem('accessToken');
 
-    // ▶ 유저 상태 초기화
-    dispatch({ type: SET_USER, user: null });
+    try {
+      const response = instance.post(URL, accessToken);
 
-    // ▶ Redirect
-    navigate('/main');
+      if (response.status === 204) {
+        console.log(response.status);
+
+        // ▶ 유저 데이터 삭제
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('uid');
+        localStorage.removeItem('nickName');
+        localStorage.removeItem('email');
+        localStorage.removeItem('socialType');
+
+        // ▶ 유저 상태 초기화
+        dispatch({ type: SET_USER, user: null });
+
+        // ▶ 유저 상태 초기화
+        window.alert('로그아웃 되었습니다!');
+
+        // ▶ Redirect
+        navigate('/main');
+      }
+    } catch (error) {
+      console.log(error);
+      window.alert('💥 로그아웃에 문제가 생겼습니다!');
+    }
   };
 
   // 🔄 비밀번호 재설정 ---------------------------------------------------------------
@@ -358,15 +374,32 @@ export const UserProvider = ({ children }) => {
       );
 
       if (response.status === 204) {
-        alert('비밀번호가 성공적으로 재설정되었습니다');
+        window.alert('비밀번호가 성공적으로 재설정되었습니다');
       } else {
-        alert('비밀번호 재설정에 실패하였습니다');
+        window.alert('비밀번호 재설정에 실패하였습니다');
       }
     } catch (error) {
       console.error('비밀번호 재설정 중 에러 발생: ', error);
     }
 
     navigate('/login');
+  };
+
+  // 🚀 리프레시 토큰 전송 -----------------------------------------------------------
+  const sendRefresh = () => {
+    const URL = 'http://localhost:8080/auth/token/refresh';
+    const accessToken = localStorage.getItem('accessToken');
+    try {
+      const response = instance.post(URL, accessToken);
+      if (response.status === 204) {
+        localStorage.setItem('accessToken', response.data.accessToken);
+        console.log(`새로운 액세스 토큰을 발급받았습니다 : ${accessToken}`);
+        navigate(window.location.pathname);
+      }
+    } catch (error) {
+      console.error(error);
+      window.alert('리프레시 토큰 전송에 실패했습니다');
+    }
   };
 
   // 🟡 카카오 --------------------------------------------------
@@ -406,6 +439,7 @@ export const UserProvider = ({ children }) => {
     checkNameDuplication,
     nameDuplicated,
     setNameDuplicated,
+    sendRefresh,
     kakaoLogin,
     googleLogin,
     naverLogin,

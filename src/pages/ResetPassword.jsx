@@ -7,7 +7,7 @@ import {
 } from 'react-icons/go';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { useUserDispatch } from '../context/User';
+import { useUserDispatch } from '../context/UserContext';
 
 export default function ResetPassword() {
   const [email, setEmail] = useState(''); // 이메일

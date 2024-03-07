@@ -19,6 +19,7 @@ import DeleteUser from './pages/DeleteUser';
 import GptResult from './pages/GptResult';
 import BoardRanking from './pages/BoardRanking';
 import LoginSuccess from './pages/LoginSuccess';
+import SendRefresh from './pages/SendRefresh';
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,7 @@ const router = createBrowserRouter([
       { path: '/ranking', element: <BoardRanking /> }, // 탑 5 랭킹
       { path: '/login', element: <Login /> }, // 로그인 페이지
       { path: '/login-success', element: <LoginSuccess /> }, // SNS 성공 확인 페이지
+      { path: '/refresh', element: <SendRefresh /> }, // SNS 성공 확인 페이지
       { path: '/signup', element: <SignUp /> }, // 회원 가입
       { path: '/reset-password', element: <ResetPassword /> }, // 비밀번호 재설정
       { path: '/delete-user', element: <DeleteUser /> }, // 회원 탈퇴

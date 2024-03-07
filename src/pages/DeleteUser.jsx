@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
-import { useUserDispatch } from '../context/User';
+import { useUserDispatch } from '../context/UserContext';
 
 export default function DeleteUser() {
   const [password, setPassword] = useState('');

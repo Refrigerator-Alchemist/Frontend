@@ -3,7 +3,7 @@ import Logo from '../components/Logo';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import { GoEye, GoEyeClosed } from 'react-icons/go';
-import { useUserDispatch } from '../context/User';
+import { useUserDispatch } from '../context/UserContext';
 import LOGO_GOOGLE from '../img/logo_google.png';
 import LOGO_KAKAO from '../img/logo_kakao.png';
 import LOGO_NAVER from '../img/logo_naver.png';
@@ -77,7 +77,7 @@ export default function Login() {
 
       {/* 로고, 타이틀 */}
       <header className="flex flex-col items-center justify-center">
-        <Logo width="250px" height="250px" />
+        <Logo page="login" width="250px" height="250px" />
         <h1 className="text-3xl font-extrabold">로그인</h1>
       </header>
 

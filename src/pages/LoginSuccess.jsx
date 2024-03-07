@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useUserState, useUserDispatch } from '../context/User.jsx';
+import { useUserState, useUserDispatch } from '../context/UserContext.jsx';
 import { useNavigate } from 'react-router-dom';
 
 export default function LoginSuccess() {
