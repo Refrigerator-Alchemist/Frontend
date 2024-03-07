@@ -92,6 +92,7 @@ export const UserProvider = ({ children }) => {
 
       // ▶ 이메일 중복 아니어야 발급 : false
       // response.data X -> .data.exists
+      // status === 409 로 판단하기
       if (response.data.exists) {
         setEmailExists(true);
         alert('이미 서버에 존재하는 이메일입니다');
