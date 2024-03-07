@@ -332,13 +332,17 @@ export const UserProvider = ({ children }) => {
     const accessToken = localStorage.getItem('accessToken');
 
     try {
-      const response = instance.post(URL, accessToken, {
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-          Accept: 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      });
+      const response = instance.post(
+        URL,
+        { accessToken: accessToken },
+        {
+          headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+            Accept: 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        }
+      );
 
       if (response.status === 204) {
         console.log(response.status);
