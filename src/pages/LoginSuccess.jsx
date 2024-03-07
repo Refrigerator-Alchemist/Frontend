@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useUserState, useUserDispatch } from '../context/User.jsx';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
 export default function LoginSuccess() {
   const [socialId, setSocialId] = useState('');
@@ -14,52 +13,42 @@ export default function LoginSuccess() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const getData = async () => {
+    const fetchLoginData = async () => {
       const urlParams = new URLSearchParams(window.location.search);
-      const socialType = urlParams.get('socialType');
-      const code = urlParams.get('code');
+      const accessToken = urlParams.get('accessToken'); // 쿼리 파라미터 : accessToken
+      const socialId = urlParams.get('socialId'); // 쿼리 파라미터 : socialId
 
-      // code 뒷 부분에 Auth토큰, socialId 둘다 붙어서 온다고 함
-      // 분리해서 매핑하는 처리와 토큰과 socialId만 저장하도록 해야함
-      try {
-        const response = await axios.get(
-          `http://localhost:8080/login/oauth2/code/${socialType}?code=${code}`
-        );
+      // 쿠키 : refreshToken
+      const cookies = document.cookie.split('; ');
+      const refreshToken = cookies
+        .find((row) => row.startsWith('refreshToken=')) // refreshToken= 으로 시작하는 행
+        .split('=')[1]; // = 뒤가 value
 
-        console.log(`소셜 타입(서비스명) : ${socialType}`);
-        console.log(`코드 : ${code}`);
+      if (accessToken && socialId && refreshToken) {
+        localStorage.setItem('socialId', socialId);
+        localStorage.setItem('Authorization-Access', accessToken);
+        localStorage.setItem('Authorization-Refresh', refreshToken);
 
-        if (response.status === 200) {
-          const socialId = response.headers['socialId'];
-          const accessToken = response.headers['Authorization-Access'];
-          const refreshToken = response.headers['Authorization-Refresh'];
+        setSocialId(socialId);
+        setAccessToken(accessToken);
+        setRefreshToken(refreshToken);
 
-          localStorage.setItem('socialId', socialId);
-          localStorage.setItem('Authorization-Access', accessToken);
-          localStorage.setItem('Authorization-Refresh', refreshToken);
+        console.log(`소셜 ID : ${socialId}`);
+        console.log(`액세스 토큰 : ${accessToken}`);
+        console.log(`리프레시 토큰 : ${refreshToken}`);
 
-          setSocialId(socialId);
-          setAccessToken(accessToken);
-          setRefreshToken(refreshToken);
+        // ▶ 유저 데이터 저장
+        let user = {
+          uid: socialId,
+        };
 
-          console.log(`소셜 ID : ${socialId}`);
-          console.log(`액세스 토큰 : ${accessToken}`);
-          console.log(`리프레시 토큰 : ${refreshToken}`);
-
-          // ▶ 유저 데이터 저장
-          let user = {
-            uid: socialId,
-          };
-
-          dispatch({ type: 'SET_USER', user }); //
-        }
-      } catch (error) {
-        console.error(error);
-        alert('로그인 실패. 🥵🥶🥵🥶🥵🥶다음 기회에ㅋ🥵🥶');
+        dispatch({ type: 'SET_USER', user }); //
+      } else {
+        alert('🥵🥶🥵🥶로그인 실패🥵🥶🥵🥶');
       }
     };
 
-    getData();
+    fetchLoginData();
   }, [dispatch]);
 
   return (
