@@ -335,6 +335,8 @@ export const UserProvider = ({ children }) => {
       const response = instance.post(URL, null, {
         headers: {
           'Authorization-Access': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json;charset=UTF-8',
+          Accept: 'application/json',
         },
       });
 
@@ -408,6 +410,8 @@ export const UserProvider = ({ children }) => {
         {
           headers: {
             'Authorization-Access': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json;charset=UTF-8',
+            Accept: 'application/json',
           },
         }
       );
