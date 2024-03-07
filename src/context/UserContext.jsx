@@ -332,13 +332,7 @@ export const UserProvider = ({ children }) => {
     const accessToken = localStorage.getItem('accessToken');
 
     try {
-      const response = instance.post(URL, null, {
-        headers: {
-          'Authorization-Access': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json;charset=UTF-8',
-          Accept: 'application/json',
-        },
-      });
+      const response = instance.post(URL, accessToken);
 
       if (response.status === 204) {
         console.log(response.status);
@@ -400,21 +394,12 @@ export const UserProvider = ({ children }) => {
     const socialId = localStorage.getItem('socialId');
 
     try {
-      const response = await instance.post(
-        URL,
-        {
-          email,
-          socialType,
-          socialId,
-        },
-        {
-          headers: {
-            'Authorization-Access': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json;charset=UTF-8',
-            Accept: 'application/json',
-          },
-        }
-      );
+      const response = await instance.post(URL, {
+        email,
+        socialType,
+        socialId,
+        accessToken,
+      });
 
       if (response.status === 204) {
         localStorage.setItem('accessToken', response.data.accessToken);
