@@ -3,7 +3,7 @@ import Logo from '../components/Logo';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import { GoEye, GoEyeClosed } from 'react-icons/go';
-import { useUserDispatch } from '../context/User';
+import { useUserDispatch } from '../context/UserContext';
 import LOGO_GOOGLE from '../img/logo_google.png';
 import LOGO_KAKAO from '../img/logo_kakao.png';
 import LOGO_NAVER from '../img/logo_naver.png';

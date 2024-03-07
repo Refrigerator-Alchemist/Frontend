@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import Navigation from '../components/Navigation';
 import axios from 'axios';
-import { useUserDispatch } from '../context/User';
+import { useUserDispatch } from '../context/UserContext';
 
 const RecipeCard = ({
   postid,
@@ -58,8 +58,8 @@ function MyPage() {
       try {
         const response = await axios.get(
           showSavedRecipes
-            ? 'http://172.30.1.30:8080/board/myLike' // 좋아요누른  
-            : 'http://172.30.1.30:8080/board/myList'  //저장한 
+            ? 'http://172.30.1.30:8080/board/myLike' // 좋아요누른
+            : 'http://172.30.1.30:8080/board/myList' //저장한
         );
         if (response.data && Array.isArray(response.data.items)) {
           const formattedData = response.data.items.map((item) => ({
@@ -174,5 +174,3 @@ function MyPage() {
 }
 
 export default MyPage;
-
-

@@ -5,7 +5,7 @@ import { IoAccessibilityOutline, IoAccessibility } from 'react-icons/io5';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import { NavigationContext } from '../context/NavigationContext';
-import { useUserState } from '../context/User';
+import { useUserState } from '../context/UserContext';
 
 export default function Navigation() {
   const { selected, setSelected } = useContext(NavigationContext);
@@ -20,7 +20,7 @@ export default function Navigation() {
       setSelected('food');
     } else if (currentPath === '/main') {
       setSelected('home');
-    } else if (currentPath === '/login'|| currentPath.startsWith('/mypage')) {
+    } else if (currentPath === '/login' || currentPath.startsWith('/mypage')) {
       setSelected('profile');
     }
   }, [location.pathname, setSelected]);

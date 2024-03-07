@@ -1,5 +1,5 @@
 import React from 'react';
-import { useUserDispatch } from '../context/User';
+import { useUserDispatch } from '../context/UserContext';
 
 export default function SendRefresh() {
   const { sendRefresh } = useUserDispatch();
