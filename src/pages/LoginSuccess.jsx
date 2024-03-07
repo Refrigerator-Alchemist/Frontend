@@ -3,8 +3,10 @@ import { useUserState, useUserDispatch } from '../context/UserContext.jsx';
 import { useNavigate } from 'react-router-dom';
 
 export default function LoginSuccess() {
-  const [socialId, setSocialId] = useState('');
   const [accessToken, setAccessToken] = useState('');
+  const [email, setEmail] = useState('');
+  const [socialType, setSocialType] = useState('');
+  const [socialId, setSocialId] = useState('');
   const [refreshToken, setRefreshToken] = useState('');
   const user = useUserState();
 
@@ -14,11 +16,14 @@ export default function LoginSuccess() {
 
   useEffect(() => {
     const fetchLoginData = async () => {
+      // ▶ 헤더 : accessToken, email, socialId, socialType
       const urlParams = new URLSearchParams(window.location.search);
       const accessToken = urlParams.get('accessToken'); // 쿼리 파라미터 : accessToken
+      const email = urlParams.get('email'); // 쿼리 파라미터 : email
       const socialId = urlParams.get('socialId'); // 쿼리 파라미터 : socialId
+      const socialType = urlParams.get('socialType'); // 쿼리 파라미터 : socialType
 
-      // 쿠키 : refreshToken
+      // ▶ 쿠키 : refreshToken
       const cookies = document.cookie.split('; ');
       const refreshToken = cookies
         .find((row) => row.startsWith('refreshToken=')) // refreshToken= 으로 시작하는 행
@@ -26,15 +31,21 @@ export default function LoginSuccess() {
 
       if (accessToken && socialId && refreshToken) {
         localStorage.setItem('socialId', socialId);
-        localStorage.setItem('Authorization-Access', accessToken);
-        localStorage.setItem('Authorization-Refresh', refreshToken);
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('email', email);
+        localStorage.setItem('socialType', socialType);
+        localStorage.setItem('refreshToken', refreshToken);
 
-        setSocialId(socialId);
         setAccessToken(accessToken);
+        setEmail(email);
+        setSocialId(socialId);
+        setSocialType(socialType);
         setRefreshToken(refreshToken);
 
-        console.log(`소셜 ID : ${socialId}`);
         console.log(`액세스 토큰 : ${accessToken}`);
+        console.log(`이메일 : ${email}`);
+        console.log(`소셜 ID : ${socialId}`);
+        console.log(`소셜 타입 : ${socialType}`);
         console.log(`리프레시 토큰 : ${refreshToken}`);
 
         // ▶ 유저 데이터 저장
@@ -59,9 +70,11 @@ export default function LoginSuccess() {
             로그인에 성공했을 때 볼 수 있는 화면입니다!
           </h1>
           <span>{`액세스 토큰 : ${accessToken}`}</span>
-          <span>{`리프레시 토큰 : ${refreshToken}`}</span>
+          <span>{`이메일 : ${email}`}</span>
           <span>{`소셜 ID : ${socialId}`}</span>
           <span>{`사용자 ID (소셜 ID와 동일) : ${user.uid}`}</span>
+          <span>{`소셜 타입 : ${socialType}`}</span>
+          <span>{`리프레시 토큰 : ${refreshToken}`}</span>
           <button onClick={navigate('/main')}>메인페이지 이동</button>
         </div>
       ) : (
