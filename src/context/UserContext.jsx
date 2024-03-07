@@ -390,11 +390,11 @@ export const UserProvider = ({ children }) => {
   };
 
   // 🚀 리프레시 토큰 전송 -----------------------------------------------------------
-  const sendRefresh = () => {
+  const sendRefresh = async () => {
     const URL = 'http://localhost:8080/auth/token/refresh';
     const accessToken = localStorage.getItem('accessToken');
     try {
-      const response = instance.post(URL, null, {
+      const response = await instance.post(URL, null, {
         headers: {
           'Authorization-Access': `Bearer ${accessToken}`,
         },

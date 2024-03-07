@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useUserDispatch } from '../context/UserContext';
 
 export default function SendRefresh() {
   const { sendRefresh } = useUserDispatch();
 
-  return <div>{sendRefresh()}</div>;
+  useEffect(() => {
+    sendRefresh();
+  }, [sendRefresh]);
+
+  return <div>Refreshing...</div>;
 }
