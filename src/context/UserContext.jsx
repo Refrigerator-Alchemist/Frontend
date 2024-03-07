@@ -332,7 +332,11 @@ export const UserProvider = ({ children }) => {
     const accessToken = localStorage.getItem('accessToken');
 
     try {
-      const response = instance.post(URL, accessToken);
+      const response = instance.post(URL, null, {
+        headers: {
+          'Authorization-Access': `Bearer ${accessToken}`,
+        },
+      });
 
       if (response.status === 204) {
         console.log(response.status);
@@ -390,7 +394,11 @@ export const UserProvider = ({ children }) => {
     const URL = 'http://localhost:8080/auth/token/refresh';
     const accessToken = localStorage.getItem('accessToken');
     try {
-      const response = instance.post(URL, accessToken);
+      const response = instance.post(URL, null, {
+        headers: {
+          'Authorization-Access': `Bearer ${accessToken}`,
+        },
+      });
       if (response.status === 204) {
         localStorage.setItem('accessToken', response.data.accessToken);
         console.log(`새로운 액세스 토큰을 발급받았습니다 : ${accessToken}`);
