@@ -393,12 +393,25 @@ export const UserProvider = ({ children }) => {
   const sendRefresh = async () => {
     const URL = 'http://localhost:8080/auth/token/refresh';
     const accessToken = localStorage.getItem('accessToken');
+    const email = localStorage.getItem('email');
+    const socialType = localStorage.getItem('socialType');
+    const socialId = localStorage.getItem('socialId');
+
     try {
-      const response = await instance.post(URL, null, {
-        headers: {
-          'Authorization-Access': `Bearer ${accessToken}`,
+      const response = await instance.post(
+        URL,
+        {
+          email,
+          socialType,
+          socialId,
         },
-      });
+        {
+          headers: {
+            'Authorization-Access': `Bearer ${accessToken}`,
+          },
+        }
+      );
+
       if (response.status === 204) {
         localStorage.setItem('accessToken', response.data.accessToken);
         console.log(`새로운 액세스 토큰을 발급받았습니다 : ${accessToken}`);
