@@ -326,13 +326,13 @@ export const UserProvider = ({ children }) => {
   };
 
   //🔓 로그아웃 ---------------------------------------------------------------
-  const logout = () => {
+  const logout = async () => {
     // post로 토큰 보내고 204 받아와서 삭제하기
     const URL = 'http://localhost:8080/auth/token/logout';
     const accessToken = localStorage.getItem('accessToken');
 
     try {
-      const response = instance.post(
+      const response = await instance.post(
         URL,
         { accessToken: accessToken },
         {

@@ -75,12 +75,12 @@ export default function LoginSuccess() {
           <span>{`사용자 ID (소셜 ID와 동일) : ${user.uid}`}</span>
           <span>{`소셜 타입 : ${socialType}`}</span>
           <span>{`리프레시 토큰 : ${refreshToken}`}</span>
-          <button onClick={navigate('/main')}>메인페이지 이동</button>
+          <button onClick={() => navigate('/main')}>메인페이지 이동</button>
         </div>
       ) : (
         <div>
           <h1>로그인에 실패했거나, 문제가 있습니다😅</h1>
-          <button onClick={navigate('/login')}>다시 로그인 시도</button>
+          <button onClick={() => navigate('/login')}>다시 로그인 시도</button>
         </div>
       )}
     </section>
