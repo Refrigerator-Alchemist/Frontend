@@ -107,9 +107,9 @@ const TagInput = () => {
   <button
     className="flex justify-center font-score transition ease-in-out delay-150 text-black bg-white hover:bg-white hover:scale-125 hover:cursor-pointer font-bold py-2 px-4 rounded w-full mb-4"
     type="button"
-    onClick={() => navigate('/history')}
+    onClick={() => navigate('/gpthistory')}
   >
-    <MdHistory className="mr-2" />
+    <MdHistory className="mr-2  w-6 h-6" />
     GPT History
   </button>
   <button

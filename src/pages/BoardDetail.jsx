@@ -38,13 +38,13 @@ const BoardDetail = () => {
         <div className="flex flex-col items-center mt-8">
           <div className="flex items-center gap-4">
             <h2 className="font-score text-2xl font-bold">{postData.title}</h2>
-            <button onClick={handleLikeClick} className="ml-2">
+            {/* <button onClick={handleLikeClick} className="ml-2">
               {isLiked ? (
                 <FaHeart className="text-red-500 text-2xl" />
               ) : (
                 <FaRegHeart className="text-2xl" />
               )}
-            </button>
+            </button> */}
           </div>
           <div className="font-score text-sm text-gray-500 my-2">
             {postData.ingredients ? postData.ingredients.join(' · ') : ''}
