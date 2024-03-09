@@ -13,6 +13,7 @@ export default function Logo({ page, width, height }) {
           width={width}
           height={height}
           className="mb-4 hover:rotate-12 hover:scale-110 transition-all ease-in-out duration-300"
+          onContextMenu={(e) => e.preventDefault()}
         ></img>
       </>
     );
@@ -28,6 +29,7 @@ export default function Logo({ page, width, height }) {
           width={width}
           height={height}
           className="mb-4 hover:rotate-12 hover:scale-110 transition-all ease-in-out duration-300"
+          onContextMenu={(e) => e.preventDefault()}
         ></img>
       </>
     );
