@@ -69,7 +69,7 @@ export default function LoginSuccess() {
           <h1 className="text-4xl">
             로그인에 성공했을 때 볼 수 있는 화면입니다!
           </h1>
-          <span>{`액세스 토큰 : ${accessToken}`}</span>
+          <span className="max-w-md break-words">{`액세스 토큰 : ${accessToken}`}</span>
           <span>{`이메일 : ${email}`}</span>
           <span>{`소셜 ID : ${socialId}`}</span>
           <span>{`소셜 타입 : ${socialType}`}</span>
