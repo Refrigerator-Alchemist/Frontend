@@ -33,14 +33,6 @@ export default function LoginSuccess() {
         localStorage.setItem('email', email);
         localStorage.setItem('socialType', socialType);
 
-        // ▶ 유저 데이터 저장
-        let user = {
-          uid: socialId,
-        };
-
-        dispatch({ type: 'SET_USER', user });
-        alert('데이터 저장 완료');
-
         // ▶ 비동기 - 동기 충돌 해결 : 테스트 렌더링용 상태 저장
         setAccessToken(accessToken);
         setEmail(email);
@@ -52,6 +44,7 @@ export default function LoginSuccess() {
       }
     };
 
+    // ▶ 유저 데이터 저장
     fetchLoginData().then((user) => {
       if (user) {
         dispatch({ type: 'SET_USER', user });
