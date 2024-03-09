@@ -29,6 +29,13 @@ export default function LoginSuccess() {
         .find((row) => row.startsWith('refreshToken=')) // refreshToken= 으로 시작하는 행
         .split('=')[1]; // = 뒤가 value
 
+      // 데이터를 제대로 추출했는지 콘솔에서 확인
+      console.log(`액세스 토큰 : ${accessToken}`);
+      console.log(`이메일 : ${email}`);
+      console.log(`소셜 ID : ${socialId}`);
+      console.log(`소셜 타입 : ${socialType}`);
+      console.log(`리프레시 토큰 : ${refreshToken}`);
+
       if (accessToken && socialId && refreshToken) {
         localStorage.setItem('socialId', socialId);
         localStorage.setItem('accessToken', accessToken);
@@ -36,26 +43,23 @@ export default function LoginSuccess() {
         localStorage.setItem('socialType', socialType);
         localStorage.setItem('refreshToken', refreshToken);
 
-        setAccessToken(accessToken);
-        setEmail(email);
-        setSocialId(socialId);
-        setSocialType(socialType);
-        setRefreshToken(refreshToken);
-
-        console.log(`액세스 토큰 : ${accessToken}`);
-        console.log(`이메일 : ${email}`);
-        console.log(`소셜 ID : ${socialId}`);
-        console.log(`소셜 타입 : ${socialType}`);
-        console.log(`리프레시 토큰 : ${refreshToken}`);
-
         // ▶ 유저 데이터 저장
         let user = {
           uid: socialId,
         };
 
-        dispatch({ type: 'SET_USER', user }); //
+        dispatch({ type: 'SET_USER', user });
+        alert('데이터 저장 완료');
+
+        // ▶ 비동기 - 동기 충돌 해결 : 테스트 렌더링용 상태 저장
+        setAccessToken(accessToken);
+        setEmail(email);
+        setSocialId(socialId);
+        setSocialType(socialType);
+        setRefreshToken(refreshToken);
       } else {
-        alert('🥵🥶🥵🥶로그인 실패🥵🥶🥵🥶');
+        console.log('데이터를 받아오지 못했습니다');
+        alert('데이터 저장 중 문제 발생');
       }
     };
 

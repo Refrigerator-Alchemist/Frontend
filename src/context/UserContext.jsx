@@ -207,10 +207,10 @@ export const UserProvider = ({ children }) => {
 
       if (response.data.isDuplicated) {
         setNameDuplicated(true);
-        window.alert('사용가능한 닉네임입니다:)');
+        window.alert('이미 존재하는 닉네임입니다');
       } else {
         setNameDuplicated(false);
-        window.alert('이미 존재하는 닉네임입니다');
+        window.alert('사용가능한 닉네임입니다:)');
       }
     } catch (error) {
       console.error('닉네임 중복 확인 중 에러 발생: ', error);
