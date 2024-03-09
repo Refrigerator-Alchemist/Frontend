@@ -43,7 +43,7 @@ const initialState = {
 // ❕ 액션 타입
 const SET_USER = 'SET_USER';
 
-// ❕ Reducer
+// ❕ Reducer : state에 유저 상태 저장
 const reducer = (state, action) => {
   switch (action.type) {
     case SET_USER:
@@ -52,7 +52,7 @@ const reducer = (state, action) => {
         user: action.user, // 유저의 액션
       };
     default:
-      throw new Error(`Unhandled action type: ${action.type}`);
+      throw new Error(`통제되지 않는 타입: ${action.type}`);
   }
 };
 
