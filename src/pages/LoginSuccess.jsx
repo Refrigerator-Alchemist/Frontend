@@ -24,10 +24,9 @@ export default function LoginSuccess() {
       const socialType = urlParams.get('socialType'); // 쿼리 파라미터 : socialType
 
       // ▶ 쿠키 : refreshToken
-      const cookies = document.cookie.split('; ');
-      const refreshToken = cookies
-        .find((row) => row.startsWith('refreshToken=')) // refreshToken= 으로 시작하는 행
-        .split('=')[1]; // = 뒤가 value
+      const cookies = document.cookie;
+      const match = cookies.match(/refreshToken=([^;]+)/);
+      const refreshToken = match ? match[1] : null;
 
       // 데이터를 제대로 추출했는지 콘솔에서 확인
       console.log(`액세스 토큰 : ${accessToken}`);
