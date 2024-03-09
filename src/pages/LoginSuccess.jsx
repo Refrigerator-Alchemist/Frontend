@@ -22,7 +22,6 @@ export default function LoginSuccess() {
       const socialId = urlParams.get('socialId'); // 쿼리 파라미터 : socialId
       const socialType = urlParams.get('socialType'); // 쿼리 파라미터 : socialType
 
-      // 데이터를 제대로 추출했는지 콘솔에서 확인
       console.log(`액세스 토큰 : ${accessToken}`);
       console.log(`이메일 : ${email}`);
       console.log(`소셜 ID : ${socialId}`);
@@ -53,7 +52,12 @@ export default function LoginSuccess() {
       }
     };
 
-    fetchLoginData();
+    fetchLoginData().then((user) => {
+      if (user) {
+        dispatch({ type: 'SET_USER', user });
+        alert('데이터 저장 완료');
+      }
+    });
   }, [dispatch]);
 
   return (
