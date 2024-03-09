@@ -78,11 +78,10 @@ export default function LoginSuccess() {
       ) : (
         <div>
           <h1>로그인에 실패했거나, 문제가 있습니다😅</h1>
-          <button
-            className="text-red-500 hover:scale-110"
-            onClick={() => navigate('/login')}
-          >
-            다시 로그인 시도
+          <button onClick={() => navigate('/login')}>
+            <span className="text-red-500 hover:scale-110">
+              다시 로그인 시도
+            </span>
           </button>
         </div>
       )}
