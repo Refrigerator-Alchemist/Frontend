@@ -14,11 +14,26 @@ const BoardDetail = () => {
     // 하트 유무 미완성
     setIsLiked(!isLiked);
     try {
-      await axios.post(`서버주소/board/${postId}/like`, { liked: !isLiked });
+      await axios.post(`서버주소/board/${postId}`, { liked: !isLiked });
     } catch (error) {
-      console.error('Error 내용:', error);
+      console.error('에러내용:', error);
     }
   };
+
+  //상세페이지 
+  // useEffect(() => {
+  //   const fetchRecipes = async () => {
+  //     try {
+  //       const response = await axios.get(`http://172.30.1.17:8080/board/${postId}`);
+  //       setRecipes(response.data);
+  //     } catch (error) {
+  //       console.error('에러내용:', error);
+  //     }
+  //   };
+
+  //   fetchRecipes();
+  // }, []);
+
 
   return (
     <>
