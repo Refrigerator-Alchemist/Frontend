@@ -7,7 +7,6 @@ export default function LoginSuccess() {
   const [email, setEmail] = useState('');
   const [socialType, setSocialType] = useState('');
   const [socialId, setSocialId] = useState('');
-  const [refreshToken, setRefreshToken] = useState('');
   const user = useUserState();
 
   const dispatch = useUserDispatch();
@@ -23,24 +22,17 @@ export default function LoginSuccess() {
       const socialId = urlParams.get('socialId'); // 쿼리 파라미터 : socialId
       const socialType = urlParams.get('socialType'); // 쿼리 파라미터 : socialType
 
-      // ▶ 쿠키 : refreshToken
-      const cookies = document.cookie;
-      const match = cookies.match(/Authorization-Refresh=([^;]+)/);
-      const refreshToken = match ? match[1] : null;
-
       // 데이터를 제대로 추출했는지 콘솔에서 확인
       console.log(`액세스 토큰 : ${accessToken}`);
       console.log(`이메일 : ${email}`);
       console.log(`소셜 ID : ${socialId}`);
       console.log(`소셜 타입 : ${socialType}`);
-      console.log(`리프레시 토큰 : ${refreshToken}`);
 
-      if (accessToken && socialId && refreshToken) {
+      if (accessToken && socialId) {
         localStorage.setItem('socialId', socialId);
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('email', email);
         localStorage.setItem('socialType', socialType);
-        localStorage.setItem('refreshToken', refreshToken);
 
         // ▶ 유저 데이터 저장
         let user = {
@@ -55,7 +47,6 @@ export default function LoginSuccess() {
         setEmail(email);
         setSocialId(socialId);
         setSocialType(socialType);
-        setRefreshToken(refreshToken);
       } else {
         console.log('데이터를 받아오지 못했습니다');
         alert('데이터 저장 중 문제 발생');
@@ -77,13 +68,17 @@ export default function LoginSuccess() {
           <span>{`소셜 ID : ${socialId}`}</span>
           <span>{`사용자 ID (소셜 ID와 동일) : ${user.uid}`}</span>
           <span>{`소셜 타입 : ${socialType}`}</span>
-          <span>{`리프레시 토큰 : ${refreshToken}`}</span>
           <button onClick={() => navigate('/main')}>메인페이지 이동</button>
         </div>
       ) : (
         <div>
           <h1>로그인에 실패했거나, 문제가 있습니다😅</h1>
-          <button onClick={() => navigate('/login')}>다시 로그인 시도</button>
+          <button
+            className="text-red-500 hover:scale-110"
+            onClick={() => navigate('/login')}
+          >
+            다시 로그인 시도
+          </button>
         </div>
       )}
     </section>
