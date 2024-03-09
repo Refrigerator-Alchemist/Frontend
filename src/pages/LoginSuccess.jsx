@@ -14,43 +14,52 @@ export default function LoginSuccess() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchLoginData = async () => {
-      // ▶ 헤더 : accessToken, email, socialId, socialType
+    const fetchLoginData = () => {
       const urlParams = new URLSearchParams(window.location.search);
-      const accessToken = urlParams.get('accessToken'); // 쿼리 파라미터 : accessToken
-      const email = urlParams.get('email'); // 쿼리 파라미터 : email
-      const socialId = urlParams.get('socialId'); // 쿼리 파라미터 : socialId
-      const socialType = urlParams.get('socialType'); // 쿼리 파라미터 : socialType
+      const accessToken = urlParams.get('accessToken');
+      const email = urlParams.get('email');
+      const socialId = urlParams.get('socialId');
+      const socialType = urlParams.get('socialType');
 
       console.log(`액세스 토큰 : ${accessToken}`);
       console.log(`이메일 : ${email}`);
       console.log(`소셜 ID : ${socialId}`);
       console.log(`소셜 타입 : ${socialType}`);
 
-      if (accessToken && socialId) {
-        localStorage.setItem('socialId', socialId);
+      if (accessToken && email && socialId && socialType) {
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('email', email);
+        localStorage.setItem('socialId', socialId);
         localStorage.setItem('socialType', socialType);
 
-        // ▶ 비동기 - 동기 충돌 해결 : 테스트 렌더링용 상태 저장
         setAccessToken(accessToken);
         setEmail(email);
         setSocialId(socialId);
         setSocialType(socialType);
+
+        let user = {
+          accessToken: localStorage.getItem('accessToken'),
+          email: localStorage.getItem('email'),
+          uid: localStorage.getItem('socialId'),
+          socialType: localStorage.getItem('socialType'),
+        };
+
+        // ▶ 유저 객체를 반환
+        return user;
       } else {
         console.log('데이터를 받아오지 못했습니다');
         alert('데이터 저장 중 문제 발생');
       }
     };
 
-    // ▶ 유저 데이터 저장
-    fetchLoginData().then((user) => {
-      if (user) {
-        dispatch({ type: 'SET_USER', user });
-        alert('데이터 저장 완료');
-      }
-    });
+    // ▶ 함수 실행
+    const user = fetchLoginData();
+
+    // ▶ 반환된 유저 객체를 dispatch로 유저 상태 저장
+    if (user) {
+      dispatch({ type: 'SET_USER', user });
+      alert('데이터 저장 완료');
+    }
   }, [dispatch]);
 
   return (
@@ -63,7 +72,6 @@ export default function LoginSuccess() {
           <span>{`액세스 토큰 : ${accessToken}`}</span>
           <span>{`이메일 : ${email}`}</span>
           <span>{`소셜 ID : ${socialId}`}</span>
-          <span>{`사용자 ID (소셜 ID와 동일) : ${user.uid}`}</span>
           <span>{`소셜 타입 : ${socialType}`}</span>
           <button onClick={() => navigate('/main')}>메인페이지 이동</button>
         </div>
