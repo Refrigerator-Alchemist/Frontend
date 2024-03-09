@@ -25,7 +25,7 @@ export default function LoginSuccess() {
 
       // ▶ 쿠키 : refreshToken
       const cookies = document.cookie;
-      const match = cookies.match(/refreshToken=([^;]+)/);
+      const match = cookies.match(/Authorization-Refresh=([^;]+)/);
       const refreshToken = match ? match[1] : null;
 
       // 데이터를 제대로 추출했는지 콘솔에서 확인
