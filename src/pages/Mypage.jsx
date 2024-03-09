@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import axios from 'axios';
 import { useUserDispatch } from '../context/UserContext';
+import { FaTrash, FaEdit } from 'react-icons/fa';
+
 
 const RecipeCard = ({
   postid,
@@ -11,6 +13,8 @@ const RecipeCard = ({
   img,
   isLiked,
   onToggleLike,
+  onEdit, 
+  onDelete, 
 }) => {
   return (
     <div className="bg-white h-auto text-black ml-6 mr-6">
@@ -24,13 +28,14 @@ const RecipeCard = ({
             <p className="text-gray-500 text-sm font-score">{description}</p>
           </div>
         </Link>
-        {/* <button onClick={onToggleLike} className="p-2">
-          {isLiked ? (
-            <FaHeart className="text-red-500 text-2xl" />
-          ) : (
-            <FaRegHeart className="text-2xl" />
-          )}
-        </button> */}
+        <div>
+          <button onClick={() => onEdit(postid)} className="p-1 mr-2 text-gray-400">
+            수정
+          </button>
+          <button onClick={() => onDelete(postid)} className="p-1">
+            <FaTrash className="text-gray-400" />
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -85,8 +90,8 @@ function MyPage() {
       try {
         const response = await axios.get(
           showSavedRecipes
-            ? 'http://172.30.1.30:8080/board/myLike' // 좋아요누른
-            : 'http://172.30.1.30:8080/board/myList' //  내가 쓴 레시피 
+            ? 'http://172.30.1.17:8080/board/myLike' // 좋아요누른
+            : 'http://172.30.1.17:8080/board/myList' //  내가 쓴 레시피 
         );
         if (response.data && Array.isArray(response.data.items)) {
           const formattedData = response.data.items.map((item) => ({
@@ -195,6 +200,7 @@ function MyPage() {
         }}
       >
         <Navigation />
+        
       </footer>
     </div>
   );

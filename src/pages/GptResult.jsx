@@ -57,7 +57,7 @@ const RecipePage = () => {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+      <div className="flex flex-col items-center justify-center h-screen ">
         <div className="animate-spin rounded-full h-14 w-14 border-b-2 border-gray-900 mb-8"></div>
         <h1 className="text-2xl font-bold text-gray-900  mb-4">로딩 중 </h1>
         <button onClick={() => navigate('/main')} className="text-lg text-gray-400">

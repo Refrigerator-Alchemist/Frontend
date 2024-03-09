@@ -1,88 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
 
-// import { FaHeart, FaRegHeart } from 'react-icons/fa';
-
 const Board = () => {
-    const navigate = useNavigate();
-  const [recipes, setRecipes] = useState([
-    {
-      postid: 1,
-      title: '레시피 1',
-      description: '임시 데이터 .',
-      img: 'https://via.placeholder.com/150',
-      isLiked: false,
-    },
-    {
-      postid: 2,
-      title: '레시피 2',
-      description: '예시',
-      img: 'https://via.placeholder.com/150',
-      isLiked: true,
-    },
-    {
-      postid: 3,
-      title: '레시피 3',
-      description: '예시',
-      img: 'https://via.placeholder.com/150',
-      isLiked: false,
-    },
-  ]);
+  const navigate = useNavigate();
+  const [recipes, setRecipes] = useState([]);
 
-//   useEffect(() => {
-//     const fetchRecipes = async () => {
-//       try {
-//         const response = await axios.get('저장된 레시피 불러오는 서버주소');
-//         setRecipes(response.data);
-//       } catch (error) {
-//         console.error('에러내용:', error);
-//       }
-//     };
+  useEffect(() => {
+    const fetchRecipes = async () => {
+      try {
+        const response = await axios.get('http://172.30.1.49:8080/MyRecipe');
+        setRecipes(response.data);
+      } catch (error) {
+        console.error('에러내용:', error);
+      }
+    };
 
-//     fetchRecipes();
-//   }, []);
+    fetchRecipes();
+  }, []);
 
-
-  const RecipeCard = ({ postid, title, description, img }) => {
+  const RecipeCard = ({ recipeId, foodName, ingredientList }) => { // 여기서 ingredients를 ingredientList로 수정
     return (
       <div className="flex items-center bg-white mx-5 my-2 p-4 rounded-xl shadow">
-        <Link to={`/board/${postid}`} className="flex-grow flex">
+        <Link to={`/board/${recipeId}`} className="flex-grow flex">
           <div className="flex-none w-20 h-20 rounded-xl border-2 border-gray-300 overflow-hidden">
-            <img className="w-full h-full object-cover" src={img} alt={title} />
+            <img className="w-full h-full object-cover" src="https://via.placeholder.com/150" alt={foodName} />
           </div>
           <div className="px-4 py-4">
-            <h3 className="text-lg font-score font-semibold">{title}</h3>
-            <p className="text-gray-500 text-sm font-score">{description}</p>
+            <h3 className="text-lg font-score font-semibold">{foodName}</h3>
+            <p className="text-gray-500 text-sm font-score">{ingredientList.join(', ')}</p> {/* 이 부분도 ingredients에서 ingredientList로 변경 */}
           </div>
         </Link>
-        
       </div>
     );
   };
 
   return (
     <div className="history">
-        <div
-        className="absolute top-5 left-45 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
+      <div
+        className="absolute top-5 left-45 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center" // left-45을 left-5로 수정했습니다.
         onClick={() => navigate("/main")}
       >
         <FaArrowLeft />
       </div>
-      <div className="my-2  mt-20 mb-4">
-        <span className="font-undong font-bold ml-8 text-2xl ">저장한 레시피 </span>
+      <div className="my-2 mt-20 mb-4">
+        <span className="font-undong font-bold ml-8 text-2xl">저장한 레시피 </span>
         {recipes.map((recipe) => (
           <RecipeCard
-            key={recipe.postid}
-            postid={recipe.postid}
-            title={recipe.title}
-            description={recipe.description}
-            img={recipe.img}
+            key={recipe.recipeId}
+            recipeId={recipe.recipeId}
+            foodName={recipe.foodName}
+            ingredientList={recipe.ingredientList}
           />
         ))}
       </div>
-      
     </div>
   );
 }

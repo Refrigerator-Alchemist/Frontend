@@ -39,7 +39,7 @@ const TagInput = () => {
       return;
     }
     
-    axios.post('http://172.30.1.89:8080/recipe/recommend', {
+    axios.post('http://172.30.1.49:8080/recipe/recommend', {
       ingredients: tags // 입력한 재료를 담고 있는 리스트
     })
     .then(response => {
