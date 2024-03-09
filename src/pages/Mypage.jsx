@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import Navigation from '../components/Navigation';
 import axios from 'axios';
 import { useUserDispatch } from '../context/UserContext';
@@ -42,6 +41,13 @@ function MyPage() {
   const [savedRecipes, setSavedRecipes] = useState([]);
   const [showSavedRecipes, setShowSavedRecipes] = useState(false);
   const navigate = useNavigate();
+  const [userInfo, setUserInfo] = useState({
+    name: "",
+    profilePic: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    bio: ""
+  });
+
+
 
   const toggleLike = (recipeTitle) => {
     let newSavedRecipes;
@@ -53,13 +59,34 @@ function MyPage() {
     setSavedRecipes(newSavedRecipes);
   };
 
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await axios.get('사용자 정보 가져오는 서버주소 '); 
+        if (response.data) {
+          setUserInfo({
+            name: response.data.name,  // ㅇ;ㅣ름 
+            profilePic: response.data.profilePic,  //프로필 사진 
+            bio: response.data.bio  //소개
+          });
+        }
+      } catch (error) {
+        console.error('에러 내용:', error);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
           showSavedRecipes
             ? 'http://172.30.1.30:8080/board/myLike' // 좋아요누른
-            : 'http://172.30.1.30:8080/board/myList' //저장한
+            : 'http://172.30.1.30:8080/board/myList' //  내가 쓴 레시피 
         );
         if (response.data && Array.isArray(response.data.items)) {
           const formattedData = response.data.items.map((item) => ({
@@ -107,16 +134,16 @@ function MyPage() {
           </button>
         </div>
         <div className="bg-gray-300 rounded-full h-32 w-32 mt-20">
-          <img
-            src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+        <img
+            src={userInfo.profilePic}
             alt="프로필 사진"
             className="rounded-full h-32 w-32 object-cover"
           />
         </div>
         <h1 className="font-score mt-5 text-xl font-semibold text-center">
-          user1
+         {userInfo.name}
         </h1>
-        <p className="font-score mt-4 pb-4\2 px-6 text-center">한줄 자기소개</p>
+        <p className="font-score mt-4 pb-4\2 px-6 text-center">{userInfo.bio}</p>
         <button
           onClick={() => navigate('/profile')}
           className="font-score my-2 bg-white text-gray-400 py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-opacity-50 underline"

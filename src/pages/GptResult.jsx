@@ -57,10 +57,11 @@ const RecipePage = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <h1 className="text-4xl font-bold font-score">로딩 중...</h1>
-        <button onClick={() => navigate('/main')} className="ml-4 text-5xl">
-          <GoHome />
+      <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+        <div className="animate-spin rounded-full h-14 w-14 border-b-2 border-gray-900 mb-8"></div>
+        <h1 className="text-2xl font-bold text-gray-900  mb-4">로딩 중 </h1>
+        <button onClick={() => navigate('/main')} className="text-lg text-gray-400">
+          취소
         </button>
       </div>
     );
@@ -74,13 +75,13 @@ const RecipePage = () => {
       >
         <FaArrowLeft />
       </div>
-      <button
+      {/* <button
         onClick={() => navigate('/main')}
         className="fixed top-5 right-5 ml-0 border-2 w-10 h-10 text-2xl transition ease-in-out delay-150 bg-white hover:scale-125 hover:cursor-pointer hover:text-black rounded-full flex items-center justify-center"
         title="Go Home"
       >
         <GoHome />
-      </button>
+      </button> */}
       <div className="max-w-md mx-auto bg-white rounded-lg overflow-hidden md:max-w-lg">
         <div className="md:flex">
           <div className="w-full p-4 pt-8">

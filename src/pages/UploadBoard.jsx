@@ -43,7 +43,7 @@ function UploadBoard() {
         },
       });
       console.log(response.data); // 모달띄우기 작성 성공됐다는 
-      navigate('/mypage'); 
+      navigate('/board'); 
     } catch (error) {
       console.error('에러 내용:', error);
     }
