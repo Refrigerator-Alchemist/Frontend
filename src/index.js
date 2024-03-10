@@ -22,6 +22,7 @@ import LoginSuccess from './pages/LoginSuccess';
 import SendRefresh from './pages/SendRefresh';
 import GptSaved from './pages/GptSaved';
 import GptDetail from './pages/GptSavedDetail';
+import EditPost from './pages/EditPost';
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,7 @@ const router = createBrowserRouter([
       { path: '/gptresult', element: <GptResult /> }, // 냉장고 연금술사 : 검색 결과 출력
       { path: '/gptSaved', element: <GptSaved /> }, // 냉장고 연금술사 : 결과 저장 리스트
       { path: '/gptSaved/:postId', element: <GptDetail /> }, // 냉장고 연금술사 : 결과 저장 리스트- 상세페이지 
+      { path: '/editpost/:postId', element: <EditPost /> }, // 마이페이지 - 내가 쓴 레시피 수정 
     ],
   },
 ]);
