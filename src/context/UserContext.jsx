@@ -424,6 +424,41 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // ⚙ SNS 로그인 리디렉션 - 유저 데이터 저장
+  const fetchLoginData = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const accessToken = urlParams.get('accessToken');
+    const email = urlParams.get('email');
+    const socialId = urlParams.get('socialId');
+    const socialType = urlParams.get('socialType');
+
+    console.log(`액세스 토큰 : ${accessToken}`);
+    console.log(`이메일 : ${email}`);
+    console.log(`소셜 ID : ${socialId}`);
+    console.log(`소셜 타입 : ${socialType}`);
+    console.log('서버에서 데이터를 문제없이 받아옴');
+
+    try {
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('email', email);
+      localStorage.setItem('socialId', socialId);
+      localStorage.setItem('socialType', socialType);
+
+      let user = {
+        accessToken: localStorage.getItem('accessToken'),
+        email: localStorage.getItem('email'),
+        uid: localStorage.getItem('socialId'),
+        socialType: localStorage.getItem('socialType'),
+      };
+
+      dispatch({ type: SET_USER, user });
+      window.alert('데이터 저장 완료');
+    } catch (error) {
+      console.error('데이터 저장 중 문제 발생');
+      window.alert('데이터 저장 중 문제 발생');
+    }
+  };
+
   // 🟡 카카오 --------------------------------------------------
   const kakaoLogin = () => {
     window.location.href = kakaoURL;
@@ -465,6 +500,7 @@ export const UserProvider = ({ children }) => {
     kakaoLogin,
     googleLogin,
     naverLogin,
+    fetchLoginData,
   };
 
   return (
