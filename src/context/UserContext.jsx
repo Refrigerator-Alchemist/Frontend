@@ -477,18 +477,10 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  const extendedDispatch = (action) => {
-    if (action.type === 'FETCH_LOGIN_DATA') {
-      fetchLoginData();
-    } else {
-      dispatch(action);
-    }
-  };
-
   // ❤ Dispatch에 담길 value
   const value = {
     state,
-    dispatch: extendedDispatch,
+    dispatch,
     login,
     logout,
     signup,
