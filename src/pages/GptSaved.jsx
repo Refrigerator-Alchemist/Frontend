@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
 
-const Board = () => {
+const GptSaved = () => {
   const navigate = useNavigate();
   const [recipes, setRecipes] = useState([]);
 
@@ -23,7 +23,7 @@ const Board = () => {
   const RecipeCard = ({ recipeId, foodName, ingredientList }) => { // 여기서 ingredients를 ingredientList로 수정
     return (
       <div className="flex items-center bg-white mx-5 my-2 p-4 rounded-xl shadow">
-        <Link to={`/board/${recipeId}`} className="flex-grow flex">
+        <Link to={`/GptSaved/${recipeId}`} className="flex-grow flex">
           <div className="flex-none w-20 h-20 rounded-xl border-2 border-gray-300 overflow-hidden">
             <img className="w-full h-full object-cover" src="https://via.placeholder.com/150" alt={foodName} />
           </div>
@@ -59,4 +59,4 @@ const Board = () => {
   );
 }
 
-export default Board;
+export default GptSaved;

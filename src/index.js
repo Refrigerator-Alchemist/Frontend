@@ -20,8 +20,8 @@ import GptResult from './pages/GptResult';
 import BoardRanking from './pages/BoardRanking';
 import LoginSuccess from './pages/LoginSuccess';
 import SendRefresh from './pages/SendRefresh';
-import GptHistory from './pages/GptHistory';
-import GptDetail from './pages/GptHistory_Detail';
+import GptSaved from './pages/GptSaved';
+import GptDetail from './pages/GptSavedDetail';
 
 const router = createBrowserRouter([
   {
@@ -45,8 +45,8 @@ const router = createBrowserRouter([
       { path: '/profile', element: <Profile /> }, // 프로필 수정
       { path: '/gptsearch', element: <GptSearch /> }, // 냉장고 연금술사 : 재료 입력
       { path: '/gptresult', element: <GptResult /> }, // 냉장고 연금술사 : 검색 결과 출력
-      { path: '/gpthistory', element: <GptHistory /> }, // 냉장고 연금술사 : 결과 기록 리스트
-      { path: '/gpthistory/:postId', element: <GptDetail /> }, // 냉장고 연금술사 : 결과 기록 리스트
+      { path: '/gptSaved', element: <GptSaved /> }, // 냉장고 연금술사 : 결과 저장 리스트
+      { path: '/gptSaved/:postId', element: <GptDetail /> }, // 냉장고 연금술사 : 결과 저장 리스트- 상세페이지 
     ],
   },
 ]);
