@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useUserState, useUserDispatch } from '../context/UserContext.jsx';
+import { useUserState } from '../context/UserContext.jsx';
 import { useNavigate } from 'react-router-dom';
 
 export default function LoginSuccess() {
@@ -8,58 +8,18 @@ export default function LoginSuccess() {
   const [socialType, setSocialType] = useState('');
   const [socialId, setSocialId] = useState('');
 
-  const user = useUserState();
-
-  const dispatch = useUserDispatch();
+  const { fetchLoginData, user } = useUserState();
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchLoginData = async () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const accessToken = urlParams.get('accessToken');
-      const email = urlParams.get('email');
-      const socialId = urlParams.get('socialId');
-      const socialType = urlParams.get('socialType');
+    fetchLoginData();
 
-      console.log(`액세스 토큰 : ${accessToken}`);
-      console.log(`이메일 : ${email}`);
-      console.log(`소셜 ID : ${socialId}`);
-      console.log(`소셜 타입 : ${socialType}`);
-
-      // ▶ 4개 데이터 받아왔는지 판단
-      if (accessToken && email && socialType && socialId) {
-        localStorage.setItem('socialId', socialId);
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('email', email);
-        localStorage.setItem('socialType', socialType);
-
-        let user = {
-          uid: socialId,
-          email: email,
-          socialType: socialType,
-        };
-
-        dispatch({ type: 'SET_USER', user });
-        alert('데이터 저장 완료');
-
-        // ▶ return문에서 사용하기 위한 상태 저장
-        setAccessToken(accessToken);
-        setEmail(email);
-        setSocialId(socialId);
-        setSocialType(socialType);
-      } else {
-        console.log('유저 데이터 저장 중 문제 발생');
-        alert('유저 데이터 저장 중 문제 발생');
-      }
-    };
-
-    fetchLoginData().then((user) => {
-      if (user) {
-        alert('유저 데이터 저장 완료');
-      }
-    });
-  }, [dispatch]);
+    setAccessToken(localStorage.getItem('accessToken'));
+    setEmail(localStorage.getItem('email'));
+    setSocialId(localStorage.getItem('socialId'));
+    setSocialType(localStorage.getItem('socialType'));
+  }, [fetchLoginData]);
 
   return (
     <section>
