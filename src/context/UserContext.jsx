@@ -49,7 +49,7 @@ const reducer = (state, action) => {
     case SET_USER:
       return {
         ...state,
-        user: action.user, // 유저의 액션
+        user: action.user, // ▶ 유저의 액션
       };
     default:
       throw new Error(`통제되지 않는 타입: ${action.type}`);
@@ -294,7 +294,6 @@ export const UserProvider = ({ children }) => {
         console.log(response.headers.authorization);
         console.log('로그인 되었습니다!');
 
-        // ▶ 유저 데이터 저장
         localStorage.setItem(
           'accessToken',
           response.headers['authorization-access']
@@ -308,7 +307,7 @@ export const UserProvider = ({ children }) => {
         localStorage.setItem('email', response.data.email);
         localStorage.setItem('socialType', response.data.socialType);
 
-        // ▶ 유저 상태 업데이트
+        // ▶ 유저 데이터 저장
         let user = {
           uid: response.data.id,
           nickName: response.data.name,
@@ -329,7 +328,7 @@ export const UserProvider = ({ children }) => {
 
   //🔓 로그아웃 ---------------------------------------------------------------
   const logout = async () => {
-    // post로 토큰 보내고 204 받아와서 삭제하기
+    // ▶ post로 토큰 보내고 204 받아와서 삭제하기
     const URL = 'http://localhost:8080/auth/token/logout';
     const accessToken = localStorage.getItem('accessToken');
 
@@ -442,41 +441,6 @@ export const UserProvider = ({ children }) => {
     console.log('네이버 로그인 페이지 접속');
   };
 
-  // ⚙ SNS 로그인 리디렉션 - 유저 데이터 저장
-  const fetchLoginData = () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const accessToken = urlParams.get('accessToken');
-    const email = urlParams.get('email');
-    const socialId = urlParams.get('socialId');
-    const socialType = urlParams.get('socialType');
-
-    console.log(`액세스 토큰 : ${accessToken}`);
-    console.log(`이메일 : ${email}`);
-    console.log(`소셜 ID : ${socialId}`);
-    console.log(`소셜 타입 : ${socialType}`);
-    console.log('서버에서 데이터를 문제없이 받아옴');
-
-    try {
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('email', email);
-      localStorage.setItem('socialId', socialId);
-      localStorage.setItem('socialType', socialType);
-
-      let user = {
-        accessToken: localStorage.getItem('accessToken'),
-        email: localStorage.getItem('email'),
-        uid: localStorage.getItem('socialId'),
-        socialType: localStorage.getItem('socialType'),
-      };
-
-      dispatch({ type: SET_USER, user });
-      window.alert('데이터 저장 완료');
-    } catch (error) {
-      console.error('데이터 저장 중 문제 발생');
-      window.alert('데이터 저장 중 문제 발생');
-    }
-  };
-
   // ❤ Dispatch에 담길 value
   const value = {
     state,
@@ -500,7 +464,6 @@ export const UserProvider = ({ children }) => {
     kakaoLogin,
     googleLogin,
     naverLogin,
-    fetchLoginData,
   };
 
   return (
