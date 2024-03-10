@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
-import { MdHistory } from "react-icons/md";
+import { CiSaveDown2 } from "react-icons/ci";
 import axios from 'axios';
 
 const TagInput = () => {
@@ -107,10 +107,10 @@ const TagInput = () => {
   <button
     className="flex justify-center font-score transition ease-in-out delay-150 text-black bg-white hover:bg-white hover:scale-125 hover:cursor-pointer font-bold py-2 px-4 rounded w-full mb-4"
     type="button"
-    onClick={() => navigate('/gpthistory')}
+    onClick={() => navigate('/gptsaved')}
   >
-    <MdHistory className="mr-2  w-6 h-6" />
-    GPT History
+    <CiSaveDown2 className="mr-1 w-6 h-6" />
+    저장한 GPT 레시피
   </button>
   <button
     className="font-score transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer text-white font-bold py-2 px-4 rounded w-full"

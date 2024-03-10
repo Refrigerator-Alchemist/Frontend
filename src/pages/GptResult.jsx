@@ -51,7 +51,7 @@ const RecipePage = () => {
       });
       navigate('/mypage');
     } catch (error) {
-      console.error('Error:', error);
+      console.error('에러내용:', error);
     }
   };
 
