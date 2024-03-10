@@ -424,6 +424,24 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // 🟡 카카오 --------------------------------------------------
+  const kakaoLogin = () => {
+    window.location.href = kakaoURL;
+    console.log('카카오 로그인 페이지 접속');
+  };
+
+  // 🔴 구글 ----------------------------------------------------
+  const googleLogin = async () => {
+    window.location.href = googleURL;
+    console.log('구글 로그인 페이지 접속');
+  };
+
+  // 🟢 네이버 --------------------------------------------------
+  const naverLogin = async () => {
+    window.location.href = naverURL;
+    console.log('네이버 로그인 페이지 접속');
+  };
+
   // ⚙ SNS 로그인 리디렉션 - 유저 데이터 저장
   const fetchLoginData = () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -459,28 +477,18 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // 🟡 카카오 --------------------------------------------------
-  const kakaoLogin = () => {
-    window.location.href = kakaoURL;
-    console.log('카카오 로그인 페이지 접속');
-  };
-
-  // 🔴 구글 ----------------------------------------------------
-  const googleLogin = async () => {
-    window.location.href = googleURL;
-    console.log('구글 로그인 페이지 접속');
-  };
-
-  // 🟢 네이버 --------------------------------------------------
-  const naverLogin = async () => {
-    window.location.href = naverURL;
-    console.log('네이버 로그인 페이지 접속');
+  const extendedDispatch = (action) => {
+    if (action.type === 'FETCH_LOGIN_DATA') {
+      fetchLoginData();
+    } else {
+      dispatch(action);
+    }
   };
 
   // ❤ Dispatch에 담길 value
   const value = {
     state,
-    dispatch,
+    dispatch: extendedDispatch,
     login,
     logout,
     signup,
