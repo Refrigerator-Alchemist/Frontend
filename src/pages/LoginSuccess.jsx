@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useUserState } from '../context/UserContext.jsx';
+import { useUserDispatch, useUserState } from '../context/UserContext.jsx';
 import { useNavigate } from 'react-router-dom';
 
 export default function LoginSuccess() {
@@ -8,18 +8,20 @@ export default function LoginSuccess() {
   const [socialType, setSocialType] = useState('');
   const [socialId, setSocialId] = useState('');
 
-  const { fetchLoginData, user } = useUserState();
+  const { user } = useUserState();
+
+  const dispatch = useUserDispatch();
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchLoginData();
+    dispatch({ type: 'FETCH_LOGIN_DATA' });
 
     setAccessToken(localStorage.getItem('accessToken'));
     setEmail(localStorage.getItem('email'));
     setSocialType(localStorage.getItem('socialType'));
     setSocialId(localStorage.getItem('socialId'));
-  }, [fetchLoginData]);
+  }, [dispatch]);
 
   return (
     <section>
