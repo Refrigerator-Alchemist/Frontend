@@ -9,7 +9,7 @@ export default function LoginSuccess() {
   const [socialId, setSocialId] = useState('');
   const user = useUserState();
 
-  const dispatch = useUserDispatch();
+  const { dispatch } = useUserDispatch();
 
   const navigate = useNavigate();
 
@@ -79,7 +79,7 @@ export default function LoginSuccess() {
     <section>
       {user ? (
         <div className="flex flex-col justify-center items-center font-score space-y-3">
-          <h1 className="text-4xl font-bold">
+          <h1 className="text-3xl font-bold">
             SNS 서버로부터 받은 데이터 확인
           </h1>
           <span className="max-w-md break-words">{`액세스 토큰 : ${accessToken}`}</span>
