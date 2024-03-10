@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useUserDispatch, useUserState } from '../context/UserContext.jsx';
+import React, { useState } from 'react';
+import { useUserState } from '../context/UserContext.jsx';
 import { useNavigate } from 'react-router-dom';
 
 export default function LoginSuccess() {
@@ -8,20 +8,17 @@ export default function LoginSuccess() {
   const [socialType, setSocialType] = useState('');
   const [socialId, setSocialId] = useState('');
 
-  const { user } = useUserState();
-
-  const dispatch = useUserDispatch();
+  const { fetchLoginData, user } = useUserState();
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    dispatch({ type: 'FETCH_LOGIN_DATA' });
-
+  const handleButtonClick = () => {
+    fetchLoginData();
     setAccessToken(localStorage.getItem('accessToken'));
     setEmail(localStorage.getItem('email'));
     setSocialType(localStorage.getItem('socialType'));
     setSocialId(localStorage.getItem('socialId'));
-  }, [dispatch]);
+  };
 
   return (
     <section>
@@ -30,6 +27,7 @@ export default function LoginSuccess() {
           <h1 className="text-4xl font-bold">
             SNS 서버로부터 받은 데이터 확인
           </h1>
+          <button onClick={handleButtonClick}>데이터 가져오기</button>
           <span className="max-w-md break-words">{`액세스 토큰 : ${accessToken}`}</span>
           <span>{`이메일 : ${email}`}</span>
           <span>{`소셜 ID : ${socialId}`}</span>
