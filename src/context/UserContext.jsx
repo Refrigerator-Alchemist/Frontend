@@ -430,21 +430,60 @@ export const UserProvider = ({ children }) => {
   };
 
   // 🔴 구글 ----------------------------------------------------
-  const googleLogin = async () => {
+  const googleLogin = () => {
     window.location.href = googleURL;
     console.log('구글 로그인 페이지 접속');
   };
 
   // 🟢 네이버 --------------------------------------------------
-  const naverLogin = async () => {
+  const naverLogin = () => {
     window.location.href = naverURL;
     console.log('네이버 로그인 페이지 접속');
+  };
+
+  // SNS 로그인 정보 저장
+  const fetchLoginData = async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const accessToken = urlParams.get('accessToken');
+    const email = urlParams.get('email');
+    const socialId = urlParams.get('socialId');
+    const socialType = urlParams.get('socialType');
+
+    console.log(`액세스 토큰 : ${accessToken}`);
+    console.log(`이메일 : ${email}`);
+    console.log(`소셜 ID : ${socialId}`);
+    console.log(`소셜 타입 : ${socialType}`);
+
+    // ▶ 4개 데이터 받아왔는지 판단
+    if (accessToken && email && socialType && socialId) {
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('email', email);
+      localStorage.setItem('socialId', socialId);
+      localStorage.setItem('socialType', socialType);
+
+      // ▶ 유저 데이터 저장
+      let user = {
+        accessToken: localStorage.getItem('accessToken'),
+        email: localStorage.getItem('email'),
+        uid: localStorage.getItem('socialId'),
+        socialType: localStorage.getItem('socialType'),
+      };
+
+      console.log(`유저 : ${user}`);
+
+      dispatch({ type: SET_USER, user });
+      window.alert('유저 데이터 저장 완료');
+    } else {
+      console.log('유저 데이터 저장 중 문제 발생');
+      window.alert('유저 데이터 저장 중 문제 발생');
+    }
   };
 
   // ❤ Dispatch에 담길 value
   const value = {
     state,
     dispatch,
+    fetchLoginData,
     login,
     logout,
     signup,
