@@ -11,40 +11,48 @@ const RecipeCard = ({
   title,
   description,
   img,
-  isLiked,
-  onToggleLike,
   onEdit, 
   onDelete, 
+  showEditDeleteButtons = true,
 }) => {
   return (
-    <div className="bg-white h-auto text-black ml-6 mr-6">
-      <div className="flex bg-white mx-2 my-2 p-4 rounded-xl shadow">
+    <div className="h-auto text-black ml-6 mr-6 mt-2" style={{ width: '460px' }}>
+      <div className="flex bg-white mx-2 my-2 p-4 rounded-xl shadow overflow-hidden h-full pb-0 relative">
         <Link to={`/board/${postid}`} className="flex-grow flex">
           <div className="flex-none w-20 h-20 rounded-xl border-2 border-gray-300 overflow-hidden">
             <img className="w-full h-full object-cover" src={img} alt={title} />
           </div>
-          <div className="px-4">
-            <h3 className="text-lg font-score font-semibold">{title}</h3>
-            <p className="text-gray-500 text-sm font-score">{description}</p>
-          </div>
-        </Link>
-        <div>
-          <button onClick={() => onEdit(postid)} className="p-1 mr-2 text-gray-400">
-            수정
-          </button>
-          <button onClick={() => onDelete(postid)} className="p-1">
-            <FaTrash className="text-gray-400" />
-          </button>
+          <div className="px-4" style={{ maxWidth: 'calc(100% - 80px)' }}>
+          <h3 className="text-lg font-score font-semibold">{title}</h3>
+          <p className="text-gray-500 pt-1 text-sm font-score" style={{ maxHeight: '3rem', maxWidth: '200px', overflowWrap: 'break-word' }}>{description}</p>
+
         </div>
+        </Link>
+        {showEditDeleteButtons && ( 
+          <div className="absolute top-4 right-4">
+            <div className="flex flex-col space-y-4">
+              <button onClick={() => onDelete(postid)} className="p-1 pl-4 text-gray-400">
+                <FaTrash />
+              </button>
+              <Link to={`/editpost/${postid}`} className="p-1 pt-6 text-sm text-gray-300">
+              수정
+            </Link>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
+  
 };
 
+
+
 function MyPage() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [recipesPerPage, setRecipesPerPage] = useState(5);
   const [recipes, setRecipes] = useState([]);
-  const [savedRecipes, setSavedRecipes] = useState([]);
-  const [showSavedRecipes, setShowSavedRecipes] = useState(false);
+  const [showMyRecipes, setShowMyRecipes] = useState(false);
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState({
     name: "",
@@ -52,18 +60,97 @@ function MyPage() {
     bio: ""
   });
 
+  const myRecipesData = [
+    {
+      postid: 1,
+      title: '나의 레시피 1',
+      description: 'api연결전 임시 "나의  레시피 " 데이터 1입니다.',
+      img: '이미지 URL 1',
+      isLiked: false,
+    },
+    {
+      postid: 2,
+      title: '나의 레시피 2',
+      description: '이것은 레시피 2입니다.',
+      img: '이미지 URL 2',
+      isLiked: true,
+    },
+    {
+      postid: 3,
+      title: '나의 레시피 3',
+      description: '이것은 레시피 2입니다.',
+      img: '이미지 URL 2',
+      isLiked: true,
+    },
+    {
+      postid: 4,
+      title: '나의 레시피 4',
+      description: '이것은 레시피 2입니다.',
+      img: '이미지 URL 2',
+      isLiked: true,
+    },
+    {
+      postid: 5,
+      title: '나의 레시피 5',
+      description: '이것은 레시피 2입니다.',
+      img: '이미지 URL 2',
+      isLiked: true,
+    },
+    {
+      postid: 6,
+      title: '나의 레시피 6',
+      description: '이것은 레시피 2입니다.',
+      img: '이미지 URL 2',
+      isLiked: true,
+    },
+    // ... 더 많은 임시 데이터
+  ];
 
-
-  const toggleLike = (recipeTitle) => {
-    let newSavedRecipes;
-    if (savedRecipes.includes(recipeTitle)) {
-      newSavedRecipes = savedRecipes.filter((title) => title !== recipeTitle);
-    } else {
-      newSavedRecipes = [...savedRecipes, recipeTitle];
-    }
-    setSavedRecipes(newSavedRecipes);
-  };
-
+  const likedRecipesData = [
+    {
+      postid: 1,
+      title: '좋아한 레시피 1',
+      description: 'api연결전 임시 "좋아한 레시피 " 데이터 1입니다.',
+      img: '이미지 URL 3',
+      isLiked: true,
+    },
+    {
+      postid: 2,
+      title: '좋아한 레시피 2',
+      description: '이것은 좋아한 레시피 2입니다.',
+      img: '이미지 URL 4',
+      isLiked: false,
+    },
+    {
+      postid: 3,
+      title: '좋아한 레시피 3',
+      description: '이것은 좋아한 레시피 2입니다.',
+      img: '이미지 URL 4',
+      isLiked: false,
+    },
+    {
+      postid: 4,
+      title: '좋아한 레시피 4',
+      description: '이것은 좋아한 레시피 2입니다.',
+      img: '이미지 URL 4',
+      isLiked: false,
+    },
+    {
+      postid: 5,
+      title: '좋아한 레시피 5',
+      description: '이것은 좋아한 레시피 2입니다.',
+      img: '이미지 URL 4',
+      isLiked: false,
+    },
+    {
+      postid: 6,
+      title: '좋아한 레시피 6',
+      description: '이것은 좋아한 레시피 2입니다.',
+      img: '이미지 URL 4',
+      isLiked: false,
+    },
+    // ... 더 많은 임시 데이터
+  ];
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -88,18 +175,19 @@ function MyPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          showSavedRecipes
-            ? 'http://172.30.1.17:8080/board/myLike' // 좋아요누른
-            : 'http://172.30.1.17:8080/board/myList' //  내가 쓴 레시피 
-        );
+        // API 연결 전 임시 데이터 사용
+        const response = {
+          data: {
+            items: showMyRecipes ? likedRecipesData : myRecipesData,
+          },
+        };
+
         if (response.data && Array.isArray(response.data.items)) {
           const formattedData = response.data.items.map((item) => ({
-            postid: item.ID,
+            postid: item.postid,
             title: item.title,
-            description: item.Recipe,
-            img: item.thumbnail,
-            isLiked: savedRecipes.includes(item.title),
+            description: item.description,
+            img: item.img,
           }));
           setRecipes(formattedData);
         } else {
@@ -111,19 +199,43 @@ function MyPage() {
     };
 
     fetchData();
-  }, [showSavedRecipes, savedRecipes]);
+  }, [showMyRecipes]);
 
   const { logout } = useUserDispatch();
 
+  const handleEdit = async (postid) => {
+    try {
+      const response = await axios.get(`http://example.com/api/recipes/${postid}`); 
+      if (response.data) {
+        const recipeData = response.data; 
+        navigate('/upload', { state: { recipe: recipeData } }); 
+      }
+    } catch (error) {
+      console.error('에러내용:', error);
+    }
+  };
+
+  //페이지네이션 코드- 수정필요 
+  const indexOfLastRecipe = currentPage * recipesPerPage;
+  const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
+  const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
+  const paginate = pageNumber => setCurrentPage(pageNumber);
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(recipes.length / recipesPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
+
+
   return (
-    <div className="Board flex items-center justify-center">
+    <div className="Board flex items-center justify-center w-full">
       <div className="flex flex-col items-center overflow-hidden">
-        <div className="flex justify-end w-full mt-2 space-x-2">
+        <div className="flex justify-end w-full mt-2 space-x-2 mr-12">
           <button
             className="font-score text-gray-300"
             onClick={(e) => {
               e.preventDefault();
-              navigate('/mypage/delete-user');
+              navigate("/mypage/delete-user");
             }}
           >
             회원 탈퇴
@@ -139,18 +251,20 @@ function MyPage() {
           </button>
         </div>
         <div className="bg-gray-300 rounded-full h-32 w-32 mt-20">
-        <img
+          <img
             src={userInfo.profilePic}
             alt="프로필 사진"
             className="rounded-full h-32 w-32 object-cover"
           />
         </div>
         <h1 className="font-score mt-5 text-xl font-semibold text-center">
-         {userInfo.name}
+          {userInfo.name}
         </h1>
-        <p className="font-score mt-4 pb-4\2 px-6 text-center">{userInfo.bio}</p>
+        <p className="font-score mt-4 pb-4\2 px-6 text-center">
+          {userInfo.bio}
+        </p>
         <button
-          onClick={() => navigate('/profile')}
+          onClick={() => navigate("/profile")}
           className="font-score my-2 bg-white text-gray-400 py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-opacity-50 underline"
         >
           회원정보 수정
@@ -158,49 +272,64 @@ function MyPage() {
 
         <div className="flex">
           <button
-            onClick={() => setShowSavedRecipes(false)}
+            onClick={() => setShowMyRecipes(false)}
             className={`font-score mx-1 py-2 px-4 rounded ${
-              !showSavedRecipes
-                ? 'bg-main text-white'
-                : 'bg-gray-100 text-black'
+              !showMyRecipes
+                ? "bg-main text-white"
+                : "bg-gray-100 text-black"
             }`}
           >
-            내가 쓴 레시피 보기
+            나의 레시피 보기
           </button>
           <button
-            onClick={() => setShowSavedRecipes(true)}
+            onClick={() => setShowMyRecipes(true)}
             className={`font-score mx-1 py-2 px-4 rounded ${
-              showSavedRecipes ? 'bg-main text-white' : 'bg-gray-100 text-black'
+              showMyRecipes ? "bg-main text-white" : "bg-gray-100 text-black"
             }`}
           >
             좋아한 레시피 보기
           </button>
         </div>
 
-        <div className="recipe-card-container" style={{ width: '120%' }}>
-          {recipes.map((recipe) => (
+        <div className="recipe-card-container w-full flex flex-wrap">
+          {currentRecipes.map((recipe) => (
             <RecipeCard
               key={recipe.postid}
               postid={recipe.postid}
               title={recipe.title}
               description={recipe.description}
               img={recipe.img}
-              isLiked={recipe.isLiked}
-              onToggleLike={() => toggleLike(recipe.title)}
+              showEditDeleteButtons={!showMyRecipes} 
+              onDelete={(postid) => console.log("Delete postid: ", postid)}
+              onEdit={(postid) => console.log("Edit postid:", postid)}
             />
+          ))}
+        </div>
+        <div className="pagination flex justify-center my-4 mb-24">
+          {pageNumbers.map((number) => (
+            <button
+              key={number}
+              onClick={() => paginate(number)}
+              className={`px-4 py-2 border rounded-full m-1 ${
+                currentPage === number
+                  ? "bg-main text-white"
+                  : "bg-white text-main"
+              }`}
+            >
+              {number}
+            </button>
           ))}
         </div>
       </div>
       <footer
         style={{
-          position: 'fixed',
-          bottom: '0',
-          width: '100%',
-          maxWidth: '31rem',
+          position: "fixed",
+          bottom: "0",
+          width: "100%",
+          maxWidth: "31rem",
         }}
       >
         <Navigation />
-        
       </footer>
     </div>
   );
