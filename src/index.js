@@ -30,25 +30,25 @@ const router = createBrowserRouter([
     element: <App />, // Root
     errorElement: <NotFound />, // 에러 페이지
     children: [
-      { index: true, element: <GetStarted /> }, // 자식 페이지 중 기본 페이지
+      { index: true, element: <GetStarted /> }, // 초기화면
       { path: '/main', element: <MainPage /> }, // 메인
-      { path: '/board', element: <Board /> }, // 게시판
       { path: '/board/:postId', element: <BoardDetail /> }, // 쿼리로 포스트 id 식별
-      { path: '/board/upload', element: <UploadBoard /> },
-      { path: '/ranking', element: <BoardRanking /> }, // 탑 5 랭킹
       { path: '/login', element: <Login /> }, // 로그인 페이지
-      { path: '/login-success', element: <LoginSuccess /> }, // SNS 성공 확인 페이지
+      { path: '/login-success', element: <LoginSuccess /> }, // SNS 로그인 데이터 저장
       { path: '/refresh', element: <SendRefresh /> }, // 액세스 토큰 만료 처리
       { path: '/signup', element: <SignUp /> }, // 회원 가입
       { path: '/reset-password', element: <ResetPassword /> }, // 비밀번호 재설정
       { path: '/delete-user', element: <DeleteUser /> }, // 회원 탈퇴
-      { path: '/mypage', element: <Mypage /> }, // 마이페이지 - 내 피드
+      { path: '/board', element: <Board /> }, // 게시판
+      { path: '/board/upload', element: <UploadBoard /> }, // 게시물 작성
+      { path: '/ranking', element: <BoardRanking /> }, // 탑 5 랭킹
       { path: '/profile', element: <Profile /> }, // 프로필 수정
+      { path: '/mypage', element: <Mypage /> }, // 마이페이지 - 내 피드
+      { path: '/editpost/:postId', element: <EditPost /> }, // 마이페이지 - 내가 쓴 레시피 수정
       { path: '/gptsearch', element: <GptSearch /> }, // 냉장고 연금술사 : 재료 입력
       { path: '/gptresult', element: <GptResult /> }, // 냉장고 연금술사 : 검색 결과 출력
       { path: '/gptSaved', element: <GptSaved /> }, // 냉장고 연금술사 : 결과 저장 리스트
-      { path: '/gptSaved/:postId', element: <GptDetail /> }, // 냉장고 연금술사 : 결과 저장 리스트- 상세페이지 
-      { path: '/editpost/:postId', element: <EditPost /> }, // 마이페이지 - 내가 쓴 레시피 수정 
+      { path: '/gptSaved/:postId', element: <GptDetail /> }, // 냉장고 연금술사 : 결과 저장 리스트- 상세페이지
     ],
   },
 ]);
