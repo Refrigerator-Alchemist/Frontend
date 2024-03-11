@@ -73,7 +73,7 @@ export default function LoginSuccess() {
       .catch((error) => {
         console.error(error);
       });
-  }, [dispatch]);
+  }, []);
 
   return (
     <section>
