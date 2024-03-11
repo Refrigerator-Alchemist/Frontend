@@ -419,7 +419,7 @@ export const UserProvider = ({ children }) => {
       }
     } catch (error) {
       console.error(error);
-      window.alert('리프레시 토큰 전송에 실패했습니다');
+      window.alert('새로운 액세스 토큰 발급 실패');
     }
   };
 

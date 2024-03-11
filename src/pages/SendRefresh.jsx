@@ -6,7 +6,7 @@ export default function SendRefresh() {
 
   useEffect(() => {
     sendRefresh();
-  }, [sendRefresh]);
+  }, []);
 
   return <div>Refreshing...</div>;
 }
