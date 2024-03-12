@@ -9,7 +9,6 @@
 // import Navigation from '../components/Navigation';
 // import axios from 'axios';
 
-
 // const SearchBar = ({ onSearch }) => {
 //   return (
 //     <div className="font-score flex-grow flex items-center rounded-full bg-white p-2 shadow ">
@@ -79,7 +78,6 @@
 //   const [recipes, setRecipes] = useState([]);
 //   const [searchResults, setSearchResults] = useState([]);
 //   const [isSearching, setIsSearching] = useState(false);
-  
 
 //   useEffect(() => {
 //     axios
@@ -116,7 +114,7 @@
 //   return (
 //     <div className="Board">
 //       <div className="bg-white px-6 py-7">
-//         <span className="font-undong font-bold text-3xl">People</span>
+//         <span className="font-undong font-extrabold text-3xl">People</span>
 //       </div>
 //       <div className="flex items-center mx-8 my-0">
 //         <SearchBar onSearch={handleSearch} />
@@ -125,7 +123,7 @@
 
 //       {isSearching ? (
 //         <div className="my-2">
-//           <span className="font-undong font-bold ml-8 text-2xl">
+//           <span className="font-undong font-extrabold ml-8 text-2xl">
 //             Search Results
 //           </span>
 //           {searchResults.map((recipe) => (
@@ -144,7 +142,7 @@
 //             <Ranking />
 //           </div>
 //           <div className="my-2">
-//             <span className="font-undong font-bold ml-8 text-2xl">Recipe</span>
+//             <span className="font-undong font-extrabold ml-8 text-2xl">Recipe</span>
 //             {recipes.map((recipe) => (
 //               <RecipeCard
 //                 key={recipe.postid}
@@ -174,7 +172,6 @@
 
 // export default Board;
 
-
 import React from 'react';
 import searchicon from '../img/search.png';
 import writingicon from '../img/writing.png';
@@ -185,7 +182,6 @@ import { useState, useEffect } from 'react';
 import Ranking from '../components/Ranking';
 import Navigation from '../components/Navigation';
 import axios from 'axios';
-
 
 const SearchBar = ({ onSearch }) => {
   return (
@@ -290,23 +286,26 @@ function Board() {
       setIsSearching(false);
     }
   };
-  //페이지네이션 코드- 수정필요 
-   const indexOfLastRecipe = currentPage * recipesPerPage;
-   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-   const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
-   const currentSearchResults = searchResults.slice(indexOfFirstRecipe, indexOfLastRecipe);
- 
-   const paginate = pageNumber => setCurrentPage(pageNumber);
- 
-   const pageNumbers = [];
-   for (let i = 1; i <= Math.ceil(recipes.length / recipesPerPage); i++) {
-     pageNumbers.push(i);
-   }
+  //페이지네이션 코드- 수정필요
+  const indexOfLastRecipe = currentPage * recipesPerPage;
+  const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
+  const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
+  const currentSearchResults = searchResults.slice(
+    indexOfFirstRecipe,
+    indexOfLastRecipe
+  );
 
-   return (
-    <div className="Board pb-24"> 
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(recipes.length / recipesPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
+  return (
+    <section className="Board pb-24">
       <div className="bg-white px-6 py-7">
-        <span className="font-undong font-bold text-3xl">People</span>
+        <span className="font-score font-extrabold text-3xl">Board</span>
       </div>
       <div className="flex items-center mx-8 my-0">
         <SearchBar onSearch={handleSearch} />
@@ -315,11 +314,11 @@ function Board() {
 
       {isSearching ? (
         <>
-          <div className="my-2">
-            <span className="font-undong font-bold ml-8 text-2xl">
+          <div className="my-2 mt-4">
+            <span className="font-score font-extrabold ml-6 text-2xl">
               Search Results
             </span>
-            {currentSearchResults.map(recipe => (
+            {currentSearchResults.map((recipe) => (
               <RecipeCard
                 key={recipe.postid}
                 postid={recipe.postid}
@@ -333,12 +332,18 @@ function Board() {
         </>
       ) : (
         <>
-          <div className="my-2 ml-4 mr-6">
+          <div className="my-2 mt-4">
+            <span className="font-score font-extrabold ml-6 text-2xl">
+              Ranking
+            </span>
+
             <Ranking />
           </div>
           <div className="my-2">
-            <span className="font-undong font-bold ml-8 text-2xl">Recipe</span>
-            {currentRecipes.map(recipe => (
+            <span className="font-score font-extrabold ml-6 text-2xl">
+              Recipe
+            </span>
+            {currentRecipes.map((recipe) => (
               <RecipeCard
                 key={recipe.postid}
                 postid={recipe.postid}
@@ -353,16 +358,21 @@ function Board() {
       )}
 
       <div className="pagination flex justify-center my-4">
-        {pageNumbers.map(number => (
+        {pageNumbers.map((number) => (
           <button
             key={number}
             onClick={() => paginate(number)}
-            className={`px-4 py-2 border rounded-full m-1 ${currentPage === number ? 'bg-main text-white' : 'bg-white text-main'}`}
+            className={`px-4 py-2 border rounded-full m-1 ${
+              currentPage === number
+                ? 'bg-main text-white'
+                : 'bg-white text-main'
+            }`}
           >
             {number}
           </button>
         ))}
       </div>
+
       <footer
         style={{
           position: 'fixed',
@@ -373,7 +383,7 @@ function Board() {
       >
         <Navigation />
       </footer>
-    </div>
+    </section>
   );
 }
 
