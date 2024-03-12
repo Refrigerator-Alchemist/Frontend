@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// 컴포넌트 안 개별 아이템
+// 📋 아이템 카드
 function RankingItem({ rank, thumbnail, name, ingredients, likes }) {
   return (
     <li className="mb-4 mt-2 px-3 transition transform hover:scale-110 ease-in-out duration-300">
@@ -24,14 +24,17 @@ function RankingItem({ rank, thumbnail, name, ingredients, likes }) {
         </div>
 
         <div>
-          <span className="font-ansung text-md font-bold ml-5">{likes}❤️</span>
+          <span className="font-score text-md font-bold ml-5">
+            {likes}
+            <span className="ml-2">❤️</span>
+          </span>
         </div>
       </figure>
     </li>
   );
 }
 
-// 랭킹 컴포넌트
+// 🏆 Top 3 아이템들
 export default function Ranking() {
   const [items, setItems] = useState([]);
   const navigate = useNavigate();
@@ -46,15 +49,14 @@ export default function Ranking() {
 
   return (
     <article
-      className="hover:cursor-pointer w-full my-4 px-3"
+      className="hover:cursor-pointer w-full my-2 px-3"
       onClick={() => {
         navigate('/ranking');
       }}
     >
-      <div className="flex justify-between">
-        <span className="font-undong font-bold text-2xl">Ranking</span>
+      <div className="flex justify-end">
         <span className="flex flex-col justify-end font-score text-sm">
-          인기많은 레시피를 볼까요?
+          가장 많은 좋아요를 받은 레시피는?
         </span>
       </div>
 

@@ -16,6 +16,10 @@ module.exports = {
         ansung: ['Ansungtangmyun-Bold'],
       },
 
+      fontWeight: {
+        extrabold: 800,
+      },
+
       dropShadow: {
         '3xl': '14px 14px 11px -7px rgba(47,49,51,0.75)',
       },

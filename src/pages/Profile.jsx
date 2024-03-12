@@ -111,6 +111,23 @@ export default function Profile() {
         </div>
 
         <form className="flex flex-col mt-8 mx-10" onSubmit={handleSubmit}>
+          {/* 이메일 박스 */}
+          <div className="flex-grow mr-3 mb-4">
+            <label
+              className="font-score block text-black-300 text-lg font-bold mb-2 text-start"
+              htmlFor="email"
+            >
+              연결된 이메일
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="email"
+              type="email"
+              value={email}
+              readOnly // 읽기 전용
+            />
+          </div>
+
           {/* 닉네임 박스 */}
           <div className="flex-grow mr-3 mb-8">
             <label
@@ -129,23 +146,6 @@ export default function Profile() {
             {nameError && (
               <p className="text-red-500 text-xs italic">{nameError}</p>
             )}
-          </div>
-
-          {/* 이메일 박스 */}
-          <div className="flex-grow mr-3 mb-4">
-            <label
-              className="font-score block text-black-300 text-lg font-bold mb-2 text-start"
-              htmlFor="email"
-            >
-              연결된 이메일
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="email"
-              type="email"
-              value={email}
-              readOnly // 읽기 전용
-            />
           </div>
 
           {/* 버튼 */}
