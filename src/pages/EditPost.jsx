@@ -84,7 +84,7 @@ function UploadBoard() {
     <section className="pt-16">
       <div
         className="absolute top-5 left-42 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate('/board')}
+        onClick={() => navigate('/mypage')}
       >
         <FaArrowLeft />
       </div>
