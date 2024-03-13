@@ -29,7 +29,6 @@ const RecipePage = () => {
           setSteps(response.data.recipe);
           setTitle(response.data.foodName);
           setImage(response.data.imgUrl);
-          // setImage(response.data.imgFlag ? generateImageUrl() : ''); // generateImageUrl은 이미지를 생성하는 
   
         }
       } catch (error) {
@@ -46,10 +45,12 @@ const RecipePage = () => {
     return imgFlag ? image : '';
   };
 
-  //결과화면에서 저장하기
+  //결과화면에서 저장하기 -> 저장리스트로 이동 
   const handleSaveButtonClick = async () => {
     try {
+      
       const imageUrl = generateImageUrl();
+      navigate('/gptSavedList');
       await axios.post('http://172.30.1.89:8080/recipe/save', {
         recipeDto: {
           foodName: title,
@@ -59,7 +60,7 @@ const RecipePage = () => {
           recipe: steps,
         },
       });
-      navigate('/mypage');
+      // navigate('/gptSavedList');
     } catch (error) {
       console.error('에러내용:', error);
     }
@@ -131,6 +132,7 @@ const RecipePage = () => {
           </div>
         </div>
       </main>
+
       {/* 이미지 생성여부 체크박스 */}
       <input
         type="checkbox"

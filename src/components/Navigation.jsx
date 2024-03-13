@@ -16,7 +16,12 @@ export default function Navigation() {
   useEffect(() => {
     const currentPath = location.pathname;
 
-    if (currentPath === '/board' || currentPath.startsWith('/board/')) {
+    if (
+      currentPath === '/board' ||
+      currentPath.startsWith('/board/') ||
+      currentPath === '/GptSavedList' ||
+      currentPath.startsWith('/GptSavedList/')
+    ) {
       setSelected('food');
     } else if (currentPath === '/main') {
       setSelected('home');
@@ -24,6 +29,8 @@ export default function Navigation() {
       setSelected('profile');
     }
   }, [location.pathname, setSelected]);
+
+
   return (
     <div
       className="sticky bottom-0 flex justify-center items-center bg-white p-5 rounded-t-3xl"
