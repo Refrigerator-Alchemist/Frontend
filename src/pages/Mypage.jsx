@@ -4,49 +4,63 @@ import Navigation from '../components/Navigation';
 import axios from 'axios';
 import { useUserDispatch } from '../context/UserContext';
 import { FaTrash, FaEdit } from 'react-icons/fa';
-
+import IMAGE_PROFILE from '../img/img_profile.png';
 
 const RecipeCard = ({
   postid,
   title,
   description,
   img,
-  onEdit, 
-  onDelete, 
+  onEdit,
+  onDelete,
   showEditDeleteButtons = true,
 }) => {
   return (
-    <div className="h-auto text-black ml-6 mr-6 mt-2" style={{ width: '460px' }}>
+    <div
+      className="h-auto text-black ml-6 mr-6 mt-2"
+      style={{ width: '460px' }}
+    >
       <div className="flex bg-white mx-2 my-2 p-4 rounded-xl shadow overflow-hidden h-full pb-0 relative">
         <Link to={`/board/${postid}`} className="flex-grow flex">
           <div className="flex-none w-20 h-20 rounded-xl border-2 border-gray-300 overflow-hidden">
             <img className="w-full h-full object-cover" src={img} alt={title} />
           </div>
           <div className="px-4" style={{ maxWidth: 'calc(100% - 80px)' }}>
-          <h3 className="text-lg font-score font-semibold">{title}</h3>
-          <p className="text-gray-500 pt-1 text-sm font-score" style={{ maxHeight: '3rem', maxWidth: '200px', overflowWrap: 'break-word' }}>{description}</p>
-
-        </div>
+            <h3 className="text-lg font-score font-semibold">{title}</h3>
+            <p
+              className="text-gray-500 pt-1 text-sm font-score"
+              style={{
+                maxHeight: '3rem',
+                maxWidth: '200px',
+                overflowWrap: 'break-word',
+              }}
+            >
+              {description}
+            </p>
+          </div>
         </Link>
-        {showEditDeleteButtons && ( 
+        {showEditDeleteButtons && (
           <div className="absolute top-4 right-4">
             <div className="flex flex-col space-y-4">
-              <button onClick={() => onDelete(postid)} className="p-1 pl-4 text-gray-400">
+              <button
+                onClick={() => onDelete(postid)}
+                className="p-1 pl-4 text-gray-400"
+              >
                 <FaTrash />
               </button>
-              <Link to={`/editpost/${postid}`} className="p-1 pt-6 text-sm text-gray-300">
-              수정
-            </Link>
+              <Link
+                to={`/editpost/${postid}`}
+                className="p-1 pt-6 text-sm text-gray-300"
+              >
+                수정
+              </Link>
             </div>
           </div>
         )}
       </div>
     </div>
   );
-  
 };
-
-
 
 function MyPage() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -55,9 +69,9 @@ function MyPage() {
   const [showMyRecipes, setShowMyRecipes] = useState(false);
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState({
-    name: "",
-    profilePic: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-    bio: ""
+    name: '',
+    profilePic: IMAGE_PROFILE || localStorage.getItem('imageUrl'),
+    bio: '',
   });
 
   const myRecipesData = [
@@ -155,12 +169,12 @@ function MyPage() {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const response = await axios.get('사용자 정보 가져오는 서버주소 '); 
+        const response = await axios.get('사용자 정보 가져오는 서버주소 ');
         if (response.data) {
           setUserInfo({
-            name: response.data.name,  // ㅇ;ㅣ름 
-            profilePic: response.data.profilePic,  //프로필 사진 
-            bio: response.data.bio  //소개
+            name: response.data.name, // ㅇ;ㅣ름
+            profilePic: response.data.profilePic, //프로필 사진
+            bio: response.data.bio, //소개
           });
         }
       } catch (error) {
@@ -170,7 +184,6 @@ function MyPage() {
 
     fetchUserInfo();
   }, []);
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -205,27 +218,27 @@ function MyPage() {
 
   const handleEdit = async (postid) => {
     try {
-      const response = await axios.get(`http://example.com/api/recipes/${postid}`); 
+      const response = await axios.get(
+        `http://example.com/api/recipes/${postid}`
+      );
       if (response.data) {
-        const recipeData = response.data; 
-        navigate('/upload', { state: { recipe: recipeData } }); 
+        const recipeData = response.data;
+        navigate('/upload', { state: { recipe: recipeData } });
       }
     } catch (error) {
       console.error('에러내용:', error);
     }
   };
 
-  //페이지네이션 코드- 수정필요 
+  //페이지네이션 코드- 수정필요
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
   const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
-  const paginate = pageNumber => setCurrentPage(pageNumber);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(recipes.length / recipesPerPage); i++) {
     pageNumbers.push(i);
   }
-
-
 
   return (
     <div className="Board flex items-center justify-center w-full">
@@ -235,7 +248,7 @@ function MyPage() {
             className="font-score text-gray-300"
             onClick={(e) => {
               e.preventDefault();
-              navigate("/mypage/delete-user");
+              navigate('/mypage/delete-user');
             }}
           >
             회원 탈퇴
@@ -264,7 +277,7 @@ function MyPage() {
           {userInfo.bio}
         </p>
         <button
-          onClick={() => navigate("/profile")}
+          onClick={() => navigate('/profile')}
           className="font-score my-2 bg-white text-gray-400 py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-opacity-50 underline"
         >
           회원정보 수정
@@ -274,9 +287,7 @@ function MyPage() {
           <button
             onClick={() => setShowMyRecipes(false)}
             className={`font-score mx-1 py-2 px-4 rounded ${
-              !showMyRecipes
-                ? "bg-main text-white"
-                : "bg-gray-100 text-black"
+              !showMyRecipes ? 'bg-main text-white' : 'bg-gray-100 text-black'
             }`}
           >
             나의 레시피 보기
@@ -284,7 +295,7 @@ function MyPage() {
           <button
             onClick={() => setShowMyRecipes(true)}
             className={`font-score mx-1 py-2 px-4 rounded ${
-              showMyRecipes ? "bg-main text-white" : "bg-gray-100 text-black"
+              showMyRecipes ? 'bg-main text-white' : 'bg-gray-100 text-black'
             }`}
           >
             좋아한 레시피 보기
@@ -299,9 +310,9 @@ function MyPage() {
               title={recipe.title}
               description={recipe.description}
               img={recipe.img}
-              showEditDeleteButtons={!showMyRecipes} 
-              onDelete={(postid) => console.log("Delete postid: ", postid)}
-              onEdit={(postid) => console.log("Edit postid:", postid)}
+              showEditDeleteButtons={!showMyRecipes}
+              onDelete={(postid) => console.log('Delete postid: ', postid)}
+              onEdit={(postid) => console.log('Edit postid:', postid)}
             />
           ))}
         </div>
@@ -312,8 +323,8 @@ function MyPage() {
               onClick={() => paginate(number)}
               className={`px-4 py-2 border rounded-full m-1 ${
                 currentPage === number
-                  ? "bg-main text-white"
-                  : "bg-white text-main"
+                  ? 'bg-main text-white'
+                  : 'bg-white text-main'
               }`}
             >
               {number}
@@ -323,10 +334,10 @@ function MyPage() {
       </div>
       <footer
         style={{
-          position: "fixed",
-          bottom: "0",
-          width: "100%",
-          maxWidth: "31rem",
+          position: 'fixed',
+          bottom: '0',
+          width: '100%',
+          maxWidth: '31rem',
         }}
       >
         <Navigation />
