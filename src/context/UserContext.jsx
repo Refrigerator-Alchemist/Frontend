@@ -332,12 +332,12 @@ export const UserProvider = ({ children }) => {
   const logout = async () => {
     // ▶ post로 토큰 보내고 204 받아와서 삭제하기
     const URL = 'http://localhost:8080/auth/token/logout';
-    const accessToken = localStorage.getItem('accessToken');
+    const socialId = localStorage.getItem('socialId');
 
     try {
       const response = await instance.post(
         URL,
-        { accessToken: accessToken },
+        { socialId: socialId },
         {
           headers: {
             'Content-Type': 'application/json;charset=UTF-8',
@@ -399,25 +399,28 @@ export const UserProvider = ({ children }) => {
     navigate('/login');
   };
 
-  // 🚀 리프레시 토큰 전송 -----------------------------------------------------------
+  // 🚀 새로운 액세스 토큰 발급 -----------------------------------------------------------
   const sendRefresh = async () => {
-    const URL = 'http://localhost:8080/auth/token/refresh';
-    const accessToken = localStorage.getItem('accessToken');
-    const email = localStorage.getItem('email');
-    const socialType = localStorage.getItem('socialType');
+    const URL = 'http://localhost:8080/auth/token/reissue';
     const socialId = localStorage.getItem('socialId');
 
     try {
-      const response = await instance.post(URL, {
-        email,
-        socialType,
-        socialId,
-        accessToken,
-      });
+      const response = await instance.post(
+        URL,
+        {
+          socialId,
+        },
+        {
+          withCredentials: true,
+        }
+      );
 
       if (response.status === 204) {
         localStorage.setItem('accessToken', response.data.accessToken);
-        console.log(`새로운 액세스 토큰을 발급받았습니다 : ${accessToken}`);
+        console.log(
+          `새로운 액세스 토큰을 발급받았습니다 : ${response.data.accessToken}`
+        );
+        console.log('쿠키: ', document.cookie);
         navigate(window.location.pathname);
       }
     } catch (error) {
