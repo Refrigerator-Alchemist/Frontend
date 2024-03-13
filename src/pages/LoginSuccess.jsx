@@ -18,13 +18,15 @@ export default function LoginSuccess() {
       const email = urlParams.get('email');
       const socialId = urlParams.get('socialId');
       const socialType = urlParams.get('socialType');
+      const imageUrl = urlParams.get('imageUrl');
 
       // ▶ 4개 데이터 받아왔는지 판단
-      if (accessToken && email && socialType && socialId) {
+      if (accessToken && email && socialType && socialId && imageUrl) {
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('email', email);
         localStorage.setItem('socialId', socialId);
         localStorage.setItem('socialType', socialType);
+        localStorage.setitem('imageUrl', imageUrl);
 
         console.log(`⭕ 로컬스토리지 저장 완료 : ${localStorage}`);
 
@@ -34,6 +36,7 @@ export default function LoginSuccess() {
           email: localStorage.getItem('email'),
           uid: localStorage.getItem('socialId'),
           socialType: localStorage.getItem('socialType'),
+          imageUrl: localStorage.getItem('imageUrl'),
         };
 
         console.log(`⭕ 유저 데이터 저장 완료 : ${user}`);
@@ -70,7 +73,7 @@ export default function LoginSuccess() {
       ) : (
         <div className="flex flex-col justify-center items-center font-score space-y-3">
           <h1 className="text-3xl font-bold">
-            콘솔과 네트워크에서 문제를 확인하세요
+            ❌ 콘솔과 네트워크에서 문제를 확인하세요
           </h1>
         </div>
       )}

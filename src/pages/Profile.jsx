@@ -3,19 +3,22 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useUserDispatch } from '../context/UserContext';
-import IMG_PROFILE from '../img/img_profile.png';
+import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
+import IMAGE_PROFILE from '../img/img_profile.png';
 
 export default function Profile() {
   const [nickName, setNickName] = useState('');
-  const [nameError, setNameError] = useState('');
+  const [nameError, setNameError] = useState(false);
   const [email, setEmail] = useState('');
-  const [image, setImage] = useState(IMG_PROFILE);
+  const [image, setImage] = useState(
+    localStorage.getItem('imageUrl') || IMAGE_PROFILE
+  );
 
   const fileInput = useRef(null);
 
   const navigate = useNavigate();
 
-  const { checkNameDuplication } = useUserDispatch();
+  const { checkNameDuplication, nameDuplicated } = useUserDispatch();
 
   // 1️⃣ 처음에 보여줄 기본 유저 정보
   useEffect(() => {
@@ -41,33 +44,20 @@ export default function Profile() {
       reader.onload = () => {
         if (reader.readyState === 2) {
           setImage(reader.result);
+          // ▶ 파일 업로드 후 바로 서버로 전송
+          uploadImage();
         }
       };
       reader.readAsDataURL(e.target.files[0]);
     }
   };
 
-  // 3️⃣ 닉네임 중복 확인
-  const handleNameChange = (e) => {
-    setNickName(e.target.value);
-    if (!e.target.value.match(/^[가-힣]{2,}|[A-Za-z]{3,}$/)) {
-      setNameError('한글은 최소 2글자, 영문은 최소 3글자 이상 입력하세요');
-    } else {
-      setNameError('');
-      // ▶ 유효성 검사 통과 시 바로 중복 확인
-      checkNameDuplication(e.target.value);
-    }
-  };
-
-  // 4️⃣ 프로필 저장하기
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const URL = 'http://localhost:8080/auth/profile';
+  // 3️⃣ 프로필 이미지 저장하기
+  const uploadImage = async () => {
+    const URL = 'http://localhost:8080/auth/change-profile';
 
     try {
       const formData = new FormData();
-      formData.append('nickName', JSON.stringify(nickName));
       formData.append('file', fileInput.current.files[0]);
 
       await axios.post(URL, formData, {
@@ -78,7 +68,48 @@ export default function Profile() {
     } catch (error) {
       console.error('에러 내용:', error);
     }
-    navigate('/mypage');
+  };
+
+  // 4️⃣ 닉네임 유효성 검사
+  const handleNameChange = (e) => {
+    setNickName(e.target.value);
+    if (!e.target.value.match(/^[가-힣]{2,}|[A-Za-z]{3,}$/)) {
+      setNameError('한글은 최소 2글자, 영문은 최소 3글자 이상 입력하세요');
+    } else {
+      setNameError(false);
+    }
+  };
+
+  // 5️⃣ 닉네임 저장하기
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const URL = 'http://localhost:8080/auth/change-nickname';
+
+    try {
+      if (nameDuplicated === false) {
+        await axios
+          .post(
+            URL,
+            { nickName: nickName },
+            {
+              headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                Accept: 'application/json',
+                'Access-Control-Allow-Origin': '*',
+              },
+            }
+          )
+          .then((result) => {
+            console.log(`닉네임 재설정 성공 : ${result}`);
+            window.alert('닉네임을 재설정 했습니다');
+          });
+
+        navigate('/mypage');
+      }
+    } catch (error) {
+      console.error('닉네임 저장 중 에러 발생:', error);
+    }
   };
 
   return (
@@ -124,43 +155,59 @@ export default function Profile() {
               id="email"
               type="email"
               value={email}
-              readOnly // 읽기 전용
+              readOnly
             />
           </div>
 
           {/* 닉네임 박스 */}
-          <div className="flex-grow mr-3 mb-8">
+          <div className="flex-grow mr-3 mb-2">
             <label
               className="font-score block text-black-300 text-lg font-bold mb-2 text-start"
-              htmlFor="username"
+              htmlFor="nickName"
             >
               닉네임
             </label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="username"
+              id="nickName"
               type="text"
               value={nickName}
               onChange={handleNameChange}
             />
-            {nameError && (
+            {nameError ? (
               <p className="text-red-500 text-xs italic">{nameError}</p>
+            ) : (
+              <p className="text-red-500 text-xs italic invisible">nameError</p>
             )}
           </div>
 
+          <p className="mt-6">
+            <li className="mb-2 flex items-center">
+              <span role="img" aria-label="check" className="flex">
+                {!nameDuplicated ? (
+                  <GoCheckCircleFill className="text-emerald" />
+                ) : (
+                  <GoCheckCircle className="text-emerald" />
+                )}
+              </span>{' '}
+              <span className="ml-3">닉네임 중복 확인 : 사용 가능</span>
+            </li>
+          </p>
+
           {/* 버튼 */}
-          <div className="flex mt-6 mr-3">
+          <div className="flex mt-2 mr-3">
             <button
               type="button"
-              className="font-score flex-grow h-12 bg-gray-300 rounded-2xl py-2 px-5 mr-2  hover:bg-gray-400"
+              className="font-score flex-grow bg-main text-white rounded-2xl p-4 mr-2 hover:bg-yellow-500"
+              onClick={() => checkNameDuplication(nickName)}
             >
-              취소
+              닉네임 중복 확인
             </button>
             <button
               type="submit"
-              className="font-score flex-grow bg-main  text-white rounded-2xl p-2 hover:bg-yellow-500"
+              className="font-score flex-grow bg-main text-white rounded-2xl p-2 hover:bg-yellow-500"
             >
-              저장하기
+              닉네임 저장하기
             </button>
           </div>
         </form>
