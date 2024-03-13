@@ -306,6 +306,7 @@ export const UserProvider = ({ children }) => {
         localStorage.setItem('nickName', response.data.name);
         localStorage.setItem('email', response.data.email);
         localStorage.setItem('socialType', response.data.socialType);
+        localStorage.setItem('imageUrl', response.data.imageUrl);
 
         // ▶ 유저 데이터 저장
         let user = {
@@ -314,6 +315,7 @@ export const UserProvider = ({ children }) => {
           email: response.data.email,
           password,
           socialType: socialType,
+          imageUrl: response.data.imageUrl,
         };
 
         dispatch({ type: SET_USER, user });
@@ -355,6 +357,7 @@ export const UserProvider = ({ children }) => {
         localStorage.removeItem('nickName');
         localStorage.removeItem('email');
         localStorage.removeItem('socialType');
+        localStorage.removeItem('imageUrl');
 
         // ▶ 유저 상태 초기화
         dispatch({ type: SET_USER, user: null });
