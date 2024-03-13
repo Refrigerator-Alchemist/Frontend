@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useUserDispatch } from '../context/UserContext';
 import { FaTrash, FaEdit } from 'react-icons/fa';
 import IMAGE_PROFILE from '../img/img_profile.png';
+import Pagination from '../components/Pagination';
 
 const RecipeCard = ({
   postid,
@@ -251,15 +252,10 @@ function MyPage() {
     }
   };
 
-  //페이지네이션 코드- 수정필요
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
   const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(recipes.length / recipesPerPage); i++) {
-    pageNumbers.push(i);
-  }
 
   return (
     <section className="Board flex flex-col items-center justify-center w-full">
@@ -338,21 +334,13 @@ function MyPage() {
             />
           ))}
         </div>
-        <div className="pagination flex justify-center my-4 mb-24">
-          {pageNumbers.map((number) => (
-            <button
-              key={number}
-              onClick={() => paginate(number)}
-              className={`px-4 py-2 border rounded-full m-1 ${
-                currentPage === number
-                  ? 'bg-main text-white'
-                  : 'bg-white text-main'
-              }`}
-            >
-              {number}
-            </button>
-          ))}
-        </div>
+        
+        <Pagination
+          currentPage={currentPage}
+          recipesPerPage={recipesPerPage}
+          totalRecipes={recipes.length}
+          paginate={paginate}
+        />
       </main>
 
       <footer

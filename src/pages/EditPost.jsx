@@ -16,8 +16,26 @@ function UploadBoard() {
       setFoodName(foodName);
       setDescription(description);
       setIngredients(ingredients);
+    } else {
+      fetchData(); 
     }
   }, [location]);
+
+  // 서버에서 기존 정보들을 불러오는 함수 
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('서버에서 기존데이터를 불러오는 API URL');
+      if (response.data) {
+        const { foodName, description, ingredients } = response.data;
+        setFoodName(foodName);
+        setDescription(description);
+        setIngredients(ingredients);
+      }
+    } catch (error) {
+      console.error('불러오는 API 에러 내용:', error);
+    }
+  };
+
 
   const handleIngredientChange = (index, event) => {
     const newIngredients = [...ingredients];
@@ -29,6 +47,8 @@ function UploadBoard() {
     setIngredients([...ingredients, '']);
   };
 
+
+    //수정 완료 버튼
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
