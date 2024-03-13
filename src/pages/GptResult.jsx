@@ -8,9 +8,11 @@ const RecipePage = () => {
   const [ingredients, setIngredients] = useState([]);
   const [steps, setSteps] = useState([]);
   const [title, setTitle] = useState('');
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState(''); 
   const [isLoading, setIsLoading] = useState(true);
+  const [imgFlag, setImgFlag] = useState(false);
   const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,9 +29,11 @@ const RecipePage = () => {
           setSteps(response.data.recipe);
           setTitle(response.data.foodName);
           setImage(response.data.imgUrl);
+          // setImage(response.data.imgFlag ? generateImageUrl() : ''); // generateImageUrl은 이미지를 생성하는 
+  
         }
       } catch (error) {
-        console.error('Error:', error);
+        console.error('에러:', error);
       } finally {
         setIsLoading(false);
       }
@@ -38,13 +42,19 @@ const RecipePage = () => {
     fetchData();
   }, [ingredients]);
 
+  const generateImageUrl = () => {
+    return imgFlag ? image : '';
+  };
+
   //결과화면에서 저장하기
   const handleSaveButtonClick = async () => {
     try {
+      const imageUrl = generateImageUrl();
       await axios.post('http://172.30.1.89:8080/recipe/save', {
         recipeDto: {
           foodName: title,
-          imgUrl: image,
+          imgFlag: imgFlag,
+          imgUrl: imageUrl,
           ingredients: ingredients,
           recipe: steps,
         },
@@ -74,17 +84,10 @@ const RecipePage = () => {
     <section className="bg-white min-h-screen p-6">
       <div
         className="absolute top-5 left-30 ml-0 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate('/board')}
+        onClick={() => navigate("/board")}
       >
         <FaArrowLeft />
       </div>
-      {/* <button
-        onClick={() => navigate('/main')}
-        className="fixed top-5 right-5 ml-0 border-2 w-10 h-10 text-2xl transition ease-in-out delay-150 bg-white hover:scale-125 hover:cursor-pointer hover:text-black rounded-full flex items-center justify-center"
-        title="Go Home"
-      >
-        <GoHome />
-      </button> */}
       <main className="max-w-md mx-auto bg-white rounded-lg overflow-hidden md:max-w-lg">
         <div className="md:flex">
           <div className="w-full p-4 pt-8">
@@ -93,13 +96,13 @@ const RecipePage = () => {
                 {title}
               </h1>
             </div>
-            <div className="py-4">
+            {/* <div className="py-4">
               <img
                 className="w-full h-70 rounded-lg"
                 src={image}
                 alt="Recipe"
               />
-            </div>
+            </div> */}
             <div className="recipebox p-4 bg-gray-100 rounded-lg overflow-y-auto max-h-96">
               <h2 className="font-score text-lg font-bold text-gray-800">
                 재료
@@ -128,15 +131,23 @@ const RecipePage = () => {
           </div>
         </div>
       </main>
+      {/* 이미지 생성여부 체크박스 */}
+      <input
+        type="checkbox"
+        id="saveImageCheckbox"
+        checked={imgFlag}
+        onChange={() => setImgFlag(!imgFlag)}
+      />
+      <label htmlFor="saveImageCheckbox"> 이미지와 함께 저장하기 </label>
 
       <footer className="fixed bottom-5 left-0 right-0 px-6">
         <div
           className="mx-auto flex justify-between"
-          style={{ maxWidth: '400px' }}
+          style={{ maxWidth: "400px" }}
         >
           <button
             className="font-score bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-8 rounded-full"
-            onClick={() => navigate('/gptsearch')}
+            onClick={() => navigate("/gptsearch")}
           >
             다시 할래요
           </button>
