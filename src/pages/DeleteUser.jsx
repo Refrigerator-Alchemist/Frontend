@@ -32,7 +32,7 @@ export default function DeleteUser() {
   };
 
   return (
-    <div className="relative flex flex-col justify-center items-center h-screen p-8 font-score">
+    <section className="relative flex flex-col justify-center items-center h-screen p-8 font-score">
       {/* 뒤로 가기 */}
       <div
         className="absolute top-5 left-5 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
@@ -70,6 +70,6 @@ export default function DeleteUser() {
           </button>
         </div>
       </form>
-    </div>
+    </section>
   );
 }

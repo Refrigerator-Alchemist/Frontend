@@ -20,7 +20,7 @@ const BoardDetail = () => {
     }
   };
 
-  //상세페이지 
+  //상세페이지
   // useEffect(() => {
   //   const fetchRecipes = async () => {
   //     try {
@@ -34,16 +34,16 @@ const BoardDetail = () => {
   //   fetchRecipes();
   // }, []);
 
-
   return (
-    <>
-      <div className="pt-16">
-        <div
-          className="absolute top-5 left-42 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-          onClick={() => navigate('/board')}
-        >
-          <FaArrowLeft />
-        </div>
+    <section>
+      <div
+        className="absolute top-5 left-42 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
+        onClick={() => navigate('/board')}
+      >
+        <FaArrowLeft />
+      </div>
+
+      <main className="pt-16">
         <img
           src={postData.thumbnail}
           alt={postData.title}
@@ -66,7 +66,8 @@ const BoardDetail = () => {
           </div>
           <p className="text-gray-700 font-score">{postData.description}</p>
         </div>
-      </div>
+      </main>
+
       <footer
         style={{
           position: 'fixed',
@@ -77,7 +78,7 @@ const BoardDetail = () => {
       >
         <Navigation />
       </footer>
-    </>
+    </section>
   );
 };
 

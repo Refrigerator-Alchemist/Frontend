@@ -10,40 +10,43 @@ function UploadBoard() {
   const navigate = useNavigate();
   const fileInput = useRef(null);
 
-
   const handleIngredientChange = (index, event) => {
-    const newIngredients = [...ingredients]; 
-    newIngredients[index] = event.target.value; 
+    const newIngredients = [...ingredients];
+    newIngredients[index] = event.target.value;
     setIngredients(newIngredients);
   };
-  
+
   const addIngredientField = () => {
     setIngredients([...ingredients, '']);
   };
 
-  const handleSubmit = async (event) => { //서버전송
+  const handleSubmit = async (event) => {
+    //서버전송
     event.preventDefault();
 
     const formData = new FormData();
     formData.append('image', fileInput.current.files[0]);
     formData.append('foodName', foodName);
     formData.append('description', description);
-    
-    
-     ingredients.forEach((ingredient, index) => {
+
+    ingredients.forEach((ingredient, index) => {
       if (ingredient.trim() !== '') {
         formData.append(`ingredient${index + 1}`, ingredient);
       }
     });
 
     try {
-      const response =  axios.post('http://172.30.1.30:8080/writeTest', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      console.log(response.data); // 모달띄우기 작성 성공됐다는 
-      navigate('/board'); 
+      const response = axios.post(
+        'http://172.30.1.30:8080/writeTest',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+      console.log(response.data); // 모달띄우기 작성 성공됐다는
+      navigate('/board');
     } catch (error) {
       console.error('에러 내용:', error);
     }
@@ -54,14 +57,17 @@ function UploadBoard() {
   };
 
   return (
-    <div className="pt-16">
+    <section className="pt-16">
       <div
         className="absolute top-5 left-42 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
         onClick={() => navigate('/board')}
       >
         <FaArrowLeft />
       </div>
-      <form onSubmit={handleSubmit} className="flex flex-col space-y-6 mx-auto p-8">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col space-y-6 mx-auto p-8"
+      >
         <div className="form-group ">
           <label
             htmlFor="cover-photo"
@@ -111,7 +117,9 @@ function UploadBoard() {
         </div>
 
         <div className="form-group">
-          <label className="block mb-2 text-sm font-medium text-gray-700">재료</label>
+          <label className="block mb-2 text-sm font-medium text-gray-700">
+            재료
+          </label>
           {ingredients.map((ingredient, index) => (
             <div key={index} className="font-score flex items-center space-x-2">
               <input
@@ -126,7 +134,9 @@ function UploadBoard() {
                   type="button"
                   className="font-score text-gray-500 hover:text-gray-700"
                   onClick={() => {
-                    const newIngredients = ingredients.filter((_, idx) => idx !== index);
+                    const newIngredients = ingredients.filter(
+                      (_, idx) => idx !== index
+                    );
                     setIngredients(newIngredients);
                   }}
                 >
@@ -144,7 +154,7 @@ function UploadBoard() {
           </button>
         </div>
 
-        <div className="flex space-x-2">
+        <footer className="flex space-x-2">
           <button
             type="button"
             onClick={handleCancel}
@@ -158,9 +168,9 @@ function UploadBoard() {
           >
             올리기
           </button>
-        </div>
+        </footer>
       </form>
-    </div>
+    </section>
   );
 }
 

@@ -57,18 +57,21 @@ const RecipePage = () => {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen ">
+      <section className="flex flex-col items-center justify-center h-screen ">
         <div className="animate-spin rounded-full h-14 w-14 border-b-2 border-gray-900 mb-8"></div>
         <h1 className="text-2xl font-bold text-gray-900  mb-4">로딩 중 </h1>
-        <button onClick={() => navigate('/main')} className="text-lg text-gray-400">
+        <button
+          onClick={() => navigate('/main')}
+          className="text-lg text-gray-400"
+        >
           취소
         </button>
-      </div>
+      </section>
     );
   }
 
   return (
-    <div className="bg-white min-h-screen p-6">
+    <section className="bg-white min-h-screen p-6">
       <div
         className="absolute top-5 left-30 ml-0 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
         onClick={() => navigate('/board')}
@@ -82,7 +85,7 @@ const RecipePage = () => {
       >
         <GoHome />
       </button> */}
-      <div className="max-w-md mx-auto bg-white rounded-lg overflow-hidden md:max-w-lg">
+      <main className="max-w-md mx-auto bg-white rounded-lg overflow-hidden md:max-w-lg">
         <div className="md:flex">
           <div className="w-full p-4 pt-8">
             <div className="border-b-2 border-gray-100 py-2">
@@ -124,8 +127,9 @@ const RecipePage = () => {
             </div>
           </div>
         </div>
-      </div>
-      <div className="fixed bottom-5 left-0 right-0 px-6">
+      </main>
+
+      <footer className="fixed bottom-5 left-0 right-0 px-6">
         <div
           className="mx-auto flex justify-between"
           style={{ maxWidth: '400px' }}
@@ -143,8 +147,8 @@ const RecipePage = () => {
             저장할래요
           </button>
         </div>
-      </div>
-    </div>
+      </footer>
+    </section>
   );
 };
 

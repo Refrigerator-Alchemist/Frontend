@@ -304,74 +304,76 @@ function Board() {
 
   return (
     <section className="Board pb-24">
-      <div className="bg-white px-6 py-7">
+      <header className="bg-white px-6 py-7">
         <span className="font-score font-extrabold text-3xl">Board</span>
-      </div>
+      </header>
       <div className="flex items-center mx-8 my-0">
         <SearchBar onSearch={handleSearch} />
         <WriteButton />
       </div>
 
-      {isSearching ? (
-        <>
-          <div className="my-2 mt-4">
-            <span className="font-score font-extrabold ml-6 text-2xl">
-              Search Results
-            </span>
-            {currentSearchResults.map((recipe) => (
-              <RecipeCard
-                key={recipe.postid}
-                postid={recipe.postid}
-                title={recipe.title}
-                description={recipe.description}
-                img={recipe.img}
-                isLiked={recipe.isLiked}
-              />
-            ))}
-          </div>
-        </>
-      ) : (
-        <>
-          <div className="my-2 mt-4">
-            <span className="font-score font-extrabold ml-6 text-2xl">
-              Ranking
-            </span>
+      <main>
+        {isSearching ? (
+          <>
+            <div className="my-2 mt-4">
+              <span className="font-score font-extrabold ml-6 text-2xl">
+                Search Results
+              </span>
+              {currentSearchResults.map((recipe) => (
+                <RecipeCard
+                  key={recipe.postid}
+                  postid={recipe.postid}
+                  title={recipe.title}
+                  description={recipe.description}
+                  img={recipe.img}
+                  isLiked={recipe.isLiked}
+                />
+              ))}
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="my-2 mt-4">
+              <span className="font-score font-extrabold ml-6 text-2xl">
+                Ranking
+              </span>
 
-            <Ranking />
-          </div>
-          <div className="my-2">
-            <span className="font-score font-extrabold ml-6 text-2xl">
-              Recipe
-            </span>
-            {currentRecipes.map((recipe) => (
-              <RecipeCard
-                key={recipe.postid}
-                postid={recipe.postid}
-                title={recipe.title}
-                description={recipe.description}
-                img={recipe.img}
-                isLiked={recipe.isLiked}
-              />
-            ))}
-          </div>
-        </>
-      )}
+              <Ranking />
+            </div>
+            <div className="my-2">
+              <span className="font-score font-extrabold ml-6 text-2xl">
+                Recipe
+              </span>
+              {currentRecipes.map((recipe) => (
+                <RecipeCard
+                  key={recipe.postid}
+                  postid={recipe.postid}
+                  title={recipe.title}
+                  description={recipe.description}
+                  img={recipe.img}
+                  isLiked={recipe.isLiked}
+                />
+              ))}
+            </div>
+          </>
+        )}
 
-      <div className="pagination flex justify-center my-4">
-        {pageNumbers.map((number) => (
-          <button
-            key={number}
-            onClick={() => paginate(number)}
-            className={`px-4 py-2 border rounded-full m-1 ${
-              currentPage === number
-                ? 'bg-main text-white'
-                : 'bg-white text-main'
-            }`}
-          >
-            {number}
-          </button>
-        ))}
-      </div>
+        <div className="pagination flex justify-center my-4">
+          {pageNumbers.map((number) => (
+            <button
+              key={number}
+              onClick={() => paginate(number)}
+              className={`px-4 py-2 border rounded-full m-1 ${
+                currentPage === number
+                  ? 'bg-main text-white'
+                  : 'bg-white text-main'
+              }`}
+            >
+              {number}
+            </button>
+          ))}
+        </div>
+      </main>
 
       <footer
         style={{
