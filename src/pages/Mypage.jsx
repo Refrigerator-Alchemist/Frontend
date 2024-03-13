@@ -62,6 +62,7 @@ const RecipeCard = ({
   );
 };
 
+
 function MyPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage, setRecipesPerPage] = useState(5);
@@ -188,7 +189,6 @@ function MyPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // API 연결 전 임시 데이터 사용
         const response = {
           data: {
             items: showMyRecipes ? likedRecipesData : myRecipesData,
@@ -204,29 +204,50 @@ function MyPage() {
           }));
           setRecipes(formattedData);
         } else {
-          console.error('Error:', response.data);
+          console.error('에러:', response.data);
         }
       } catch (error) {
-        console.error('Error:', error);
+        console.error('에러:', error);
       }
     };
 
     fetchData();
   }, [showMyRecipes]);
 
-  const { logout } = useUserDispatch();
+  const { logout } = useUserDispatch();  // 로그아웃 
 
+    // 레시피 수정하는 api
   const handleEdit = async (postid) => {
     try {
       const response = await axios.get(
-        `http://example.com/api/recipes/${postid}`
+        `레시피 수정하는 api url/${postid}`
       );
       if (response.data) {
         const recipeData = response.data;
         navigate('/upload', { state: { recipe: recipeData } });
-      }
+      } //수정페이지로 
     } catch (error) {
       console.error('에러내용:', error);
+    }
+  };
+
+  // 레시피 삭제하는 api
+  const deleteRecipe = async (postid) => {
+    try {
+      await axios.delete(`레시피 삭제하는 api url/${postid}`);
+      console.log('삭제성공');
+      removeRecipe(postid);
+    } catch (error) {
+      console.error('삭제에러', error);
+    }
+  };
+
+  const removeRecipe = (postid) => {
+    setRecipes(recipes.filter(recipe => recipe.postid !== postid));
+  };
+  const handleDeleteConfirmation = (postid) => {
+    if (window.confirm('레시피를 삭제하시겠습니까?')) {
+      deleteRecipe(postid); 
     }
   };
 
@@ -312,8 +333,8 @@ function MyPage() {
               description={recipe.description}
               img={recipe.img}
               showEditDeleteButtons={!showMyRecipes}
-              onDelete={(postid) => console.log('Delete postid: ', postid)}
-              onEdit={(postid) => console.log('Edit postid:', postid)}
+              onDelete={(postid) => handleDeleteConfirmation(postid)}
+              onEdit={(postid) => handleEdit(postid)}
             />
           ))}
         </div>
