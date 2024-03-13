@@ -7,6 +7,7 @@ import axios from 'axios';
 const TagInput = () => {
   const [tags, setTags] = useState([]);
   const [inputValue, setInputValue] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
   const inputRef = useRef(null); // 입력란 참조
 
@@ -41,23 +42,29 @@ const TagInput = () => {
 
     axios
       .post('http://172.30.1.49:8080/recipe/recommend', {
-        ingredients: tags, // 입력한 재료를 담고 있는 리스트
+        ingredients: tags, 
       })
       .then((response) => {
         console.log(response.data);
         navigate('/gptresult');
       })
       .catch((error) => {
-        if (error.response) {
-          console.error('Error 내용:', error.response.data);
-        } else if (error.request) {
-          console.error('서버 응답 없음:', error.request);
+        if (error.response && error.response.status === 406) {
+          setErrorMessage(error.response.data.message);
+          setTags([]);
+          setInputValue('');
+          inputRef.current.focus();
         } else {
-          console.error('에러 메시지:', error.message);
+          if (error.response) {
+            console.error('Error 내용:', error.response.data);
+          } else if (error.request) {
+            console.error('서버 응답 없음:', error.request);
+          } else {
+            console.error('에러 메시지:', error.message);
+          }
         }
       });
   };
-
   return (
     <section className="bg-white min-h-screen px-4 py-8 flex flex-col">
       <div
@@ -103,15 +110,18 @@ const TagInput = () => {
             </div>
           ))}
         </div>
+        {errorMessage && (
+          <div className="text-red-500 text-sm mb-4">{errorMessage}</div>
+        )}
       </main>
       <footer className="w-full max-w-xs mx-auto pb-8">
         <button
           className="flex justify-center font-score transition ease-in-out delay-150 text-black bg-white hover:bg-white hover:scale-125 hover:cursor-pointer font-bold py-2 px-4 rounded w-full mb-4"
           type="button"
-          onClick={() => navigate('/gptsaved')}
+          onClick={() => navigate('/GptSavedList')}
         >
           <CiSaveDown2 className="mr-1 w-6 h-6" />
-          저장한 GPT 레시피
+          저장한 AI 레시피
         </button>
         <button
           className="font-score transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer text-white font-bold py-2 px-4 rounded w-full"
