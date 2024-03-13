@@ -241,28 +241,29 @@ function MyPage() {
   }
 
   return (
-    <div className="Board flex items-center justify-center w-full">
-      <div className="flex flex-col items-center overflow-hidden">
-        <div className="flex justify-end w-full mt-2 space-x-2 mr-12">
-          <button
-            className="font-score text-gray-300"
-            onClick={(e) => {
-              e.preventDefault();
-              navigate('/mypage/delete-user');
-            }}
-          >
-            회원 탈퇴
-          </button>
-          <button
-            className="font-score outline-none font-semibold underline underline-offset-2 hover:text-red-500"
-            onClick={(e) => {
-              e.preventDefault();
-              logout();
-            }}
-          >
-            로그아웃
-          </button>
-        </div>
+    <section className="Board flex flex-col items-center justify-center w-full">
+      <header className="flex justify-end w-full mt-2 space-x-2 mr-12">
+        <button
+          className="font-score text-gray-300"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate('/mypage/delete-user');
+          }}
+        >
+          회원 탈퇴
+        </button>
+        <button
+          className="font-score outline-none font-semibold underline underline-offset-2 hover:text-red-500"
+          onClick={(e) => {
+            e.preventDefault();
+            logout();
+          }}
+        >
+          로그아웃
+        </button>
+      </header>
+
+      <main className="flex flex-col items-center overflow-hidden">
         <div className="bg-gray-300 rounded-full h-32 w-32 mt-20">
           <img
             src={userInfo.profilePic}
@@ -278,9 +279,9 @@ function MyPage() {
         </p>
         <button
           onClick={() => navigate('/profile')}
-          className="font-score my-2 bg-white text-gray-400 py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-opacity-50 underline"
+          className="font-score my-2 bg-white py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-opacity-50 underline hover:text-red-500"
         >
-          회원정보 수정
+          내 프로필 수정
         </button>
 
         <div className="flex">
@@ -331,7 +332,8 @@ function MyPage() {
             </button>
           ))}
         </div>
-      </div>
+      </main>
+
       <footer
         style={{
           position: 'fixed',
@@ -342,7 +344,7 @@ function MyPage() {
       >
         <Navigation />
       </footer>
-    </div>
+    </section>
   );
 }
 

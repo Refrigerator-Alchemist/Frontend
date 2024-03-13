@@ -182,7 +182,7 @@ export default function ResetPassword() {
         </main>
 
         {/* 비밀번호 재설정 */}
-        <footer className="flex flex-col mt-10 w-full p-3">
+        <div className="flex flex-col mt-10 w-full p-3">
           <div>
             <label className="mb-4 text-lg font-bold font-undong text-center">
               새로운 비밀번호
@@ -293,7 +293,7 @@ export default function ResetPassword() {
           >
             재설정하기
           </button>
-        </footer>
+        </div>
       </form>
     </section>
   );

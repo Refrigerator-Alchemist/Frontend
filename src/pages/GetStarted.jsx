@@ -7,8 +7,8 @@ export default function GetStarted() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-main flex items-center justify-center">
-      <div className="text-center flex flex-col space-y-8 items-center h-full py-8">
+    <section className="min-h-screen bg-main flex items-center justify-center">
+      <main className="text-center flex flex-col space-y-8 items-center h-full py-8">
         <Name />
         <Logo page="start" width="300px" height="300px" />
         <Link
@@ -19,7 +19,7 @@ export default function GetStarted() {
         >
           시작하기
         </Link>
-      </div>
-    </div>
+      </main>
+    </section>
   );
 }
