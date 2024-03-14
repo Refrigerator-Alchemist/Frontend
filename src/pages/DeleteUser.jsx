@@ -1,32 +1,33 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
-import { useUserDispatch } from '../context/UserContext';
+import { useUserDispatch, useUserState } from '../context/UserContext';
 
 export default function DeleteUser() {
   const [password, setPassword] = useState('');
 
   const { deleteUser } = useUserDispatch(); // deleteUser 함수 가져오기
 
+  const user = useUserState();
+
   const navigate = useNavigate();
 
-  // 비밀번호 입력값 저장
+  // 1️⃣ 비밀번호 입력
   const handlePasswordChange = (e) => setPassword(e.target.value);
 
-  // 회원 탈퇴
+  // 2️⃣ 회원 탈퇴
   const handleDeleteUser = async (e) => {
     e.preventDefault();
 
-    if (!password) {
-      alert('비밀번호를 입력해주세요');
+    if (password !== user.password) {
+      alert('비밀번호가 일치하지 않습니다');
       return;
     }
 
-    // 사용자에게 확인 질문
+    // ▶️ 사용자에게 확인 질문
     const confirmDelete = window.confirm('정말 회원탈퇴를 진행할까요?');
 
     if (confirmDelete) {
-      // deleteUser 함수 호출
       await deleteUser();
     }
   };

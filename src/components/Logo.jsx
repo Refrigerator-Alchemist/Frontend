@@ -3,7 +3,7 @@ import logo from '../img/logo.png';
 import logo_transparent from '../img/logo_transparent.png';
 
 export default function Logo({ page, width, height }) {
-  // 시작 페이지 : 일반
+  // 🏃‍♀️ 시작 페이지 : 일반
   if (page === 'start') {
     return (
       <>
@@ -19,7 +19,7 @@ export default function Logo({ page, width, height }) {
     );
   }
 
-  // 로그인 페이지 : 투명
+  // 🔓 로그인 페이지 : 투명
   if (page === 'login') {
     return (
       <>
