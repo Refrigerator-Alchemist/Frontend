@@ -39,7 +39,7 @@ export default function LoginSuccess() {
           imageUrl: localStorage.getItem('imageUrl'),
         };
 
-        console.log(`⭕ 유저 데이터 저장 완료 : ${user}`);
+        console.log(`⭕ 유저 데이터 저장 완료`);
 
         // ▶ dispatch로 리듀서에 저장
         dispatch({ type: SET_USER, user });
@@ -55,7 +55,7 @@ export default function LoginSuccess() {
     fetchLoginData()
       .then((user) => {
         if (user) {
-          console.log(`⭕ 유저 데이터 컨텍스트에 저장 완료 : ${user}`);
+          console.log(`⭕ 유저 데이터를 컨텍스트에 저장 완료`);
           navigate('/main'); // ▶ 메인페이지 리디렉션
         }
       })
