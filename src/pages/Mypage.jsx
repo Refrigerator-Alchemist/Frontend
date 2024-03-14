@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import axios from 'axios';
-import { useUserDispatch } from '../context/UserContext';
+import { useUserDispatch, useUserState } from '../context/UserContext';
 import { FaTrash, FaEdit } from 'react-icons/fa';
 import IMAGE_PROFILE from '../img/img_profile.png';
 import Pagination from '../components/Pagination';
@@ -21,11 +21,7 @@ const RecipeCard = ({
       <div className="bg-white mx-2 my-2 p-4 rounded-xl shadow overflow-hidden relative flex flex-col md:flex-row">
         <Link to={`/board/${postid}`} className="flex-grow flex items-center">
           <div className="flex-none w-20 h-20 md:w-20 md:h-20 max-w-xs rounded-xl border-2 border-gray-300 overflow-hidden mr-4">
-            <img
-              className="w-full h-full object-cover"
-              src={img}
-              alt={title}
-            />
+            <img className="w-full h-full object-cover" src={img} alt={title} />
           </div>
           <div className="md:pl-4 mt-4 md:mt-0">
             <h3 className="text-lg font-score font-semibold">{title}</h3>
@@ -63,8 +59,7 @@ function MyPage() {
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState({
     name: '',
-    profilePic: IMAGE_PROFILE || localStorage.getItem('imageUrl'),
-    bio: '',
+    profilePic: IMAGE_PROFILE,
   });
 
   const myRecipesData = [
@@ -72,7 +67,7 @@ function MyPage() {
       postid: 1,
       title: '나의 레시피 1',
       description: 'api연결전 임시 "나의  레시피 " 데이터 1입니다.',
-      img: "https://blog.kakaocdn.net/dn/dMg4A1/btqx6ZVdX0n/kKTF0MOw9OQ7Uv3PoTBLwK/img.jpg",
+      img: 'https://blog.kakaocdn.net/dn/dMg4A1/btqx6ZVdX0n/kKTF0MOw9OQ7Uv3PoTBLwK/img.jpg',
       isLiked: false,
     },
     {
@@ -114,7 +109,7 @@ function MyPage() {
       postid: 7,
       title: '나의 레시피 1',
       description: 'api연결전 임시 "나의  레시피 " 데이터 1입니다.',
-      img: "https://blog.kakaocdn.net/dn/dMg4A1/btqx6ZVdX0n/kKTF0MOw9OQ7Uv3PoTBLwK/img.jpg",
+      img: 'https://blog.kakaocdn.net/dn/dMg4A1/btqx6ZVdX0n/kKTF0MOw9OQ7Uv3PoTBLwK/img.jpg',
       isLiked: false,
     },
     // ... 더 많은 임시 데이터
@@ -167,21 +162,21 @@ function MyPage() {
       postid: 7,
       title: '나의 레시피 1',
       description: 'api연결전 임시 "나의  레시피 " 데이터 1입니다.',
-      img: "https://blog.kakaocdn.net/dn/dMg4A1/btqx6ZVdX0n/kKTF0MOw9OQ7Uv3PoTBLwK/img.jpg",
+      img: 'https://blog.kakaocdn.net/dn/dMg4A1/btqx6ZVdX0n/kKTF0MOw9OQ7Uv3PoTBLwK/img.jpg',
       isLiked: false,
     },
     // ... 더 많은 임시 데이터
   ];
 
+  const user = useUserState();
+
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const response = await axios.get('사용자 정보 가져오는 서버주소 ');
-        if (response.data) {
+        if (user) {
           setUserInfo({
-            name: response.data.name, // ㅇ;ㅣ름
-            profilePic: response.data.profilePic, //프로필 사진
-            bio: response.data.bio, //소개
+            imageUrl: user.imageUrl || IMAGE_PROFILE, // 프로필 사진
+            nickName: user.nickName, // 이름
           });
         }
       } catch (error) {
@@ -220,18 +215,16 @@ function MyPage() {
     fetchData();
   }, [showMyRecipes]);
 
-  const { logout } = useUserDispatch();  // 로그아웃 
+  const { logout } = useUserDispatch(); // 로그아웃
 
-    // 레시피 수정하는 api
+  // 레시피 수정하는 api
   const handleEdit = async (postid) => {
     try {
-      const response = await axios.get(
-        `레시피 수정하는 api url/${postid}`
-      );
+      const response = await axios.get(`레시피 수정하는 api url/${postid}`);
       if (response.data) {
         const recipeData = response.data;
         navigate('/upload', { state: { recipe: recipeData } });
-      } //수정페이지로 
+      } //수정페이지로
     } catch (error) {
       console.error('에러내용:', error);
     }
@@ -249,11 +242,11 @@ function MyPage() {
   };
 
   const removeRecipe = (postid) => {
-    setRecipes(recipes.filter(recipe => recipe.postid !== postid));
+    setRecipes(recipes.filter((recipe) => recipe.postid !== postid));
   };
   const handleDeleteConfirmation = (postid) => {
     if (window.confirm('레시피를 삭제하시겠습니까?')) {
-      deleteRecipe(postid); 
+      deleteRecipe(postid);
     }
   };
 
@@ -276,8 +269,7 @@ function MyPage() {
         </button>
         <button
           className="font-score outline-none font-semibold underline underline-offset-2 hover:text-red-500"
-          onClick={(e) => {
-            e.preventDefault();
+          onClick={() => {
             logout();
           }}
         >
@@ -339,7 +331,7 @@ function MyPage() {
             />
           ))}
         </div>
-        
+
         <Pagination
           currentPage={currentPage}
           recipesPerPage={recipesPerPage}

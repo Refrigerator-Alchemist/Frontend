@@ -271,7 +271,7 @@ export const UserProvider = ({ children }) => {
 
   // 🔐 로그인 ---------------------------------------------------------------
   const login = (email, password, socialType) => {
-    const URL = 'http://localhost:8080/auth/login';
+    const URL = 'http://localhost:8080/auth/token/login';
 
     instance
       .post(
@@ -290,8 +290,6 @@ export const UserProvider = ({ children }) => {
         }
       )
       .then((response) => {
-        console.log(response);
-        console.log(response.headers.authorization);
         console.log('로그인 되었습니다!');
 
         localStorage.setItem(
