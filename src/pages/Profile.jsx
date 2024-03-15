@@ -59,6 +59,7 @@ export default function Profile() {
     try {
       const formData = new FormData();
       formData.append('file', fileInput.current.files[0]);
+      formData.append('nickName', JSON.stringify({ nickName }));
 
       await axios.post(URL, formData, {
         headers: {
