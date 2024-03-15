@@ -93,6 +93,7 @@ function UploadBoard() {
         onSubmit={handleSubmit}
         className="flex flex-col space-y-6 mx-auto p-8"
       >
+        
         <div className="form-group">
           <label
             htmlFor="food-name"
