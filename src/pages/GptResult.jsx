@@ -16,30 +16,25 @@ const RecipePage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
-        const response = await axios.post(
-          'http://172.30.1.89:8080/recipe/recommend',
-          {
-            ingredients: ingredients,
-          }
-        );
-
+        const response = await axios.post('http://172.30.1.89:8080/recipe/recommend/', {
+          ingredients: ingredients,
+        });
         if (response.data) {
+          setTitle(response.data.foodName);
           setIngredients(response.data.ingredients);
           setSteps(response.data.recipe);
-          setTitle(response.data.foodName);
-          // setImage(response.data.imgUrl);
-  
         }
       } catch (error) {
-        console.error('에러:', error);
+        console.error('에러내용:', error);
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchData();
-  }, [ingredients]);
+  }, []); 
 
   // const generateImageUrl = () => {
   //   return imgFlag ? image : '';
@@ -97,13 +92,6 @@ const RecipePage = () => {
                 {title}
               </h1>
             </div>
-            {/* <div className="py-4">
-              <img
-                className="w-full h-70 rounded-lg"
-                src={image}
-                alt="Recipe"
-              />
-            </div> */}
             <div className="recipebox p-4 bg-gray-100 rounded-lg overflow-y-auto max-h-96">
               <h2 className="font-score text-lg font-bold text-gray-800">
                 재료
