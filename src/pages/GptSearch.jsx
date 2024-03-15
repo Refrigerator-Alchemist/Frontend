@@ -121,7 +121,7 @@ const TagInput = () => {
           onClick={() => navigate('/GptSavedList')}
         >
           <CiSaveDown2 className="mr-1 w-6 h-6" />
-          저장한 AI 레시피
+          나의 연금술 레시피
         </button>
         <button
           className="font-score transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer text-white font-bold py-2 px-4 rounded w-full"

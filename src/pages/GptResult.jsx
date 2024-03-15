@@ -28,7 +28,7 @@ const RecipePage = () => {
           setIngredients(response.data.ingredients);
           setSteps(response.data.recipe);
           setTitle(response.data.foodName);
-          setImage(response.data.imgUrl);
+          // setImage(response.data.imgUrl);
   
         }
       } catch (error) {
@@ -41,21 +41,21 @@ const RecipePage = () => {
     fetchData();
   }, [ingredients]);
 
-  const generateImageUrl = () => {
-    return imgFlag ? image : '';
-  };
+  // const generateImageUrl = () => {
+  //   return imgFlag ? image : '';
+  // };
 
   //결과화면에서 저장하기 -> 저장리스트로 이동 
   const handleSaveButtonClick = async () => {
     try {
       
-      const imageUrl = generateImageUrl();
+      // const imageUrl = generateImageUrl();
       navigate('/gptSavedList');
       await axios.post('http://172.30.1.89:8080/recipe/save', {
         recipeDto: {
           foodName: title,
-          imgFlag: imgFlag,
-          imgUrl: imageUrl,
+          // imgFlag: imgFlag,
+          // imgUrl: imageUrl,
           ingredients: ingredients,
           recipe: steps,
         },
@@ -134,13 +134,13 @@ const RecipePage = () => {
       </main>
 
       {/* 이미지 생성여부 체크박스 */}
-      <input
+      {/* <input
         type="checkbox"
         id="saveImageCheckbox"
         checked={imgFlag}
         onChange={() => setImgFlag(!imgFlag)}
-      />
-      <label htmlFor="saveImageCheckbox"> 이미지와 함께 저장하기 </label>
+      /> */}
+      {/* <label htmlFor="saveImageCheckbox"> 이미지와 함께 저장하기 </label> */}
 
       <footer className="fixed bottom-5 left-0 right-0 px-6">
         <div
