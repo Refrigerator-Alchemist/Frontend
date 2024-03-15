@@ -11,20 +11,17 @@ function UploadBoard() {
   const [ingredients, setIngredients] = useState(['']);
 
   useEffect(() => {
-    if (location.state && location.state.recipe) {
-      const { foodName, description, ingredients } = location.state.recipe;
-      setFoodName(foodName);
-      setDescription(description);
-      setIngredients(ingredients);
-    } else {
-      fetchData(); 
+    if (location.state && location.state.postId) {
+      fetchData(location.state.postId); // postId를 전달하여 fetchData 함수 호출
     }
   }, [location]);
 
   // 서버에서 기존 정보들을 불러오는 함수 
-  const fetchData = async () => {
+  const fetchData = async (postId) => {
     try {
-      const response = await axios.get('서버에서 기존데이터를 불러오는 API URL');
+      const response = await axios.post('http://192.168.0.13:8080/board/updateBoard', {
+        postId: postId
+      });
       if (response.data) {
         const { foodName, description, ingredients } = response.data;
         setFoodName(foodName);
@@ -36,7 +33,6 @@ function UploadBoard() {
     }
   };
 
-
   const handleIngredientChange = (index, event) => {
     const newIngredients = [...ingredients];
     newIngredients[index] = event.target.value;
@@ -47,8 +43,7 @@ function UploadBoard() {
     setIngredients([...ingredients, '']);
   };
 
-
-    //수정 완료 버튼
+  // 수정 완료 버튼 핸들러
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
