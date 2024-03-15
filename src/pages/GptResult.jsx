@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { GoHome } from 'react-icons/go';
 import { FaArrowLeft } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom'; 
 import axios from 'axios';
 
 const RecipePage = () => {
@@ -12,14 +12,15 @@ const RecipePage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [imgFlag, setImgFlag] = useState(false);
   const navigate = useNavigate();
+  const { recommendId } = useParams(); 
 
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.post('http://172.30.1.89:8080/recipe/recommend/', {
-          ingredients: ingredients,
+        const response = await axios.post(`http://172.30.1.89:8080/recipe/recommend/${recommendId}`, {
+          recommendId: recommendId
         });
         if (response.data) {
           setTitle(response.data.foodName);
@@ -32,30 +33,23 @@ const RecipePage = () => {
         setIsLoading(false);
       }
     };
-
+  
     fetchData();
-  }, []); 
+  }, [recommendId]);
 
-  // const generateImageUrl = () => {
-  //   return imgFlag ? image : '';
-  // };
 
   //결과화면에서 저장하기 -> 저장리스트로 이동 
   const handleSaveButtonClick = async () => {
     try {
-      
-      // const imageUrl = generateImageUrl();
-      navigate('/gptSavedList');
       await axios.post('http://172.30.1.89:8080/recipe/save', {
         recipeDto: {
           foodName: title,
-          // imgFlag: imgFlag,
-          // imgUrl: imageUrl,
           ingredients: ingredients,
           recipe: steps,
         },
       });
-      // navigate('/gptSavedList');
+      console.log('저장 성공');
+      navigate('/gptSavedList');
     } catch (error) {
       console.error('에러내용:', error);
     }
@@ -68,7 +62,7 @@ const RecipePage = () => {
         <h1 className="text-2xl font-bold text-gray-900  mb-4">로딩 중 </h1>
         <button
           onClick={() => navigate('/main')}
-          className="text-lg text-gray-400"
+          className="text-sm text-gray-400"
         >
           취소
         </button>
@@ -121,15 +115,6 @@ const RecipePage = () => {
         </div>
       </main>
 
-      {/* 이미지 생성여부 체크박스 */}
-      {/* <input
-        type="checkbox"
-        id="saveImageCheckbox"
-        checked={imgFlag}
-        onChange={() => setImgFlag(!imgFlag)}
-      /> */}
-      {/* <label htmlFor="saveImageCheckbox"> 이미지와 함께 저장하기 </label> */}
-
       <footer className="fixed bottom-5 left-0 right-0 px-6">
         <div
           className="mx-auto flex justify-between"
@@ -137,7 +122,7 @@ const RecipePage = () => {
         >
           <button
             className="font-score bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-8 rounded-full"
-            onClick={() => navigate("/gptsearch")}
+            onClick={() => navigate("/recipe/recommend")}
           >
             다시 할래요
           </button>
