@@ -41,7 +41,7 @@ const TagInput = () => {
     }
 
     axios
-      .post('http://172.30.1.49:8080/recipe/recommend', {
+      .post('http://192.168.0.35:8080/recipe/recommend', {
         ingredients: tags, 
       })
       .then((response) => {
@@ -118,7 +118,7 @@ const TagInput = () => {
         <button
           className="flex justify-center font-score transition ease-in-out delay-150 text-black bg-white hover:bg-white hover:scale-125 hover:cursor-pointer font-bold py-2 px-4 rounded w-full mb-4"
           type="button"
-          onClick={() => navigate('/GptSavedList')}
+          onClick={() => navigate('/recipe/myRecipe')}
         >
           <CiSaveDown2 className="mr-1 w-6 h-6" />
           나의 연금술 레시피
