@@ -63,112 +63,6 @@ function MyPage() {
   });
 
 
-  // const myRecipesData = [
-  //   {
-  //     postid: 1,
-  //     title: '나의 레시피 1',
-  //     description: 'api연결전 임시 "나의  레시피 " 데이터 1입니다.',
-  //     img: 'https://blog.kakaocdn.net/dn/dMg4A1/btqx6ZVdX0n/kKTF0MOw9OQ7Uv3PoTBLwK/img.jpg',
-  //     isLiked: false,
-  //   },
-  //   {
-  //     postid: 2,
-  //     title: '나의 레시피 2',
-  //     description: '이것은 레시',
-  //     img: '이미지 URL 2',
-  //     isLiked: true,
-  //   },
-  //   {
-  //     postid: 3,
-  //     title: '나의 레시피 3',
-  //     description: '이것은 레시피 2입니다.',
-  //     img: '이미지 URL 2',
-  //     isLiked: true,
-  //   },
-  //   {
-  //     postid: 4,
-  //     title: '나의 레시피 4',
-  //     description: '이것은 레시피 2입니다.',
-  //     img: '이미지 URL 2',
-  //     isLiked: true,
-  //   },
-  //   {
-  //     postid: 5,
-  //     title: '나의 레시피 5',
-  //     description: '이것은 레시피 2입니다.',
-  //     img: '이미지 URL 2',
-  //     isLiked: true,
-  //   },
-  //   {
-  //     postid: 6,
-  //     title: '나의 레시피 6',
-  //     description: '이것은 레시피 2입니다.',
-  //     img: '이미지 URL 2',
-  //     isLiked: true,
-  //   },
-  //   {
-  //     postid: 7,
-  //     title: '나의 레시피 1',
-  //     description: 'api연결전 임시 "나의  레시피 " 데이터 1입니다.',
-  //     img: 'https://blog.kakaocdn.net/dn/dMg4A1/btqx6ZVdX0n/kKTF0MOw9OQ7Uv3PoTBLwK/img.jpg',
-  //     isLiked: false,
-  //   },
-  //   // ... 더 많은 임시 데이터
-  // ];
-
-  // const likedRecipesData = [
-  //   {
-  //     postid: 1,
-  //     title: '좋아한 레시피 1',
-  //     description: 'api연결전 임시 "좋아한 레시피 " 데이터 1입니다.',
-  //     img: '이미지 URL 3',
-  //     isLiked: true,
-  //   },
-  //   {
-  //     postid: 2,
-  //     title: '좋아한 레시피 2',
-  //     description: '이것은 좋아한 레시피 2입니다.',
-  //     img: '이미지 URL 4',
-  //     isLiked: false,
-  //   },
-  //   {
-  //     postid: 3,
-  //     title: '좋아한 레시피 3',
-  //     description: '이것은 좋아한 레시피 2입니다.',
-  //     img: '이미지 URL 4',
-  //     isLiked: false,
-  //   },
-  //   {
-  //     postid: 4,
-  //     title: '좋아한 레시피 4',
-  //     description: '이것은 좋아한 레시피 2입니다.',
-  //     img: '이미지 URL 4',
-  //     isLiked: false,
-  //   },
-  //   {
-  //     postid: 5,
-  //     title: '좋아한 레시피 5',
-  //     description: '이것은 좋아한 레시피 2입니다.',
-  //     img: '이미지 URL 4',
-  //     isLiked: false,
-  //   },
-  //   {
-  //     postid: 6,
-  //     title: '좋아한 레시피 6',
-  //     description: '이것은 좋아한 레시피 2입니다.',
-  //     img: '이미지 URL 4',
-  //     isLiked: false,
-  //   },
-  //   {
-  //     postid: 7,
-  //     title: '나의 레시피 1',
-  //     description: 'api연결전 임시 "나의  레시피 " 데이터 1입니다.',
-  //     img: 'https://blog.kakaocdn.net/dn/dMg4A1/btqx6ZVdX0n/kKTF0MOw9OQ7Uv3PoTBLwK/img.jpg',
-  //     isLiked: false,
-  //   },
-  //   // ... 더 많은 임시 데이터
-  // ];
-
   const user = useUserState();
 
   useEffect(() => {
@@ -248,15 +142,19 @@ function MyPage() {
 
 
   // 레시피 수정하는 api
-  const handleEdit = async (postid) => {
-    try {
-      await axios.post(`http://192.168.0.13:8080/board/updateBoard`, { postId: postid });
+const handleEdit = async (postid) => {
+  try {
+    const response = await axios.post(`http://192.168.0.13:8080/board/updateBoard`, { postId: postid });
+    if (response.status === 200) { 
       navigate('/upload', { state: { postId: postid } });
-    } catch (error) {
-      console.error('레시피 수정 에러내용:', error);
-      throw error;
+    } else {
+      console.error('응답에러 :', response.data);
     }
-  };
+  } catch (error) {
+    console.error('에러내용:', error);
+  }
+};
+
   
 
   const handleDeleteConfirmation = async (postid) => {
