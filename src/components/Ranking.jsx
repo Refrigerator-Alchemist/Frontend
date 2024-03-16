@@ -3,9 +3,22 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // 📋 아이템 카드
-function RankingItem({ rank, imageUrl, title, ingredients, likeCount }) {
+function RankingItem({
+  rank,
+  imageUrl,
+  title,
+  ingredients,
+  likeCount,
+  onClick,
+}) {
   return (
-    <li className="mb-4 mt-2 px-3 transition transform hover:scale-110 ease-in-out duration-300">
+    <li
+      className="mb-4 mt-2 px-3 transition transform hover:scale-110 ease-in-out duration-300"
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick();
+      }}
+    >
       <figure className="flex topItems-center justify-between drop-shadow-xl">
         <div className="flex topItems-center justify-center space-x-10">
           <div style={{ width: '30px' }}>
@@ -41,7 +54,7 @@ export default function Ranking() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const URL = 'http://192.168.0.13:8080/board/apiTestLikeCount';
+    const URL = 'http://172.30.1.89:8080/board/apiTestLikeCount';
     axios.get(URL).then(function (response) {
       if (response.data && Array.isArray(response.data.items)) {
         const items = response.data.items.map((item) => ({
@@ -72,8 +85,15 @@ export default function Ranking() {
       </div>
 
       <ul>
-        {topItems.map((topItem) => (
-          <RankingItem key={topItem.id} {...topItem} />
+        {topItems.map((topItem, index) => (
+          <RankingItem
+            key={index + 1}
+            rank={index + 1}
+            {...topItem}
+            onClick={() => {
+              navigate(`/board/${topItem.id}`);
+            }}
+          />
         ))}
       </ul>
     </article>
