@@ -66,10 +66,12 @@ function MyPage() {
 
   useEffect(() => {
     const fetchUserInfo = async () => {
+      const URL = '이미지 URL 받아오는 엔드포인트';
+      axios.get(URL, '마이페이지');
       try {
         if (user) {
           setUserInfo({
-            imageUrl: user.imageUrl || IMAGE_PROFILE, // 프로필 사진
+            imageUrl: IMAGE_PROFILE, // 프로필 사진
             nickName: user.nickName, // 이름
           });
         }

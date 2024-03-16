@@ -56,7 +56,7 @@ export default function ResetPassword() {
     e.preventDefault();
     console.log(`입력한 인증번호 : ${inputNum}`);
 
-    checkCodeVerification(email, inputNum, socialType);
+    checkCodeVerification(email, emailType, inputNum, socialType);
   };
 
   // 4️⃣ 비밀번호 유효성 검사
