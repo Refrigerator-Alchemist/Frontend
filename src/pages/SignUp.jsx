@@ -44,13 +44,18 @@ export default function SignUp() {
   // 1️⃣ 이메일 저장
   const handleEmailChange = (e) => setEmail(e.target.value);
 
-  // 2️⃣ 인증요청
+  // 2️⃣ 인증 요청
   const onRequest = async (e) => {
     e.preventDefault();
     console.log(`입력한 이메일 : ${email}`);
 
     const pattern =
       /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+
+    if (!email) {
+      alert('이메일을 입력해주세요');
+      return;
+    }
 
     if (!pattern.test(email)) {
       setEmailError('이메일 형식이 올바르지 않습니다');
@@ -68,7 +73,7 @@ export default function SignUp() {
     e.preventDefault();
     console.log(`입력한 인증번호 : ${inputNum}`);
 
-    checkCodeVerification(email, inputNum, socialType);
+    checkCodeVerification(email, emailType, inputNum, socialType);
   };
 
   // 4️⃣ 닉네임 중복 확인
@@ -78,9 +83,11 @@ export default function SignUp() {
     const pattern = /^[가-힣]{2,}|[A-Za-z]{3,}$/;
 
     if (!pattern.test(nickName)) {
+      console.log(`입력한 닉네임 : ${nickName}`);
       setNameError('한글은 최소 2글자, 영문은 최소 3글자 이상 입력하세요');
       setNickName('');
     } else {
+      console.log(`입력한 닉네임 : ${nickName}`);
       setNameError('');
       checkNameDuplication(nickName);
     }
@@ -102,7 +109,7 @@ export default function SignUp() {
     if (password && checkPassword) {
       password !== checkPassword
         ? setPasswordMessage(false)
-        : setPasswordMessage(true); // disabled 풀림
+        : setPasswordMessage(true);
     } else {
       setPasswordMessage(null);
     }
