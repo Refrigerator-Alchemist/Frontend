@@ -75,7 +75,7 @@ export default function ResetPassword() {
     if (password && rePassword) {
       password !== rePassword
         ? setPasswordMessage(false)
-        : setPasswordMessage(true); // disabled 풀림
+        : setPasswordMessage(true);
     } else {
       setPasswordMessage(null);
     }

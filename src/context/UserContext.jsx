@@ -2,15 +2,6 @@ import React, { useState, useReducer, createContext, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-/*
-🚚
-서버 로컬 : http://localhost:8080
-PATH(엔드포인트)
-로그인 : /login
-회원가입 : /signup
-비밀번호 재설정 : /reset-password
-*/
-
 // 📀 토큰 처리
 const instance = axios.create({
   baseURL: 'http://localhost:8080/auth',
@@ -65,8 +56,8 @@ export const UserProvider = ({ children }) => {
 
   const [emailExists, setEmailExists] = useState(true); // 회원가입 시 이메일 중복 여부
 
-  const [takenTime, setTakenTime] = useState(null); // 인증번호 발급시간
-  const [expireTime, setExpireTime] = useState(null); // 인증번호 만료시간
+  // const [takenTime, setTakenTime] = useState(null); // 인증번호 발급시간
+  // const [expireTime, setExpireTime] = useState(null); // 인증번호 만료시간
 
   const [verified, setVerified] = useState(false); // 이메일 인증 여부
 
@@ -95,8 +86,8 @@ export const UserProvider = ({ children }) => {
       // ▶ 204 === 중복 아니고, 인증발급
       if (response.status === 204) {
         setEmailExists(false);
-        setTakenTime(new Date());
-        setExpireTime(response.data.expireTime);
+        // setTakenTime(new Date());
+        // setExpireTime(response.data.expireTime);
         window.alert('인증번호가 발송되었습니다');
       } else {
         setEmailExists(true);
@@ -123,8 +114,8 @@ export const UserProvider = ({ children }) => {
       // ▶ 204 === 중복이고, 인증 발급
       if (response.status === 204) {
         setEmailExists(true);
-        setTakenTime(new Date());
-        setExpireTime(response.data.expireTime);
+        // setTakenTime(new Date());
+        // setExpireTime(response.data.expireTime);
         window.alert('인증번호가 발송되었습니다');
       } else {
         setEmailExists(false);
@@ -138,12 +129,12 @@ export const UserProvider = ({ children }) => {
   // ✅ 이메일 인증 확인 ------------------------------------------------------------
   const checkCodeVerification = async (
     email,
-    inputNum,
     emailType,
+    inputNum,
     socialType
   ) => {
     const NO_CODE_ERROR = '인증번호를 입력해주세요';
-    const EXPIRED_CODE_ERROR = '인증번호가 만료되었습니다';
+    // const EXPIRED_CODE_ERROR = '인증번호가 만료되었습니다';
 
     // ▶ 인증번호 입력 여부 확인
     if (!inputNum) {
@@ -152,22 +143,22 @@ export const UserProvider = ({ children }) => {
     }
 
     // ▶ 인증 유효 시간 10분
-    const timeDifference = (expireTime - takenTime) / 1000 / 60;
+    // const timeDifference = (expireTime - takenTime) / 1000 / 60;
 
-    if (timeDifference > 10) {
-      window.alert(EXPIRED_CODE_ERROR);
-      return;
-    }
+    // if (timeDifference > 10) {
+    // window.alert(EXPIRED_CODE_ERROR);
+    // return;
+    // }
 
     try {
       const response = await instance.post(
         'http://localhost:8080/auth/verify-email',
         {
           email,
-          // randomNum,
-          inputNum,
           emailType,
+          inputNum,
           socialType,
+          // randomNum,
           // takenTime,
           // expireTime,
         }
@@ -177,7 +168,7 @@ export const UserProvider = ({ children }) => {
         setVerified(true);
         window.alert('인증 완료!');
       } else {
-        window.alert('인증 실패: ' + response.data.message);
+        window.alert('인증 실패;');
       }
     } catch (error) {
       console.error('인증 완료 상태 전송 중 에러 발생: ', error);
@@ -287,7 +278,7 @@ export const UserProvider = ({ children }) => {
           'refreshToken',
           response.headers['authorization-refresh']
         );
-        localStorage.setItem('uid', response.data.id);
+        localStorage.setItem('socialId', response.data.socialId);
         localStorage.setItem('nickName', response.data.name);
         localStorage.setItem('email', response.data.email);
         localStorage.setItem('socialType', response.data.socialType);
@@ -295,7 +286,7 @@ export const UserProvider = ({ children }) => {
 
         // ▶ 유저 데이터 저장
         let user = {
-          uid: response.data.id,
+          socialId: response.data.socialId,
           nickName: response.data.name,
           email: response.data.email,
           password,
