@@ -257,7 +257,7 @@ function Board() {
 
   useEffect(() => {
     axios
-      .get('http://172.30.1.17:8080/board/apiTest')
+      .post('http://192.168.0.13:8080/board/apiTest', '1')
       .then((response) => {
         if (response.data && Array.isArray(response.data.items)) {
           const formattedData = response.data.items.map((item) => ({
