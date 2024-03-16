@@ -19,8 +19,8 @@ function RankingItem({
         onClick();
       }}
     >
-      <figure className="flex topItems-center justify-between drop-shadow-xl">
-        <div className="flex topItems-center justify-center space-x-10">
+      <figure className="flex items-center justify-between drop-shadow-xl">
+        <div className="flex items-center justify-center space-x-10">
           <div style={{ width: '30px' }}>
             <span className="font-undong">{rank}</span>
           </div>
@@ -54,7 +54,7 @@ export default function Ranking() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const URL = 'http://172.30.1.89:8080/board/apiTestLikeCount';
+    const URL = 'http://172.30.1.55:8080/board/apiTestLikeCount';
     axios.get(URL).then(function (response) {
       if (response.data && Array.isArray(response.data.items)) {
         const items = response.data.items.map((item) => ({

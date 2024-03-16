@@ -90,18 +90,16 @@ export const UserProvider = ({ children }) => {
         socialType,
       });
 
-      // ▶ 이메일 중복 아니어야 발급 : false
-      // response.data X -> .data.exists
-      // status === 409 로 판단하기
-      if (response.data.exists) {
-        setEmailExists(true);
-        window.alert('이미 서버에 존재하는 이메일입니다');
-      } else {
+      // ▶ 204 === 중복 아니고, 인증발급
+      if (response.status === 204) {
         setEmailExists(false);
         setRandomNum(response.data.randomNum);
         setSendTime(new Date());
         setExpireTime(response.data.expireTime);
         window.alert('인증번호가 발송되었습니다');
+      } else {
+        setEmailExists(true);
+        window.alert('이미 서버에 존재하는 이메일입니다');
       }
     } catch (error) {
       console.error('이메일 인증번호 요청 중 에러 발생: ', error);
@@ -119,8 +117,8 @@ export const UserProvider = ({ children }) => {
         socialType,
       });
 
-      // ▶ 이메일 존재해야 발급 : true
-      if (response.data) {
+      // ▶ 204 === 중복이고, 인증 발급
+      if (response.status === 204) {
         setEmailExists(true);
         setRandomNum(response.data.randomNum);
         setSendTime(new Date()); //
@@ -174,12 +172,12 @@ export const UserProvider = ({ children }) => {
         'http://localhost:8080/auth/verify-email',
         {
           email,
-          randomNum,
+          // randomNum,
           inputNum,
           emailType,
           socialType,
-          sendTime,
-          expireTime,
+          // sendTime,
+          // expireTime,
         }
       );
 
@@ -251,13 +249,11 @@ export const UserProvider = ({ children }) => {
   // 🚫 회원탈퇴 ---------------------------------------------------------------
   const deleteUser = async () => {
     const URL = 'http://localhost:8080/auth/delete-user';
+    const socialId = localStorage.getItem('socialId');
 
     try {
       await instance.delete(URL, {
-        headers: {
-          'authorization-access': localStorage.getItem('accessToken'),
-          'authorization-refresh': localStorage.getItem('refreshToken'),
-        },
+        data: { socialId },
       });
 
       // ▶ 로그아웃 처리
@@ -328,7 +324,6 @@ export const UserProvider = ({ children }) => {
 
   //🔓 로그아웃 ---------------------------------------------------------------
   const logout = async () => {
-    // ▶ post로 토큰 보내고 204 받아와서 삭제하기
     const URL = 'http://localhost:8080/auth/token/logout';
     const socialId = localStorage.getItem('socialId');
 
@@ -341,6 +336,7 @@ export const UserProvider = ({ children }) => {
             'Content-Type': 'application/json;charset=UTF-8',
             Accept: 'application/json',
             'Access-Control-Allow-Origin': '*',
+            'authorization-access': localStorage.getItem('accessToken'),
           },
         }
       );
@@ -403,22 +399,18 @@ export const UserProvider = ({ children }) => {
     const socialId = localStorage.getItem('socialId');
 
     try {
-      const response = await instance.post(
-        URL,
-        {
-          socialId,
+      const response = await instance.post(URL, {
+        socialId,
+        headers: {
+          'authorization-refresh': localStorage.getItem('refreshToken'),
         },
-        {
-          withCredentials: true,
-        }
-      );
+      });
 
       if (response.status === 204) {
         localStorage.setItem('accessToken', response.data.accessToken);
         console.log(
           `새로운 액세스 토큰을 발급받았습니다 : ${response.data.accessToken}`
         );
-        console.log('쿠키: ', document.cookie);
         navigate(window.location.pathname);
       }
     } catch (error) {

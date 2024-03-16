@@ -18,7 +18,7 @@ export default function Profile() {
 
   const navigate = useNavigate();
 
-  const { checkNameDuplication, nameDuplicated } = useUserDispatch();
+  const { nameDuplicated } = useUserDispatch();
 
   // 1️⃣ 처음에 보여줄 기본 유저 정보
   useEffect(() => {
@@ -45,7 +45,7 @@ export default function Profile() {
         if (reader.readyState === 2) {
           setImage(reader.result);
           // ▶ 파일 업로드 후 바로 서버로 전송
-          uploadImage();
+          uploadImage(e.target.files[0]);
         }
       };
       reader.readAsDataURL(e.target.files[0]);
@@ -53,12 +53,12 @@ export default function Profile() {
   };
 
   // 3️⃣ 프로필 이미지 저장하기
-  const uploadImage = async () => {
+  const uploadImage = async (file) => {
     const URL = 'http://localhost:8080/auth/change-profile';
 
     try {
       const formData = new FormData();
-      formData.append('file', fileInput.current.files[0]);
+      formData.append('file', file);
       formData.append('nickName', JSON.stringify({ nickName }));
 
       await axios.post(URL, formData, {
@@ -197,13 +197,6 @@ export default function Profile() {
 
           {/* 버튼 */}
           <div className="flex mt-2 mr-3">
-            <button
-              type="button"
-              className="font-score flex-grow bg-main text-white rounded-2xl p-4 mr-2 hover:bg-yellow-500"
-              onClick={() => checkNameDuplication(nickName)}
-            >
-              닉네임 중복 확인
-            </button>
             <button
               type="submit"
               className="font-score flex-grow bg-main text-white rounded-2xl p-2 hover:bg-yellow-500"

@@ -59,7 +59,7 @@ function MyPage() {
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState({
     name: '',
-    profilePic: IMAGE_PROFILE,
+    imageUrl: IMAGE_PROFILE,
   });
 
   const user = useUserState();
