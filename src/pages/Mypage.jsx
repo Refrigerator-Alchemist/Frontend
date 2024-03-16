@@ -31,7 +31,7 @@ const RecipeCard = ({
           </div>
         </Link>
         {showEditDeleteButtons && (
-          <div className="absolute top-0 right-0 flex flex-col space-y-14">
+          <div className="absolute top-4 right-0 flex flex-col space-y-10">
             <button
               onClick={() => onDelete(postid)}
               className="p-1 text-gray-400"
@@ -62,111 +62,6 @@ function MyPage() {
     profilePic: IMAGE_PROFILE,
   });
 
-  const myRecipesData = [
-    {
-      postid: 1,
-      title: '나의 레시피 1',
-      description: 'api연결전 임시 "나의  레시피 " 데이터 1입니다.',
-      img: 'https://blog.kakaocdn.net/dn/dMg4A1/btqx6ZVdX0n/kKTF0MOw9OQ7Uv3PoTBLwK/img.jpg',
-      isLiked: false,
-    },
-    {
-      postid: 2,
-      title: '나의 레시피 2',
-      description: '이것은 레시',
-      img: '이미지 URL 2',
-      isLiked: true,
-    },
-    {
-      postid: 3,
-      title: '나의 레시피 3',
-      description: '이것은 레시피 2입니다.',
-      img: '이미지 URL 2',
-      isLiked: true,
-    },
-    {
-      postid: 4,
-      title: '나의 레시피 4',
-      description: '이것은 레시피 2입니다.',
-      img: '이미지 URL 2',
-      isLiked: true,
-    },
-    {
-      postid: 5,
-      title: '나의 레시피 5',
-      description: '이것은 레시피 2입니다.',
-      img: '이미지 URL 2',
-      isLiked: true,
-    },
-    {
-      postid: 6,
-      title: '나의 레시피 6',
-      description: '이것은 레시피 2입니다.',
-      img: '이미지 URL 2',
-      isLiked: true,
-    },
-    {
-      postid: 7,
-      title: '나의 레시피 1',
-      description: 'api연결전 임시 "나의  레시피 " 데이터 1입니다.',
-      img: 'https://blog.kakaocdn.net/dn/dMg4A1/btqx6ZVdX0n/kKTF0MOw9OQ7Uv3PoTBLwK/img.jpg',
-      isLiked: false,
-    },
-    // ... 더 많은 임시 데이터
-  ];
-
-  const likedRecipesData = [
-    {
-      postid: 1,
-      title: '좋아한 레시피 1',
-      description: 'api연결전 임시 "좋아한 레시피 " 데이터 1입니다.',
-      img: '이미지 URL 3',
-      isLiked: true,
-    },
-    {
-      postid: 2,
-      title: '좋아한 레시피 2',
-      description: '이것은 좋아한 레시피 2입니다.',
-      img: '이미지 URL 4',
-      isLiked: false,
-    },
-    {
-      postid: 3,
-      title: '좋아한 레시피 3',
-      description: '이것은 좋아한 레시피 2입니다.',
-      img: '이미지 URL 4',
-      isLiked: false,
-    },
-    {
-      postid: 4,
-      title: '좋아한 레시피 4',
-      description: '이것은 좋아한 레시피 2입니다.',
-      img: '이미지 URL 4',
-      isLiked: false,
-    },
-    {
-      postid: 5,
-      title: '좋아한 레시피 5',
-      description: '이것은 좋아한 레시피 2입니다.',
-      img: '이미지 URL 4',
-      isLiked: false,
-    },
-    {
-      postid: 6,
-      title: '좋아한 레시피 6',
-      description: '이것은 좋아한 레시피 2입니다.',
-      img: '이미지 URL 4',
-      isLiked: false,
-    },
-    {
-      postid: 7,
-      title: '나의 레시피 1',
-      description: 'api연결전 임시 "나의  레시피 " 데이터 1입니다.',
-      img: 'https://blog.kakaocdn.net/dn/dMg4A1/btqx6ZVdX0n/kKTF0MOw9OQ7Uv3PoTBLwK/img.jpg',
-      isLiked: false,
-    },
-    // ... 더 많은 임시 데이터
-  ];
 
   const user = useUserState();
 
@@ -187,68 +82,109 @@ function MyPage() {
     fetchUserInfo();
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = {
-          data: {
-            items: showMyRecipes ? likedRecipesData : myRecipesData,
-          },
-        };
 
+
+
+  useEffect(() => {
+    axios
+    .post('http://192.168.0.13:8080/board/myPage', 
+    'test'
+)
+      .then((response) => {
         if (response.data && Array.isArray(response.data.items)) {
           const formattedData = response.data.items.map((item) => ({
-            postid: item.postid,
+            postid: item.ID,
             title: item.title,
-            description: item.description,
-            img: item.img,
+            description: item.Recipe,
+            img: item.thumbnail,
+            isLiked: item.likeCount > 0, //0보다크면 하트 눌러진상태
           }));
           setRecipes(formattedData);
         } else {
-          console.error('에러:', response.data);
+          console.error('에러 내용1:', response.data);
         }
-      } catch (error) {
-        console.error('에러:', error);
-      }
-    };
+      })
+      .catch((error) => {
+        console.error('에러 내용2:', error);
+      });
+  }, []);
 
-    fetchData();
-  }, [showMyRecipes]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.post('http://192.168.0.13:8080/board/myPage', {
+  //       });
+  
+  //       if (response.data && Array.isArray(response.data.items)) {
+  //         const formattedData = response.data.items.map((item) => ({
+  //           postid: item.ID,
+  //           title: item.title,
+  //           description: item.Recipe,
+  //           img: item.thumbnail,
+  //           // isLiked: item.likeCount > 0, // 해당 부분 제거
+  //         }));
+  //         setRecipes(formattedData);
+  //       } else {
+  //         setRecipes([]);
+  //       }
+  //     } catch (error) {
+  //       console.error('에러:', error);
+  //     }
+  //   };
+  
+  //   fetchData();
+  // }, []);
+  
+  
+  
 
   const { logout } = useUserDispatch(); // 로그아웃
 
+
   // 레시피 수정하는 api
-  const handleEdit = async (postid) => {
-    try {
-      const response = await axios.get(`레시피 수정하는 api url/${postid}`);
-      if (response.data) {
-        const recipeData = response.data;
-        navigate('/upload', { state: { recipe: recipeData } });
-      } //수정페이지로
-    } catch (error) {
-      console.error('에러내용:', error);
+const handleEdit = async (postid) => {
+  try {
+    const response = await axios.post(`http://192.168.0.13:8080/board/updateBoard`, { postId: postid });
+    if (response.status === 200) { 
+      navigate('/upload', { state: { postId: postid } });
+    } else {
+      console.error('응답에러 :', response.data);
+    }
+  } catch (error) {
+    console.error('에러내용:', error);
+  }
+};
+
+  
+
+  const handleDeleteConfirmation = async (postid) => {
+    const confirmDelete = window.confirm('정말로 삭제하시겠습니까?');
+    if (confirmDelete) {
+      try {
+        await deleteRecipe(postid);
+        console.log('레시피 삭제 성공');
+      } catch (error) {
+        console.error('레시피 삭제 실패:', error);
+      }
     }
   };
-
-  // 레시피 삭제하는 api
+  
+   // 레시피 삭제 
   const deleteRecipe = async (postid) => {
     try {
-      await axios.delete(`레시피 삭제하는 api url/${postid}`);
-      console.log('삭제성공');
-      removeRecipe(postid);
-    } catch (error) {
-      console.error('삭제에러', error);
-    }
-  };
+      await axios.post(`http://192.168.0.13:8080/board/deleteBoard`, { postId: postid });
 
-  const removeRecipe = (postid) => {
-    setRecipes(recipes.filter((recipe) => recipe.postid !== postid));
-  };
-  const handleDeleteConfirmation = (postid) => {
-    if (window.confirm('레시피를 삭제하시겠습니까?')) {
-      deleteRecipe(postid);
+      setRecipes((prevRecipes) =>
+        prevRecipes.filter((recipe) => recipe.postid !== postid)
+      ); //ui에서도삭제 
+    } catch (error) {
+      console.error('레시피 삭제 에러내용:', error);
+      throw error;
     }
   };
+  
+  
+
 
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
@@ -355,3 +291,5 @@ function MyPage() {
 }
 
 export default MyPage;
+
+

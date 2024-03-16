@@ -81,6 +81,9 @@
 //   const [currentPage, setCurrentPage] = useState(1);
 //   const [recipesPerPage, setRecipesPerPage] = useState(5);
 
+  
+
+
 //   //레시피 불러오기 - 연결되는 코드(페이지 전)
 //   // useEffect(() => {
 //   //   axios
@@ -92,7 +95,9 @@
 //   //           title: item.title,
 //   //           description: item.Recipe,
 //   //           img: item.thumbnail,
-//   //           isLiked: item.likeCount > 0,
+
+//   //           isLiked: item.likeCount > 0, 
+
 //   //         }));
 //   //         setRecipes(formattedData);
 //   //       } else {
@@ -111,6 +116,8 @@
 //         pageNumber: pageNumber
 //       });
 
+  
+
 //       if (response.data && Array.isArray(response.data.items)) {
 //         const formattedData = response.data.items.map((item) => ({
 //           postid: item.ID,
@@ -128,9 +135,15 @@
 //     }
 //   };
 
+  
+
 //   useEffect(() => {
 //     fetchRecipesByPage(1); // 초기 페이지 로딩 시 첫 번째 페이지의 레시피 가져오기
 //   }, []);
+
+
+
+
 
 // //검색
 //   const handleSearch = (query) => {
@@ -154,6 +167,8 @@
 //     pageNumbers.push(i);
 //   }
 
+    
+
 //   //프론트 페이지네이션 코드- 삭제예정
 //   // const indexOfLastRecipe = currentPage * recipesPerPage;
 //   // const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
@@ -164,6 +179,10 @@
 //   // );
 
 //   // const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+
+
+
 
 //   return (
 //     <section className="Board pb-24">
@@ -252,6 +271,22 @@
 
 // export default Board;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import React from 'react';
 import searchicon from '../img/search.png';
 import writingicon from '../img/writing.png';
@@ -337,6 +372,9 @@ function Board() {
   const [totalPages, setTotalPages] = useState(0);
   const recipesPerPage = 6;
 
+  
+
+
   //레시피 불러오기 - 연결되는 코드(페이지 전)
   // useEffect(() => {
   //   axios
@@ -348,7 +386,9 @@ function Board() {
   //           title: item.title,
   //           description: item.Recipe,
   //           img: item.thumbnail,
-  //           isLiked: item.likeCount > 0,
+
+  //           isLiked: item.likeCount > 0, 
+
   //         }));
   //         setRecipes(formattedData);
   //       } else {
@@ -360,12 +400,14 @@ function Board() {
   //     });
   // }, []);
 
+
   useEffect(() => {
     fetchTotalRecipes(); // 전체 레시피 수를 가져오는
   }, []);
 
   useEffect(() => {
-    fetchRecipesByPage(currentPage);
+    fetchRecipesByPage(currentPage); 
+
   }, [currentPage]);
 
   const fetchTotalRecipes = async () => {
@@ -379,15 +421,14 @@ function Board() {
     }
   };
 
+
   //레시피
   const fetchRecipesByPage = async (pageNumber) => {
     try {
-      const response = await axios.post(
-        'http://192.168.0.13:8080/board/apiTest',
-        {
-          pageNumber: pageNumber,
-        }
-      );
+      const response = await axios.post('http://192.168.0.13:8080/board/apiTest', {
+        pageNumber: pageNumber
+      });
+
 
       if (response.data && Array.isArray(response.data.items)) {
         const formattedData = response.data.items.map((item) => ({
@@ -405,12 +446,15 @@ function Board() {
       console.error('에러 내용2:', error);
     }
   };
-
+  
   useEffect(() => {
-    fetchRecipesByPage(1);
+    fetchRecipesByPage(1); 
   }, []);
 
-  //검색
+
+
+//검색
+
   const handleSearch = (query) => {
     if (query.length > 0) {
       const results = recipes.filter((recipe) => recipe.title.includes(query));
@@ -426,10 +470,16 @@ function Board() {
     setCurrentPage(pageNumber);
   };
 
+
+
+
   const pageNumbers = [];
   for (let i = 1; i <= totalPages; i++) {
     pageNumbers.push(i);
   } // 클릭할 페이지번호 순서대로
+
+    
+
 
   return (
     <section className="Board pb-24">
@@ -470,7 +520,7 @@ function Board() {
               <Ranking />
             </div>
             <div className="my-2">
-              <span className="font-score font-extrabold ml-6 text-2xl">
+            <span className="font-score font-extrabold ml-6 text-2xl">
                 Recipe
               </span>
               {recipes.map((recipe) => (
@@ -493,9 +543,7 @@ function Board() {
               key={number}
               onClick={() => handlePageClick(number)}
               className={`px-4 py-2 border rounded-full m-1 ${
-                currentPage === number
-                  ? 'bg-main text-white'
-                  : 'bg-white text-main'
+                currentPage === number ? 'bg-main text-white' : 'bg-white text-main'
               }`}
             >
               {number}
@@ -519,3 +567,20 @@ function Board() {
 }
 
 export default Board;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

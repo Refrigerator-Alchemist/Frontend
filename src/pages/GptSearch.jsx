@@ -35,36 +35,65 @@ const TagInput = () => {
     inputRef.current.focus();
   };
 
-  const handleNextButtonClick = () => {
-    if (tags.length === 0) {
-      return;
-    }
+  // const handleNextButtonClick = () => {
+  //   if (tags.length === 0) {
+  //     return;
+  //   }
 
-    axios
-      .post('http://192.168.0.35:8080/recipe/recommend', {
-        ingredients: tags, 
-      })
-      .then((response) => {
-        console.log(response.data);
-        navigate('/gptresult');
-      })
-      .catch((error) => {
-        if (error.response && error.response.status === 406) {
-          setErrorMessage(error.response.data.message);
-          setTags([]);
-          setInputValue('');
-          inputRef.current.focus();
-        } else {
-          if (error.response) {
-            console.error('Error 내용:', error.response.data);
-          } else if (error.request) {
-            console.error('서버 응답 없음:', error.request);
-          } else {
-            console.error('에러 메시지:', error.message);
-          }
+  //   axios
+  //     .post('http://192.168.0.35:8080/recipe/recommend', {
+  //       ingredients: tags, 
+  //     })
+  //     .then((response) => {
+  //       console.log(response.data);
+  //       navigate('/gptresult');
+  //     })
+  //     .catch((error) => {
+  //       if (error.response && error.response.status === 406) {
+  //         setErrorMessage(error.response.data.message);
+  //         setTags([]);
+  //         setInputValue('');
+  //         inputRef.current.focus();
+  //       } else {
+  //         if (error.response) {
+  //           console.error('Error 내용:', error.response.data);
+  //         } else if (error.request) {
+  //           console.error('서버 응답 없음:', error.request);
+  //         } else {
+  //           console.error('에러 메시지:', error.message);
+  //         }
+  //       }
+  //     });
+  // };
+
+  const handleNextButtonClick = async () => {
+    try {
+      const response = await axios.post(
+        "http://192.168.0.35:8080/recipe/recommend",
+        {
+          ingredients: tags,
         }
-      });
-  };
+      );
+
+      console.log(response.data);
+      navigate(`/gptresult/${response.data.recommendId}`);
+
+      
+    } catch (error) {
+      if (error.response && error.response.status === 406) {
+        setErrorMessage(
+          error.response.data.message || "입력한 재료로 추천을 받을 수 없습니다."
+        );
+        setTags([]);
+        setInputValue("");
+        inputRef.current.focus();
+      } else {
+        console.error("Error:", error.response || error.message);
+      }
+    }
+      };
+
+
   return (
     <section className="bg-white min-h-screen px-4 py-8 flex flex-col">
       <div
@@ -128,7 +157,7 @@ const TagInput = () => {
           type="button"
           onClick={handleNextButtonClick}
         >
-          다음
+          연금술 시작하기 
         </button>
       </footer>
     </section>
