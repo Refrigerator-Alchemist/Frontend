@@ -54,7 +54,7 @@ export default function Ranking() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const URL = 'http://172.30.1.55:8080/board/apiTestLikeCount';
+    const URL = 'http://localhost:8080/board/apiTestLikeCount';
     axios.get(URL).then(function (response) {
       if (response.data && Array.isArray(response.data.items)) {
         const items = response.data.items.map((item) => ({
