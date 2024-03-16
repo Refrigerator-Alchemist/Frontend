@@ -15,18 +15,16 @@ export default function LoginSuccess() {
     const fetchLoginData = async () => {
       const urlParams = new URLSearchParams(window.location.search);
       const accessToken = urlParams.get('accessToken');
-      const email = urlParams.get('email');
+      const refreshToken = urlParams.get('refreshToken');
       const socialId = urlParams.get('socialId');
-      const socialType = urlParams.get('socialType');
-      const imageUrl = urlParams.get('imageUrl');
+      const email = urlParams.get('email');
 
       // ▶ 4개 데이터 받아왔는지 판단
-      if (accessToken && email && socialType && socialId && imageUrl) {
+      if (accessToken && socialId && refreshToken && email) {
         localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('email', email);
         localStorage.setItem('socialId', socialId);
-        localStorage.setItem('socialType', socialType);
-        localStorage.setitem('imageUrl', imageUrl);
+        localStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem('email', email);
 
         console.log(`⭕ 로컬스토리지 저장 완료 : ${localStorage}`);
 
@@ -34,9 +32,8 @@ export default function LoginSuccess() {
         let user = {
           accessToken: localStorage.getItem('accessToken'),
           email: localStorage.getItem('email'),
-          uid: localStorage.getItem('socialId'),
+          socialId: localStorage.getItem('socialId'),
           socialType: localStorage.getItem('socialType'),
-          imageUrl: localStorage.getItem('imageUrl'),
         };
 
         console.log(`⭕ 유저 데이터 저장 완료`);

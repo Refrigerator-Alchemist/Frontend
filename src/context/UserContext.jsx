@@ -13,10 +13,10 @@ instance.interceptors.request.use(
     const accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
     if (accessToken) {
-      config.headers['Authorization-Access'] = 'Bearer ' + accessToken;
+      config.headers['Authorization-Access'] = accessToken;
     }
     if (refreshToken) {
-      config.headers['Authorization-Refresh'] = 'Bearer ' + refreshToken;
+      config.headers['Authorization-Refresh'] = refreshToken;
     }
     return config;
   },
@@ -278,20 +278,18 @@ export const UserProvider = ({ children }) => {
           'refreshToken',
           response.headers['authorization-refresh']
         );
-        localStorage.setItem('socialId', response.headers['Socialid']);
+        localStorage.setItem('socialId', response.headers.get['socialId']);
         localStorage.setItem('nickName', response.data.name);
         localStorage.setItem('email', response.data.email);
         localStorage.setItem('socialType', response.data.socialType);
-        localStorage.setItem('imageUrl', response.data.imageUrl);
 
         // ▶ 유저 데이터 저장
         let user = {
-          socialId: response.headers['Socialid'],
+          socialId: response.headers['socialId'],
           nickName: response.data.name,
           email: response.data.email,
           password,
           socialType: socialType,
-          imageUrl: response.data.imageUrl,
         };
 
         dispatch({ type: SET_USER, user });
@@ -329,11 +327,10 @@ export const UserProvider = ({ children }) => {
         // ▶ 유저 데이터 삭제
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
-        localStorage.removeItem('uid');
+        localStorage.removeItem('socialid');
         localStorage.removeItem('nickName');
         localStorage.removeItem('email');
         localStorage.removeItem('socialType');
-        localStorage.removeItem('imageUrl');
 
         // ▶ 유저 상태 초기화
         dispatch({ type: SET_USER, user: null });
