@@ -58,7 +58,7 @@ export default function Ranking() {
     axios.get(URL).then(function (response) {
       if (response.data && Array.isArray(response.data.items)) {
         const items = response.data.items.map((item) => ({
-          id: item.id,
+          id: item.ID,
           imageUrl: item.imageUrl,
           title: item.title,
           ingredients: item.ingredients.map((ingredient) => ingredient),
