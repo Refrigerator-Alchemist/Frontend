@@ -65,9 +65,9 @@ export const UserProvider = ({ children }) => {
 
   const [emailExists, setEmailExists] = useState(true); // 회원가입 시 이메일 중복 여부
 
-  const [randomNum, setRandomNum] = useState(null); // 발급된 인증번호
-  const [sendTime, setSendTime] = useState(null); // 인증번호 발급시간
+  const [takenTime, setTakenTime] = useState(null); // 인증번호 발급시간
   const [expireTime, setExpireTime] = useState(null); // 인증번호 만료시간
+
   const [verified, setVerified] = useState(false); // 이메일 인증 여부
 
   const [nameDuplicated, setNameDuplicated] = useState(true); // 닉네임 중복 여부
@@ -79,7 +79,7 @@ export const UserProvider = ({ children }) => {
 
   const navigate = useNavigate();
 
-  // 📧 이메일 인증 요청 (회원가입용)
+  // 📧 이메일 인증 요청 (회원가입용) -------------------------------------------------
   const requestEmailForSignUp = async (email, emailType, socialType) => {
     const URL = 'http://localhost:8080/auth/send-email';
 
@@ -90,11 +90,12 @@ export const UserProvider = ({ children }) => {
         socialType,
       });
 
+      console.log('리스폰스', response);
+
       // ▶ 204 === 중복 아니고, 인증발급
       if (response.status === 204) {
         setEmailExists(false);
-        setRandomNum(response.data.randomNum);
-        setSendTime(new Date());
+        setTakenTime(new Date());
         setExpireTime(response.data.expireTime);
         window.alert('인증번호가 발송되었습니다');
       } else {
@@ -106,7 +107,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // 📧 이메일 인증 요청 (비밀번호 재설정용)
+  // 📧 이메일 인증 요청 (비밀번호 재설정용) ---------------------------------------------
   const requestEmailForReset = async (email, emailType, socialType) => {
     const URL = 'http://localhost:8080/auth/send-email';
 
@@ -117,11 +118,12 @@ export const UserProvider = ({ children }) => {
         socialType,
       });
 
+      console.log('리스폰스', response);
+
       // ▶ 204 === 중복이고, 인증 발급
       if (response.status === 204) {
         setEmailExists(true);
-        setRandomNum(response.data.randomNum);
-        setSendTime(new Date()); //
+        setTakenTime(new Date());
         setExpireTime(response.data.expireTime);
         window.alert('인증번호가 발송되었습니다');
       } else {
@@ -133,37 +135,27 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // ✅ 이메일 인증 확인
+  // ✅ 이메일 인증 확인 ------------------------------------------------------------
   const checkCodeVerification = async (
     email,
     inputNum,
     emailType,
     socialType
   ) => {
-    const NO_SERVER_CODE_ERROR = '발급된 인증번호가 없습니다';
     const NO_CODE_ERROR = '인증번호를 입력해주세요';
     const EXPIRED_CODE_ERROR = '인증번호가 만료되었습니다';
-    const INVALID_CODE_ERROR = '인증번호가 일치하지 않습니다';
 
-    // ▶ 발급 여부 확인, 인증번호 입력여부 확인
-    if (!randomNum) {
-      window.alert(NO_SERVER_CODE_ERROR);
-      return;
-    } else if (!inputNum) {
+    // ▶ 인증번호 입력 여부 확인
+    if (!inputNum) {
       window.alert(NO_CODE_ERROR);
       return;
     }
 
     // ▶ 인증 유효 시간 10분
-    const timeDifference = (expireTime - sendTime) / 1000 / 60;
+    const timeDifference = (expireTime - takenTime) / 1000 / 60;
 
     if (timeDifference > 10) {
       window.alert(EXPIRED_CODE_ERROR);
-      return;
-    }
-
-    if (inputNum !== randomNum) {
-      window.alert(INVALID_CODE_ERROR);
       return;
     }
 
@@ -176,14 +168,13 @@ export const UserProvider = ({ children }) => {
           inputNum,
           emailType,
           socialType,
-          // sendTime,
+          // takenTime,
           // expireTime,
         }
       );
 
       if (response.status === 204) {
         setVerified(true);
-        setRandomNum('');
         window.alert('인증 완료!');
       } else {
         window.alert('인증 실패: ' + response.data.message);

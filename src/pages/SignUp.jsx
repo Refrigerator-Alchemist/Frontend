@@ -39,7 +39,7 @@ export default function SignUp() {
   const emailType = 'sign-up';
   const socialType = 'Refrigerator-Cleaner';
 
-  /**-----------------------------------------상태, 상수---------------------------------------------*/
+  //-----------------------------------------상태, 상수---------------------------------------------
 
   // 1️⃣ 이메일 저장
   const handleEmailChange = (e) => setEmail(e.target.value);
