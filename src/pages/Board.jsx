@@ -80,7 +80,9 @@
 //   const [isSearching, setIsSearching] = useState(false);
 //   const [currentPage, setCurrentPage] = useState(1);
 //   const [recipesPerPage, setRecipesPerPage] = useState(5);
+
   
+
 
 //   //레시피 불러오기 - 연결되는 코드(페이지 전)
 //   // useEffect(() => {
@@ -93,7 +95,9 @@
 //   //           title: item.title,
 //   //           description: item.Recipe,
 //   //           img: item.thumbnail,
+
 //   //           isLiked: item.likeCount > 0, 
+
 //   //         }));
 //   //         setRecipes(formattedData);
 //   //       } else {
@@ -111,7 +115,9 @@
 //       const response = await axios.post('http://192.168.0.13:8080/board/apiTest', {
 //         pageNumber: pageNumber
 //       });
+
   
+
 //       if (response.data && Array.isArray(response.data.items)) {
 //         const formattedData = response.data.items.map((item) => ({
 //           postid: item.ID,
@@ -128,10 +134,14 @@
 //       console.error('에러 내용2:', error);
 //     }
 //   };
+
   
+
 //   useEffect(() => {
 //     fetchRecipesByPage(1); // 초기 페이지 로딩 시 첫 번째 페이지의 레시피 가져오기
 //   }, []);
+
+
 
 
 
@@ -156,8 +166,8 @@
 //   for (let i = 1; i <= Math.ceil(recipes.length / recipesPerPage); i++) {
 //     pageNumbers.push(i);
 //   }
-    
 
+    
 
 //   //프론트 페이지네이션 코드- 삭제예정
 //   // const indexOfLastRecipe = currentPage * recipesPerPage;
@@ -169,6 +179,8 @@
 //   // );
 
 //   // const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+
 
 
 
@@ -359,7 +371,9 @@ function Board() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const recipesPerPage = 6;
+
   
+
 
   //레시피 불러오기 - 연결되는 코드(페이지 전)
   // useEffect(() => {
@@ -372,7 +386,9 @@ function Board() {
   //           title: item.title,
   //           description: item.Recipe,
   //           img: item.thumbnail,
+
   //           isLiked: item.likeCount > 0, 
+
   //         }));
   //         setRecipes(formattedData);
   //       } else {
@@ -391,6 +407,7 @@ function Board() {
 
   useEffect(() => {
     fetchRecipesByPage(currentPage); 
+
   }, [currentPage]);
 
   const fetchTotalRecipes = async () => {
@@ -405,13 +422,13 @@ function Board() {
   };
 
 
-
   //레시피
   const fetchRecipesByPage = async (pageNumber) => {
     try {
       const response = await axios.post('http://192.168.0.13:8080/board/apiTest', {
         pageNumber: pageNumber
       });
+
 
       if (response.data && Array.isArray(response.data.items)) {
         const formattedData = response.data.items.map((item) => ({
@@ -437,6 +454,7 @@ function Board() {
 
 
 //검색
+
   const handleSearch = (query) => {
     if (query.length > 0) {
       const results = recipes.filter((recipe) => recipe.title.includes(query));
@@ -453,11 +471,15 @@ function Board() {
   };
 
 
+
+
   const pageNumbers = [];
   for (let i = 1; i <= totalPages; i++) {
     pageNumbers.push(i);
   } // 클릭할 페이지번호 순서대로
+
     
+
 
   return (
     <section className="Board pb-24">
