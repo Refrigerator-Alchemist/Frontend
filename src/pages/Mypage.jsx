@@ -62,7 +62,6 @@ function MyPage() {
     profilePic: IMAGE_PROFILE,
   });
 
-
   const user = useUserState();
 
   useEffect(() => {
@@ -82,14 +81,9 @@ function MyPage() {
     fetchUserInfo();
   }, []);
 
-
-
-
   useEffect(() => {
     axios
-    .post('http://192.168.0.13:8080/board/myPage', 
-    'test'
-)
+      .post('http://172.30.1.89:8080/board/myPage', 'test')
       .then((response) => {
         if (response.data && Array.isArray(response.data.items)) {
           const formattedData = response.data.items.map((item) => ({
@@ -114,7 +108,7 @@ function MyPage() {
   //     try {
   //       const response = await axios.post('http://192.168.0.13:8080/board/myPage', {
   //       });
-  
+
   //       if (response.data && Array.isArray(response.data.items)) {
   //         const formattedData = response.data.items.map((item) => ({
   //           postid: item.ID,
@@ -131,31 +125,28 @@ function MyPage() {
   //       console.error('에러:', error);
   //     }
   //   };
-  
+
   //   fetchData();
   // }, []);
-  
-  
-  
 
   const { logout } = useUserDispatch(); // 로그아웃
 
-
   // 레시피 수정하는 api
-const handleEdit = async (postid) => {
-  try {
-    const response = await axios.post(`http://192.168.0.13:8080/board/updateBoard`, { postId: postid });
-    if (response.status === 200) { 
-      navigate('/upload', { state: { postId: postid } });
-    } else {
-      console.error('응답에러 :', response.data);
+  const handleEdit = async (postid) => {
+    try {
+      const response = await axios.post(
+        `http://172.30.1.89:8080/board/updateBoard`,
+        { postId: postid }
+      );
+      if (response.status === 200) {
+        navigate('/upload', { state: { postId: postid } });
+      } else {
+        console.error('응답에러 :', response.data);
+      }
+    } catch (error) {
+      console.error('에러내용:', error);
     }
-  } catch (error) {
-    console.error('에러내용:', error);
-  }
-};
-
-  
+  };
 
   const handleDeleteConfirmation = async (postid) => {
     const confirmDelete = window.confirm('정말로 삭제하시겠습니까?');
@@ -168,23 +159,22 @@ const handleEdit = async (postid) => {
       }
     }
   };
-  
-   // 레시피 삭제 
+
+  // 레시피 삭제
   const deleteRecipe = async (postid) => {
     try {
-      await axios.post(`http://192.168.0.13:8080/board/deleteBoard`, { postId: postid });
+      await axios.post(`http://172.30.1.89:8080/board/deleteBoard`, {
+        postId: postid,
+      });
 
       setRecipes((prevRecipes) =>
         prevRecipes.filter((recipe) => recipe.postid !== postid)
-      ); //ui에서도삭제 
+      ); //ui에서도삭제
     } catch (error) {
       console.error('레시피 삭제 에러내용:', error);
       throw error;
     }
   };
-  
-  
-
 
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
@@ -291,5 +281,3 @@ const handleEdit = async (postid) => {
 }
 
 export default MyPage;
-
-
