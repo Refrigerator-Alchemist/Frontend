@@ -19,9 +19,7 @@ const RecipePage = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.post(`http://172.30.1.89:8080/recipe/recommend/${recommendId}`, {
-          recommendId: recommendId
-        });
+        const response = await axios.get(`http://172.30.1.89:8080/recipe/recommend/${recommendId}`);
         if (response.data) {
           setTitle(response.data.foodName);
           setIngredients(response.data.ingredients);
@@ -36,6 +34,7 @@ const RecipePage = () => {
   
     fetchData();
   }, [recommendId]);
+  
 
 
   //결과화면에서 저장하기 -> 저장리스트로 이동 
