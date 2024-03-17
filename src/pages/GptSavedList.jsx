@@ -14,8 +14,8 @@ const GptSavedList = () => {
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const response = await axios.get('http://192.168.0.35:8080/MyRecipe');
-        setRecipes(response.data); // Assuming response.data is an array of recipes
+        const response = await axios.get('http://172.30.1.42:8080/MyRecipe');
+        setRecipes(response.data); 
       } catch (error) {
         console.error('에러내용:', error);
       }
@@ -51,7 +51,7 @@ const GptSavedList = () => {
       </div>
       <div className="my-2 mt-20 mb-4">
         <div className="titlebox mb-6 mt-2">
-          <span className="font-undong font-bold ml-8 text-2xl">나의 연금술 레시피</span>
+          <span className="font-score font-extrabold ml-8 text-2xl">나의 연금술 레시피</span>
         </div>
         {currentRecipes.map((recipe) => (
           <RecipeCard

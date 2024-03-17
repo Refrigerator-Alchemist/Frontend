@@ -38,12 +38,12 @@ const RecipeCard = ({
             >
               <FaTrash />
             </button>
-            <Link
-              to={`/editpost/${postid}`}
+            <button 
+              onClick={() => onEdit(postid)}
               className="pr-3 text-sm text-gray-300"
             >
               수정
-            </Link>
+            </button>
           </div>
         )}
       </div>
@@ -87,18 +87,26 @@ function MyPage() {
 
   useEffect(() => {
     axios
-    .post('http://192.168.0.13:8080/board/myPage', 
-    'test'
-)
+      .post('http://172.30.1.55:8080/board/myPage', 'test')
       .then((response) => {
+        console.log("서버 응답 데이터:", response.data);
+  
         if (response.data && Array.isArray(response.data.items)) {
-          const formattedData = response.data.items.map((item) => ({
-            postid: item.ID,
-            title: item.title,
-            description: item.Recipe,
-            img: item.thumbnail,
-            isLiked: item.likeCount > 0, //0보다크면 하트 눌러진상태
-          }));
+          const formattedData = response.data.items.map((item) => {
+            // console.log("postid의 타입:", typeof item.ID);
+            // console.log("title의 타입:", typeof item.title);
+            // console.log("description의 타입:", typeof item.Recipe);
+            // console.log("img의 타입:", typeof item.thumbnail);
+            // console.log("isLiked의 타입:", typeof item.likeCount > 0);
+  
+            return {
+              postid: item.ID,
+              title: item.title,
+              description: item.Recipe,
+              img: item.thumbnail,
+              isLiked: item.likeCount > 0,
+            };
+          });
           setRecipes(formattedData);
         } else {
           console.error('에러 내용1:', response.data);
@@ -108,6 +116,7 @@ function MyPage() {
         console.error('에러 내용2:', error);
       });
   }, []);
+  
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -141,21 +150,15 @@ function MyPage() {
   const { logout } = useUserDispatch(); // 로그아웃
 
 
-  // 레시피 수정하는 api
-const handleEdit = async (postid) => {
+//   레시피 수정하는 api
+const handleEdit = async (postId) => {
   try {
-    const response = await axios.post(`http://192.168.0.13:8080/board/updateBoard`, { postId: postid });
-    if (response.status === 200) { 
-      navigate('/upload', { state: { postId: postid } });
-    } else {
-      console.error('응답에러 :', response.data);
-    }
+    // 수정 페이지로 이동하는 부분
+    navigate(`/editpost/${postId}`);
   } catch (error) {
-    console.error('에러내용:', error);
+    console.error('에러 내용:', error);
   }
 };
-
-  
 
   const handleDeleteConfirmation = async (postid) => {
     const confirmDelete = window.confirm('정말로 삭제하시겠습니까?');
@@ -172,7 +175,7 @@ const handleEdit = async (postid) => {
    // 레시피 삭제 
   const deleteRecipe = async (postid) => {
     try {
-      await axios.post(`http://192.168.0.13:8080/board/deleteBoard`, { postId: postid });
+      await axios.post(`http://172.30.1.55:8080/board/deleteBoard`, { postId: postid });
 
       setRecipes((prevRecipes) =>
         prevRecipes.filter((recipe) => recipe.postid !== postid)
@@ -256,15 +259,16 @@ const handleEdit = async (postid) => {
         <div className="recipe-card-container w-full flex flex-wrap">
           {currentRecipes.map((recipe) => (
             <RecipeCard
-              key={recipe.postid}
-              postid={recipe.postid}
-              title={recipe.title}
-              description={recipe.description}
-              img={recipe.img}
-              showEditDeleteButtons={!showMyRecipes}
-              onDelete={(postid) => handleDeleteConfirmation(postid)}
-              onEdit={(postid) => handleEdit(postid)}
-            />
+            key={recipe.postid}
+            postid={recipe.postid}
+            title={recipe.title}
+            description={recipe.description}
+            img={recipe.img}
+            showEditDeleteButtons={!showMyRecipes}
+            onDelete={handleDeleteConfirmation} // 이 부분 수정
+            onEdit={handleEdit} // 이 부분 수정
+          />
+          
           ))}
         </div>
 

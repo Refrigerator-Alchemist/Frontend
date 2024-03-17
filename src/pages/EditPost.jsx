@@ -12,27 +12,34 @@ function UploadBoard() {
   const [ingredients, setIngredients] = useState(['']);
 
   useEffect(() => {
-    if (postId) {
-      fetchData(postId);
-    }
+    fetchData(postId); 
   }, [postId]);
-
 
   // 서버에서 기존 정보들을 불러오는 함수 
   const fetchData = async (postId) => {
+    if (!postId) return; // postId가 없으면 함수 종료
+  
     try {
-      const response = await axios.post('http://192.168.0.13:8080/board/updateBoard', {
-        postId: postId, 
-      });
-
-      const { foodName, description, ingredients } = response.data;
-      setFoodName(foodName);
-      setDescription(description);
-      setIngredients(ingredients);
+      const response = await axios.post('http://172.30.1.89:8080/board/updateBoard', { postId });
+     
+      console.log("서버 응답 데이터:", response.data);
+  
+      if (response.data) {
+        const { Recipe, nickName, ingredients } = response.data;
+  
+        setFoodName(Recipe || ''); 
+        setDescription(nickName || '');
+        setIngredients(Array.isArray(ingredients) ? ingredients : []); 
+      } else {
+        console.error('에러1:', response.data);
+      }
     } catch (error) {
       console.error('데이터 불러오는 중 에러 발생:', error);
     }
   };
+  
+
+
 
   const handleIngredientChange = (index, event) => {
     const newIngredients = [...ingredients];
@@ -181,8 +188,6 @@ function UploadBoard() {
 }
 
 export default UploadBoard;
-
-
 
 
 //아래는 임시데이터로 불러오기 확인 

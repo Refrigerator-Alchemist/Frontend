@@ -19,7 +19,7 @@ const RecipePage = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(`http://172.30.1.89:8080/recipe/recommend/${recommendId}`);
+        const response = await axios.get(`http://172.30.1.42:8080/recipe/recommend/${recommendId}`);
         if (response.data) {
           setTitle(response.data.foodName);
           setIngredients(response.data.ingredients);
@@ -40,19 +40,21 @@ const RecipePage = () => {
   //결과화면에서 저장하기 -> 저장리스트로 이동 
   const handleSaveButtonClick = async () => {
     try {
-      await axios.post('http://172.30.1.89:8080/recipe/save', {
-        recipeDto: {
-          foodName: title,
-          ingredients: ingredients,
-          recipe: steps,
-        },
+      console.log('저장 요청 전:', title, ingredients, steps);
+      await axios.post('http://172.30.1.42:8080/recipe/save', {
+        foodName: title,
+        ingredients: ingredients,
+        recipe: steps
       });
       console.log('저장 성공');
-      navigate('/gptSavedList');
+      navigate('/recipe/myRecipe');
     } catch (error) {
       console.error('에러내용:', error);
     }
-  };
+};
+
+
+
 
   if (isLoading) {
     return (
@@ -81,11 +83,11 @@ const RecipePage = () => {
         <div className="md:flex">
           <div className="w-full p-4 pt-8">
             <div className="border-b-2 border-gray-100 py-2">
-              <h1 className="font-score text-2xl font-bold text-gray-800 text-center">
+              <h1 className="m-4 tfont-score text-xl font-bold text-gray-800 text-center">
                 {title}
               </h1>
-            </div>
-            <div className="recipebox p-4 bg-gray-100 rounded-lg overflow-y-auto max-h-96">
+            </div> 
+            <div className="mt-8 recipebox p-4 bg-gray-100 rounded-lg overflow-y-auto max-h-200">
               <h2 className="font-score text-lg font-bold text-gray-800">
                 재료
               </h2>

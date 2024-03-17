@@ -10,30 +10,32 @@ const BoardDetail = () => {
   const { postId } = useParams();
   const navigate = useNavigate();
 
-  const handleLikeClick = async () => {
-    // 하트 유무 미완성
-    setIsLiked(!isLiked);
-    try {
-      await axios.post(`서버주소/board/${postId}`, { liked: !isLiked });
-    } catch (error) {
-      console.error('에러내용:', error);
-    }
-  };
+  // const handleLikeClick = async () => {
+  //   // 하트 유무 미완성
+  //   setIsLiked(!isLiked);
+  //   try {
+  //     await axios.post(`서버주소/board/${postId}`, { liked: !isLiked });
+  //   } catch (error) {
+  //     console.error('에러내용:', error);
+  //   }
+  // };
 
-  //상세페이지
-  // useEffect(() => {
-  //   const fetchRecipes = async () => {
-  //     try {
-  //       const response = await axios.get(`http://172.30.1.17:8080/board/${postId}`);
-  //       setRecipes(response.data);
-  //     } catch (error) {
-  //       console.error('에러내용:', error);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchPostData = async () => {
+      try {
+        const response = await axios.post(`http://172.30.1.55:8080/board/specific`, { postId });
+        const { data } = response;
+        setPostData(data);
+      } catch (error) {
+        console.error('에러 내용:', error);
+      }
+    };
 
-  //   fetchRecipes();
-  // }, []);
+    fetchPostData();
+  }, [postId]);
 
+
+  
   return (
     <section>
       <div

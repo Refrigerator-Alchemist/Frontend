@@ -286,6 +286,8 @@ import Ranking from '../components/Ranking';
 import Navigation from '../components/Navigation';
 import axios from 'axios';
 
+
+//게시물 검색
 const SearchBar = ({ onSearch }) => {
   return (
     <div className="font-score flex-grow flex items-center rounded-full bg-white p-2 shadow ">
@@ -305,6 +307,8 @@ const SearchBar = ({ onSearch }) => {
   );
 };
 
+
+// 레시피 작성하기 
 const WriteButton = () => {
   return (
     <Link
@@ -321,7 +325,7 @@ const WriteButton = () => {
   );
 };
 
-//레시피카드
+// board - 레시피카드
 const RecipeCard = ({ postid, title, description, img, isLiked }) => {
   const [liked, setLiked] = useState(false);
 
@@ -351,6 +355,7 @@ const RecipeCard = ({ postid, title, description, img, isLiked }) => {
     </div>
   );
 };
+
 
 function Board() {
   const [recipes, setRecipes] = useState([]);
@@ -389,54 +394,59 @@ function Board() {
     fetchTotalRecipes(); // 전체 레시피 수를 가져오는
   }, []);
 
-  useEffect(() => {
+    useEffect(() => {
     fetchRecipesByPage(currentPage); 
   }, [currentPage]);
 
   const fetchTotalRecipes = async () => {
     try {
-      const response = await axios.get('http://192.168.0.13:8080/boardSize');
-      const totalRecipes = response.data.totalRecipes;
+      const response = await axios.get('http://172.30.1.55:8080/boardSize');
+      console.log(response.data);
+      const totalRecipes = response.data;
       const totalPages = Math.ceil(totalRecipes / recipesPerPage);
-      setTotalPages(totalPages); //
+      setTotalPages(totalPages);
+  
+      console.log('총 페이지 수:', totalPages); 
     } catch (error) {
       console.error('전체 레시피 수 가져오기 에러:', error);
     }
   };
-
-
-
-  //레시피
-  const fetchRecipesByPage = async (pageNumber) => {
-    try {
-      const response = await axios.post('http://192.168.0.13:8080/board/apiTest', {
-        pageNumber: pageNumber
-      });
-
-      if (response.data && Array.isArray(response.data.items)) {
-        const formattedData = response.data.items.map((item) => ({
-          postid: item.ID,
-          title: item.title,
-          description: item.Recipe,
-          img: item.thumbnail,
-          isLiked: item.likeCount > 0,
-        }));
-        setRecipes(formattedData);
-      } else {
-        console.error('에러 내용1:', response.data);
-      }
-    } catch (error) {
-      console.error('에러 내용2:', error);
-    }
-  };
   
-  useEffect(() => {
-    fetchRecipesByPage(1); 
-  }, []);
 
 
 
-//검색
+  // 페이지 해당하는 레시피를 불러오는 함수
+const fetchRecipesByPage = async (pageNumber) => {
+  try {
+      const response = await axios.post('http://172.30.1.55:8080/board/apiTest', 
+          pageNumber
+      );
+      if (response.data && Array.isArray(response.data.items)) {
+          const formattedData = response.data.items.map((item) => ({
+              postid: item.ID,
+              title: item.title,
+              description: item.Recipe,
+              img: item.thumbnail,
+              isLiked: item.likeCount > 0,
+          }));
+          setRecipes(formattedData);
+      } else {
+          console.error('에러 내용1:', response.data);
+      }
+  } catch (error) {
+      console.error('에러 내용2:', error);
+  }
+};
+
+// 컴포넌트가 마운트될 때 첫 번째 페이지의 레시피를 불러오는 useEffect
+useEffect(() => {
+  fetchRecipesByPage(1);
+}, []);
+
+
+
+
+//게시물 검색 
   const handleSearch = (query) => {
     if (query.length > 0) {
       const results = recipes.filter((recipe) => recipe.title.includes(query));
@@ -448,16 +458,18 @@ function Board() {
   };
 
   //페이지
-  const handlePageClick = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
+  // 페이지 번호를 받아와 해당 번호에서 1을 뺀 값을 서버로 보내는 핸들러
+const handlePageClick = (pageNumber) => {
+  fetchRecipesByPage(pageNumber - 1); // 서버는 페이지를 0부터 시작하므로 1을 뺍니다.
+  setCurrentPage(pageNumber); // 현재 페이지를 설정합니다.
+};
 
 
   const pageNumbers = [];
   for (let i = 1; i <= totalPages; i++) {
     pageNumbers.push(i);
   } // 클릭할 페이지번호 순서대로
-    
+
 
   return (
     <section className="Board pb-24">
