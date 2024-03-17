@@ -59,18 +59,19 @@ function MyPage() {
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState({
     name: '',
-    profilePic: IMAGE_PROFILE,
+    imageUrl: IMAGE_PROFILE,
   });
-
 
   const user = useUserState();
 
   useEffect(() => {
     const fetchUserInfo = async () => {
+      const URL = '이미지 URL 받아오는 엔드포인트';
+      axios.get(URL, '마이페이지');
       try {
         if (user) {
           setUserInfo({
-            imageUrl: user.imageUrl || IMAGE_PROFILE, // 프로필 사진
+            imageUrl: IMAGE_PROFILE, // 프로필 사진
             nickName: user.nickName, // 이름
           });
         }
@@ -82,12 +83,10 @@ function MyPage() {
     fetchUserInfo();
   }, []);
 
-
-
-
   useEffect(() => {
     axios
       .post('http://172.30.1.55:8080/board/myPage', 'test')
+
       .then((response) => {
         console.log("서버 응답 데이터:", response.data);
   
@@ -123,7 +122,7 @@ function MyPage() {
   //     try {
   //       const response = await axios.post('http://192.168.0.13:8080/board/myPage', {
   //       });
-  
+
   //       if (response.data && Array.isArray(response.data.items)) {
   //         const formattedData = response.data.items.map((item) => ({
   //           postid: item.ID,
@@ -140,25 +139,28 @@ function MyPage() {
   //       console.error('에러:', error);
   //     }
   //   };
-  
+
   //   fetchData();
   // }, []);
-  
-  
-  
 
   const { logout } = useUserDispatch(); // 로그아웃
 
-
-//   레시피 수정하는 api
-const handleEdit = async (postId) => {
-  try {
-    // 수정 페이지로 이동하는 부분
-    navigate(`/editpost/${postId}`);
-  } catch (error) {
-    console.error('에러 내용:', error);
-  }
-};
+  // 레시피 수정하는 api
+  const handleEdit = async (postid) => {
+    try {
+      const response = await axios.post(
+        `http://172.30.1.89:8080/board/updateBoard`,
+        { postId: postid }
+      );
+      if (response.status === 200) {
+        navigate('/upload', { state: { postId: postid } });
+      } else {
+        console.error('응답에러 :', response.data);
+      }
+    } catch (error) {
+      console.error('에러내용:', error);
+    }
+  };
 
   const handleDeleteConfirmation = async (postid) => {
     const confirmDelete = window.confirm('정말로 삭제하시겠습니까?');
@@ -171,23 +173,21 @@ const handleEdit = async (postId) => {
       }
     }
   };
-  
-   // 레시피 삭제 
+
+  // 레시피 삭제
   const deleteRecipe = async (postid) => {
     try {
       await axios.post(`http://172.30.1.55:8080/board/deleteBoard`, { postId: postid });
 
+
       setRecipes((prevRecipes) =>
         prevRecipes.filter((recipe) => recipe.postid !== postid)
-      ); //ui에서도삭제 
+      ); //ui에서도삭제
     } catch (error) {
       console.error('레시피 삭제 에러내용:', error);
       throw error;
     }
   };
-  
-  
-
 
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
@@ -295,5 +295,3 @@ const handleEdit = async (postId) => {
 }
 
 export default MyPage;
-
-
