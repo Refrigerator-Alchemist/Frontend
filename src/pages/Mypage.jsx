@@ -115,52 +115,36 @@ function MyPage() {
         console.error('에러 내용2:', error);
       });
   }, []);
-  
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.post('http://192.168.0.13:8080/board/myPage', {
-  //       });
-
-  //       if (response.data && Array.isArray(response.data.items)) {
-  //         const formattedData = response.data.items.map((item) => ({
-  //           postid: item.ID,
-  //           title: item.title,
-  //           description: item.Recipe,
-  //           img: item.thumbnail,
-  //           // isLiked: item.likeCount > 0, // 해당 부분 제거
-  //         }));
-  //         setRecipes(formattedData);
-  //       } else {
-  //         setRecipes([]);
-  //       }
-  //     } catch (error) {
-  //       console.error('에러:', error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
 
   const { logout } = useUserDispatch(); // 로그아웃
 
-  // 레시피 수정하는 api
-  const handleEdit = async (postid) => {
-    try {
-      const response = await axios.post(
-        `http://172.30.1.89:8080/board/updateBoard`,
-        { postId: postid }
-      );
-      if (response.status === 200) {
-        navigate('/upload', { state: { postId: postid } });
-      } else {
-        console.error('응답에러 :', response.data);
-      }
-    } catch (error) {
-      console.error('에러내용:', error);
-    }
-  };
+
+
+// 레시피 수정하는 함수
+const handleEdit = (postid) => {
+  navigate(`/editpost/${postid}`);
+};
+
+
+
+// 레시피 수정하는 api
+// const handleEdit = async (postid) => {
+//   try {
+//     const response = await axios.post(
+//       `http://172.30.1.89:8080/board/updateBoard`,
+//       { postId: postid }
+//     );
+//     if (response.status === 200) {
+//       navigate('/upload', { state: { postId: postid } });
+//     } else {
+//       console.error('응답에러 :', response.data);
+//     }
+//   } catch (error) {
+//     console.error('에러내용:', error);
+//   }
+// };
+
+
 
   const handleDeleteConfirmation = async (postid) => {
     const confirmDelete = window.confirm('정말로 삭제하시겠습니까?');

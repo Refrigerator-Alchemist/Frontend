@@ -15,6 +15,8 @@ function UploadBoard() {
     fetchData(postId); 
   }, [postId]);
 
+  
+
   // 서버에서 기존 정보들을 불러오는 함수 
   const fetchData = async (postId) => {
     if (!postId) return; // postId가 없으면 함수 종료
