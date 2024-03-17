@@ -8,8 +8,10 @@ const GptSavedDetail = () => {
   const [recipeData, setRecipeData] = useState({});
   const { recipeId } = useParams();
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
+    // setErrorMessage('임시 에러 메시지. API 연결 전 UI 확인용.');
     const fetchRecipeData = async () => {
       try {
         if (!recipeId) {
@@ -55,6 +57,9 @@ const GptSavedDetail = () => {
   return (
     <>
       <div className="pt-16">
+      {errorMessage && (
+          <div className="text-red-500 text-center py-4">{errorMessage}</div> // 에러 메시지를 화면에 표시
+        )}
         <div
           className="absolute top-5 left-42 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
           onClick={() => navigate('/recipe/myRecipe')}
