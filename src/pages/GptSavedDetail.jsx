@@ -12,34 +12,23 @@ const GptSavedDetail = () => {
   useEffect(() => {
     const fetchRecipeData = async () => {
       try {
-        const response = await axios.get(`http://192.168.0.35:8080/recipe/myRecipe/${recipeId}`);
+        if (!recipeId) {
+          console.error('Recipe ID가 존재하지 않습니다.');
+          return;
+        }
+  
+        const response = await axios.get(`http://172.30.1.42:8080/recipe/myRecipe/${recipeId}`);
+        console.log('데이터:', response.data); 
         setRecipeData(response.data);
       } catch (error) {
-        console.error('에러내용:', error);
+        console.error('에러 내용:', error); 
       }
     };
-
-    fetchRecipeData();
-}, [recipeId]);
   
-
-  // 임시 데이터
-  // const tempData = {
-  //   foodName: "Temp Recipe",
-  //   // imgUrl: "https://via.placeholder.com/150",
-  //   ingredients: ["딸기", "식빵", "오이", "양파", "양배추"],
-  //   recipe: [
-  //     "1. ~~~~",
-  //     "2. ~~~~",
-  //     "3. ~~~~"
-  //   ]
-  // };
-
-  // useEffect(() => {
-  //   if (!Object.keys(recipeData).length) {
-  //     setRecipeData(tempData);
-  //   }
-  // }, [recipeData, tempData]);
+    fetchRecipeData();
+  }, [recipeId]);
+  
+  
 
   return (
     <>
@@ -50,11 +39,6 @@ const GptSavedDetail = () => {
         >
           <FaArrowLeft />
         </div>
-        {/* <img
-          src={recipeData.imgUrl}
-          alt={recipeData.foodName}
-          className="mt-10 mb-4 w-80 h-60 object-cover rounded-lg mx-auto"
-        /> */}
 
         <div className="flex flex-col items-center mt-10">
           <div className="flex items-center gap-4">
@@ -63,7 +47,7 @@ const GptSavedDetail = () => {
           <div className="font-score text-lg text-gray-500 my-8">
             {recipeData.ingredients ? recipeData.ingredients.join(' · ') : ''}
           </div>
-          <div className="text-gray-700 font-score mt-6 m-6">
+          <div className="text-gray-700 font-score mt-6 m-6 p-5">
             {recipeData.recipe && recipeData.recipe.map((step, index) => (
               <p key={index}>{step}</p>
             ))}

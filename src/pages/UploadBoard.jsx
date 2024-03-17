@@ -56,6 +56,8 @@ function UploadBoard() {
     navigate(-1);
   };
 
+
+  
   return (
     <section className="pt-16">
       <div

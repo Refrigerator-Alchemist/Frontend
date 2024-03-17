@@ -38,12 +38,12 @@ const RecipeCard = ({
             >
               <FaTrash />
             </button>
-            <Link
-              to={`/editpost/${postid}`}
+            <button 
+              onClick={() => onEdit(postid)}
               className="pr-3 text-sm text-gray-300"
             >
               수정
-            </Link>
+            </button>
           </div>
         )}
       </div>
@@ -85,16 +85,27 @@ function MyPage() {
 
   useEffect(() => {
     axios
-      .post('http://172.30.1.89:8080/board/myPage', 'test')
+      .post('http://172.30.1.55:8080/board/myPage', 'test')
+
       .then((response) => {
+        console.log("서버 응답 데이터:", response.data);
+  
         if (response.data && Array.isArray(response.data.items)) {
-          const formattedData = response.data.items.map((item) => ({
-            postid: item.ID,
-            title: item.title,
-            description: item.Recipe,
-            img: item.thumbnail,
-            isLiked: item.likeCount > 0, //0보다크면 하트 눌러진상태
-          }));
+          const formattedData = response.data.items.map((item) => {
+            // console.log("postid의 타입:", typeof item.ID);
+            // console.log("title의 타입:", typeof item.title);
+            // console.log("description의 타입:", typeof item.Recipe);
+            // console.log("img의 타입:", typeof item.thumbnail);
+            // console.log("isLiked의 타입:", typeof item.likeCount > 0);
+  
+            return {
+              postid: item.ID,
+              title: item.title,
+              description: item.Recipe,
+              img: item.thumbnail,
+              isLiked: item.likeCount > 0,
+            };
+          });
           setRecipes(formattedData);
         } else {
           console.error('에러 내용1:', response.data);
@@ -104,6 +115,7 @@ function MyPage() {
         console.error('에러 내용2:', error);
       });
   }, []);
+  
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -165,9 +177,8 @@ function MyPage() {
   // 레시피 삭제
   const deleteRecipe = async (postid) => {
     try {
-      await axios.post(`http://172.30.1.89:8080/board/deleteBoard`, {
-        postId: postid,
-      });
+      await axios.post(`http://172.30.1.55:8080/board/deleteBoard`, { postId: postid });
+
 
       setRecipes((prevRecipes) =>
         prevRecipes.filter((recipe) => recipe.postid !== postid)
@@ -248,15 +259,16 @@ function MyPage() {
         <div className="recipe-card-container w-full flex flex-wrap">
           {currentRecipes.map((recipe) => (
             <RecipeCard
-              key={recipe.postid}
-              postid={recipe.postid}
-              title={recipe.title}
-              description={recipe.description}
-              img={recipe.img}
-              showEditDeleteButtons={!showMyRecipes}
-              onDelete={(postid) => handleDeleteConfirmation(postid)}
-              onEdit={(postid) => handleEdit(postid)}
-            />
+            key={recipe.postid}
+            postid={recipe.postid}
+            title={recipe.title}
+            description={recipe.description}
+            img={recipe.img}
+            showEditDeleteButtons={!showMyRecipes}
+            onDelete={handleDeleteConfirmation} // 이 부분 수정
+            onEdit={handleEdit} // 이 부분 수정
+          />
+          
           ))}
         </div>
 
