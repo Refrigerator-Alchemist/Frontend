@@ -44,6 +44,7 @@ const TagInput = () => {
   };
 
   const handleNextButtonClick = async () => {
+    // setErrorMessage('임시 에러 메시지. API 연결 전 UI 확인용.');
     try {
       const response = await axios.post(
         "http://172.30.1.42:8080/recipe/recommend",
@@ -112,6 +113,7 @@ const TagInput = () => {
             +
           </button>
         </div>
+        
         <div className="flex flex-col items-center mb-8 w-full">
           {tags.map((tag, index) => (
             <div

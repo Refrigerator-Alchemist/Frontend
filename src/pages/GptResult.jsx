@@ -13,6 +13,8 @@ const RecipePage = () => {
   const [imgFlag, setImgFlag] = useState(false);
   const navigate = useNavigate();
   const { recommendId } = useParams(); 
+  const [errorMessage, setErrorMessage] = useState('');
+
 
 
   useEffect(() => {
@@ -39,6 +41,7 @@ const RecipePage = () => {
 
   //결과화면에서 저장하기 -> 저장리스트로 이동 
   const handleSaveButtonClick = async () => {
+     setErrorMessage('임시 에러 메시지. API 연결 전 UI 확인용.');
     try {
       console.log('저장 요청 전:', title, ingredients, steps);
       await axios.post('http://172.30.1.42:8080/recipe/save', {
@@ -87,16 +90,18 @@ const RecipePage = () => {
   }
 
   return (
+    
     <section className="bg-white min-h-screen p-6">
-      {errorMessage && (
-        <div className="text-red-500 text-center py-4">{errorMessage}</div>
-      )}
+      
       <div
         className="absolute top-5 left-30 ml-0 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
         onClick={() => navigate("/board")}
       >
         <FaArrowLeft />
       </div>
+      {errorMessage && (
+        <div className="text-red-500 text-center py-4">{errorMessage}</div>
+      )}
       <main className="max-w-md mx-auto bg-white rounded-lg overflow-hidden md:max-w-lg">
         <div className="md:flex">
           <div className="w-full p-4 pt-8">
