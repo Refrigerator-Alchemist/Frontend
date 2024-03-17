@@ -14,13 +14,32 @@ const GptSavedList = () => {
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
+        
         const response = await axios.get('http://172.30.1.42:8080/MyRecipe');
-        setRecipes(response.data); 
+        setRecipes(response.data);
       } catch (error) {
         console.error('에러내용:', error);
+        let message = '오류가 발생했습니다. 다시 시도해주세요.';
+        if (error.response) {
+          switch (error.response.status) {
+            case 401:
+              message = "인증되지 않은 유저입니다.";
+              break;
+            case 500:
+              message = "레시피 목록 조회에 실패했습니다.";
+              break;
+            default:
+              message = "알 수 없는 오류가 발생했습니다.";
+              break;
+          }
+        }
+        setErrorMessage(message);
+        setTimeout(() => {
+          setErrorMessage('');
+          fetchRecipes(); 
+        }, 3000);
       }
     };
-
     fetchRecipes();
   }, []);
 
@@ -46,6 +65,9 @@ const GptSavedList = () => {
 
   return (
     <section className="history">
+       {errorMessage && (
+        <div className="text-red-500 text-center py-4">{errorMessage}</div>
+      )}
       <div className="absolute top-5 left-45 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center" onClick={() => navigate('/main')}>
         <FaArrowLeft />
       </div>

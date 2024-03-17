@@ -50,8 +50,23 @@ const RecipePage = () => {
       navigate('/recipe/myRecipe');
     } catch (error) {
       console.error('에러내용:', error);
+      let message = '오류가 발생했습니다. 다시 시도해주세요.';
+      if (error.response) {
+        switch (error.response.status) {
+          case 401:
+            message = "socialId가 존재하지 않습니다.";
+            break;
+          case 500:
+            message = "레시피 저장을 실패했습니다.";
+            break;
+        }
+      }
+      setErrorMessage(message);
+      setTimeout(() => {
+        setErrorMessage(''); // 3초 
+      }, 3000);
     }
-};
+  };
 
 
 
@@ -73,6 +88,9 @@ const RecipePage = () => {
 
   return (
     <section className="bg-white min-h-screen p-6">
+      {errorMessage && (
+        <div className="text-red-500 text-center py-4">{errorMessage}</div>
+      )}
       <div
         className="absolute top-5 left-30 ml-0 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
         onClick={() => navigate("/board")}

@@ -13,7 +13,8 @@ const GptSavedDetail = () => {
     const fetchRecipeData = async () => {
       try {
         if (!recipeId) {
-          console.error('Recipe ID가 존재하지 않습니다.');
+          setErrorMessage('Recipe ID가 존재하지 않습니다.');
+          setTimeout(() => setErrorMessage(''), 3000);
           return;
         }
   
@@ -21,7 +22,28 @@ const GptSavedDetail = () => {
         console.log('데이터:', response.data); 
         setRecipeData(response.data);
       } catch (error) {
-        console.error('에러 내용:', error); 
+        let message = '상세 레시피 조회에 실패했습니다.';
+        if (error.response) {
+          switch (error.response.status) {
+            case 401:
+              message = "socialId가 존재하지 않습니다.";
+              break;
+            case 406:
+              message = "해당 recipeId가 존재하지 않습니다.";
+              break;
+            case 403:
+              message = "해당 레시피에 대한 조회 권한이 없습니다.";
+              break;
+            case 500:
+              message = "상세 레시피 조회에 실패했습니다.";
+              break;
+          }
+        }
+        setErrorMessage(message);
+        setTimeout(() => {
+          setErrorMessage('');
+          fetchRecipeData(); // 에러 후 자동으로 다시 시도
+        }, 3000);
       }
     };
   

@@ -35,7 +35,13 @@ const TagInput = () => {
     inputRef.current.focus();
   };
 
-  
+  const showError = (message) => {
+    setErrorMessage(message);
+    setTimeout(() => {
+      setErrorMessage('');
+      inputRef.current.focus();
+    }, 3000); //3초
+  };
 
   const handleNextButtonClick = async () => {
     try {
@@ -57,11 +63,22 @@ const TagInput = () => {
       }
     } catch (error) {
       console.error('에러내용:', error);
-      if (error.response && error.response.status === 400) {
-        console.error("잘못된 요청입니다.");
-        handleNextButtonClick();
+      if (error.response) {
+        switch (error.response.status) {
+          case 400:
+            showError("입력된 재료가 없습니다. 재료를 입력해 주세요.");
+            break;
+          case 406:
+            showError("적절하지 못한 재료가 있습니다.");
+            break;
+          case 500:
+            showError("추천 레시피 생성에 실패했습니다.");
+            break;
+          default:
+            showError("알 수 없는 에러가 발생했습니다.");
+        }
       } else {
-        console.error('에러내용:', error);
+        showError("서버와의 연결에 실패했습니다.");
       }
     }
   };
