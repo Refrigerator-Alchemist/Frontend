@@ -21,7 +21,7 @@ export default function Profile() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const URL = 'http://localhost:8080/email-nickname';
+        const URL = 'http://localhost:8080/profile';
         const accessToken = localStorage.getItem('accessToken');
 
         const response = await axios.get(URL, {
