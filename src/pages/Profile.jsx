@@ -2,7 +2,6 @@ import axios from 'axios';
 import React, { useState, useEffect, useRef } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { useUserDispatch } from '../context/UserContext';
 import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
 import IMAGE_PROFILE from '../img/img_profile.png';
 
@@ -17,8 +16,6 @@ export default function Profile() {
   const fileInput = useRef(null);
 
   const navigate = useNavigate();
-
-  const { nameDuplicated } = useUserDispatch();
 
   // 1️⃣ 처음에 보여줄 기본 유저 정보
   useEffect(() => {
@@ -96,7 +93,7 @@ export default function Profile() {
     const URL = 'http://localhost:8080/change-nickname';
 
     try {
-      if (nameDuplicated === false) {
+      if (nameError === false) {
         await axios
           .post(
             URL,
@@ -193,13 +190,13 @@ export default function Profile() {
           <p className="mt-6">
             <li className="mb-2 flex items-center">
               <span role="img" aria-label="check" className="flex">
-                {!nameDuplicated ? (
+                {!nameError ? (
                   <GoCheckCircleFill className="text-emerald" />
                 ) : (
                   <GoCheckCircle className="text-emerald" />
                 )}
               </span>{' '}
-              <span className="ml-3">닉네임 중복 확인 : 사용 가능</span>
+              <span className="ml-3">닉네임 사용 가능</span>
             </li>
           </p>
 
