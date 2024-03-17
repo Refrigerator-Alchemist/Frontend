@@ -187,7 +187,7 @@ export default function Profile() {
               className="shadow appearance-none border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="nickName"
               type="text"
-              value={changNickName}
+              value={changNickName || nickName}
               onChange={handleNameChange}
             />
             {nameError ? (
