@@ -278,7 +278,7 @@ export const UserProvider = ({ children }) => {
           'refreshToken',
           response.headers['authorization-refresh']
         );
-        localStorage.setItem('socialId', response.headers.get['socialId']);
+        localStorage.setItem('socialId', response.headers.get('socialId'));
         localStorage.setItem('nickName', response.data.name);
         localStorage.setItem('email', response.data.email);
         localStorage.setItem('socialType', response.data.socialType);

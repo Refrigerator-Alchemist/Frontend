@@ -6,7 +6,8 @@ import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
 import IMAGE_PROFILE from '../img/img_profile.png';
 
 export default function Profile() {
-  const [nickName, setNickName] = useState('');
+  const [nickName, setNickName] = useState(''); // 원래 닉네임
+  const [changNickName, setChangeNickName] = useState(nickName); // 새로 바꿀 닉네임
   const [nameError, setNameError] = useState(false);
   const [email, setEmail] = useState('');
   const [image, setImage] = useState(
@@ -21,9 +22,9 @@ export default function Profile() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const URL = `http://localhost:8080/profile?socialId=${socialId}`;
         const socialId = localStorage.getItem('socialId');
         const accessToken = localStorage.getItem('accessToken');
+        const URL = `http://localhost:8080/profile?socialId=${socialId}`;
 
         const response = await axios.get(URL, {
           headers: {
@@ -61,14 +62,17 @@ export default function Profile() {
 
     try {
       const formData = new FormData();
+      // Blob을 써야 formData 안에 json으로 저장 가능
+      const nickNameBlob = new Blob([JSON.stringify({ nickName })], {
+        type: 'application/json',
+      });
+      formData.append('nickName', nickNameBlob);
       formData.append('file', file);
-      formData.append('nickName', JSON.stringify({ nickName }));
 
       const accessToken = localStorage.getItem('accessToken');
 
       await axios.post(URL, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
           'Authorization-Access': accessToken,
         },
       });
@@ -79,7 +83,7 @@ export default function Profile() {
 
   // 4️⃣ 닉네임 유효성 검사
   const handleNameChange = (e) => {
-    setNickName(e.target.value);
+    setChangeNickName(e.target.value);
     if (!e.target.value.match(/^[가-힣]{2,}|[A-Za-z]{3,}$/)) {
       setNameError('한글은 최소 2글자, 영문은 최소 3글자 이상 입력하세요');
     } else {
@@ -92,18 +96,23 @@ export default function Profile() {
     e.preventDefault();
 
     const URL = 'http://localhost:8080/change-nickname';
+    const accessToken = localStorage.getItem('accessToken');
 
     try {
       if (nameError === false) {
         await axios
           .post(
             URL,
-            { nickName: nickName },
+            {
+              presentNickName: nickName,
+              changeNickName: changNickName,
+            },
             {
               headers: {
                 'Content-Type': 'application/json;charset=UTF-8',
                 Accept: 'application/json',
                 'Access-Control-Allow-Origin': '*',
+                'Authorization-Access': accessToken,
               },
             }
           )
@@ -178,7 +187,7 @@ export default function Profile() {
               className="shadow appearance-none border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="nickName"
               type="text"
-              value={nickName}
+              value={changNickName}
               onChange={handleNameChange}
             />
             {nameError ? (
