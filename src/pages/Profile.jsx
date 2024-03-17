@@ -24,11 +24,17 @@ export default function Profile() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const nickName = localStorage.getItem('nickName');
-        const email = localStorage.getItem('email');
+        const URL = 'http://localhost:8080/email-nickname';
+        const accessToken = localStorage.getItem('accessToken');
 
-        setNickName(nickName);
-        setEmail(email);
+        const response = await axios.get(URL, {
+          headers: {
+            'Authorization-Access': accessToken,
+          },
+        });
+
+        setNickName(response.data.nickName);
+        setEmail(response.data.email);
       } catch (error) {
         console.error(`유저 데이터 불러오는 중 문제 발생 : ${error}`);
       }
@@ -41,11 +47,10 @@ export default function Profile() {
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
       const reader = new FileReader();
-      reader.onload = () => {
+      reader.onload = async () => {
         if (reader.readyState === 2) {
           setImage(reader.result);
-          // ▶ 파일 업로드 후 바로 서버로 전송
-          uploadImage(e.target.files[0]);
+          await uploadImage(e.target.files[0]);
         }
       };
       reader.readAsDataURL(e.target.files[0]);
@@ -54,16 +59,19 @@ export default function Profile() {
 
   // 3️⃣ 프로필 이미지 저장하기
   const uploadImage = async (file) => {
-    const URL = 'http://localhost:8080/auth/change-profile';
+    const URL = 'http://localhost:8080/change-profile';
 
     try {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('nickName', JSON.stringify({ nickName }));
 
+      const accessToken = localStorage.getItem('accessToken');
+
       await axios.post(URL, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          'Authorization-Access': accessToken,
         },
       });
     } catch (error) {
@@ -85,7 +93,7 @@ export default function Profile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const URL = 'http://localhost:8080/auth/change-nickname';
+    const URL = 'http://localhost:8080/change-nickname';
 
     try {
       if (nameDuplicated === false) {
