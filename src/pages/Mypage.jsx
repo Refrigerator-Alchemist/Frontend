@@ -59,18 +59,19 @@ function MyPage() {
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState({
     name: '',
-    profilePic: IMAGE_PROFILE,
+    imageUrl: IMAGE_PROFILE,
   });
-
 
   const user = useUserState();
 
   useEffect(() => {
     const fetchUserInfo = async () => {
+      const URL = '이미지 URL 받아오는 엔드포인트';
+      axios.get(URL, '마이페이지');
       try {
         if (user) {
           setUserInfo({
-            imageUrl: user.imageUrl || IMAGE_PROFILE, // 프로필 사진
+            imageUrl: IMAGE_PROFILE, // 프로필 사진
             nickName: user.nickName, // 이름
           });
         }
@@ -82,12 +83,10 @@ function MyPage() {
     fetchUserInfo();
   }, []);
 
-
-
-
   useEffect(() => {
     axios
       .post('http://172.30.1.55:8080/board/myPage', 'test')
+
       .then((response) => {
         console.log("서버 응답 데이터:", response.data);
   
@@ -158,23 +157,21 @@ const handleEdit = (postid) => {
       }
     }
   };
-  
-   // 레시피 삭제 
+
+  // 레시피 삭제
   const deleteRecipe = async (postid) => {
     try {
       await axios.post(`http://172.30.1.55:8080/board/deleteBoard`, { postId: postid });
 
+
       setRecipes((prevRecipes) =>
         prevRecipes.filter((recipe) => recipe.postid !== postid)
-      ); //ui에서도삭제 
+      ); //ui에서도삭제
     } catch (error) {
       console.error('레시피 삭제 에러내용:', error);
       throw error;
     }
   };
-  
-  
-
 
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
@@ -282,5 +279,3 @@ const handleEdit = (postid) => {
 }
 
 export default MyPage;
-
-

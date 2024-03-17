@@ -2,15 +2,6 @@ import React, { useState, useReducer, createContext, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-/*
-🚚
-서버 로컬 : http://localhost:8080
-PATH(엔드포인트)
-로그인 : /login
-회원가입 : /signup
-비밀번호 재설정 : /reset-password
-*/
-
 // 📀 토큰 처리
 const instance = axios.create({
   baseURL: 'http://localhost:8080/auth',
@@ -22,10 +13,10 @@ instance.interceptors.request.use(
     const accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
     if (accessToken) {
-      config.headers['Authorization-Access'] = 'Bearer ' + accessToken;
+      config.headers['Authorization-Access'] = accessToken;
     }
     if (refreshToken) {
-      config.headers['Authorization-Refresh'] = 'Bearer ' + refreshToken;
+      config.headers['Authorization-Refresh'] = refreshToken;
     }
     return config;
   },
@@ -65,9 +56,9 @@ export const UserProvider = ({ children }) => {
 
   const [emailExists, setEmailExists] = useState(true); // 회원가입 시 이메일 중복 여부
 
-  const [randomNum, setRandomNum] = useState(null); // 발급된 인증번호
-  const [sendTime, setSendTime] = useState(null); // 인증번호 발급시간
-  const [expireTime, setExpireTime] = useState(null); // 인증번호 만료시간
+  // const [takenTime, setTakenTime] = useState(null); // 인증번호 발급시간
+  // const [expireTime, setExpireTime] = useState(null); // 인증번호 만료시간
+
   const [verified, setVerified] = useState(false); // 이메일 인증 여부
 
   const [nameDuplicated, setNameDuplicated] = useState(true); // 닉네임 중복 여부
@@ -79,7 +70,7 @@ export const UserProvider = ({ children }) => {
 
   const navigate = useNavigate();
 
-  // 📧 이메일 인증 요청 (회원가입용)
+  // 📧 이메일 인증 요청 (회원가입용) -------------------------------------------------
   const requestEmailForSignUp = async (email, emailType, socialType) => {
     const URL = 'http://localhost:8080/auth/send-email';
 
@@ -90,25 +81,24 @@ export const UserProvider = ({ children }) => {
         socialType,
       });
 
-      // ▶ 이메일 중복 아니어야 발급 : false
-      // response.data X -> .data.exists
-      // status === 409 로 판단하기
-      if (response.data.exists) {
+      console.log('리스폰스', response);
+
+      // ▶ 204 === 중복 아니고, 인증발급
+      if (response.status === 204) {
+        setEmailExists(false);
+        // setTakenTime(new Date());
+        // setExpireTime(response.data.expireTime);
+        window.alert('인증번호가 발송되었습니다');
+      } else {
         setEmailExists(true);
         window.alert('이미 서버에 존재하는 이메일입니다');
-      } else {
-        setEmailExists(false);
-        setRandomNum(response.data.randomNum);
-        setSendTime(new Date());
-        setExpireTime(response.data.expireTime);
-        window.alert('인증번호가 발송되었습니다');
       }
     } catch (error) {
       console.error('이메일 인증번호 요청 중 에러 발생: ', error);
     }
   };
 
-  // 📧 이메일 인증 요청 (비밀번호 재설정용)
+  // 📧 이메일 인증 요청 (비밀번호 재설정용) ---------------------------------------------
   const requestEmailForReset = async (email, emailType, socialType) => {
     const URL = 'http://localhost:8080/auth/send-email';
 
@@ -119,12 +109,13 @@ export const UserProvider = ({ children }) => {
         socialType,
       });
 
-      // ▶ 이메일 존재해야 발급 : true
-      if (response.data) {
+      console.log('리스폰스', response);
+
+      // ▶ 204 === 중복이고, 인증 발급
+      if (response.status === 204) {
         setEmailExists(true);
-        setRandomNum(response.data.randomNum);
-        setSendTime(new Date()); //
-        setExpireTime(response.data.expireTime);
+        // setTakenTime(new Date());
+        // setExpireTime(response.data.expireTime);
         window.alert('인증번호가 발송되었습니다');
       } else {
         setEmailExists(false);
@@ -135,60 +126,49 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // ✅ 이메일 인증 확인
+  // ✅ 이메일 인증 확인 ------------------------------------------------------------
   const checkCodeVerification = async (
     email,
-    inputNum,
     emailType,
+    inputNum,
     socialType
   ) => {
-    const NO_SERVER_CODE_ERROR = '발급된 인증번호가 없습니다';
     const NO_CODE_ERROR = '인증번호를 입력해주세요';
-    const EXPIRED_CODE_ERROR = '인증번호가 만료되었습니다';
-    const INVALID_CODE_ERROR = '인증번호가 일치하지 않습니다';
+    // const EXPIRED_CODE_ERROR = '인증번호가 만료되었습니다';
 
-    // ▶ 발급 여부 확인, 인증번호 입력여부 확인
-    if (!randomNum) {
-      window.alert(NO_SERVER_CODE_ERROR);
-      return;
-    } else if (!inputNum) {
+    // ▶ 인증번호 입력 여부 확인
+    if (!inputNum) {
       window.alert(NO_CODE_ERROR);
       return;
     }
 
     // ▶ 인증 유효 시간 10분
-    const timeDifference = (expireTime - sendTime) / 1000 / 60;
+    // const timeDifference = (expireTime - takenTime) / 1000 / 60;
 
-    if (timeDifference > 10) {
-      window.alert(EXPIRED_CODE_ERROR);
-      return;
-    }
-
-    if (inputNum !== randomNum) {
-      window.alert(INVALID_CODE_ERROR);
-      return;
-    }
+    // if (timeDifference > 10) {
+    // window.alert(EXPIRED_CODE_ERROR);
+    // return;
+    // }
 
     try {
       const response = await instance.post(
         'http://localhost:8080/auth/verify-email',
         {
           email,
-          randomNum,
-          inputNum,
           emailType,
+          inputNum,
           socialType,
-          sendTime,
-          expireTime,
+          // randomNum,
+          // takenTime,
+          // expireTime,
         }
       );
 
       if (response.status === 204) {
         setVerified(true);
-        setRandomNum('');
         window.alert('인증 완료!');
       } else {
-        window.alert('인증 실패: ' + response.data.message);
+        window.alert('인증 실패;');
       }
     } catch (error) {
       console.error('인증 완료 상태 전송 중 에러 발생: ', error);
@@ -251,13 +231,11 @@ export const UserProvider = ({ children }) => {
   // 🚫 회원탈퇴 ---------------------------------------------------------------
   const deleteUser = async () => {
     const URL = 'http://localhost:8080/auth/delete-user';
+    const socialId = localStorage.getItem('socialId');
 
     try {
       await instance.delete(URL, {
-        headers: {
-          'authorization-access': localStorage.getItem('accessToken'),
-          'authorization-refresh': localStorage.getItem('refreshToken'),
-        },
+        data: { socialId },
       });
 
       // ▶ 로그아웃 처리
@@ -300,20 +278,18 @@ export const UserProvider = ({ children }) => {
           'refreshToken',
           response.headers['authorization-refresh']
         );
-        localStorage.setItem('uid', response.data.id);
+        localStorage.setItem('socialId', response.headers.get('socialId'));
         localStorage.setItem('nickName', response.data.name);
         localStorage.setItem('email', response.data.email);
         localStorage.setItem('socialType', response.data.socialType);
-        localStorage.setItem('imageUrl', response.data.imageUrl);
 
         // ▶ 유저 데이터 저장
         let user = {
-          uid: response.data.id,
+          socialId: response.headers['socialId'],
           nickName: response.data.name,
           email: response.data.email,
           password,
           socialType: socialType,
-          imageUrl: response.data.imageUrl,
         };
 
         dispatch({ type: SET_USER, user });
@@ -328,19 +304,19 @@ export const UserProvider = ({ children }) => {
 
   //🔓 로그아웃 ---------------------------------------------------------------
   const logout = async () => {
-    // ▶ post로 토큰 보내고 204 받아와서 삭제하기
     const URL = 'http://localhost:8080/auth/token/logout';
     const socialId = localStorage.getItem('socialId');
 
     try {
       const response = await instance.post(
         URL,
-        { socialId: socialId },
+        { socialId },
         {
           headers: {
             'Content-Type': 'application/json;charset=UTF-8',
             Accept: 'application/json',
             'Access-Control-Allow-Origin': '*',
+            'authorization-access': localStorage.getItem('accessToken'),
           },
         }
       );
@@ -351,11 +327,10 @@ export const UserProvider = ({ children }) => {
         // ▶ 유저 데이터 삭제
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
-        localStorage.removeItem('uid');
+        localStorage.removeItem('socialid');
         localStorage.removeItem('nickName');
         localStorage.removeItem('email');
         localStorage.removeItem('socialType');
-        localStorage.removeItem('imageUrl');
 
         // ▶ 유저 상태 초기화
         dispatch({ type: SET_USER, user: null });
@@ -403,22 +378,18 @@ export const UserProvider = ({ children }) => {
     const socialId = localStorage.getItem('socialId');
 
     try {
-      const response = await instance.post(
-        URL,
-        {
-          socialId,
+      const response = await instance.post(URL, {
+        socialId,
+        headers: {
+          'authorization-refresh': localStorage.getItem('refreshToken'),
         },
-        {
-          withCredentials: true,
-        }
-      );
+      });
 
       if (response.status === 204) {
         localStorage.setItem('accessToken', response.data.accessToken);
         console.log(
           `새로운 액세스 토큰을 발급받았습니다 : ${response.data.accessToken}`
         );
-        console.log('쿠키: ', document.cookie);
         navigate(window.location.pathname);
       }
     } catch (error) {

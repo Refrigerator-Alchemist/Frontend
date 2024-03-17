@@ -2,12 +2,12 @@ import axios from 'axios';
 import React, { useState, useEffect, useRef } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { useUserDispatch } from '../context/UserContext';
 import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
 import IMAGE_PROFILE from '../img/img_profile.png';
 
 export default function Profile() {
-  const [nickName, setNickName] = useState('');
+  const [nickName, setNickName] = useState(''); // 원래 닉네임
+  const [changNickName, setChangeNickName] = useState(nickName); // 새로 바꿀 닉네임
   const [nameError, setNameError] = useState(false);
   const [email, setEmail] = useState('');
   const [image, setImage] = useState(
@@ -18,17 +18,22 @@ export default function Profile() {
 
   const navigate = useNavigate();
 
-  const { checkNameDuplication, nameDuplicated } = useUserDispatch();
-
   // 1️⃣ 처음에 보여줄 기본 유저 정보
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const nickName = localStorage.getItem('nickName');
-        const email = localStorage.getItem('email');
+        const socialId = localStorage.getItem('socialId');
+        const accessToken = localStorage.getItem('accessToken');
+        const URL = `http://localhost:8080/profile?socialId=${socialId}`;
 
-        setNickName(nickName);
-        setEmail(email);
+        const response = await axios.get(URL, {
+          headers: {
+            'Authorization-Access': accessToken,
+          },
+        });
+
+        setNickName(response.data.nickName);
+        setEmail(response.data.email);
       } catch (error) {
         console.error(`유저 데이터 불러오는 중 문제 발생 : ${error}`);
       }
@@ -41,11 +46,10 @@ export default function Profile() {
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
       const reader = new FileReader();
-      reader.onload = () => {
+      reader.onload = async () => {
         if (reader.readyState === 2) {
           setImage(reader.result);
-          // ▶ 파일 업로드 후 바로 서버로 전송
-          uploadImage();
+          await uploadImage(e.target.files[0]);
         }
       };
       reader.readAsDataURL(e.target.files[0]);
@@ -53,17 +57,23 @@ export default function Profile() {
   };
 
   // 3️⃣ 프로필 이미지 저장하기
-  const uploadImage = async () => {
-    const URL = 'http://localhost:8080/auth/change-profile';
+  const uploadImage = async (file) => {
+    const URL = 'http://localhost:8080/change-profile';
 
     try {
       const formData = new FormData();
-      formData.append('file', fileInput.current.files[0]);
-      formData.append('nickName', JSON.stringify({ nickName }));
+      // Blob을 써야 formData 안에 json으로 저장 가능
+      const nickNameBlob = new Blob([JSON.stringify({ nickName })], {
+        type: 'application/json',
+      });
+      formData.append('nickName', nickNameBlob);
+      formData.append('file', file);
+
+      const accessToken = localStorage.getItem('accessToken');
 
       await axios.post(URL, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Authorization-Access': accessToken,
         },
       });
     } catch (error) {
@@ -73,7 +83,7 @@ export default function Profile() {
 
   // 4️⃣ 닉네임 유효성 검사
   const handleNameChange = (e) => {
-    setNickName(e.target.value);
+    setChangeNickName(e.target.value);
     if (!e.target.value.match(/^[가-힣]{2,}|[A-Za-z]{3,}$/)) {
       setNameError('한글은 최소 2글자, 영문은 최소 3글자 이상 입력하세요');
     } else {
@@ -85,19 +95,24 @@ export default function Profile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const URL = 'http://localhost:8080/auth/change-nickname';
+    const URL = 'http://localhost:8080/change-nickname';
+    const accessToken = localStorage.getItem('accessToken');
 
     try {
-      if (nameDuplicated === false) {
+      if (nameError === false) {
         await axios
           .post(
             URL,
-            { nickName: nickName },
+            {
+              presentNickName: nickName,
+              changeNickName: changNickName,
+            },
             {
               headers: {
                 'Content-Type': 'application/json;charset=UTF-8',
                 Accept: 'application/json',
                 'Access-Control-Allow-Origin': '*',
+                'Authorization-Access': accessToken,
               },
             }
           )
@@ -172,7 +187,7 @@ export default function Profile() {
               className="shadow appearance-none border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="nickName"
               type="text"
-              value={nickName}
+              value={changNickName || nickName}
               onChange={handleNameChange}
             />
             {nameError ? (
@@ -185,25 +200,18 @@ export default function Profile() {
           <p className="mt-6">
             <li className="mb-2 flex items-center">
               <span role="img" aria-label="check" className="flex">
-                {!nameDuplicated ? (
+                {!nameError ? (
                   <GoCheckCircleFill className="text-emerald" />
                 ) : (
                   <GoCheckCircle className="text-emerald" />
                 )}
               </span>{' '}
-              <span className="ml-3">닉네임 중복 확인 : 사용 가능</span>
+              <span className="ml-3">닉네임 사용 가능</span>
             </li>
           </p>
 
           {/* 버튼 */}
           <div className="flex mt-2 mr-3">
-            <button
-              type="button"
-              className="font-score flex-grow bg-main text-white rounded-2xl p-4 mr-2 hover:bg-yellow-500"
-              onClick={() => checkNameDuplication(nickName)}
-            >
-              닉네임 중복 확인
-            </button>
             <button
               type="submit"
               className="font-score flex-grow bg-main text-white rounded-2xl p-2 hover:bg-yellow-500"
