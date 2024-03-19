@@ -17,7 +17,7 @@ const GptSavedList = () => {
     const fetchRecipes = async () => {
       try {
         
-        const response = await axios.get('http://172.30.1.42:8080/MyRecipe');
+        const response = await axios.get('http://172.30.1.42:8080//recipe/myRecipe');
         setRecipes(response.data);
       } catch (error) {
         console.error('에러내용:', error);
