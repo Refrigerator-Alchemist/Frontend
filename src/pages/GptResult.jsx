@@ -3,19 +3,16 @@ import { GoHome } from 'react-icons/go';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate, useParams } from 'react-router-dom'; 
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const RecipePage = () => {
   const [ingredients, setIngredients] = useState([]);
   const [steps, setSteps] = useState([]);
   const [title, setTitle] = useState('');
-  const [image, setImage] = useState(''); 
   const [isLoading, setIsLoading] = useState(true);
-  const [imgFlag, setImgFlag] = useState(false);
   const navigate = useNavigate();
   const { recommendId } = useParams(); 
-  const [errorMessage, setErrorMessage] = useState('');
-
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,6 +26,7 @@ const RecipePage = () => {
         }
       } catch (error) {
         console.error('에러내용:', error);
+        toast.error('레시피 정보를 불러오는 중 에러가 발생했습니다.');
       } finally {
         setIsLoading(false);
       }
@@ -36,20 +34,15 @@ const RecipePage = () => {
   
     fetchData();
   }, [recommendId]);
-  
 
-
-  //결과화면에서 저장하기 -> 저장리스트로 이동 
   const handleSaveButtonClick = async () => {
-     setErrorMessage('임시 에러 메시지. API 연결 전 UI 확인용.');
     try {
-      console.log('저장 요청 전:', title, ingredients, steps);
       await axios.post('http://172.30.1.42:8080/recipe/save', {
         foodName: title,
         ingredients: ingredients,
         recipe: steps
       });
-      console.log('저장 성공');
+      toast.success('레시피가 성공적으로 저장되었습니다.');
       navigate('/recipe/myRecipe');
     } catch (error) {
       console.error('에러내용:', error);
@@ -64,15 +57,9 @@ const RecipePage = () => {
             break;
         }
       }
-      setErrorMessage(message);
-      setTimeout(() => {
-        setErrorMessage(''); // 3초 
-      }, 3000);
+      toast.error(message);
     }
   };
-
-
-
 
   if (isLoading) {
     return (
@@ -90,18 +77,13 @@ const RecipePage = () => {
   }
 
   return (
-    
     <section className="bg-white min-h-screen p-6">
-      
       <div
         className="absolute top-5 left-30 ml-0 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
         onClick={() => navigate("/board")}
       >
         <FaArrowLeft />
       </div>
-      {errorMessage && (
-        <div className="text-red-500 text-center py-4">{errorMessage}</div>
-      )}
       <main className="max-w-md mx-auto bg-white rounded-lg overflow-hidden md:max-w-lg">
         <div className="md:flex">
           <div className="w-full p-4 pt-8">
@@ -138,7 +120,6 @@ const RecipePage = () => {
           </div>
         </div>
       </main>
-
       <footer className="fixed bottom-5 left-0 right-0 px-6">
         <div
           className="mx-auto flex justify-between"

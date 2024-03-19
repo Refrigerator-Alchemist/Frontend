@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Pagination from '../components/Pagination'; 
 import Navigation from '../components/Navigation';
 
@@ -10,13 +12,11 @@ const GptSavedList = () => {
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage] = useState(7);
-  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    // setErrorMessage('임시 에러 메시지. API 연결 전 UI 확인용.');
+    toast.error('임시 에러 메시지. API 연결 전 UI 확인용.');
     const fetchRecipes = async () => {
       try {
-        
         const response = await axios.get('http://172.30.1.42:8080//recipe/myRecipe');
         setRecipes(response.data);
       } catch (error) {
@@ -35,11 +35,7 @@ const GptSavedList = () => {
               break;
           }
         }
-        setErrorMessage(message);
-        setTimeout(() => {
-          setErrorMessage('');
-          fetchRecipes(); 
-        }, 3000);
+        toast.error(message);
       }
     };
     fetchRecipes();
@@ -67,7 +63,7 @@ const GptSavedList = () => {
 
   return (
     <section className="history">
-      
+      <ToastContainer position="top-center" />
       <div className="absolute top-5 left-45 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center" onClick={() => navigate('/main')}>
         <FaArrowLeft />
       </div>
@@ -75,9 +71,6 @@ const GptSavedList = () => {
         <div className="titlebox mb-6 mt-2">
           <span className="font-score font-extrabold ml-8 text-2xl">나의 연금술 레시피</span>
         </div>
-        {errorMessage && (
-        <div className="text-red-500 text-center py-4">{errorMessage}</div>
-      )}
         {currentRecipes.map((recipe) => (
           <RecipeCard
             key={recipe.recipeId}

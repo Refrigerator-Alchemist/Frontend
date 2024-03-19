@@ -3,11 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import { CiSaveDown2 } from 'react-icons/ci';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const TagInput = () => {
   const [tags, setTags] = useState([]);
   const [inputValue, setInputValue] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
   const inputRef = useRef(null); // 입력란 참조
 
@@ -35,16 +36,8 @@ const TagInput = () => {
     inputRef.current.focus();
   };
 
-  const showError = (message) => {
-    setErrorMessage(message);
-    setTimeout(() => {
-      setErrorMessage('');
-      inputRef.current.focus();
-    }, 3000); //3초
-  };
-
   const handleNextButtonClick = async () => {
-    // setErrorMessage('임시 에러 메시지. API 연결 전 UI 확인용.');
+    toast.error('임시 에러 메시지. API 연결 전 UI 확인용.');
     try {
       const response = await axios.post(
         "http://172.30.1.42:8080/recipe/recommend",
@@ -52,11 +45,11 @@ const TagInput = () => {
           ingredients: tags,
         }
       );
-  
+
       console.log("서버 응답:", response.data);
-  
+
       const recommendId = response.data;
-  
+
       if (recommendId) {
         navigate(`/recipe/recommend/${recommendId}`);
       } else {
@@ -67,25 +60,29 @@ const TagInput = () => {
       if (error.response) {
         switch (error.response.status) {
           case 400:
-            showError("입력된 재료가 없습니다. 재료를 입력해 주세요.");
+            toast.error("입력된 재료가 없습니다. 재료를 입력해 주세요.");
+            break;
+          case 400:
+            toast.error("recommendId를 찾을 수 없습니다.");
             break;
           case 406:
-            showError("적절하지 못한 재료가 있습니다.");
+            toast.error("적절하지 못한 재료가 있습니다.");
             break;
           case 500:
-            showError("추천 레시피 생성에 실패했습니다.");
+            toast.error("추천 레시피 생성에 실패했습니다.");
             break;
           default:
-            showError("알 수 없는 에러가 발생했습니다.");
+            toast.error("알 수 없는 에러가 발생했습니다.");
         }
       } else {
-        showError("서버와의 연결에 실패했습니다.");
+        toast.error("서버와의 연결에 실패했습니다.");
       }
     }
   };
 
   return (
     <section className="bg-white min-h-screen px-4 py-8 flex flex-col">
+      <ToastContainer position="top-center" />
       <div
         className="absolute top-5 left-45 ml-0 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
         onClick={() => navigate('/main')}
@@ -130,9 +127,6 @@ const TagInput = () => {
             </div>
           ))}
         </div>
-        {errorMessage && (
-          <div className="text-red-500 text-sm mb-4">{errorMessage}</div>
-        )}
       </main>
       <footer className="w-full max-w-xs mx-auto pb-8">
         <button
