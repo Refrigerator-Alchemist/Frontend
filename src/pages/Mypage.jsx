@@ -141,18 +141,7 @@ function MyPage() {
     navigate(`/editpost/${postid}`);
   };
 
-  const handleDeleteConfirmation = async (postid) => {
-    const confirmDelete = window.confirm('정말로 삭제하시겠습니까?');
-    if (confirmDelete) {
-      try {
-        await deleteRecipe(postid);
-        console.log('레시피 삭제 성공');
-      } catch (error) {
-        console.error('레시피 삭제 실패:', error);
-      }
-    }
-  };
-
+  
   // 레시피 삭제
   const deleteRecipe = async (postid) => {
     try {
@@ -168,6 +157,20 @@ function MyPage() {
       throw error;
     }
   };
+
+  const handleDeleteConfirmation = async (postid) => {
+    const confirmDelete = window.confirm('정말로 삭제하시겠습니까?');
+    if (confirmDelete) {
+      try {
+        await deleteRecipe(postid);
+        console.log('레시피 삭제 성공');
+      } catch (error) {
+        console.error('레시피 삭제 실패:', error);
+      }
+    }
+  };
+
+  
 
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
