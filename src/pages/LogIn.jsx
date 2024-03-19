@@ -14,7 +14,7 @@ export default function Login() {
   const [emailError, setEmailError] = useState(''); // 로그인 오류 메세지
 
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // 비밀번호 표시
 
   const [notAllow, setNotAllow] = useState(true); // 로그인 disabled on/off
 
@@ -28,12 +28,12 @@ export default function Login() {
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
 
-    // 이메일 유효성 검사 : '.com .net .org' 형식
+    // ▶️ 이메일 유효성 검사 : '.com .net .org' 형식
     const pattern =
-      /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
     if (!pattern.test(email)) {
-      setEmailError('이메일 형식이 올바르지 않습니다');
+      setEmailError('이메일 형식이 올바르지 않습니다 : .com .net .org');
       setEmailValid(false);
     } else {
       setEmailError('');
