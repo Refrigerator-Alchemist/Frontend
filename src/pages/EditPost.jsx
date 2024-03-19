@@ -3,81 +3,90 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
 
-
-function UploadBoard() {
+export default function UploadBoard() {
   const { postid } = useParams();
+  const [recipeName, setRecipeName] = useState(''); // 레시피 이름
+  const [description, setDescription] = useState(''); // 내용
+  const [ingredients, setIngredients] = useState([]); // 재료
   const navigate = useNavigate();
-  const [foodName, setFoodName] = useState('');
-  const [description, setDescription] = useState('');
-  const [ingredients, setIngredients] = useState(['']);
 
   useEffect(() => {
-    fetchData(postid); 
+    fetchData(postid);
   }, [postid]);
-  
-  // 서버에서 기존 정보들을 불러오는 함수 
+
+  // 1️⃣ 서버에서 기존 정보들을 불러오는 함수
   const fetchData = async (postid) => {
-    if (!postid) return; // postId가 없으면 함수 종료
-  
+    if (!postid) return;
+
     try {
-      const response = await axios.post('http://172.30.1.89:8080/board/updateBoard', { postid: postid  });
-     
-      console.log(" 데이터:", response.data);
-  
+      const response = await axios.post(
+        'http://localhost:8080/board/updateBoard',
+        { postid: postid }
+      );
+
+      console.log('서버 응답 데이터:', response.data);
+
       if (response.data) {
-        const { Recipe, nickName, ingredients } = response.data;
-  
-        setFoodName(Recipe || ''); 
-        setDescription(nickName || '');
-        setIngredients(Array.isArray(ingredients) ? ingredients : []); 
+        if (response.data && Array.isArray(response.data.items)) {
+          // 배열은 map으로 받아와서 저장해야함
+          const items = response.data.items.map((item) => ({
+            title: item.title,
+            description: item.Recipe,
+            ingredients: item.ingredients.map((ingredient) => ingredient),
+          }));
+          setRecipeName(items[0].title);
+          setDescription(items[0].description);
+          setIngredients(items[0].ingredients);
+        }
       } else {
-        console.error('에러1:', response.data);
+        console.error('데이터 타입 오류:', response.data);
       }
     } catch (error) {
-      console.error('데이터 불러오는 중 에러:', error);
+      console.error('데이터 전송 오류:', error);
     }
   };
-  
 
-
-
-  const handleIngredientChange = (index, event) => {
-    const newIngredients = [...ingredients];
-    newIngredients[index] = event.target.value;
-    setIngredients(newIngredients);
+  // 2️⃣ 재료 입력
+  const handleIngredientChange = (index, e) => {
+    const newIngredients = [...ingredients]; // 기존 재료들
+    newIngredients[index] = e.target.value; // index번째 재료
+    setIngredients(newIngredients); // 모두 재료들 안에 순서대로 합치기
   };
 
+  // 3️⃣ 재료 추가
   const addIngredientField = () => {
     setIngredients([...ingredients, '']);
   };
 
-
-  // 수정 완료 버튼 - 서버요청  
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  // 4️⃣ 수정 완료
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const URL = 'http://localhost:8080/content/update;';
 
     const formData = {
-      foodName,
+      recipeName,
       description,
       ingredients,
     };
-  
+
     try {
-      const response = await axios.post('수정한내용 변경요청하는 url', formData, {
+      const response = await axios.post(URL, formData, {
         headers: {
-          'Content-Type': 'application/json', 
+          'Content-Type': 'application/json',
         },
       });
 
-      console.log('수정 성공', response.data);
+      if (response) {
+        console.log('게시물 수정 완료');
+        window.alert('게시물 수정 완료');
+      }
     } catch (error) {
-      console.error('수정 에러', error);
+      console.error('수정 중 에러가 발생했습니다', error);
+      window.alert('수정 중 에러가 발생했습니다');
     }
   };
-  
 
-
-
+  // 5️⃣ 취소
   const handleCancel = () => {
     navigate(-1);
   };
@@ -95,7 +104,6 @@ function UploadBoard() {
         onSubmit={handleSubmit}
         className="flex flex-col space-y-6 mx-auto p-8"
       >
-        
         <div className="form-group">
           <label
             htmlFor="food-name"
@@ -106,8 +114,8 @@ function UploadBoard() {
           <input
             type="text"
             id="food-name"
-            value={foodName}
-            onChange={(e) => setFoodName(e.target.value)}
+            value={recipeName}
+            onChange={(e) => setRecipeName(e.target.value)}
             placeholder="음식 이름을 입력하세요"
             className="font-score w-full border border-gray-300 rounded-md p-2 text-sm"
           />
@@ -186,5 +194,3 @@ function UploadBoard() {
     </section>
   );
 }
-
-export default UploadBoard;
