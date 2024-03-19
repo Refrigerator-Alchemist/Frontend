@@ -13,6 +13,7 @@ const GptSavedList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage] = useState(7);
 
+  //저장한 목록 보기 
   useEffect(() => {
     toast.error('임시 에러 메시지. API 연결 전 UI 확인용.');
     const fetchRecipes = async () => {
@@ -46,6 +47,8 @@ const GptSavedList = () => {
   const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+
+  //레시피 카드
   const RecipeCard = ({ recipeId, foodName, ingredientList }) => {
     return (
       <div className="flex items-center bg-white mx-5 my-2 p-2 rounded-xl shadow">

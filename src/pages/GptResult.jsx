@@ -14,6 +14,7 @@ const RecipePage = () => {
   const navigate = useNavigate();
   const { recommendId } = useParams(); 
 
+  //gpt결과 불러오기 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -26,7 +27,11 @@ const RecipePage = () => {
         }
       } catch (error) {
         console.error('에러내용:', error);
-        toast.error('레시피 정보를 불러오는 중 에러가 발생했습니다.');
+        if (error.response && error.response.status === 404) {
+          toast.error('해당 recommendId가 존재하지 않습니다.');
+        } else {
+          toast.error('레시피 정보를 불러오는 중 에러가 발생했습니다.');
+        }
       } finally {
         setIsLoading(false);
       }
@@ -35,6 +40,8 @@ const RecipePage = () => {
     fetchData();
   }, [recommendId]);
 
+  
+  // 저장하기 
   const handleSaveButtonClick = async () => {
     try {
       await axios.post('http://172.30.1.42:8080/recipe/save', {

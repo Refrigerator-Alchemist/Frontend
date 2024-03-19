@@ -11,6 +11,8 @@ const GptSavedDetail = () => {
   const { recipeId } = useParams();
   const navigate = useNavigate();
 
+
+  // id로 세부내용 불러오기
   useEffect(() => {
     toast.error('임시 에러 메시지. API 연결 전 UI 확인용.');
     const fetchRecipeData = async () => {
@@ -45,6 +47,7 @@ const GptSavedDetail = () => {
   
     fetchRecipeData();
   }, [recipeId]);
+  
   
   return (
     <>
