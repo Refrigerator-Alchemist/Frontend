@@ -51,6 +51,7 @@ const RecipeCard = ({
   );
 };
 
+
 function MyPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage, setRecipesPerPage] = useState(5);
@@ -93,12 +94,6 @@ function MyPage() {
 
         if (response.data && Array.isArray(response.data.items)) {
           const formattedData = response.data.items.map((item) => {
-            // console.log("postid의 타입:", typeof item.ID);
-            // console.log("title의 타입:", typeof item.title);
-            // console.log("description의 타입:", typeof item.Recipe);
-            // console.log("img의 타입:", typeof item.thumbnail);
-            // console.log("isLiked의 타입:", typeof item.likeCount > 0);
-
             return {
               postid: item.ID,
               title: item.title,
@@ -151,7 +146,7 @@ function MyPage() {
 
       setRecipes((prevRecipes) =>
         prevRecipes.filter((recipe) => recipe.postid !== postid)
-      ); //ui에서도삭제
+      );
     } catch (error) {
       console.error('레시피 삭제 에러내용:', error);
       throw error;
@@ -246,8 +241,8 @@ function MyPage() {
               description={recipe.description}
               img={recipe.img}
               showEditDeleteButtons={!showMyRecipes}
-              onDelete={handleDeleteConfirmation} // 이 부분 수정
-              onEdit={handleEdit} // 이 부분 수정
+              onDelete={handleDeleteConfirmation} 
+              onEdit={handleEdit}
             />
           ))}
         </div>

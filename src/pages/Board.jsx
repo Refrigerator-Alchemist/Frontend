@@ -9,6 +9,36 @@ import Ranking from '../components/Ranking';
 import Navigation from '../components/Navigation';
 import axios from 'axios';
 
+// board - 레시피카드
+const RecipeCard = ({ postid, title, description, img, isLiked }) => {
+  const [liked, setLiked] = useState(false);
+
+  const toggleLike = (event) => {
+    event.stopPropagation();
+    setLiked(!liked);
+  };
+
+  return (
+    <div className="flex items-center bg-white mx-5 my-2 p-4 rounded-xl shadow">
+      <Link to={`/board/${postid}`} className="flex-grow flex">
+        <div className="flex-none w-20 h-20 rounded-xl border-2 border-gray-300 overflow-hidden">
+          <img className="w-full h-full object-cover" src={img} alt={title} />
+        </div>
+        <div className="px-4 py-4">
+          <h3 className="text-lg font-score font-semibold">{title}</h3>
+          <p className="text-gray-500 text-sm font-score">{description}</p>
+        </div>
+      </Link>
+      <button onClick={toggleLike} className="p-2">
+        {liked ? (
+          <FaHeart className="text-red-500 text-2xl" />
+        ) : (
+          <FaRegHeart className="text-2xl" />
+        )}
+      </button>
+    </div>
+  );
+};
 
 //게시물 검색
 const SearchBar = ({ onSearch }) => {
@@ -48,37 +78,6 @@ const WriteButton = () => {
   );
 };
 
-// board - 레시피카드
-const RecipeCard = ({ postid, title, description, img, isLiked }) => {
-  const [liked, setLiked] = useState(false);
-
-  const toggleLike = (event) => {
-    event.stopPropagation();
-    setLiked(!liked);
-  };
-
-  return (
-    <div className="flex items-center bg-white mx-5 my-2 p-4 rounded-xl shadow">
-      <Link to={`/board/${postid}`} className="flex-grow flex">
-        <div className="flex-none w-20 h-20 rounded-xl border-2 border-gray-300 overflow-hidden">
-          <img className="w-full h-full object-cover" src={img} alt={title} />
-        </div>
-        <div className="px-4 py-4">
-          <h3 className="text-lg font-score font-semibold">{title}</h3>
-          <p className="text-gray-500 text-sm font-score">{description}</p>
-        </div>
-      </Link>
-      <button onClick={toggleLike} className="p-2">
-        {liked ? (
-          <FaHeart className="text-red-500 text-2xl" />
-        ) : (
-          <FaRegHeart className="text-2xl" />
-        )}
-      </button>
-    </div>
-  );
-};
-
 
 function Board() {
   const [recipes, setRecipes] = useState([]);
@@ -87,31 +86,6 @@ function Board() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const recipesPerPage = 6;
-
-  //레시피 불러오기 - 연결되는 코드(페이지 전)
-  // useEffect(() => {
-  //   axios
-  //     .post('http://192.168.0.13:8080/board/apiTest','7')
-  //     .then((response) => {
-  //       if (response.data && Array.isArray(response.data.items)) {
-  //         const formattedData = response.data.items.map((item) => ({
-  //           postid: item.ID,
-  //           title: item.title,
-  //           description: item.Recipe,
-  //           img: item.thumbnail,
-
-  //           isLiked: item.likeCount > 0,
-
-  //         }));
-  //         setRecipes(formattedData);
-  //       } else {
-  //         console.error('에러 내용1:', response.data);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error('에러 내용2:', error);
-  //     });
-  // }, []);
 
   useEffect(() => {
     fetchTotalRecipes(); // 전체 레시피 수를 가져오는
@@ -138,8 +112,6 @@ function Board() {
     }
   };
   
-
-
   // 페이지 해당하는 레시피를 불러오는 함수
 const fetchRecipesByPage = async (pageNumber) => {
   try {
@@ -170,6 +142,7 @@ useEffect(() => {
   fetchRecipesByPage(1);
 }, []);
 
+
 //게시물 검색 
 const handleSearch = (query) => {
     if (query.length > 0) {
@@ -181,10 +154,10 @@ const handleSearch = (query) => {
     }
   };
 
-  // 페이지 번호를 받아와 해당 번호에서 1을 뺀 값을 서버로 보내는 핸들러
+  // 페이지 번호를 받아와 해당 번호에서 1을 뺀 값을 서버로 보내는
 const handlePageClick = (pageNumber) => {
-  fetchRecipesByPage(pageNumber - 1); // 서버는 페이지를 0부터 시작하므로 1을 뺍니다.
-  setCurrentPage(pageNumber); // 현재 페이지를 설정합니다.
+  fetchRecipesByPage(pageNumber - 1);
+  setCurrentPage(pageNumber); 
 };
 
   const pageNumbers = [];
