@@ -38,7 +38,7 @@ const RecipeCard = ({
             >
               <FaTrash />
             </button>
-            <button 
+            <button
               onClick={() => onEdit(postid)}
               className="pr-3 text-sm text-gray-300"
             >
@@ -62,16 +62,17 @@ function MyPage() {
     imageUrl: IMAGE_PROFILE,
   });
 
-  const user = useUserState();
+  const user = useUserState(); // 유저 데이터 : 로그인 상태면 존재함
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const URL = '이미지 URL 받아오는 엔드포인트';
-      axios.get(URL, '마이페이지');
       try {
+        const URL = 'http://localhost:8080/userprofile';
+        const response = await axios.get(URL, user.nickName);
+
         if (user) {
           setUserInfo({
-            imageUrl: IMAGE_PROFILE, // 프로필 사진
+            imageUrl: response.data.imageUrl, // 프로필 사진
             nickName: user.nickName, // 이름
           });
         }
@@ -88,8 +89,8 @@ function MyPage() {
       .post('http://172.30.1.55:8080/board/myPage', 'test')
 
       .then((response) => {
-        console.log("서버 응답 데이터:", response.data);
-  
+        console.log('서버 응답 데이터:', response.data);
+
         if (response.data && Array.isArray(response.data.items)) {
           const formattedData = response.data.items.map((item) => {
             // console.log("postid의 타입:", typeof item.ID);
@@ -97,7 +98,7 @@ function MyPage() {
             // console.log("description의 타입:", typeof item.Recipe);
             // console.log("img의 타입:", typeof item.thumbnail);
             // console.log("isLiked의 타입:", typeof item.likeCount > 0);
-  
+
             return {
               postid: item.ID,
               title: item.title,
@@ -118,31 +119,27 @@ function MyPage() {
 
   const { logout } = useUserDispatch(); // 로그아웃
 
+  // 레시피 수정하는 api
+  // const handleEdit = async (postid) => {
+  //   try {
+  //     const response = await axios.post(
+  //       `http://172.30.1.89:8080/board/updateBoard`,
+  //       { postId: postid }
+  //     );
+  //     if (response.status === 200) {
+  //       navigate('/upload', { state: { postId: postid } });
+  //     } else {
+  //       console.error('응답에러 :', response.data);
+  //     }
+  //   } catch (error) {
+  //     console.error('에러내용:', error);
+  //   }
+  // };
 
-
-// 레시피 수정하는 api
-// const handleEdit = async (postid) => {
-//   try {
-//     const response = await axios.post(
-//       `http://172.30.1.89:8080/board/updateBoard`,
-//       { postId: postid }
-//     );
-//     if (response.status === 200) {
-//       navigate('/upload', { state: { postId: postid } });
-//     } else {
-//       console.error('응답에러 :', response.data);
-//     }
-//   } catch (error) {
-//     console.error('에러내용:', error);
-//   }
-// };
-
-
-
-// 레시피 수정하는 
-const handleEdit = (postid) => {
-  navigate(`/editpost/${postid}`);
-};
+  // 레시피 수정하는
+  const handleEdit = (postid) => {
+    navigate(`/editpost/${postid}`);
+  };
 
   const handleDeleteConfirmation = async (postid) => {
     const confirmDelete = window.confirm('정말로 삭제하시겠습니까?');
@@ -159,8 +156,9 @@ const handleEdit = (postid) => {
   // 레시피 삭제
   const deleteRecipe = async (postid) => {
     try {
-      await axios.post(`http://172.30.1.55:8080/board/deleteBoard`, { postId: postid });
-
+      await axios.post(`http://172.30.1.55:8080/board/deleteBoard`, {
+        postId: postid,
+      });
 
       setRecipes((prevRecipes) =>
         prevRecipes.filter((recipe) => recipe.postid !== postid)
@@ -201,7 +199,7 @@ const handleEdit = (postid) => {
       <main className="flex flex-col items-center overflow-hidden">
         <div className="bg-gray-300 rounded-full h-32 w-32 mt-20">
           <img
-            src={userInfo.profilePic}
+            src={userInfo.imageUrl}
             alt="프로필 사진"
             className="rounded-full h-32 w-32 object-cover"
           />
@@ -209,9 +207,7 @@ const handleEdit = (postid) => {
         <h1 className="font-score mt-5 text-xl font-semibold text-center">
           {userInfo.name}
         </h1>
-        <p className="font-score mt-4 pb-4\2 px-6 text-center">
-          {userInfo.bio}
-        </p>
+
         <button
           onClick={() => navigate('/profile')}
           className="font-score my-2 bg-white py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-opacity-50 underline hover:text-red-500"
@@ -241,16 +237,15 @@ const handleEdit = (postid) => {
         <div className="recipe-card-container w-full flex flex-wrap">
           {currentRecipes.map((recipe) => (
             <RecipeCard
-            key={recipe.postid}
-            postid={recipe.postid}
-            title={recipe.title}
-            description={recipe.description}
-            img={recipe.img}
-            showEditDeleteButtons={!showMyRecipes}
-            onDelete={handleDeleteConfirmation} // 이 부분 수정
-            onEdit={handleEdit} // 이 부분 수정
-          />
-          
+              key={recipe.postid}
+              postid={recipe.postid}
+              title={recipe.title}
+              description={recipe.description}
+              img={recipe.img}
+              showEditDeleteButtons={!showMyRecipes}
+              onDelete={handleDeleteConfirmation} // 이 부분 수정
+              onEdit={handleEdit} // 이 부분 수정
+            />
           ))}
         </div>
 

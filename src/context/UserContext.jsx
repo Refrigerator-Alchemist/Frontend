@@ -1,6 +1,7 @@
 import React, { useState, useReducer, createContext, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import ErrorCode from '../components/ErrorCode';
 
 // 📀 토큰 처리
 const instance = axios.create({
@@ -56,8 +57,8 @@ export const UserProvider = ({ children }) => {
 
   const [emailExists, setEmailExists] = useState(true); // 회원가입 시 이메일 중복 여부
 
-  // const [takenTime, setTakenTime] = useState(null); // 인증번호 발급시간
-  // const [expireTime, setExpireTime] = useState(null); // 인증번호 만료시간
+  const [takenTime, setTakenTime] = useState(null); // 인증번호 발급시간
+  const [expireTime, setExpireTime] = useState(null);
 
   const [verified, setVerified] = useState(false); // 이메일 인증 여부
 
@@ -86,8 +87,7 @@ export const UserProvider = ({ children }) => {
       // ▶ 204 === 중복 아니고, 인증발급
       if (response.status === 204) {
         setEmailExists(false);
-        // setTakenTime(new Date());
-        // setExpireTime(response.data.expireTime);
+        setTakenTime(new Date());
         window.alert('인증번호가 발송되었습니다');
       } else {
         setEmailExists(true);
@@ -114,8 +114,10 @@ export const UserProvider = ({ children }) => {
       // ▶ 204 === 중복이고, 인증 발급
       if (response.status === 204) {
         setEmailExists(true);
-        // setTakenTime(new Date());
-        // setExpireTime(response.data.expireTime);
+        setTakenTime(new Date());
+        setExpireTime(
+          new Date(new Date().setMinutes(new Date().getMinutes() + 10))
+        );
         window.alert('인증번호가 발송되었습니다');
       } else {
         setEmailExists(false);
@@ -134,7 +136,7 @@ export const UserProvider = ({ children }) => {
     socialType
   ) => {
     const NO_CODE_ERROR = '인증번호를 입력해주세요';
-    // const EXPIRED_CODE_ERROR = '인증번호가 만료되었습니다';
+    const EXPIRED_CODE_ERROR = '인증번호가 만료되었습니다';
 
     // ▶ 인증번호 입력 여부 확인
     if (!inputNum) {
@@ -143,12 +145,12 @@ export const UserProvider = ({ children }) => {
     }
 
     // ▶ 인증 유효 시간 10분
-    // const timeDifference = (expireTime - takenTime) / 1000 / 60;
+    const timeDifference = (expireTime - takenTime) / 1000 / 60;
 
-    // if (timeDifference > 10) {
-    // window.alert(EXPIRED_CODE_ERROR);
-    // return;
-    // }
+    if (timeDifference > 10) {
+      window.alert(EXPIRED_CODE_ERROR);
+      return;
+    }
 
     try {
       const response = await instance.post(
@@ -297,8 +299,22 @@ export const UserProvider = ({ children }) => {
         navigate('/main');
       })
       .catch((error) => {
-        console.log(error);
-        window.alert('로그인 실패!');
+        // 에러 상태 코드에 따른 메시지 표시
+        if (error.response && error.response.status) {
+          switch (error.response.status) {
+            case ErrorCode.NOT_EXIST_USER_EMAIL_SOCIALTYPE.status:
+              window.alert(ErrorCode.NOT_EXIST_USER_EMAIL_SOCIALTYPE.message);
+              break;
+            case ErrorCode.NOT_VALID_ACCESSTOKEN.status:
+              window.alert(ErrorCode.NOT_VALID_ACCESSTOKEN.message);
+              break;
+            // 필요한 만큼 다른 에러 코드를 추가할 수 있습니다.
+            default:
+              window.alert('로그인 실패!');
+          }
+        } else {
+          window.alert('로그인 실패!');
+        }
       });
   };
 
@@ -376,12 +392,13 @@ export const UserProvider = ({ children }) => {
   const sendRefresh = async () => {
     const URL = 'http://localhost:8080/auth/token/reissue';
     const socialId = localStorage.getItem('socialId');
+    const refreshToken = localStorage.getItem('refreshToken');
 
     try {
       const response = await instance.post(URL, {
         socialId,
         headers: {
-          'authorization-refresh': localStorage.getItem('refreshToken'),
+          'authorization-refresh': `Bearer ${refreshToken}`,
         },
       });
 
