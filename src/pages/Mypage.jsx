@@ -120,13 +120,6 @@ function MyPage() {
 
 
 
-// 레시피 수정하는 함수
-const handleEdit = (postid) => {
-  navigate(`/editpost/${postid}`);
-};
-
-
-
 // 레시피 수정하는 api
 // const handleEdit = async (postid) => {
 //   try {
@@ -145,6 +138,11 @@ const handleEdit = (postid) => {
 // };
 
 
+
+// 레시피 수정하는 
+const handleEdit = (postid) => {
+  navigate(`/editpost/${postid}`);
+};
 
   const handleDeleteConfirmation = async (postid) => {
     const confirmDelete = window.confirm('정말로 삭제하시겠습니까?');

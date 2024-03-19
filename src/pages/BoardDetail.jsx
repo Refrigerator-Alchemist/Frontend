@@ -7,23 +7,13 @@ import axios from 'axios';
 const BoardDetail = () => {
   const [postData, setPostData] = useState({});
   const [isLiked, setIsLiked] = useState(false);
-  const { postId } = useParams();
+  const { postid } = useParams();
   const navigate = useNavigate();
-
-  // const handleLikeClick = async () => {
-  //   // 하트 유무 미완성
-  //   setIsLiked(!isLiked);
-  //   try {
-  //     await axios.post(`서버주소/board/${postId}`, { liked: !isLiked });
-  //   } catch (error) {
-  //     console.error('에러내용:', error);
-  //   }
-  // };
 
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await axios.post(`http://172.30.1.55:8080/board/specific`, { postId });
+        const response = await axios.post(`http://172.30.1.55:8080/board/specific`, { postId: postid });
         const { data } = response;
         setPostData(data);
       } catch (error) {
@@ -32,7 +22,7 @@ const BoardDetail = () => {
     };
 
     fetchPostData();
-  }, [postId]);
+  }, [postid]);
 
 
   
