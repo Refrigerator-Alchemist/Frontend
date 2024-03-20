@@ -14,10 +14,10 @@ instance.interceptors.request.use(
     const accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
     if (accessToken) {
-      config.headers['Authorization-Access'] = accessToken;
+      config.headers['Authorization-Access'] = 'Bearer ' + accessToken;
     }
     if (refreshToken) {
-      config.headers['Authorization-Refresh'] = refreshToken;
+      config.headers['Authorization-Refresh'] = 'Bearer ' + refreshToken;
     }
     return config;
   },
@@ -308,7 +308,6 @@ export const UserProvider = ({ children }) => {
             case ErrorCode.NOT_VALID_ACCESSTOKEN.status:
               window.alert(ErrorCode.NOT_VALID_ACCESSTOKEN.message);
               break;
-            // 필요한 만큼 다른 에러 코드를 추가할 수 있습니다.
             default:
               window.alert('로그인 실패!');
           }
@@ -322,6 +321,7 @@ export const UserProvider = ({ children }) => {
   const logout = async () => {
     const URL = 'http://localhost:8080/auth/token/logout';
     const socialId = localStorage.getItem('socialId');
+    // const accessToken = localStorage.getItem('accessToken');
 
     try {
       const response = await instance.post(
@@ -332,7 +332,7 @@ export const UserProvider = ({ children }) => {
             'Content-Type': 'application/json;charset=UTF-8',
             Accept: 'application/json',
             'Access-Control-Allow-Origin': '*',
-            'authorization-access': localStorage.getItem('accessToken'),
+            // 'authorization-access': accessToken,
           },
         }
       );
@@ -392,15 +392,18 @@ export const UserProvider = ({ children }) => {
   const sendRefresh = async () => {
     const URL = 'http://localhost:8080/auth/token/reissue';
     const socialId = localStorage.getItem('socialId');
-    const refreshToken = localStorage.getItem('refreshToken');
+    // const refreshToken = localStorage.getItem('refreshToken');
 
     try {
-      const response = await instance.post(URL, {
-        socialId,
-        headers: {
-          'authorization-refresh': `Bearer ${refreshToken}`,
-        },
-      });
+      const response = await instance.post(
+        URL,
+        { socialId }
+        // {
+        // headers: {
+        // 'authorization-refresh': refreshToken,
+        // },
+        // }
+      );
 
       if (response.status === 204) {
         localStorage.setItem('accessToken', response.data.accessToken);
