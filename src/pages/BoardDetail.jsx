@@ -10,12 +10,15 @@ const BoardDetail = () => {
   const { postid } = useParams();
   const navigate = useNavigate();
 
+
+  //상세페이지 
   useEffect(() => {
     const fetchPostData = async () => {
       try {
         const response = await axios.post(`http://172.30.1.55:8080/board/specific`, { postId: postid });
         const { data } = response;
         setPostData(data);
+        setIsLiked(data.isLiked);// 하트가 
       } catch (error) {
         console.error('에러 내용:', error);
       }
@@ -24,6 +27,11 @@ const BoardDetail = () => {
     fetchPostData();
   }, [postid]);
 
+
+  // 하트 아이콘을 클릭했을 때 실행되는 함수
+  // const handleLikeClick = async () => {
+    
+  // };
 
   
   return (

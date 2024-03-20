@@ -6,12 +6,15 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Pagination from '../components/Pagination'; 
 import Navigation from '../components/Navigation';
+import { useUserState } from '../context/UserContext';
 
 const GptSavedList = () => {
   const navigate = useNavigate();
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage] = useState(7);
+  const user = useUserState();
+
 
   //저장한 목록 보기 
   useEffect(() => {
@@ -40,7 +43,7 @@ const GptSavedList = () => {
       }
     };
     fetchRecipes();
-  }, []);
+  }, [user.nickName]);
 
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
@@ -72,7 +75,7 @@ const GptSavedList = () => {
       </div>
       <div className="my-2 mt-20 mb-4">
         <div className="titlebox mb-6 mt-2">
-          <span className="font-score font-extrabold ml-8 text-2xl">나의 연금술 레시피</span>
+        <span className="font-score font-extrabold ml-8 text-2xl">{`${user.nickName}의 연금술 레시피`}</span>
         </div>
         {currentRecipes.map((recipe) => (
           <RecipeCard
