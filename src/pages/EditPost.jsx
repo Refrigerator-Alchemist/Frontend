@@ -4,37 +4,34 @@ import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
 
 export default function UploadBoard() {
-  const { postid } = useParams();
-  const [recipeName, setRecipeName] = useState(''); // 레시피 이름
+  const { postId } = useParams(); // 라우터 엔드포인트
+  const [title, setTitle] = useState(''); // 레시피 글 제목
   const [description, setDescription] = useState(''); // 내용
   const [ingredients, setIngredients] = useState([]); // 재료
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchData(postid);
-  }, [postid]);
+    fetchData(postId);
+  }, [postId]);
 
   // 1️⃣ 서버에서 기존 정보들을 불러오는 함수
-  const fetchData = async (postid) => {
-    if (!postid) return;
+  const fetchData = async (postId) => {
+    if (!postId) return;
 
     try {
       const response = await axios.post(
         'http://localhost:8080/board/updateBoard',
-        { postid: postid }
+        postId
       );
-
-      console.log('서버 응답 데이터:', response.data);
 
       if (response.data) {
         if (response.data && Array.isArray(response.data.items)) {
-          // 배열은 map으로 받아와서 저장해야함
           const items = response.data.items.map((item) => ({
             title: item.title,
-            description: item.Recipe,
+            description: item.description,
             ingredients: item.ingredients.map((ingredient) => ingredient),
           }));
-          setRecipeName(items[0].title);
+          setTitle(items[0].title);
           setDescription(items[0].description);
           setIngredients(items[0].ingredients);
         }
@@ -64,9 +61,9 @@ export default function UploadBoard() {
     const URL = 'http://localhost:8080/content/update;';
 
     const formData = {
-      recipeName,
-      description,
-      ingredients,
+      title: title,
+      description: description,
+      ingredients: ingredients,
     };
 
     try {
@@ -80,6 +77,8 @@ export default function UploadBoard() {
         console.log('게시물 수정 완료');
         window.alert('게시물 수정 완료');
       }
+
+      navigate(`/board/${postId}`);
     } catch (error) {
       console.error('수정 중 에러가 발생했습니다', error);
       window.alert('수정 중 에러가 발생했습니다');
@@ -114,8 +113,8 @@ export default function UploadBoard() {
           <input
             type="text"
             id="food-name"
-            value={recipeName}
-            onChange={(e) => setRecipeName(e.target.value)}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
             placeholder="음식 이름을 입력하세요"
             className="font-score w-full border border-gray-300 rounded-md p-2 text-sm"
           />

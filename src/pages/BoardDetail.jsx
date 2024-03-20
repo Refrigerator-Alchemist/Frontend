@@ -5,27 +5,52 @@ import Navigation from '../components/Navigation';
 import axios from 'axios';
 
 const BoardDetail = () => {
-  const [postData, setPostData] = useState({});
-  const [isLiked, setIsLiked] = useState(false);
-  const { postid } = useParams();
+  const { postId } = useParams(); // 라우터 엔드포인트
+  const [imageUrl, setImageUrl] = useState(''); // 이미지
+  const [title, setTitle] = useState(''); // 레시피 글 제목
+
+  const [description, setDescription] = useState(''); // 내용
+  const [ingredients, setIngredients] = useState([]); // 재료
+  const [isLiked, setIsLiked] = useState(false); // 좋아요 상태
   const navigate = useNavigate();
 
+  // 1️⃣ 서버에서 기존 정보들을 불러오는 함수
+  const fetchPostData = async (postId) => {
+    try {
+      const response = await axios.post(
+        `http://172.30.1.55:8080/board/specific`,
+        postId
+      );
 
-  //상세페이지 
-  useEffect(() => {
-    const fetchPostData = async () => {
-      try {
-        const response = await axios.post(`http://172.30.1.55:8080/board/specific`, { postId: postid });
-        const { data } = response;
-        setPostData(data);
-        setIsLiked(data.isLiked);// 하트가 
-      } catch (error) {
-        console.error('에러 내용:', error);
+      if (response.data) {
+        if (response.data && Array.isArray(response.data.items)) {
+          const items = response.data.items.map((item) => ({
+            imageUrl: item.imageUrl,
+            title: item.title,
+            description: item.description,
+            ingredients: item.ingredients.map((ingredient) => ingredient),
+          }));
+          setImageUrl(items[0].imageUrl);
+          setTitle(items[0].title);
+          setDescription(items[0].description);
+          setIngredients(items[0].ingredients);
+        }
+      } else {
+        console.error('데이터 타입 오류:', response.data);
       }
-    };
+    } catch (error) {
+      console.error('에러 내용:', error);
+    }
+  };
 
-    fetchPostData();
-  }, [postid]);
+  // 2️⃣ 좋아요 / 취소
+  const toggleLike = () => {
+    if (isLiked) {
+      setIsLiked(false);
+    } else {
+      setIsLiked(true);
+    }
+  };
 
 
   // 하트 아이콘을 클릭했을 때 실행되는 함수
@@ -45,26 +70,26 @@ const BoardDetail = () => {
 
       <main className="pt-16">
         <img
-          src={postData.thumbnail}
-          alt={postData.title}
+          src={imageUrl}
+          alt={title}
           className="mt-10 mb-4 w-80 h-60 object-cover rounded-lg mx-auto sm:w-80"
         />
 
         <div className="flex flex-col items-center mt-8">
           <div className="flex items-center gap-4">
-            <h2 className="font-score text-2xl font-bold">{postData.title}</h2>
-            {/* <button onClick={handleLikeClick} className="ml-2">
+            <h2 className="font-score text-2xl font-bold">{title}</h2>
+            <button onClick={toggleLike} className="ml-2">
               {isLiked ? (
                 <FaHeart className="text-red-500 text-2xl" />
               ) : (
                 <FaRegHeart className="text-2xl" />
               )}
-            </button> */}
+            </button>
           </div>
           <div className="font-score text-sm text-gray-500 my-2">
-            {postData.ingredients ? postData.ingredients.join(' · ') : ''}
+            {ingredients ? ingredients.join(' · ') : ''}
           </div>
-          <p className="text-gray-700 font-score">{postData.description}</p>
+          <p className="text-gray-700 font-score">{description}</p>
         </div>
       </main>
 
