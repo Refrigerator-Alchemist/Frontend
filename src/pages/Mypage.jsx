@@ -51,7 +51,6 @@ const RecipeCard = ({
   );
 };
 
-
 function MyPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage, setRecipesPerPage] = useState(5);
@@ -68,17 +67,19 @@ function MyPage() {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const URL = 'http://localhost:8080/userprofile';
-        const response = await axios.get(URL, user.nickName);
-
         if (user) {
+          const URL = 'http://localhost:8080/userprofile';
+          const response = await axios.get(URL, user.nickName);
+
           setUserInfo({
             imageUrl: response.data.imageUrl, // 프로필 사진
             nickName: user.nickName, // 이름
           });
+        } else {
+          window.alert('로그인 하지 않았습니다!');
         }
       } catch (error) {
-        console.error('에러 내용:', error);
+        console.error('데이터 통신 중 문제 발생: ', error);
       }
     };
 
@@ -88,7 +89,6 @@ function MyPage() {
   useEffect(() => {
     axios
       .post('http://172.30.1.55:8080/board/myPage', 'test')
-
       .then((response) => {
         console.log('서버 응답 데이터:', response.data);
 
@@ -97,8 +97,8 @@ function MyPage() {
             return {
               postid: item.ID,
               title: item.title,
-              description: item.Recipe,
-              img: item.thumbnail,
+              description: item.description,
+              img: item.imageUrl,
               isLiked: item.likeCount > 0,
             };
           });
@@ -136,7 +136,6 @@ function MyPage() {
     navigate(`/editpost/${postid}`);
   };
 
-  
   // 레시피 삭제
   const deleteRecipe = async (postid) => {
     try {
@@ -164,8 +163,6 @@ function MyPage() {
       }
     }
   };
-
-  
 
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
@@ -241,7 +238,7 @@ function MyPage() {
               description={recipe.description}
               img={recipe.img}
               showEditDeleteButtons={!showMyRecipes}
-              onDelete={handleDeleteConfirmation} 
+              onDelete={handleDeleteConfirmation}
               onEdit={handleEdit}
             />
           ))}
