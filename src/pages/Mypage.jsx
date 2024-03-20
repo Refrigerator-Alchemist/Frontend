@@ -114,23 +114,6 @@ function MyPage() {
 
   const { logout } = useUserDispatch(); // 로그아웃
 
-  // 레시피 수정하는 api
-  // const handleEdit = async (postid) => {
-  //   try {
-  //     const response = await axios.post(
-  //       `http://172.30.1.89:8080/board/updateBoard`,
-  //       { postId: postid }
-  //     );
-  //     if (response.status === 200) {
-  //       navigate('/upload', { state: { postId: postid } });
-  //     } else {
-  //       console.error('응답에러 :', response.data);
-  //     }
-  //   } catch (error) {
-  //     console.error('에러내용:', error);
-  //   }
-  // };
-
   // 레시피 수정하는
   const handleEdit = (postid) => {
     navigate(`/editpost/${postid}`);
