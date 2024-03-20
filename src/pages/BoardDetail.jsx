@@ -15,6 +15,10 @@ const BoardDetail = () => {
   const [isLiked, setIsLiked] = useState(false); // 좋아요 상태
   const navigate = useNavigate();
 
+  useEffect(() => {
+    fetchPostData(postId);
+  }, [postId]);
+
   // 1️⃣ 서버에서 기존 정보들을 불러오는 함수
   const fetchPostData = async (postId) => {
     try {
@@ -55,13 +59,11 @@ const BoardDetail = () => {
     }
   };
 
-
   // 하트 아이콘을 클릭했을 때 실행되는 함수
   // const handleLikeClick = async () => {
-    
+
   // };
 
-  
   return (
     <section>
       <div
@@ -81,7 +83,6 @@ const BoardDetail = () => {
         <div className="flex flex-col items-center mt-8">
           <div className="flex items-center gap-4">
             <h2 className="font-score text-2xl font-bold">{title}</h2>
-            <h2 className="font-score text-2xl font-bold">{nickName}</h2>
             <button onClick={toggleLike} className="ml-2">
               {isLiked ? (
                 <FaHeart className="text-red-500 text-2xl" />
@@ -89,6 +90,11 @@ const BoardDetail = () => {
                 <FaRegHeart className="text-2xl" />
               )}
             </button>
+          </div>
+          <div>
+            <h2 className="font-score text-2xl font-bold">
+              작성자: {nickName}
+            </h2>
           </div>
           <div className="font-score text-sm text-gray-500 my-2">
             {ingredients ? ingredients.join(' · ') : ''}
