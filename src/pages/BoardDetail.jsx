@@ -8,6 +8,7 @@ const BoardDetail = () => {
   const { postId } = useParams(); // 라우터 엔드포인트
   const [imageUrl, setImageUrl] = useState(''); // 이미지
   const [title, setTitle] = useState(''); // 레시피 글 제목
+  const [nickName, setNickName] = useState(''); // 작성자 닉네임
 
   const [description, setDescription] = useState(''); // 내용
   const [ingredients, setIngredients] = useState([]); // 재료
@@ -18,6 +19,7 @@ const BoardDetail = () => {
   useEffect(() => {
     fetchPostData(postId);
   }, [postId]);
+
 
   // 1️⃣ 서버에서 기존 정보들을 불러오는 함수
   const fetchPostData = async (postId) => {
@@ -32,11 +34,13 @@ const BoardDetail = () => {
           const items = response.data.items.map((item) => ({
             imageUrl: item.imageUrl,
             title: item.title,
+            nickName: item.nickName,
             description: item.description,
             ingredients: item.ingredients.map((ingredient) => ingredient),
           }));
           setImageUrl(items[0].imageUrl);
           setTitle(items[0].title);
+          setNickName(items[0].nickName);
           setDescription(items[0].description);
           setIngredients(items[0].ingredients);
           setNickname(items[0].Nickname);  //닉네임 추가 
@@ -101,9 +105,13 @@ const BoardDetail = () => {
             </button>
             
           </div>
-          <span className="font-score text-gray-500 mt-2">{Nickname}</span>
-          <div className="font-score text-lg text-gray-500 my-10">
-            {ingredients ? ingredients.join(" · ") : ""}
+          <div>
+            <h2 className="font-score text-2xl font-bold">
+              작성자: {nickName}
+            </h2>
+          </div>
+          <div className="font-score text-sm text-gray-500 my-2">
+            {ingredients ? ingredients.join(' · ') : ''}
           </div>
           <p className="text-gray-700 font-score pl-12 pr-12">{description}</p>
         </div>

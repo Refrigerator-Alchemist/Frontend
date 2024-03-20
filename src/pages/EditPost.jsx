@@ -61,6 +61,7 @@ export default function UploadBoard() {
     const URL = 'http://localhost:8080/content/update;';
 
     const formData = {
+      postId: postId,
       title: title,
       description: description,
       ingredients: ingredients,
