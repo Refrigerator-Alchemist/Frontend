@@ -8,6 +8,7 @@ const BoardDetail = () => {
   const { postId } = useParams(); // 라우터 엔드포인트
   const [imageUrl, setImageUrl] = useState(''); // 이미지
   const [title, setTitle] = useState(''); // 레시피 글 제목
+  const [nickName, setNickName] = useState(''); // 작성자 닉네임
 
   const [description, setDescription] = useState(''); // 내용
   const [ingredients, setIngredients] = useState([]); // 재료
@@ -27,11 +28,13 @@ const BoardDetail = () => {
           const items = response.data.items.map((item) => ({
             imageUrl: item.imageUrl,
             title: item.title,
+            nickName: item.nickName,
             description: item.description,
             ingredients: item.ingredients.map((ingredient) => ingredient),
           }));
           setImageUrl(items[0].imageUrl);
           setTitle(items[0].title);
+          setNickName(items[0].nickName);
           setDescription(items[0].description);
           setIngredients(items[0].ingredients);
         }
@@ -78,6 +81,7 @@ const BoardDetail = () => {
         <div className="flex flex-col items-center mt-8">
           <div className="flex items-center gap-4">
             <h2 className="font-score text-2xl font-bold">{title}</h2>
+            <h2 className="font-score text-2xl font-bold">{nickName}</h2>
             <button onClick={toggleLike} className="ml-2">
               {isLiked ? (
                 <FaHeart className="text-red-500 text-2xl" />
