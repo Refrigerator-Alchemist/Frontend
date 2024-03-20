@@ -14,10 +14,6 @@ const BoardDetail = () => {
   const [isLiked, setIsLiked] = useState(false); // 좋아요 상태
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchPostData(postId);
-  }, [postId]);
-
   // 1️⃣ 서버에서 기존 정보들을 불러오는 함수
   const fetchPostData = async (postId) => {
     try {
@@ -56,6 +52,13 @@ const BoardDetail = () => {
     }
   };
 
+
+  // 하트 아이콘을 클릭했을 때 실행되는 함수
+  // const handleLikeClick = async () => {
+    
+  // };
+
+  
   return (
     <section>
       <div

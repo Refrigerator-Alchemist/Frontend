@@ -30,6 +30,7 @@ export default function Navigation() {
     }
   }, [location.pathname, setSelected]);
 
+  const iconStyle = `mx-12 text-4xl text-main cursor-pointer hover:text-main-dark hover:scale-110 transition-all duration-300`;
 
   return (
     <div
@@ -42,9 +43,7 @@ export default function Navigation() {
           setSelected('food');
           navigate('/board');
         }}
-        className={`mx-12 text-4xl text-main cursor-pointer ${
-          selected === 'food' ? 'selected-icon' : ''
-        }`}
+        className={`${iconStyle} ${selected === 'food' ? 'selected-icon' : ''}`}
       >
         {selected === 'food' ? <PiCookingPotFill /> : <PiCookingPot />}
       </div>
@@ -54,9 +53,7 @@ export default function Navigation() {
           setSelected('home');
           navigate('/main');
         }}
-        className={`mx-12 text-4xl text-main cursor-pointer ${
-          selected === 'home' ? 'selected-icon' : ''
-        }`}
+        className={`${iconStyle} ${selected === 'home' ? 'selected-icon' : ''}`}
       >
         {selected === 'home' ? <GoHomeFill /> : <GoHome />}
       </div>
@@ -66,9 +63,7 @@ export default function Navigation() {
           setSelected('profile');
           navigate(user ? '/mypage' : '/login'); // 로그인에 따라 경로가 바뀜
         }}
-        className={`mx-12 text-4xl text-main cursor-pointer ${
-          selected === 'profile' ? 'selected-icon' : ''
-        }`}
+        className={`${iconStyle} ${selected === 'profile' ? 'selected-icon' : ''}`}
       >
         {selected === 'profile' ? (
           <IoAccessibility />

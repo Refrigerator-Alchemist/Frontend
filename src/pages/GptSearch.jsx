@@ -5,12 +5,15 @@ import { CiSaveDown2 } from 'react-icons/ci';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useUserState } from '../context/UserContext';
+
 
 const TagInput = () => {
   const [tags, setTags] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const navigate = useNavigate();
-  const inputRef = useRef(null); // 입력란 참조
+  const inputRef = useRef(null); 
+  const user = useUserState(); // 사용자 정보 가져오기
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -135,7 +138,7 @@ const TagInput = () => {
           onClick={() => navigate('/recipe/myRecipe')}
         >
           <CiSaveDown2 className="mr-1 w-6 h-6" />
-          나의 연금술 레시피
+          {`${user.nickName}의 연금술 레시피`}
         </button>
         <button
           className="font-score transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer text-white font-bold py-2 px-4 rounded w-full"
