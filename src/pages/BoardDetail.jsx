@@ -7,14 +7,17 @@ import axios from 'axios';
 const BoardDetail = () => {
   const [postData, setPostData] = useState({});
   const [isLiked, setIsLiked] = useState(false);
-  const { postid } = useParams();
+  const { postId } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await axios.post(`http://172.30.1.55:8080/board/specific`, { postId: postid });
-        const { data } = response;
+        const response = await axios.post(
+          `http://172.30.1.55:8080/board/specific`,
+          postId
+        );
+        const { data } = response; // map으로 배열을 받아오는 코드로 수정하기
         setPostData(data);
       } catch (error) {
         console.error('에러 내용:', error);
@@ -22,10 +25,8 @@ const BoardDetail = () => {
     };
 
     fetchPostData();
-  }, [postid]);
+  }, [postId]);
 
-
-  
   return (
     <section>
       <div
@@ -37,7 +38,7 @@ const BoardDetail = () => {
 
       <main className="pt-16">
         <img
-          src={postData.thumbnail}
+          src={postData.imageUrl}
           alt={postData.title}
           className="mt-10 mb-4 w-80 h-60 object-cover rounded-lg mx-auto sm:w-80"
         />

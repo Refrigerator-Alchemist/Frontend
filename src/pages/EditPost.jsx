@@ -4,24 +4,24 @@ import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
 
 export default function UploadBoard() {
-  const { postid } = useParams();
+  const { postId } = useParams();
   const [recipeName, setRecipeName] = useState(''); // 레시피 이름
   const [description, setDescription] = useState(''); // 내용
   const [ingredients, setIngredients] = useState([]); // 재료
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchData(postid);
-  }, [postid]);
+    fetchData(postId);
+  }, [postId]);
 
   // 1️⃣ 서버에서 기존 정보들을 불러오는 함수
-  const fetchData = async (postid) => {
-    if (!postid) return;
+  const fetchData = async (postId) => {
+    if (!postId) return;
 
     try {
       const response = await axios.post(
         'http://localhost:8080/board/updateBoard',
-        { postid: postid }
+        postId
       );
 
       console.log('서버 응답 데이터:', response.data);
@@ -80,6 +80,8 @@ export default function UploadBoard() {
         console.log('게시물 수정 완료');
         window.alert('게시물 수정 완료');
       }
+
+      navigate(`/board/${postId}`);
     } catch (error) {
       console.error('수정 중 에러가 발생했습니다', error);
       window.alert('수정 중 에러가 발생했습니다');
