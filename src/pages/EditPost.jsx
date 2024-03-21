@@ -60,12 +60,15 @@ export default function UploadBoard() {
     try {
       const URL = 'http://localhost:8080/content/update';
 
-      const formData = {
-        postId,
-        title,
-        description,
-        ingredients,
-      };
+
+
+    const formData = {
+      postId: postId,
+      title: title,
+      description: description,
+      ingredients: ingredients,
+    };
+
 
       const response = await axios.post(URL, formData, {
         headers: {
