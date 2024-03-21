@@ -62,18 +62,21 @@ function MyPage() {
     imageUrl: IMAGE_PROFILE,
   });
 
-  const user = useUserState(); // 유저 데이터 : 로그인 상태면 존재함
+  const user = useUserState(); // 유저 데이터 : 로그인 상태면 존재
+
+  const { logout } = useUserDispatch();
 
   useEffect(() => {
     const fetchUserInfo = async () => {
+      const URL = 'http://localhost:8080/userprofile';
+
       try {
         if (user) {
-          const URL = 'http://localhost:8080/userprofile';
           const response = await axios.get(URL, user.nickName);
 
           setUserInfo({
-            imageUrl: response.data.imageUrl, // 프로필 사진
-            nickName: user.nickName, // 이름
+            imageUrl: response.data.imageUrl,
+            nickName: user.nickName,
           });
         } else {
           window.alert('로그인 하지 않았습니다!');
@@ -88,7 +91,7 @@ function MyPage() {
 
   useEffect(() => {
     axios
-      .post('http://172.30.1.55:8080/board/myPage', 'test')
+      .post('http://localhost:8080/board/myPage', 'test')
       .then((response) => {
         console.log('서버 응답 데이터:', response.data);
 
@@ -112,8 +115,6 @@ function MyPage() {
       });
   }, []);
 
-  const { logout } = useUserDispatch(); // 로그아웃
-
   // 레시피 수정하는
   const handleEdit = (postid) => {
     navigate(`/editpost/${postid}`);
@@ -122,7 +123,7 @@ function MyPage() {
   // 레시피 삭제
   const deleteRecipe = async (postid) => {
     try {
-      await axios.post(`http://172.30.1.55:8080/board/deleteBoard`, {
+      await axios.post(`http://localhost:8080/board/deleteBoard`, {
         postId: postid,
       });
 

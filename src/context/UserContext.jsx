@@ -389,7 +389,7 @@ export const UserProvider = ({ children }) => {
   };
 
   // 🚀 새로운 액세스 토큰 발급 -----------------------------------------------------------
-  const sendRefresh = async () => {
+  const reIssue = async () => {
     const URL = 'http://localhost:8080/auth/token/reissue';
     const socialId = localStorage.getItem('socialId');
     // const refreshToken = localStorage.getItem('refreshToken');
@@ -455,7 +455,7 @@ export const UserProvider = ({ children }) => {
     checkNameDuplication,
     nameDuplicated,
     setNameDuplicated,
-    sendRefresh,
+    reIssue,
     kakaoLogin,
     googleLogin,
     naverLogin,

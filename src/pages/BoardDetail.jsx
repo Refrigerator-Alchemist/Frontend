@@ -12,7 +12,6 @@ const BoardDetail = () => {
 
   const [description, setDescription] = useState(''); // 내용
   const [ingredients, setIngredients] = useState([]); // 재료
-  const [Nickname, setNickname] = useState(''); // 작성자 닉네임
   const [isLiked, setIsLiked] = useState(false); // 좋아요 상태
   const navigate = useNavigate();
 
@@ -20,12 +19,11 @@ const BoardDetail = () => {
     fetchPostData(postId);
   }, [postId]);
 
-
   // 1️⃣ 서버에서 기존 정보들을 불러오는 함수
   const fetchPostData = async (postId) => {
     try {
       const response = await axios.post(
-        `http://172.30.1.55:8080/board/specific`,
+        `http://localhost:8080/board/specific`,
         postId
       );
 
@@ -43,7 +41,6 @@ const BoardDetail = () => {
           setNickName(items[0].nickName);
           setDescription(items[0].description);
           setIngredients(items[0].ingredients);
-          setNickname(items[0].Nickname);  //닉네임 추가 
         }
       } else {
         console.error('데이터 타입 오류:', response.data);
@@ -54,32 +51,27 @@ const BoardDetail = () => {
   };
 
   // 2️⃣ 좋아요 / 취소
-   const toggleLike = async (postId) => {
+  const toggleLike = async (postId) => {
     try {
       if (isLiked) {
-        // 좋아요 취소 
-        await axios.post(`http://172.30.1.55:8080/board/unlike`,
-        { postId }
-        );
+        // 좋아요 취소
+        await axios.post(`http://localhost:8080/board/unlike`, { postId });
         setIsLiked(false);
       } else {
-        // 좋아요 
-        await axios.post(`http://172.30.1.55:8080/board/like`, 
-        { postId }
-        );
+        // 좋아요
+        await axios.post(`http://localhost:8080/board/like`, { postId });
         setIsLiked(true);
       }
     } catch (error) {
       console.error('좋아요 에러내용:', error);
     }
   };
-  
 
   return (
     <section>
       <div
         className="absolute top-5 left-42 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate("/board")}
+        onClick={() => navigate('/board')}
       >
         <FaArrowLeft />
       </div>
@@ -93,9 +85,8 @@ const BoardDetail = () => {
 
         <div className="flex flex-col items-center mt-12">
           <div className="flex items-center gap-4">
-            
             <h2 className="font-score text-2xl font-bold">{title}</h2>
-           
+
             <button onClick={() => toggleLike(postId)} className="ml-4">
               {isLiked ? (
                 <FaHeart className="text-red-500 text-2xl" />
@@ -103,7 +94,6 @@ const BoardDetail = () => {
                 <FaRegHeart className="text-2xl" />
               )}
             </button>
-            
           </div>
           <div>
             <h2 className="font-score text-2xl font-bold">
@@ -119,10 +109,10 @@ const BoardDetail = () => {
 
       <footer
         style={{
-          position: "fixed",
-          bottom: "0",
-          width: "100%",
-          maxWidth: "31rem",
+          position: 'fixed',
+          bottom: '0',
+          width: '100%',
+          maxWidth: '31rem',
         }}
       >
         <Navigation />
