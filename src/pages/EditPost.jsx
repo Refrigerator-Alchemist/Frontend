@@ -56,9 +56,11 @@ export default function UploadBoard() {
   };
 
   // 4️⃣ 수정 완료
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const URL = 'http://localhost:8080/content/update;';
+  const handleSubmit = async () => {
+    try {
+      const URL = 'http://localhost:8080/content/update';
+
+
 
     const formData = {
       postId: postId,
@@ -67,7 +69,7 @@ export default function UploadBoard() {
       ingredients: ingredients,
     };
 
-    try {
+
       const response = await axios.post(URL, formData, {
         headers: {
           'Content-Type': 'application/json',

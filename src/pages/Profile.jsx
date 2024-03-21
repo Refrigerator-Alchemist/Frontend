@@ -22,13 +22,12 @@ export default function Profile() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const socialId = localStorage.getItem('socialId');
         const accessToken = localStorage.getItem('accessToken');
-        const URL = `http://localhost:8080/profile?socialId=${socialId}`;
+        const URL = 'http://localhost:8080/profile';
 
         const response = await axios.get(URL, {
           headers: {
-            'Authorization-Access': accessToken,
+            'Authorization-Access': 'Bearer ' + accessToken,
           },
         });
 
@@ -73,7 +72,7 @@ export default function Profile() {
 
       await axios.post(URL, formData, {
         headers: {
-          'Authorization-Access': accessToken,
+          'Authorization-Access': 'Bearer ' + accessToken,
         },
       });
     } catch (error) {
@@ -112,7 +111,7 @@ export default function Profile() {
                 'Content-Type': 'application/json;charset=UTF-8',
                 Accept: 'application/json',
                 'Access-Control-Allow-Origin': '*',
-                'Authorization-Access': accessToken,
+                'Authorization-Access': 'Bearer ' + accessToken,
               },
             }
           )
