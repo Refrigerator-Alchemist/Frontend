@@ -13,6 +13,7 @@ const TagInput = () => {
   const navigate = useNavigate();
   const inputRef = useRef(null);
   const user = useUserState(); // 사용자 정보 가져오기
+  const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -45,6 +46,11 @@ const TagInput = () => {
         'http://localhost:8080/recipe/recommend',
         {
           ingredients: tags,
+        },
+        {
+          headers: {
+            'Authorization-Access': accessToken,
+          },
         }
       );
 
