@@ -36,15 +36,11 @@ function UploadBoard() {
     });
 
     try {
-      const response = axios.post(
-        'http://172.30.1.30:8080/writeTest',
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      );
+      const response = axios.post('http://localhost:8080/writeTest', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       console.log(response.data); // 모달띄우기 작성 성공됐다는
       navigate('/board');
     } catch (error) {
@@ -56,8 +52,6 @@ function UploadBoard() {
     navigate(-1);
   };
 
-
-  
   return (
     <section className="pt-16">
       <div

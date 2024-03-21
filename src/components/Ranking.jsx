@@ -54,8 +54,15 @@ export default function Ranking() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    fetchRanking();
+  }, []);
+
+  const fetchRanking = async () => {
     const URL = 'http://localhost:8080/board/apiTestLikeCount';
-    axios.get(URL).then(function (response) {
+
+    try {
+      const response = await axios.get(URL);
+
       if (response.data && Array.isArray(response.data.items)) {
         const items = response.data.items.map((item) => ({
           id: item.ID,
@@ -68,8 +75,10 @@ export default function Ranking() {
       } else {
         console.error('서버에서 데이터 전송 중 오류 발생');
       }
-    });
-  }, []);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <article

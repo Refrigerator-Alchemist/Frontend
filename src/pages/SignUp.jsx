@@ -50,7 +50,7 @@ export default function SignUp() {
     console.log(`입력한 이메일 : ${email}`);
 
     const pattern =
-      /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
     if (!email) {
       alert('이메일을 입력해주세요');
@@ -143,9 +143,9 @@ export default function SignUp() {
 
       {/* 타이틀 */}
       <header className="flex flex-col items-center mt-10">
-        <h1 className="font-score font-extrabold text-3xl">신규 회원가입</h1>
+        <h1 className="font-score text-3xl">신규 회원가입</h1>
         <p className="font-score text-md text-gray-400 mt-2">
-          회원가입에 사용할 이메일과 필수 정보를 입력하세요
+          환영합니다! 냉장고 연금술과 레시피 나눔을 해보세요
         </p>
       </header>
 
@@ -169,7 +169,7 @@ export default function SignUp() {
                 {/* 인증 요청 */}
                 <button
                   onClick={onRequest}
-                  className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
+                  className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtraBold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
                 >
                   인증 요청
                 </button>
@@ -210,7 +210,7 @@ export default function SignUp() {
               </div>
               <button
                 onClick={onCheckCode}
-                className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
+                className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtraBold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
               >
                 인증 확인
               </button>
@@ -236,7 +236,7 @@ export default function SignUp() {
                 {/* 중복확인 */}
                 <button
                   onClick={onCheckName}
-                  className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
+                  className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtraBold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
                 >
                   중복 확인
                 </button>
@@ -369,7 +369,7 @@ export default function SignUp() {
                   isPasswordValid(password) === false &&
                   !passwordMessage
                 }
-                className={`p-3 mx-20 mt-3 rounded-3xl font-jua text-xl transition ease-in-out duration-300
+                className={`p-3 mx-20 mt-3 rounded-3xl font-scoreExtraBold font-extrabold text-xl transition ease-in-out duration-300
               ${
                 passwordMessage
                   ? 'text-white bg-main hover:bg-[#15ed79] hover:text-black hover:cursor-pointer hover:-translate-y-1 hover:scale-110'

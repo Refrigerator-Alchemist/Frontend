@@ -66,7 +66,7 @@ export default function Login() {
   }, [emailValid, password]);
 
   return (
-    <section className="relative flex flex-col items-center justify-center font-score min-h-screen">
+    <section className="relative flex flex-col items-center justify-center min-h-screen">
       {/* 뒤로가기 버튼 */}
       <div
         className="absolute top-5 left-5 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
@@ -78,7 +78,7 @@ export default function Login() {
       {/* 로고, 타이틀 */}
       <header className="flex flex-col items-center justify-center">
         <Logo page="login" width="250px" height="250px" />
-        <h1 className="text-3xl font-extrabold">로그인</h1>
+        <h1 className="text-3xl font-score">로그인</h1>
       </header>
 
       {/* 이메일, 비밀번호 입력 + 로그인 */}
@@ -89,12 +89,14 @@ export default function Login() {
           onSubmit={onLogin}
         >
           <div className="mb-4">
-            <label className="block text-gray-700 ml-3">이메일</label>
+            <label className="block text-gray-700 ml-3 font-score">
+              이메일
+            </label>
             <input
               type="email"
               value={email}
               onChange={handleEmailChange}
-              className="w-full px-4 py-3 mt-1 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-3 mt-1 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-score"
               placeholder="이메일"
               required
             />
@@ -107,13 +109,15 @@ export default function Login() {
             </p>
           </div>
           <div className="mb-1">
-            <label className="block text-gray-700 ml-3">비밀번호</label>
+            <label className="block text-gray-700 ml-3 font-score">
+              비밀번호
+            </label>
             <div className="flex">
               <input
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={handlePasswordChange}
-                className="w-full px-4 py-3 mt-1 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-4 py-3 mt-1 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-score"
                 placeholder="비밀번호"
                 required
               />
@@ -128,14 +132,14 @@ export default function Login() {
           </div>
           <p
             onClick={() => navigate('/reset-password')}
-            className="flex justify-end underline font-bold hover:cursor-pointer hover:text-red-500 mb-4 "
+            className="flex justify-end underline font-bold hover:cursor-pointer hover:text-red-500 mb-4 font-score"
           >
             비밀번호 재설정
           </p>
           <button
             type="submit"
             disabled={notAllow}
-            className={`w-full py-2 text-2xl font-jua transition ease-in-out duration-300 rounded-3xl ${
+            className={`w-full py-2 text-2xl font-scoreExtraBold font-extrabold transition ease-in-out duration-300 rounded-3xl ${
               notAllow
                 ? 'bg-gray-500 text-black'
                 : 'bg-main text-white hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black'
@@ -149,7 +153,7 @@ export default function Login() {
       {/* 신규 회원가입 */}
       <footer className="flex flex-col items-center mb-4">
         {/* SNS 계정으로 가입 */}
-        <p className="my-4 text-gray-400">SNS 간편 로그인</p>
+        <p className="my-4 text-gray-400 font-score">SNS 간편 로그인</p>
         <figure className="flex mb-4">
           <button onClick={googleLogin}>
             <img
@@ -179,10 +183,10 @@ export default function Login() {
 
         {/* 이메일 회원가입 */}
         <div className="flex">
-          <span>계정이 없으신가요?</span>
+          <span className="font-score">계정이 없으신가요?</span>
           <span
             onClick={() => navigate('/signup')}
-            className="underline font-bold hover:cursor-pointer hover:text-red-500 ml-5"
+            className="underline font-bold hover:cursor-pointer hover:text-red-500 ml-5 font-score"
           >
             회원가입 하기
           </span>

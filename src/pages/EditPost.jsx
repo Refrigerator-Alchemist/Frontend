@@ -16,8 +16,6 @@ export default function UploadBoard() {
 
   // 1️⃣ 서버에서 기존 정보들을 불러오는 함수
   const fetchData = async (postId) => {
-    if (!postId) return;
-
     try {
       const response = await axios.post(
         'http://localhost:8080/board/updateBoard',
@@ -57,10 +55,7 @@ export default function UploadBoard() {
 
   // 4️⃣ 수정 완료
   const handleSubmit = async () => {
-    try {
-      const URL = 'http://localhost:8080/content/update';
-
-
+    const URL = 'http://localhost:8080/content/update';
 
     const formData = {
       postId: postId,
@@ -69,7 +64,7 @@ export default function UploadBoard() {
       ingredients: ingredients,
     };
 
-
+    try {
       const response = await axios.post(URL, formData, {
         headers: {
           'Content-Type': 'application/json',

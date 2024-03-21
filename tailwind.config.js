@@ -13,11 +13,8 @@ module.exports = {
         dongle: ['Dongle', 'sans-serif'],
         undong: ['TTHakgyoansimUndongjangL'],
         score: ['S-CoreDream-3Light'],
+        scoreExtrabold: ['S-CoreDream-7ExtraBold'],
         ansung: ['Ansungtangmyun-Bold'],
-      },
-
-      fontWeight: {
-        extrabold: 800,
       },
 
       dropShadow: {

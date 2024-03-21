@@ -21,10 +21,10 @@ export default function Profile() {
   // 1️⃣ 처음에 보여줄 기본 유저 정보
   useEffect(() => {
     const fetchUserData = async () => {
-      try {
-        const accessToken = localStorage.getItem('accessToken');
-        const URL = 'http://localhost:8080/profile';
+      const URL = 'http://localhost:8080/profile';
+      const accessToken = localStorage.getItem('accessToken');
 
+      try {
         const response = await axios.get(URL, {
           headers: {
             'Authorization-Access': 'Bearer ' + accessToken,
@@ -45,12 +45,14 @@ export default function Profile() {
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
       const reader = new FileReader();
+
       reader.onload = async () => {
         if (reader.readyState === 2) {
           setImage(reader.result);
           await uploadImage(e.target.files[0]);
         }
       };
+
       reader.readAsDataURL(e.target.files[0]);
     }
   };
@@ -58,18 +60,16 @@ export default function Profile() {
   // 3️⃣ 프로필 이미지 저장하기
   const uploadImage = async (file) => {
     const URL = 'http://localhost:8080/change-profile';
+    const accessToken = localStorage.getItem('accessToken');
+
+    const formData = new FormData();
+    const nickNameBlob = new Blob([JSON.stringify({ nickName })], {
+      type: 'application/json',
+    });
+    formData.append('nickName', nickNameBlob);
+    formData.append('file', file);
 
     try {
-      const formData = new FormData();
-      // Blob을 써야 formData 안에 json으로 저장 가능
-      const nickNameBlob = new Blob([JSON.stringify({ nickName })], {
-        type: 'application/json',
-      });
-      formData.append('nickName', nickNameBlob);
-      formData.append('file', file);
-
-      const accessToken = localStorage.getItem('accessToken');
-
       await axios.post(URL, formData, {
         headers: {
           'Authorization-Access': 'Bearer ' + accessToken,
@@ -83,6 +83,7 @@ export default function Profile() {
   // 4️⃣ 닉네임 유효성 검사
   const handleNameChange = (e) => {
     setChangeNickName(e.target.value);
+
     if (!e.target.value.match(/^[가-힣]{2,}|[A-Za-z]{3,}$/)) {
       setNameError('한글은 최소 2글자, 영문은 최소 3글자 이상 입력하세요');
     } else {

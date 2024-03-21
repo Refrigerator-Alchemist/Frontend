@@ -7,12 +7,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useUserState } from '../context/UserContext';
 
-
 const TagInput = () => {
   const [tags, setTags] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const navigate = useNavigate();
-  const inputRef = useRef(null); 
+  const inputRef = useRef(null);
   const user = useUserState(); // 사용자 정보 가져오기
 
   const handleInputChange = (e) => {
@@ -43,42 +42,42 @@ const TagInput = () => {
     toast.error('임시 에러 메시지. API 연결 전 UI 확인용.');
     try {
       const response = await axios.post(
-        "http://172.30.1.42:8080/recipe/recommend",
+        'http://localhost:8080/recipe/recommend',
         {
           ingredients: tags,
         }
       );
 
-      console.log("서버 응답:", response.data);
+      console.log('서버 응답:', response.data);
 
       const recommendId = response.data;
 
       if (recommendId) {
         navigate(`/recipe/recommend/${recommendId}`);
       } else {
-        console.error("recommendId를 찾을 수 없습니다.");
+        console.error('recommendId를 찾을 수 없습니다.');
       }
     } catch (error) {
       console.error('에러내용:', error);
       if (error.response) {
         switch (error.response.status) {
           case 400:
-            toast.error("입력된 재료가 없습니다. 재료를 입력해 주세요.");
+            toast.error('입력된 재료가 없습니다. 재료를 입력해 주세요.');
             break;
           case 400:
-            toast.error("recommendId를 찾을 수 없습니다.");
+            toast.error('recommendId를 찾을 수 없습니다.');
             break;
           case 406:
-            toast.error("적절하지 못한 재료가 있습니다.");
+            toast.error('적절하지 못한 재료가 있습니다.');
             break;
           case 500:
-            toast.error("추천 레시피 생성에 실패했습니다.");
+            toast.error('추천 레시피 생성에 실패했습니다.');
             break;
           default:
-            toast.error("알 수 없는 에러가 발생했습니다.");
+            toast.error('알 수 없는 에러가 발생했습니다.');
         }
       } else {
-        toast.error("서버와의 연결에 실패했습니다.");
+        toast.error('서버와의 연결에 실패했습니다.');
       }
     }
   };
@@ -113,7 +112,7 @@ const TagInput = () => {
             +
           </button>
         </div>
-        
+
         <div className="flex flex-col items-center mb-8 w-full">
           {tags.map((tag, index) => (
             <div
@@ -145,7 +144,7 @@ const TagInput = () => {
           type="button"
           onClick={handleNextButtonClick}
         >
-          연금술 시작하기 
+          연금술 시작하기
         </button>
       </footer>
     </section>

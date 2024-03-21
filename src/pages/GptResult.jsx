@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { GoHome } from 'react-icons/go';
 import { FaArrowLeft } from 'react-icons/fa';
-import { useNavigate, useParams } from 'react-router-dom'; 
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -12,14 +12,16 @@ const RecipePage = () => {
   const [title, setTitle] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-  const { recommendId } = useParams(); 
+  const { recommendId } = useParams();
 
-  //gpt결과 불러오기 
+  //gpt결과 불러오기
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(`http://172.30.1.42:8080/recipe/recommend/${recommendId}`);
+        const response = await axios.get(
+          `http://localhost:8080/recipe/recommend/${recommendId}`
+        );
         if (response.data) {
           setTitle(response.data.foodName);
           setIngredients(response.data.ingredients);
@@ -36,18 +38,17 @@ const RecipePage = () => {
         setIsLoading(false);
       }
     };
-  
+
     fetchData();
   }, [recommendId]);
 
-  
-  // 저장하기 
+  // 저장하기
   const handleSaveButtonClick = async () => {
     try {
-      await axios.post('http://172.30.1.42:8080/recipe/save', {
+      await axios.post('http://localhost:8080/recipe/save', {
         foodName: title,
         ingredients: ingredients,
-        recipe: steps
+        recipe: steps,
       });
       toast.success('레시피가 성공적으로 저장되었습니다.');
       navigate('/recipe/myRecipe');
@@ -57,10 +58,10 @@ const RecipePage = () => {
       if (error.response) {
         switch (error.response.status) {
           case 401:
-            message = "socialId가 존재하지 않습니다.";
+            message = 'socialId가 존재하지 않습니다.';
             break;
           case 500:
-            message = "레시피 저장을 실패했습니다.";
+            message = '레시피 저장을 실패했습니다.';
             break;
         }
       }
@@ -87,7 +88,7 @@ const RecipePage = () => {
     <section className="bg-white min-h-screen p-6">
       <div
         className="absolute top-5 left-30 ml-0 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate("/board")}
+        onClick={() => navigate('/board')}
       >
         <FaArrowLeft />
       </div>
@@ -98,7 +99,7 @@ const RecipePage = () => {
               <h1 className="m-4 tfont-score text-xl font-bold text-gray-800 text-center">
                 {title}
               </h1>
-            </div> 
+            </div>
             <div className="mt-8 recipebox p-4 bg-gray-100 rounded-lg overflow-y-auto max-h-200">
               <h2 className="font-score text-lg font-bold text-gray-800">
                 재료
@@ -130,11 +131,11 @@ const RecipePage = () => {
       <footer className="fixed bottom-5 left-0 right-0 px-6">
         <div
           className="mx-auto flex justify-between"
-          style={{ maxWidth: "400px" }}
+          style={{ maxWidth: '400px' }}
         >
           <button
             className="font-score bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-8 rounded-full"
-            onClick={() => navigate("/recipe/recommend")}
+            onClick={() => navigate('/recipe/recommend')}
           >
             다시 할래요
           </button>

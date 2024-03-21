@@ -9,24 +9,20 @@ import Ranking from '../components/Ranking';
 import Navigation from '../components/Navigation';
 import axios from 'axios';
 
-// board - 레시피카드
-const RecipeCard = ({ postid, title, description, img, isLiked  }) => {
+// 🃏 Board - 레시피카드
+const RecipeCard = ({ postid, title, description, img, isLiked }) => {
   const [Liked, setLiked] = useState(isLiked); //prop기반으로 하트 상태설정
 
-  // 좋아요 / 취소
+  // 💛 좋아요 / 취소
   const toggleLike = async (postId) => {
     try {
       if (Liked) {
-        // 좋아요 취소 
-        await axios.post(`http://172.30.1.55:8080/board/unlike`,
-        { postId }
-        );
+        // 좋아요 취소
+        await axios.post(`http://localhost:8080/board/unlike`, { postId });
         setLiked(false);
       } else {
-        // 좋아요 
-        await axios.post(`http://172.30.1.55:8080/board/like`, 
-        { postId }
-        );
+        // 좋아요
+        await axios.post(`http://localhost:8080/board/like`, { postId });
         setLiked(true);
       }
     } catch (error) {
@@ -37,14 +33,14 @@ const RecipeCard = ({ postid, title, description, img, isLiked  }) => {
   // const toggleLike = async () => {
   //   try {
   //     if (Liked) {
-  //       // 좋아요 취소 
+  //       // 좋아요 취소
   //       await axios.post(`http://172.30.1.55:8080/board/unlike`,
   //       { postId: postid }
   //       );
   //       setLiked(false);
   //     } else {
-  //       // 좋아요 
-  //       await axios.post(`http://172.30.1.55:8080/board/like`, 
+  //       // 좋아요
+  //       await axios.post(`http://172.30.1.55:8080/board/like`,
   //       { postId: postid }
   //       );
   //       setLiked(true);
@@ -53,7 +49,6 @@ const RecipeCard = ({ postid, title, description, img, isLiked  }) => {
   //     console.error('좋아요 에러내용:', error);
   //   }
   // };
-
 
   return (
     <div className="flex items-center bg-white mx-5 my-2 p-4 rounded-xl shadow">
@@ -84,16 +79,14 @@ const RecipeCard = ({ postid, title, description, img, isLiked  }) => {
   );
 };
 
-
-
-//게시물 검색
+// 🔎 게시물 검색
 const SearchBar = ({ onSearch }) => {
   return (
     <div className="font-score flex-grow flex items-center rounded-full bg-white p-2 shadow ">
       <img
         src={searchicon}
         alt="검색아이콘"
-        className="w-5 h-5"
+        className="w-5 h-5 ml-2"
         style={{ opacity: 0.5 }}
       />
       <input
@@ -106,8 +99,7 @@ const SearchBar = ({ onSearch }) => {
   );
 };
 
-
-// 레시피 작성하기 
+// ✍️ 게시물 작성 페이지로 이동
 const WriteButton = () => {
   return (
     <Link
@@ -124,7 +116,6 @@ const WriteButton = () => {
   );
 };
 
-
 function Board() {
   const [recipes, setRecipes] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
@@ -134,63 +125,62 @@ function Board() {
   const recipesPerPage = 6;
 
   useEffect(() => {
-    fetchTotalRecipes(); // 전체 레시피 수를 가져오는
+    fetchTotalRecipes();
   }, []);
 
-    useEffect(() => {
-    fetchRecipesByPage(currentPage); 
-
+  useEffect(() => {
+    fetchRecipesByPage(currentPage);
   }, [currentPage]);
 
+  // 전체 레시피 수를 가져오는 함수
   const fetchTotalRecipes = async () => {
     try {
-      const response = await axios.get('http://172.30.1.55:8080/boardSize');
+      const response = await axios.get('http://localhost:8080/boardSize');
 
       console.log(response.data);
       const totalRecipes = response.data;
 
       const totalPages = Math.ceil(totalRecipes / recipesPerPage);
       setTotalPages(totalPages);
-  
-      console.log('총 페이지 수:', totalPages); 
+
+      console.log('총 페이지 수:', totalPages);
     } catch (error) {
       console.error('전체 레시피 수 가져오기 에러:', error);
     }
   };
-  
-  // 페이지 해당하는 레시피를 불러오는 함수
-const fetchRecipesByPage = async (pageNumber) => {
-  try {
-      const response = await axios.post('http://172.30.1.55:8080/board/apiTest', 
-          pageNumber
+
+  // 각 페이지에 해당하는 레시피들을 불러오는 함수
+  const fetchRecipesByPage = async (pageNumber) => {
+    try {
+      const response = await axios.post(
+        'http://localhost:8080/board/apiTest',
+        pageNumber
       );
 
       if (response.data && Array.isArray(response.data.items)) {
-          const formattedData = response.data.items.map((item) => ({
-              postid: item.ID,
-              title: item.title,
-              description: item.Recipe,
-              img: item.thumbnail,
-              isLiked: item.isLiked, // 서버로부터 받은 좋아요 상태
-          }));
-          setRecipes(formattedData);
+        const formattedData = response.data.items.map((item) => ({
+          postid: item.ID,
+          title: item.title,
+          description: item.Recipe,
+          img: item.thumbnail,
+          isLiked: item.isLiked, // 서버로부터 받은 좋아요 상태
+        }));
+        setRecipes(formattedData);
       } else {
-          console.error('에러 내용1:', response.data);
+        console.error('에러 내용1:', response.data);
       }
-  } catch (error) {
+    } catch (error) {
       console.error('에러 내용2:', error);
+    }
+  };
 
-  }
-};
+  // 컴포넌트가 마운트될 때 첫 번째 페이지의 레시피를 불러오는 useEffect
+  useEffect(() => {
+    fetchRecipesByPage(1);
+  }, []);
 
-// 컴포넌트가 마운트될 때 첫 번째 페이지의 레시피를 불러오는 useEffect
-useEffect(() => {
-  fetchRecipesByPage(1);
-}, []);
-
-
-//게시물 검색 
-const handleSearch = (query) => {
+  //게시물 검색
+  const handleSearch = (query) => {
     if (query.length > 0) {
       const results = recipes.filter((recipe) => recipe.title.includes(query));
       setSearchResults(results);
@@ -200,23 +190,24 @@ const handleSearch = (query) => {
     }
   };
 
-  // 페이지 번호를 받아와 해당 번호에서 1을 뺀 값을 서버로 보내는
-const handlePageClick = (pageNumber) => {
-  fetchRecipesByPage(pageNumber - 1);
-  setCurrentPage(pageNumber); 
-};
+  // 페이지 번호를 받아와 해당 번호에서 1을 뺀 값을 서버로 보내는 함수
+  const handlePageClick = (pageNumber) => {
+    fetchRecipesByPage(pageNumber - 1);
+    setCurrentPage(pageNumber);
+  };
 
+  // 클릭할 페이지번호 순서대로
   const pageNumbers = [];
   for (let i = 1; i <= totalPages; i++) {
     pageNumbers.push(i);
-  } // 클릭할 페이지번호 순서대로
-
-
+  }
 
   return (
     <section className="Board pb-24">
       <header className="bg-white px-6 py-7">
-        <span className="font-score font-extrabold text-3xl">Board</span>
+        <span className="font-scoreExtraBold font-extrabold text-3xl">
+          레시피 게시판
+        </span>
       </header>
       <div className="flex items-center mx-8 my-0">
         <SearchBar onSearch={handleSearch} />
@@ -227,8 +218,8 @@ const handlePageClick = (pageNumber) => {
         {isSearching ? (
           <>
             <div className="my-2 mt-4">
-              <span className="font-score font-extrabold ml-6 text-2xl">
-                Search Results
+              <span className="font-scoreExtraBold font-extrabold ml-6 text-2xl">
+                검색 결과
               </span>
               {searchResults.map((recipe) => (
                 <RecipeCard
@@ -245,15 +236,15 @@ const handlePageClick = (pageNumber) => {
         ) : (
           <>
             <div className="my-2 mt-4">
-              <span className="font-score font-extrabold ml-6 text-2xl">
-                Ranking
+              <span className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
+                TOP3 레시피🔥
               </span>
 
               <Ranking />
             </div>
             <div className="my-2">
-              <span className="font-score font-extrabold ml-6 text-2xl">
-                Recipe
+              <span className="font-scoreExtraBold font-extrabold ml-6 text-2xl">
+                레시피🌮
               </span>
               {recipes.map((recipe) => (
                 <RecipeCard

@@ -109,9 +109,9 @@ export default function ResetPassword() {
 
       {/* 타이틀 */}
       <header className="flex flex-col items-center">
-        <h1 className="font-score font-extrabold text-3xl">비밀번호 재설정</h1>
+        <h1 className="font-score text-3xl">비밀번호 재설정</h1>
         <p className="font-score text-md text-gray-400 mt-2">
-          재설정할 계정의 이메일과 필수 정보를 입력하세요
+          인증을 완료하고, 새로운 비밀번호를 설정하세요
         </p>
       </header>
 
@@ -133,7 +133,7 @@ export default function ResetPassword() {
               />
               <button
                 onClick={onRequest}
-                className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
+                className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtaBold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
               >
                 인증 요청
               </button>
@@ -173,7 +173,7 @@ export default function ResetPassword() {
               </div>
               <button
                 onClick={onCheck}
-                className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
+                className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtaBold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
               >
                 인증 확인
               </button>
@@ -283,7 +283,7 @@ export default function ResetPassword() {
               isPasswordValid(password) === false &&
               !passwordMessage
             }
-            className={`p-3 mx-20 mt-3 rounded-3xl font-jua text-xl transition ease-in-out duration-300
+            className={`p-3 mx-20 mt-3 rounded-3xl font-scoreExtaBold font-extrabold text-xl transition ease-in-out duration-300
               ${
                 passwordMessage
                   ? 'text-white bg-main hover:bg-[#15ed79] hover:text-black hover:cursor-pointer hover:-translate-y-1 hover:scale-110'
