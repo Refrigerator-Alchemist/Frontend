@@ -23,7 +23,7 @@ export default function Navigation() {
       currentPath.startsWith('/GptSavedList/')
     ) {
       setSelected('food');
-    } else if (currentPath === '/main') {
+    } else if (currentPath === '/main'|| currentPath.startsWith('/recipe/myRecipe')) {
       setSelected('home');
     } else if (currentPath === '/login' || currentPath.startsWith('/mypage')) {
       setSelected('profile');

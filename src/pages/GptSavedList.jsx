@@ -57,7 +57,6 @@ const GptSavedList = () => {
   const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  //레시피 카드
   const RecipeCard = ({ recipeId, foodName, ingredientList }) => {
     return (
       <div className="flex items-center bg-white mx-5 my-2 p-2 rounded-xl shadow">

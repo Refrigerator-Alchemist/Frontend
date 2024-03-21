@@ -82,7 +82,7 @@ const RecipeCard = ({ postid, title, description, img, isLiked }) => {
 // 🔎 게시물 검색
 const SearchBar = ({ onSearch }) => {
   return (
-    <div className="font-score flex-grow flex items-center rounded-full bg-white p-2 shadow ">
+    <div className="font-score flex-grow flex items-center rounded-full bg-gray-50 p-2 shadow ">
       <img
         src={searchicon}
         alt="검색아이콘"
@@ -90,7 +90,7 @@ const SearchBar = ({ onSearch }) => {
         style={{ opacity: 0.5 }}
       />
       <input
-        className="w-full pl-2 py-2 text-sm focus:outline-none"
+        className="w-full pl-2 py-2 text-sm focus:outline-none bg-gray-50"
         type="text"
         placeholder="검색"
         onChange={(e) => onSearch(e.target.value)}
@@ -104,12 +104,12 @@ const WriteButton = () => {
   return (
     <Link
       to="/board/upload"
-      className="ml-4 flex items-center justify-center rounded-full bg-white p-4 shadow write-button transition-transform duration-200 hover:scale-110"
+      className="bg-gray-50 ml-4 flex items-center justify-center rounded-full  p-4 shadow write-button transition-transform duration-200 hover:scale-110"
     >
       <img
         src={writingicon}
         alt="쓰기아이콘"
-        className="w-6 h-6"
+        className="w-6 h-6 text-bold text-center"
         style={{ opacity: 0.7 }}
       />
     </Link>
@@ -174,7 +174,6 @@ function Board() {
     }
   };
 
-  // 컴포넌트가 마운트될 때 첫 번째 페이지의 레시피를 불러오는 useEffect
   useEffect(() => {
     fetchRecipesByPage(1);
   }, []);
