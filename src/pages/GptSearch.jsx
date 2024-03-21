@@ -7,25 +7,33 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useUserState } from '../context/UserContext';
 
-const TagInput = () => {
+const GptSearch = () => {
   const [tags, setTags] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const navigate = useNavigate();
   const inputRef = useRef(null);
-  const user = useUserState(); // 사용자 정보 가져오기
+  const user = useUserState(); 
   const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
 
+   // 입력 값 변경 시 상태 업데이트
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
 
+  // Enter 키 입력 시 태그 추가
   const handleInputKeyDown = (e) => {
     if (e.key === 'Enter' && inputValue.trim() !== '') {
       addTag();
+      setInputValue(''); 
+      e.preventDefault();
+    } else if (e.key === 'Enter') {
+      setInputValue('');
       e.preventDefault();
     }
   };
+  
 
+  // 새 태그 추가 및 입력 필드 초기화
   const addTag = () => {
     if (inputValue.trim() !== '' && !tags.includes(inputValue.trim())) {
       setTags([...tags, inputValue.trim()]);
@@ -34,11 +42,13 @@ const TagInput = () => {
     inputRef.current.focus();
   };
 
+  // 태그 삭제 - 배열에서 제거 
   const handleDelete = (indexToDelete) => {
     setTags(tags.filter((_, index) => index !== indexToDelete));
     inputRef.current.focus();
   };
 
+  // Gpt로 레시피 검색 요청하는 함수
   const handleNextButtonClick = async () => {
     toast.error('임시 에러 메시지. API 연결 전 UI 확인용.');
     try {
@@ -62,6 +72,7 @@ const TagInput = () => {
         navigate(`/recipe/recommend/${recommendId}`);
       } else {
         console.error('recommendId를 찾을 수 없습니다.');
+        toast.error('recommendId를 찾을 수 없습니다.');
       }
     } catch (error) {
       console.error('에러내용:', error);
@@ -97,11 +108,11 @@ const TagInput = () => {
       >
         <FaArrowLeft />
       </div>
-      <main className="max-w-xs mx-auto flex-1">
-        <h2 className=" font-score text-3xl font-bold mb-6 mt-24 text-center">
-          재료를 넣어주세요
+      <main className="max-w-lg mx-auto flex-1">
+        <h2 className=" font-score text-3xl font-bold mb-12 mt-24 text-center">
+          냉장고 재료를 넣어주세요
         </h2>
-        <div className="flex items-center border-b border-gray-300 mb-4">
+        <div className="mr-10 ml-10 flex items-center border-b border-gray-300 mb-4">
           <input
             type="text"
             ref={inputRef}
@@ -157,4 +168,4 @@ const TagInput = () => {
   );
 };
 
-export default TagInput;
+export default GptSearch;

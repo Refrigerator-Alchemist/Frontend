@@ -51,6 +51,7 @@ const RecipeCard = ({
   );
 };
 
+
 function MyPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage, setRecipesPerPage] = useState(5);
@@ -63,17 +64,17 @@ function MyPage() {
   });
 
   const user = useUserState(); // 유저 데이터 : 로그인 상태면 존재
-
   const { logout } = useUserDispatch();
+
 
   useEffect(() => {
     const fetchUserInfo = async () => {
       const URL = 'http://localhost:8080/userprofile';
-
+  
       try {
         if (user) {
           const response = await axios.get(URL, user.nickName);
-
+  
           setUserInfo({
             imageUrl: response.data.imageUrl,
             nickName: user.nickName,
@@ -85,37 +86,37 @@ function MyPage() {
         console.error('데이터 통신 중 문제 발생: ', error);
       }
     };
+  
+    const fetchMyPage = () => {
+      axios
+        .post('http://localhost:8080/board/myPage', 'test')
+        .then((response) => {
+          console.log('서버 응답 데이터:', response.data);
+  
+          if (response.data && Array.isArray(response.data.items)) {
+            const formattedData = response.data.items.map((item) => {
+              return {
+                postid: item.ID,
+                title: item.title,
+                description: item.description,
+                img: item.imageUrl,
+                isLiked: item.likeCount > 0,
+              };
+            });
+            setRecipes(formattedData);
+          } else {
+            console.error('에러 내용1:', response.data);
+          }
+        })
+        .catch((error) => {
+          console.error('에러 내용2:', error);
+        });
+    };
+  
+    fetchUserInfo().then(fetchMyPage); 
+  }, []); 
 
-    fetchUserInfo();
-  }, []);
-
-  useEffect(() => {
-    axios
-      .post('http://localhost:8080/board/myPage', 'test')
-      .then((response) => {
-        console.log('서버 응답 데이터:', response.data);
-
-        if (response.data && Array.isArray(response.data.items)) {
-          const formattedData = response.data.items.map((item) => {
-            return {
-              postid: item.ID,
-              title: item.title,
-              description: item.description,
-              img: item.imageUrl,
-              isLiked: item.likeCount > 0,
-            };
-          });
-          setRecipes(formattedData);
-        } else {
-          console.error('에러 내용1:', response.data);
-        }
-      })
-      .catch((error) => {
-        console.error('에러 내용2:', error);
-      });
-  }, []);
-
-  // 레시피 수정하는
+  // 레시피 수정
   const handleEdit = (postid) => {
     navigate(`/editpost/${postid}`);
   };
@@ -136,6 +137,7 @@ function MyPage() {
     }
   };
 
+  //레시피 삭제 확인 
   const handleDeleteConfirmation = async (postid) => {
     const confirmDelete = window.confirm('정말로 삭제하시겠습니까?');
     if (confirmDelete) {
