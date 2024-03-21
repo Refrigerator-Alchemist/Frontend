@@ -162,7 +162,7 @@ function MyPage() {
           className="font-score text-gray-300"
           onClick={(e) => {
             e.preventDefault();
-            navigate('/mypage/delete-user');
+            navigate('/delete-user');
           }}
         >
           회원 탈퇴
