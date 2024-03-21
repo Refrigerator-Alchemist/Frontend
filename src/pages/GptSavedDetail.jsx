@@ -10,6 +10,7 @@ const GptSavedDetail = () => {
   const [recipeData, setRecipeData] = useState({});
   const { recipeId } = useParams();
   const navigate = useNavigate();
+  const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
 
   // id로 세부내용 불러오기
   useEffect(() => {
@@ -21,7 +22,12 @@ const GptSavedDetail = () => {
         }
 
         const response = await axios.get(
-          `http://localhost:8080/recipe/myRecipe/${recipeId}`
+          `http://localhost:8080/recipe/myRecipe/${recipeId}`,
+          {
+            headers: {
+              'Authorization-Access': accessToken,
+            },
+          }
         );
         setRecipeData(response.data);
       } catch (error) {

@@ -14,6 +14,7 @@ const GptSavedList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage] = useState(7);
   const user = useUserState();
+  const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
 
   //저장한 목록 보기
   useEffect(() => {
@@ -21,7 +22,12 @@ const GptSavedList = () => {
     const fetchRecipes = async () => {
       try {
         const response = await axios.get(
-          'http://localhost:8080//recipe/myRecipe'
+          'http://localhost:8080//recipe/myRecipe',
+          {
+            headers: {
+              'Authorization-Access': accessToken,
+            },
+          }
         );
         setRecipes(response.data);
       } catch (error) {

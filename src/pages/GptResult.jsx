@@ -13,6 +13,7 @@ const RecipePage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const { recommendId } = useParams();
+  const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
 
   //gpt결과 불러오기
   useEffect(() => {
@@ -20,7 +21,12 @@ const RecipePage = () => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          `http://localhost:8080/recipe/recommend/${recommendId}`
+          `http://localhost:8080/recipe/recommend/${recommendId}`,
+          {
+            headers: {
+              'Authorization-Access': accessToken,
+            },
+          }
         );
         if (response.data) {
           setTitle(response.data.foodName);
@@ -45,15 +51,24 @@ const RecipePage = () => {
   // 저장하기
   const handleSaveButtonClick = async () => {
     try {
-      await axios.post('http://localhost:8080/recipe/save', {
-        foodName: title,
-        ingredients: ingredients,
-        recipe: steps,
-      });
+      await axios.post(
+        'http://localhost:8080/recipe/save',
+        {
+          foodName: title,
+          ingredients: ingredients,
+          recipe: steps,
+        },
+        {
+          headers: {
+            'Authorization-Access': accessToken,
+          },
+        }
+      );
       toast.success('레시피가 성공적으로 저장되었습니다.');
       navigate('/recipe/myRecipe');
     } catch (error) {
       console.error('에러내용:', error);
+
       let message = '오류가 발생했습니다. 다시 시도해주세요.';
       if (error.response) {
         switch (error.response.status) {
