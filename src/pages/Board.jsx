@@ -14,41 +14,22 @@ const RecipeCard = ({ postid, title, description, img, isLiked }) => {
   const [Liked, setLiked] = useState(isLiked); //prop기반으로 하트 상태설정
 
   // 💛 좋아요 / 취소
-  const toggleLike = async (postId) => {
+  const toggleLike = async () => {
     try {
       if (Liked) {
         // 좋아요 취소
-        await axios.post(`http://localhost:8080/board/unlike`, { postId });
-        setLiked(false);
+        await axios.post(`/board/unlike`, { postId: postid });
+        setLiked(!Liked);
       } else {
         // 좋아요
-        await axios.post(`http://localhost:8080/board/like`, { postId });
-        setLiked(true);
+        await axios.post(`/board/like`, { postId: postid });
+        setLiked(!Liked);
       }
     } catch (error) {
       console.error('좋아요 에러내용:', error);
     }
   };
 
-  // const toggleLike = async () => {
-  //   try {
-  //     if (Liked) {
-  //       // 좋아요 취소
-  //       await axios.post(`http://172.30.1.55:8080/board/unlike`,
-  //       { postId: postid }
-  //       );
-  //       setLiked(false);
-  //     } else {
-  //       // 좋아요
-  //       await axios.post(`http://172.30.1.55:8080/board/like`,
-  //       { postId: postid }
-  //       );
-  //       setLiked(true);
-  //     }
-  //   } catch (error) {
-  //     console.error('좋아요 에러내용:', error);
-  //   }
-  // };
 
   return (
     <div className="flex items-center bg-white mx-5 my-2 p-4 rounded-xl shadow">
@@ -61,20 +42,13 @@ const RecipeCard = ({ postid, title, description, img, isLiked }) => {
           <p className="text-gray-500 text-sm font-score">{description}</p>
         </div>
       </Link>
-      <button onClick={() => toggleLike(postid)} className="p-2">
+      <button onClick={toggleLike} className="p-2">
         {Liked ? (
           <FaHeart className="text-red-500 text-2xl" />
         ) : (
           <FaRegHeart className="text-2xl" />
         )}
       </button>
-      {/* <button onClick={toggleLike} className="p-2">
-        {Liked ? (
-          <FaHeart className="text-red-500 text-2xl" />
-        ) : (
-          <FaRegHeart className="text-2xl" />
-        )}
-      </button> */}
     </div>
   );
 };
@@ -163,7 +137,7 @@ function Board() {
           title: item.title,
           description: item.Recipe,
           img: item.thumbnail,
-          isLiked: item.isLiked, // 서버로부터 받은 좋아요 상태
+          isLiked: item.isLiked, // 서버로부터 받은 좋아요 상태-3/22
         }));
         setRecipes(formattedData);
       } else {
