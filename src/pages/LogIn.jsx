@@ -88,7 +88,7 @@ export default function Login() {
           style={{ width: '400px' }}
           onSubmit={onLogin}
         >
-          <div className="mb-4">
+          <div className="">
             <label className="block text-gray-700 ml-3 font-score">
               이메일
             </label>
@@ -108,7 +108,7 @@ export default function Login() {
               {emailError || 'empty'}
             </p>
           </div>
-          <div className="mb-1">
+          <div className="mb-4">
             <label className="block text-gray-700 ml-3 font-score">
               비밀번호
             </label>
@@ -132,7 +132,7 @@ export default function Login() {
           </div>
           <p
             onClick={() => navigate('/reset-password')}
-            className="flex justify-end underline font-bold hover:cursor-pointer hover:text-red-500 mb-4 font-score"
+            className="flex justify-start ml-2 underline font-bold hover:cursor-pointer hover:text-red-500 mb-4 font-score"
           >
             비밀번호 재설정
           </p>

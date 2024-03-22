@@ -80,7 +80,7 @@ export default function SignUp() {
   const onCheckName = (e) => {
     e.preventDefault();
 
-    const pattern = /^[가-힣]{2,}|[A-Za-z]{3,}$/;
+    const pattern = /^[가-힣]{2,}$|^[A-Za-z]{3,}$/;
 
     if (!pattern.test(nickName)) {
       console.log(`입력한 닉네임 : ${nickName}`);
