@@ -50,18 +50,32 @@ const BoardDetail = () => {
     }
   };
 
-  // 2️⃣ 좋아요 / 취소
-  const toggleLike = async (postId) => {
+  // 2️⃣좋아요 상태 불러오는 함수 
+  useEffect(() => {
+    const fetchLikeStatus = async () => {
+      try {
+        const likeStatusResponse = await axios.post(`/board/likeStatus`, { postId });
+        //JSON형태로 서버에 전송 
+        setIsLiked(likeStatusResponse.data.isLiked);
+      } catch (error) {
+        console.error('좋아요 상태 조회 에러:', error);
+      }
+    };
+
+    fetchLikeStatus();
+  }, [postId]);
+
+  // 3️⃣좋아요 / 취소 함수 수정
+  const toggleLike = async () => {
     try {
       if (isLiked) {
         // 좋아요 취소
-        await axios.post(`http://localhost:8080/board/unlike`, { postId });
-        setIsLiked(false);
+        await axios.post(`/board/unlike`, { postId });
       } else {
-        // 좋아요
-        await axios.post(`http://localhost:8080/board/like`, { postId });
-        setIsLiked(true);
+        //좋아요
+        await axios.post(`/board/like`, { postId });
       }
+      setIsLiked(!isLiked); 
     } catch (error) {
       console.error('좋아요 에러내용:', error);
     }
@@ -87,7 +101,7 @@ const BoardDetail = () => {
           <div className="flex items-center gap-4">
             <h2 className="font-score text-2xl font-bold">{title}</h2>
 
-            <button onClick={() => toggleLike(postId)} className="ml-4">
+            <button onClick={toggleLike} className="ml-4">
               {isLiked ? (
                 <FaHeart className="text-red-500 text-2xl" />
               ) : (
