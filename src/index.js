@@ -13,13 +13,13 @@ import Login from './pages/LogIn';
 import SignUp from './pages/SignUp';
 import ResetPassword from './pages/ResetPassword';
 import Mypage from './pages/Mypage';
-import Profile from './pages/Profile';
+import EditProfile from './pages/EditProfile';
 import GptSearch from './pages/GptSearch';
 import DeleteUser from './pages/DeleteUser';
 import GptResult from './pages/GptResult';
 import BoardRanking from './pages/BoardRanking';
 import LoginSuccess from './pages/LoginSuccess';
-import SendRefresh from './pages/SendRefresh';
+import ReIssue from './pages/ReIssue';
 import GptSaved from './pages/GptSavedList';
 import GptDetail from './pages/GptSavedDetail';
 import EditPost from './pages/EditPost';
@@ -32,20 +32,21 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <GetStarted /> }, // 초기화면
       { path: '/main', element: <MainPage /> }, // 메인
-      { path: '/login', element: <Login /> }, // 로그인 페이지
+
+      { path: '/login', element: <Login /> }, // 로그인
       { path: '/login-success', element: <LoginSuccess /> }, // SNS 로그인 데이터 저장
-      { path: '/refresh', element: <SendRefresh /> }, // 액세스 토큰 만료 처리
-      { path: '/signup', element: <SignUp /> }, // 회원 가입
+      { path: '/auth/token/reissue', element: <ReIssue /> }, // 액세스 토큰 재발급
       { path: '/reset-password', element: <ResetPassword /> }, // 비밀번호 재설정
+      { path: '/signup', element: <SignUp /> }, // 회원 가입
       { path: '/delete-user', element: <DeleteUser /> }, // 회원 탈퇴
 
       { path: '/board', element: <Board /> }, // 게시판
-      { path: '/board/:postId', element: <BoardDetail /> }, // 쿼리로 포스트 id 식별
+      { path: '/board/:postId', element: <BoardDetail /> }, // 게시물 상세
       { path: '/board/upload', element: <UploadBoard /> }, // 게시물 작성
       { path: '/ranking', element: <BoardRanking /> }, // 탑 3 랭킹
-      { path: '/mypage', element: <Mypage /> }, // 마이페이지 : 내 피드
-      { path: '/profile', element: <Profile /> }, // 프로필 수정
       { path: '/editpost/:postId', element: <EditPost /> }, // 내가 쓴 레시피 수정
+      { path: '/mypage', element: <Mypage /> }, // 마이페이지 : 내 프로필 + 저장한 레시피, 내가 쓴 레시피
+      { path: '/profile', element: <EditProfile /> }, // 프로필 수정
 
       { path: '/recipe/recommend', element: <GptSearch /> }, // 냉장고 연금술사 : 재료 입력
       { path: '/recipe/recommend/:recommendId', element: <GptResult /> }, // 냉장고 연금술사 : 검색 결과 출력

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useUserDispatch } from '../context/UserContext';
 
-export default function SendRefresh() {
+export default function ReIssue() {
   const { reIssue } = useUserDispatch();
 
   useEffect(() => {

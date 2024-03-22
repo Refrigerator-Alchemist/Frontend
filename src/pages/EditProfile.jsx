@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
 import IMAGE_PROFILE from '../img/img_profile.png';
 
-export default function Profile() {
+export default function EditProfile() {
   const [nickName, setNickName] = useState(''); // 원래 닉네임
   const [changNickName, setChangeNickName] = useState(nickName); // 새로 바꿀 닉네임
   const [nameError, setNameError] = useState(false);
@@ -84,7 +84,7 @@ export default function Profile() {
   const handleNameChange = (e) => {
     setChangeNickName(e.target.value);
 
-    if (!e.target.value.match(/^[가-힣]{2,}|[A-Za-z]{3,}$/)) {
+    if (!e.target.value.match(/^[가-힣]{2,}$|^[A-Za-z]{3,}$/)) {
       setNameError('한글은 최소 2글자, 영문은 최소 3글자 이상 입력하세요');
     } else {
       setNameError(false);
