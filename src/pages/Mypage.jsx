@@ -4,7 +4,7 @@ import Navigation from '../components/Navigation';
 import axios from 'axios';
 import { useUserDispatch, useUserState } from '../context/UserContext';
 import { FaTrash, FaEdit } from 'react-icons/fa';
-import IMAGE_PROFILE from '../img/img_profile.png';
+import IMAGE_PROFILE from '../assets/img/img_profile.png';
 import Pagination from '../components/Pagination';
 
 const RecipeCard = ({
@@ -51,7 +51,6 @@ const RecipeCard = ({
   );
 };
 
-
 function MyPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage, setRecipesPerPage] = useState(5);
@@ -66,15 +65,14 @@ function MyPage() {
   const user = useUserState(); // 유저 데이터 : 로그인 상태면 존재
   const { logout } = useUserDispatch();
 
-
   useEffect(() => {
     const fetchUserInfo = async () => {
       const URL = 'http://localhost:8080/userprofile';
-  
+
       try {
         if (user) {
           const response = await axios.get(URL, user.nickName);
-  
+
           setUserInfo({
             imageUrl: response.data.imageUrl,
             nickName: user.nickName,
@@ -86,13 +84,13 @@ function MyPage() {
         console.error('데이터 통신 중 문제 발생: ', error);
       }
     };
-  
+
     const fetchMyPage = () => {
       axios
         .post('http://localhost:8080/board/myPage', 'test')
         .then((response) => {
           console.log('서버 응답 데이터:', response.data);
-  
+
           if (response.data && Array.isArray(response.data.items)) {
             const formattedData = response.data.items.map((item) => {
               return {
@@ -112,9 +110,9 @@ function MyPage() {
           console.error('에러 내용2:', error);
         });
     };
-  
-    fetchUserInfo().then(fetchMyPage); 
-  }, []); 
+
+    fetchUserInfo().then(fetchMyPage);
+  }, []);
 
   // 레시피 수정
   const handleEdit = (postid) => {
@@ -137,7 +135,7 @@ function MyPage() {
     }
   };
 
-  //레시피 삭제 확인 
+  //레시피 삭제 확인
   const handleDeleteConfirmation = async (postid) => {
     const confirmDelete = window.confirm('정말로 삭제하시겠습니까?');
     if (confirmDelete) {
