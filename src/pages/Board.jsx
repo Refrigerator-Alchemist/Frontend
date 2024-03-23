@@ -1,6 +1,6 @@
 import React from 'react';
-import searchicon from '../img/search.png';
-import writingicon from '../img/writing.png';
+import searchicon from '../assets/img/search.png';
+import writingicon from '../assets/img/writing.png';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
 import { Link } from 'react-router-dom';
@@ -11,25 +11,55 @@ import axios from 'axios';
 
 // 🃏 Board - 레시피카드
 const RecipeCard = ({ postid, title, description, img, isLiked }) => {
-  const [Liked, setLiked] = useState(isLiked); //prop기반으로 하트 상태설정
+  const [Liked, setLiked] = useState(isLiked); // prop기반으로 하트 상태설정
+  const [likedItems, setLikedItems] = useState([]); // 현재 계정으로 좋아요 누른 게시물들
+  const nickName = localStorage.getItem('nickName');
+
+  useEffect(() => {
+    fetchLikeData();
+  }, [likedItems]);
 
   // 💛 좋아요 / 취소
   const toggleLike = async () => {
     try {
       if (Liked) {
         // 좋아요 취소
-        await axios.post(`/board/unlike`, { postId: postid });
+        await axios.post(`/board/dislike`, {
+          nickName: nickName,
+          postId: postid,
+        });
         setLiked(!Liked);
       } else {
         // 좋아요
-        await axios.post(`/board/like`, { postId: postid });
+        await axios.post(`/board/like`, {
+          nickName: nickName,
+          postId: postid,
+        });
         setLiked(!Liked);
       }
     } catch (error) {
-      console.error('좋아요 에러내용:', error);
+      console.error('좋아요 에러: ', error);
     }
   };
 
+  // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
+  const fetchLikeData = async () => {
+    const URL = 'http://localhost:8080/islike';
+    const nickName = localStorage.getItem('nickName');
+
+    try {
+      const response = await axios.get(URL, nickName);
+      if (response.data && Array.isArray(response.data.items)) {
+        const items = response.data.items.map((item) => item);
+        setLikedItems(items);
+        console.log('게시물 id', items);
+      } else {
+        console.error('에러 내용', response.data);
+      }
+    } catch (error) {
+      console.error('좋아요 누른 기록 받아오는 중 에러 발생');
+    }
+  };
 
   return (
     <div className="flex items-center bg-white mx-5 my-2 p-4 rounded-xl shadow">

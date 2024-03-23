@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
-import IMAGE_PROFILE from '../img/img_profile.png';
+import IMAGE_PROFILE from '../assets/img/img_profile.png';
 
 export default function EditProfile() {
   const [nickName, setNickName] = useState(''); // 원래 닉네임

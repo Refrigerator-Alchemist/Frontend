@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import { GoEye, GoEyeClosed } from 'react-icons/go';
 import { useUserDispatch } from '../context/UserContext';
-import LOGO_GOOGLE from '../img/logo_google.png';
-import LOGO_KAKAO from '../img/logo_kakao.png';
-import LOGO_NAVER from '../img/logo_naver.png';
+import LOGO_GOOGLE from '../assets/img/logo_google.png';
+import LOGO_KAKAO from '../assets/img/logo_kakao.png';
+import LOGO_NAVER from '../assets/img/logo_naver.png';
 
 export default function Login() {
   const [email, setEmail] = useState('');

@@ -4,14 +4,14 @@
 
 @font-face {
   font-family: 'Jua';
-  src: url('./fonts/Jua-Regular.ttf') format('truetype');
+  src: url('./assets/fonts/Jua-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Dongle';
-  src: url('./fonts/Dongle-Light.ttf') format('truetype');
+  src: url('./assets/fonts/Dongle-Light.ttf') format('truetype');
 }
 
 @font-face {

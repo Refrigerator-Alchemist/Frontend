@@ -27,21 +27,19 @@ const BoardDetail = () => {
         postId
       );
 
-      if (response.data) {
-        if (response.data && Array.isArray(response.data.items)) {
-          const items = response.data.items.map((item) => ({
-            imageUrl: item.imageUrl,
-            title: item.title,
-            nickName: item.nickName,
-            description: item.description,
-            ingredients: item.ingredients.map((ingredient) => ingredient),
-          }));
-          setImageUrl(items[0].imageUrl);
-          setTitle(items[0].title);
-          setNickName(items[0].nickName);
-          setDescription(items[0].description);
-          setIngredients(items[0].ingredients);
-        }
+      if (response.data && Array.isArray(response.data.items)) {
+        const items = response.data.items.map((item) => ({
+          imageUrl: item.imageUrl,
+          title: item.title,
+          nickName: item.nickName,
+          description: item.description,
+          ingredients: item.ingredients.map((ingredient) => ingredient),
+        }));
+        setImageUrl(items[0].imageUrl);
+        setTitle(items[0].title);
+        setNickName(items[0].nickName);
+        setDescription(items[0].description);
+        setIngredients(items[0].ingredients);
       } else {
         console.error('데이터 타입 오류:', response.data);
       }
@@ -50,12 +48,14 @@ const BoardDetail = () => {
     }
   };
 
-  // 2️⃣좋아요 상태 불러오는 함수 
+  // 2️⃣좋아요 상태 불러오는 함수
   useEffect(() => {
     const fetchLikeStatus = async () => {
       try {
-        const likeStatusResponse = await axios.post(`/board/likeStatus`, { postId });
-        //JSON형태로 서버에 전송 
+        const likeStatusResponse = await axios.post(`/board/likeStatus`, {
+          postId,
+        });
+        //JSON형태로 서버에 전송
         setIsLiked(likeStatusResponse.data.isLiked);
       } catch (error) {
         console.error('좋아요 상태 조회 에러:', error);
@@ -75,7 +75,7 @@ const BoardDetail = () => {
         //좋아요
         await axios.post(`/board/like`, { postId });
       }
-      setIsLiked(!isLiked); 
+      setIsLiked(!isLiked);
     } catch (error) {
       console.error('좋아요 에러내용:', error);
     }
