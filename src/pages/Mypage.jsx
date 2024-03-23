@@ -11,7 +11,7 @@ const RecipeCard = ({
   postid,
   title,
   description,
-  img,
+  imageUrl,
   onEdit,
   onDelete,
   showEditDeleteButtons = true,
@@ -21,7 +21,7 @@ const RecipeCard = ({
       <div className="bg-white mx-2 my-2 p-4 rounded-xl shadow overflow-hidden relative flex flex-col md:flex-row">
         <Link to={`/board/${postid}`} className="flex-grow flex items-center">
           <div className="flex-none w-20 h-20 md:w-20 md:h-20 max-w-xs rounded-xl border-2 border-gray-300 overflow-hidden mr-4">
-            <img className="w-full h-full object-cover" src={img} alt={title} />
+            <img className="w-full h-full object-cover" src={imageUrl} alt={title} />
           </div>
           <div className="md:pl-4 mt-4 md:mt-0">
             <h3 className="text-lg font-score font-semibold">{title}</h3>
@@ -115,7 +115,10 @@ function MyPage() {
 
     fetchLikeData();
     fetchUserInfo().then(fetchMyPage);
-  }, []);
+  }, [showMyRecipes]);
+
+  
+
 
   // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
   const fetchLikeData = async () => {
