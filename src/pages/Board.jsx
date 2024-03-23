@@ -9,9 +9,9 @@ import Ranking from '../components/Ranking';
 import Navigation from '../components/Navigation';
 import axios from 'axios';
 
-// 🃏 Board - 레시피카드
-const RecipeCard = ({ postid, title, description, img, isLiked }) => {
-  const [Liked, setLiked] = useState(isLiked); // prop기반으로 하트 상태설정
+// 🃏 레시피카드
+const RecipeCard = ({ postId, title, description, img }) => {
+  const [Liked, setLiked] = useState(false);
   const [likedItems, setLikedItems] = useState([]); // 현재 계정으로 좋아요 누른 게시물들
   const nickName = localStorage.getItem('nickName');
 
@@ -23,18 +23,38 @@ const RecipeCard = ({ postid, title, description, img, isLiked }) => {
   const toggleLike = async () => {
     try {
       if (Liked) {
-        // 좋아요 취소
-        await axios.post(`/board/dislike`, {
-          nickName: nickName,
-          postId: postid,
-        });
+        // ▶️ 좋아요 되어있는 상태면 취소
+        const response = await axios.post(
+          `/board/dislike`,
+          {
+            nickName: nickName,
+            postId: postId,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json;charset=UTF-8',
+              Accept: 'application/json',
+            },
+          }
+        );
+        console.log(response);
         setLiked(!Liked);
       } else {
-        // 좋아요
-        await axios.post(`/board/like`, {
-          nickName: nickName,
-          postId: postid,
-        });
+        // ▶️ 안 눌려져 있는 상태면 좋아요
+        const response = await axios.post(
+          `/board/like`,
+          {
+            nickName: nickName,
+            postId: postId,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json;charset=UTF-8',
+              Accept: 'application/json',
+            },
+          }
+        );
+        console.log(response);
         setLiked(!Liked);
       }
     } catch (error) {
@@ -44,7 +64,7 @@ const RecipeCard = ({ postid, title, description, img, isLiked }) => {
 
   // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
   const fetchLikeData = async () => {
-    const URL = 'http://localhost:8080/islike';
+    const URL = 'http://localhost:8080/board/islike';
     const nickName = localStorage.getItem('nickName');
 
     try {
@@ -57,13 +77,13 @@ const RecipeCard = ({ postid, title, description, img, isLiked }) => {
         console.error('에러 내용', response.data);
       }
     } catch (error) {
-      console.error('좋아요 누른 기록 받아오는 중 에러 발생');
+      console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
     }
   };
 
   return (
     <div className="flex items-center bg-white mx-5 my-2 p-4 rounded-xl shadow">
-      <Link to={`/board/${postid}`} className="flex-grow flex">
+      <Link to={`/board/${postId}`} className="flex-grow flex">
         <div className="flex-none w-20 h-20 rounded-xl border-2 border-gray-300 overflow-hidden">
           <img className="w-full h-full object-cover" src={img} alt={title} />
         </div>
@@ -120,6 +140,7 @@ const WriteButton = () => {
   );
 };
 
+// ----------------------------게시판
 function Board() {
   const [recipes, setRecipes] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
@@ -163,11 +184,10 @@ function Board() {
 
       if (response.data && Array.isArray(response.data.items)) {
         const formattedData = response.data.items.map((item) => ({
-          postid: item.ID,
+          postId: item.ID,
           title: item.title,
           description: item.Recipe,
           img: item.thumbnail,
-          isLiked: item.isLiked, // 서버로부터 받은 좋아요 상태-3/22
         }));
         setRecipes(formattedData);
       } else {
@@ -226,12 +246,11 @@ function Board() {
               </span>
               {searchResults.map((recipe) => (
                 <RecipeCard
-                  key={recipe.postid}
-                  postid={recipe.postid}
+                  key={recipe.postId}
+                  postId={recipe.postId}
                   title={recipe.title}
                   description={recipe.description}
                   img={recipe.img}
-                  isLiked={recipe.isLiked}
                 />
               ))}
             </div>
@@ -251,12 +270,11 @@ function Board() {
               </span>
               {recipes.map((recipe) => (
                 <RecipeCard
-                  key={recipe.postid}
-                  postid={recipe.postid}
+                  key={recipe.postId}
+                  postId={recipe.postId}
                   title={recipe.title}
                   description={recipe.description}
                   img={recipe.img}
-                  isLiked={recipe.isLiked}
                 />
               ))}
             </div>
