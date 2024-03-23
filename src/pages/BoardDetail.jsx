@@ -13,10 +13,12 @@ const BoardDetail = () => {
   const [description, setDescription] = useState(''); // 내용
   const [ingredients, setIngredients] = useState([]); // 재료
   const [isLiked, setIsLiked] = useState(false); // 좋아요 상태
+  const [likedItems, setLikedItems] = useState([]); // 현재 계정으로 좋아요 누른 게시물들
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchPostData(postId);
+    fetchLikeData();
   }, [postId]);
 
   // 1️⃣ 서버에서 기존 정보들을 불러오는 함수
@@ -48,7 +50,7 @@ const BoardDetail = () => {
     }
   };
 
-  // 2️⃣좋아요 상태 불러오는 함수
+  // 2️⃣ 좋아요 상태 불러오는 함수
   useEffect(() => {
     const fetchLikeStatus = async () => {
       try {
@@ -65,7 +67,7 @@ const BoardDetail = () => {
     fetchLikeStatus();
   }, [postId]);
 
-  // 3️⃣좋아요 / 취소 함수 수정
+  // 3️⃣ 좋아요 / 취소 함수 수정
   const toggleLike = async () => {
     try {
       if (isLiked) {
@@ -78,6 +80,25 @@ const BoardDetail = () => {
       setIsLiked(!isLiked);
     } catch (error) {
       console.error('좋아요 에러내용:', error);
+    }
+  };
+
+  // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
+  const fetchLikeData = async () => {
+    const URL = 'http://localhost:8080/board/islike';
+    const nickName = localStorage.getItem('nickName');
+
+    try {
+      const response = await axios.get(URL, nickName);
+      if (response.data && Array.isArray(response.data.items)) {
+        const items = response.data.items.map((item) => item);
+        setLikedItems(items);
+        console.log('게시물 id', items);
+      } else {
+        console.error('에러 내용', response.data);
+      }
+    } catch (error) {
+      console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
     }
   };
 

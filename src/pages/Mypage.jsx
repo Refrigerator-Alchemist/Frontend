@@ -62,6 +62,8 @@ function MyPage() {
     imageUrl: IMAGE_PROFILE,
   });
 
+  const [likedItems, setLikedItems] = useState([]); // 현재 계정으로 좋아요 누른 게시물들
+
   const user = useUserState(); // 유저 데이터 : 로그인 상태면 존재
   const { logout } = useUserDispatch();
 
@@ -111,8 +113,28 @@ function MyPage() {
         });
     };
 
+    fetchLikeData();
     fetchUserInfo().then(fetchMyPage);
   }, []);
+
+  // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
+  const fetchLikeData = async () => {
+    const URL = 'http://localhost:8080/board/islike';
+    const nickName = localStorage.getItem('nickName');
+
+    try {
+      const response = await axios.get(URL, nickName);
+      if (response.data && Array.isArray(response.data.items)) {
+        const items = response.data.items.map((item) => item);
+        setLikedItems(items);
+        console.log('게시물 id', items);
+      } else {
+        console.error('에러 내용', response.data);
+      }
+    } catch (error) {
+      console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
+    }
+  };
 
   // 레시피 수정
   const handleEdit = (postid) => {
