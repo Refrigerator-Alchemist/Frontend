@@ -17,7 +17,12 @@ const RecipeCard = ({ postId, title, description, img }) => {
 
   useEffect(() => {
     fetchLikeData();
-  }, [likedItems]);
+  }, [likedItems]);//
+
+  useEffect(() => {
+    setLiked(Array.isArray(likedItems) ? likedItems.includes(postId) : false);
+  }, [likedItems, postId]);
+  // likedItems 배열이 업데이트될 때마다, 해당 레시피의 좋아요 상태로 설정
 
   // 💛 좋아요 / 취소
   const toggleLike = async () => {
@@ -80,6 +85,7 @@ const RecipeCard = ({ postId, title, description, img }) => {
       console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
     }
   };
+
 
   return (
     <div className="flex items-center bg-white mx-5 my-2 p-4 rounded-xl shadow">
@@ -184,10 +190,14 @@ function Board() {
 
       if (response.data && Array.isArray(response.data.items)) {
         const formattedData = response.data.items.map((item) => ({
-          postId: item.ID,
+          // postId: item.ID,
+          // title: item.title,
+          // description: item.Recipe,
+          // img: item.thumbnail,
+          id: item.ID,
           title: item.title,
           description: item.Recipe,
-          img: item.thumbnail,
+          imageUrl: item.imageUrl,
         }));
         setRecipes(formattedData);
       } else {
@@ -246,11 +256,11 @@ function Board() {
               </span>
               {searchResults.map((recipe) => (
                 <RecipeCard
-                  key={recipe.postId}
-                  postId={recipe.postId}
+                  key={recipe.id}
+                  postId={recipe.id}
                   title={recipe.title}
                   description={recipe.description}
-                  img={recipe.img}
+                  img={recipe.imageUrl}
                 />
               ))}
             </div>
@@ -270,11 +280,16 @@ function Board() {
               </span>
               {recipes.map((recipe) => (
                 <RecipeCard
-                  key={recipe.postId}
-                  postId={recipe.postId}
+                  // key={recipe.postId}
+                  // postId={recipe.postId}
+                  // title={recipe.title}
+                  // description={recipe.description}
+                  // img={recipe.img}
+                  key={recipe.id}
+                  postId={recipe.id}
                   title={recipe.title}
                   description={recipe.description}
-                  img={recipe.img}
+                  img={recipe.imageUrl}
                 />
               ))}
             </div>
@@ -313,3 +328,79 @@ function Board() {
 }
 
 export default Board;
+
+
+
+
+
+
+
+// 좋아요 조회 테스트 
+// import React, { useState, useEffect } from 'react';
+// import { FaHeart, FaRegHeart } from 'react-icons/fa';
+// import { Link } from 'react-router-dom';
+
+// // 🃏 레시피카드 컴포넌트
+// const RecipeCard = ({ postId, title, description, img }) => {
+//   const [Liked, setLiked] = useState(false);
+//   const [likedItems, setLikedItems] = useState([1, 2]); // 초기에 postid 1, 2번 게시물에 좋아요가 되어있다고 가정
+
+//   useEffect(() => {
+//     setLiked(likedItems.includes(postId));
+//   }, [likedItems, postId]);
+
+//   // 💛 좋아요 / 취소 토글
+//   const toggleLike = () => {
+//     setLiked(!Liked);
+//     if (Liked) {
+//       setLikedItems(likedItems.filter(item => item !== postId));
+//     } else {
+//       setLikedItems([...likedItems, postId]);
+//     }
+//   };
+
+//   return (
+//     <div className="flex items-center bg-white mx-5 my-2 p-4 rounded-xl shadow">
+//       <Link to={`/board/${postId}`} className="flex-grow flex">
+//         <div className="flex-none w-20 h-20 rounded-xl border-2 border-gray-300 overflow-hidden">
+//           <img className="w-full h-full object-cover" src={img} alt={title} />
+//         </div>
+//         <div className="px-4 py-4">
+//           <h3 className="text-lg font-semibold">{title}</h3>
+//           <p className="text-gray-500 text-sm">{description}</p>
+//         </div>
+//       </Link>
+//       <button onClick={toggleLike} className="p-2">
+//         {Liked ? <FaHeart className="text-red-500 text-2xl" /> : <FaRegHeart className="text-2xl" />}
+//       </button>
+//     </div>
+//   );
+// };
+
+// // ----------------------------게시판
+// function Board() {
+//   const recipesData = [
+//     { postId: 1, title: '레시피 1', description: '설명 1', img: 'img_url_1' },
+//     { postId: 2, title: '레시피 2', description: '설명 2', img: 'img_url_2' },
+//     { postId: 3, title: '레시피 3', description: '설명 3', img: 'img_url_3' },
+//   ];
+
+//   return (
+//     <section className="Board pb-24">
+//       <div className="my-2">
+//         <span className="font-bold ml-6 text-2xl">레시피 목록</span>
+//         {recipesData.map(recipe => (
+//           <RecipeCard
+//             key={recipe.postId}
+//             postId={recipe.postId}
+//             title={recipe.title}
+//             description={recipe.description}
+//             img={recipe.img}
+//           />
+//         ))}
+//       </div>
+//     </section>
+//   );
+// }
+
+// export default Board;

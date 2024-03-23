@@ -12,7 +12,7 @@ const BoardDetail = () => {
 
   const [description, setDescription] = useState(''); // 내용
   const [ingredients, setIngredients] = useState([]); // 재료
-  const [isLiked, setIsLiked] = useState(false); // 좋아요 상태
+  const [Liked, setLiked] = useState(false); // 좋아요 상태
   const [likedItems, setLikedItems] = useState([]); // 현재 계정으로 좋아요 누른 게시물들
   const navigate = useNavigate();
 
@@ -20,6 +20,10 @@ const BoardDetail = () => {
     fetchPostData(postId);
     fetchLikeData();
   }, [postId]);
+
+  useEffect(() => {
+    setLiked(likedItems.includes(postId));
+  }, [likedItems, postId]);
 
   // 1️⃣ 서버에서 기존 정보들을 불러오는 함수
   const fetchPostData = async (postId) => {
@@ -50,36 +54,46 @@ const BoardDetail = () => {
     }
   };
 
-  // 2️⃣ 좋아요 상태 불러오는 함수
-  useEffect(() => {
-    const fetchLikeStatus = async () => {
-      try {
-        const likeStatusResponse = await axios.post(`/board/likeStatus`, {
-          postId,
-        });
-        //JSON형태로 서버에 전송
-        setIsLiked(likeStatusResponse.data.isLiked);
-      } catch (error) {
-        console.error('좋아요 상태 조회 에러:', error);
-      }
-    };
-
-    fetchLikeStatus();
-  }, [postId]);
-
-  // 3️⃣ 좋아요 / 취소 함수 수정
+  // 💛 좋아요 / 취소
   const toggleLike = async () => {
     try {
-      if (isLiked) {
-        // 좋아요 취소
-        await axios.post(`/board/unlike`, { postId });
+      if (Liked) {
+        // ▶️ 좋아요 되어있는 상태면 취소
+        const response = await axios.post(
+          `/board/dislike`,
+          {
+            nickName: nickName,
+            postId: postId,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json;charset=UTF-8',
+              Accept: 'application/json',
+            },
+          }
+        );
+        console.log(response);
+        setLiked(!Liked);
       } else {
-        //좋아요
-        await axios.post(`/board/like`, { postId });
+        // ▶️ 안 눌려져 있는 상태면 좋아요
+        const response = await axios.post(
+          `/board/like`,
+          {
+            nickName: nickName,
+            postId: postId,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json;charset=UTF-8',
+              Accept: 'application/json',
+            },
+          }
+        );
+        console.log(response);
+        setLiked(!Liked);
       }
-      setIsLiked(!isLiked);
     } catch (error) {
-      console.error('좋아요 에러내용:', error);
+      console.error('좋아요 에러: ', error);
     }
   };
 
@@ -123,7 +137,7 @@ const BoardDetail = () => {
             <h2 className="font-score text-2xl font-bold">{title}</h2>
 
             <button onClick={toggleLike} className="ml-4">
-              {isLiked ? (
+              {Liked ? (
                 <FaHeart className="text-red-500 text-2xl" />
               ) : (
                 <FaRegHeart className="text-2xl" />
