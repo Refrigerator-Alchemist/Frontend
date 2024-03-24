@@ -280,9 +280,7 @@ function Board() {
 
   // 5️⃣ 클릭할 페이지번호 순서대로
   const pageNumbers = [];
-
   for (let i = 0; i <= totalPages; i++) {
-
     pageNumbers.push(i + 1);
   }
 
