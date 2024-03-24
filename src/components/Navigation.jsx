@@ -9,9 +9,11 @@ import { useUserState } from '../context/UserContext';
 
 export default function Navigation() {
   const { selected, setSelected } = useContext(NavigationContext);
-  const { user } = useUserState(); // user가 있어야 로그인 상태
-  const navigate = useNavigate();
+  const { user } = useUserState(); // user 객체가 존재하거나, 로컬스토리지에 nickName이 존재할 때
+
   const location = useLocation();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const currentPath = location.pathname;
@@ -23,7 +25,10 @@ export default function Navigation() {
       currentPath.startsWith('/GptSavedList/')
     ) {
       setSelected('food');
-    } else if (currentPath === '/main'|| currentPath.startsWith('/recipe/myRecipe')) {
+    } else if (
+      currentPath === '/main' ||
+      currentPath.startsWith('/recipe/myRecipe')
+    ) {
       setSelected('home');
     } else if (currentPath === '/login' || currentPath.startsWith('/mypage')) {
       setSelected('profile');
@@ -61,9 +66,13 @@ export default function Navigation() {
         style={{ position: 'relative' }}
         onClick={() => {
           setSelected('profile');
-          navigate(user ? '/mypage' : '/login'); // 로그인에 따라 경로가 바뀜
+          navigate(
+            user || localStorage.getItem('nickName') ? '/mypage' : '/login'
+          ); // 로그인에 따라 경로가 바뀜
         }}
-        className={`${iconStyle} ${selected === 'profile' ? 'selected-icon' : ''}`}
+        className={`${iconStyle} ${
+          selected === 'profile' ? 'selected-icon' : ''
+        }`}
       >
         {selected === 'profile' ? (
           <IoAccessibility />
