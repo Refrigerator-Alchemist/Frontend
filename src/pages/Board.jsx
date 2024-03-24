@@ -265,15 +265,7 @@ function Board() {
   }, []);
 
   // // 3️⃣ 게시물 검색
-  // const handleSearch = (query) => {
-  //   if (query.length > 0) {
-  //     const results = recipes.filter((recipe) => recipe.title.includes(query));
-  //     setSearchResults(results);
-  //     setIsSearching(true);
-  //   } else {
-  //     setIsSearching(false);
-  //   }
-  // };
+
   const handleSearch = (results) => {
     setSearchResults(results); // 검색 결과 상태 업데이트
     setIsSearching(true);      // 검색 모드 활성화
