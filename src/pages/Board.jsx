@@ -205,7 +205,10 @@ function Board() {
     const nickName = localStorage.getItem('nickName');
 
     try {
-      const response = await axios.post(URL, nickName);
+      const response = await axios.get(URL, {
+        params: { nickName }
+      });
+      
       if (response.data) {
         const posts = response.data.map(Number);
         setLikedPosts(posts);
@@ -236,10 +239,10 @@ function Board() {
   // 2️⃣ 각 페이지에 해당하는 레시피들을 불러오는 함수
   const fetchRecipesByPage = async (pageNumber) => {
     try {
-      const response = await axios.post(
-        `${IP_ADDRESS}/board/apiTest`,
-        pageNumber
-      );
+      const response = await axios.get(`${IP_ADDRESS}/board/apiTest`, {
+        params: { page: pageNumber }
+      });
+  
 
       if (response.data && Array.isArray(response.data.items)) {
         const formattedData = response.data.items.map((item) => ({
