@@ -46,6 +46,7 @@ const RecipeCard = ({ postId, title, description, img,  initialLikeCount,  isLik
         if (response.status === 200) {
           setLiked(false);
           setLikeCount(likeCount - 1); 
+          setLikedPosts(prevLikedPosts => prevLikedPosts.filter(id => id !== postId));
         }
 
         console.log(response);
@@ -68,8 +69,10 @@ const RecipeCard = ({ postId, title, description, img,  initialLikeCount,  isLik
         if (response.status === 200) {
           setLiked(true);
           setLikeCount(likeCount + 1); 
+          setLikedPosts(prevLikedPosts => [...prevLikedPosts, postId]); 
         }
         console.log(response);
+        console.log('***변경된 likedPosts:', likedPosts);
         setLiked(!Liked);
       }
     } catch (error) {
