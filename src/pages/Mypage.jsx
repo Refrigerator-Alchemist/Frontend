@@ -91,7 +91,7 @@ function MyPage() {
   const [recipes, setRecipes] = useState([]); // 내가 저장한 레시피
   const [likedItems, setLikedItems] = useState([]); // 현재 계정으로 좋아요 누른 게시물들
   const [userInfo, setUserInfo] = useState({
-    name: '',
+    nickName: '',
     imageUrl: IMAGE_PROFILE,
   });
 
@@ -249,7 +249,7 @@ function MyPage() {
           />
         </div>
         <h1 className="font-score mt-5 text-xl font-semibold text-center">
-          {userInfo.name}
+          {userInfo.nickName}
         </h1>
 
         <button
