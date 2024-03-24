@@ -1,7 +1,7 @@
 import React, { useState, useReducer, createContext, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import ErrorCode from '../components/ErrorCode';
+import ErrorCode from '../utils/ErrorCode';
 
 // 📀 토큰 처리
 const instance = axios.create({
