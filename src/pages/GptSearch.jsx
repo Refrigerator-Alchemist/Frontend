@@ -49,7 +49,7 @@ const GptSearch = () => {
 
   // Gpt로 레시피 검색 요청하는 함수
   const handleNextButtonClick = async () => {
-    toast.success('연금술을 시작합니다! ');
+    // toast.success('연금술을 시작합니다! ');
     // toast.error('임시 에러 메시지');
     try {
       const response = await axios.post(
