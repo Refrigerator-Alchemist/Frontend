@@ -82,7 +82,7 @@ const LikedRecipe = ({ postId, title, description, imageUrl }) => {
   );
 };
 
-// 마이페이지
+// 📂 마이페이지
 function MyPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage, setRecipesPerPage] = useState(5);
@@ -107,7 +107,7 @@ function MyPage() {
     fetchUserInfo().then(fetchMyPage);
   }, [showMyRecipes]);
 
-  // 🧑🏽‍🌾 유저 정보를 가져오는 함수 : 프로필 이미지, 닉네임
+  // 🧑🏽‍🌾 현재 로그인 중인 유저 정보 : 프로필 이미지, 닉네임
   const fetchUserInfo = async () => {
     const URL = 'http://localhost:8080/userprofile';
 
@@ -261,17 +261,17 @@ function MyPage() {
 
         <div className="flex">
           <button
-            onClick={() => setShowMyRecipes(false)}
+            onClick={() => setShowMyRecipes(true)} // 내가 작성한 레시피 on
             className={`font-score mx-1 py-2 px-4 rounded ${
-              !showMyRecipes ? 'bg-main text-white' : 'bg-gray-100 text-black'
+              showMyRecipes ? 'bg-main text-white' : 'bg-gray-100 text-black'
             }`}
           >
             내가 작성한 레시피
           </button>
           <button
-            onClick={() => setShowMyRecipes(true)}
+            onClick={() => setShowMyRecipes(false)} // 좋아요 누른 레시피 on
             className={`font-score mx-1 py-2 px-4 rounded ${
-              showMyRecipes ? 'bg-main text-white' : 'bg-gray-100 text-black'
+              !showMyRecipes ? 'bg-main text-white' : 'bg-gray-100 text-black'
             }`}
           >
             좋아요 누른 레시피
@@ -289,7 +289,7 @@ function MyPage() {
                 title={recipe.title}
                 description={recipe.description}
                 imageUrl={recipe.imageUrl}
-                showEditDeleteButtons={!showMyRecipes}
+                showEditDeleteButtons={showMyRecipes}
                 onDelete={handleDeleteConfirmation}
                 onEdit={handleEdit}
               />
