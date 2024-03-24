@@ -3,12 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import axios from 'axios';
 import { useUserDispatch, useUserState } from '../context/UserContext';
-import { FaTrash, FaEdit } from 'react-icons/fa';
+import { FaTrash, FaHeart } from 'react-icons/fa';
 import IMAGE_PROFILE from '../assets/img/img_profile.png';
 import Pagination from '../components/Pagination';
 
-const RecipeCard = ({
-  postid,
+// 🃏 내가 저장한 게시물
+const SavedRecipe = ({
+  postId,
   title,
   description,
   imageUrl,
@@ -19,9 +20,13 @@ const RecipeCard = ({
   return (
     <div className="text-black ml-6 mr-6 mt-2 w-full max-w-md">
       <div className="bg-white mx-2 my-2 p-4 rounded-xl shadow overflow-hidden relative flex flex-col md:flex-row">
-        <Link to={`/board/${postid}`} className="flex-grow flex items-center">
+        <Link to={`/board/${postId}`} className="flex-grow flex items-center">
           <div className="flex-none w-20 h-20 md:w-20 md:h-20 max-w-xs rounded-xl border-2 border-gray-300 overflow-hidden mr-4">
-            <img className="w-full h-full object-cover" src={imageUrl} alt={title} />
+            <img
+              className="w-full h-full object-cover"
+              src={imageUrl}
+              alt={title}
+            />
           </div>
           <div className="md:pl-4 mt-4 md:mt-0">
             <h3 className="text-lg font-score font-semibold">{title}</h3>
@@ -33,13 +38,13 @@ const RecipeCard = ({
         {showEditDeleteButtons && (
           <div className="absolute top-4 right-0 flex flex-col space-y-10">
             <button
-              onClick={() => onDelete(postid)}
+              onClick={() => onDelete(postId)}
               className="p-1 text-gray-400"
             >
               <FaTrash />
             </button>
             <button
-              onClick={() => onEdit(postid)}
+              onClick={() => onEdit(postId)}
               className="pr-3 text-sm text-gray-300"
             >
               수정
@@ -51,85 +56,120 @@ const RecipeCard = ({
   );
 };
 
+// 🃏 좋아요 누른 레시피
+const LikedRecipe = ({ postId, title, description, imageUrl }) => {
+  return (
+    <div className="text-black ml-6 mr-6 mt-2 w-full max-w-md">
+      <div className="bg-white mx-2 my-2 p-4 rounded-xl shadow overflow-hidden relative flex flex-col md:flex-row">
+        <Link to={`/board/${postId}`} className="flex-grow flex items-center">
+          <div className="flex-none w-20 h-20 md:w-20 md:h-20 max-w-xs rounded-xl border-2 border-gray-300 overflow-hidden mr-4">
+            <img
+              className="w-full h-full object-cover"
+              src={imageUrl}
+              alt={title}
+            />
+          </div>
+          <div className="md:pl-4 mt-4 md:mt-0">
+            <h3 className="text-lg font-score font-semibold">{title}</h3>
+            <p className="text-gray-500 pt-1 text-sm font-score md:max-w-xs">
+              {description}
+            </p>
+          </div>
+          <FaHeart className="text-red-500 text-2xl" />
+        </Link>
+      </div>
+    </div>
+  );
+};
+
+// 마이페이지
 function MyPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage, setRecipesPerPage] = useState(5);
-  const [recipes, setRecipes] = useState([]);
-  const [showMyRecipes, setShowMyRecipes] = useState(false);
-  const navigate = useNavigate();
+
+  const [showMyRecipes, setShowMyRecipes] = useState(false); // 내가 저장한 레시피 or 좋아요 누른 레시피
+  const [recipes, setRecipes] = useState([]); // 내가 저장한 레시피
+  const [likedItems, setLikedItems] = useState([]); // 현재 계정으로 좋아요 누른 게시물들
   const [userInfo, setUserInfo] = useState({
     name: '',
     imageUrl: IMAGE_PROFILE,
   });
 
-  const [likedItems, setLikedItems] = useState([]); // 현재 계정으로 좋아요 누른 게시물들
+  const navigate = useNavigate();
 
   const user = useUserState(); // 유저 데이터 : 로그인 상태면 존재
+
   const { logout } = useUserDispatch();
 
+  // --------------------------------------------------------------------------------------------------------
   useEffect(() => {
-    const fetchUserInfo = async () => {
-      const URL = 'http://localhost:8080/userprofile';
-
-      try {
-        if (user) {
-          const response = await axios.get(URL, user.nickName);
-
-          setUserInfo({
-            imageUrl: response.data.imageUrl,
-            nickName: user.nickName,
-          });
-        } else {
-          window.alert('로그인 하지 않았습니다!');
-        }
-      } catch (error) {
-        console.error('데이터 통신 중 문제 발생: ', error);
-      }
-    };
-
-    const fetchMyPage = () => {
-      axios
-        .post('http://localhost:8080/board/myPage', 'test')
-        .then((response) => {
-          console.log('서버 응답 데이터:', response.data);
-
-          if (response.data && Array.isArray(response.data.items)) {
-            const formattedData = response.data.items.map((item) => {
-              return {
-                postid: item.ID,
-                title: item.title,
-                description: item.description,
-                img: item.imageUrl,
-                isLiked: item.likeCount > 0,
-              };
-            });
-            setRecipes(formattedData);
-          } else {
-            console.error('에러 내용1:', response.data);
-          }
-        })
-        .catch((error) => {
-          console.error('에러 내용2:', error);
-        });
-    };
-
     fetchLikeData();
     fetchUserInfo().then(fetchMyPage);
   }, [showMyRecipes]);
 
-  
+  // 🧑🏽‍🌾 유저 정보를 가져오는 함수 : 프로필 이미지, 닉네임
+  const fetchUserInfo = async () => {
+    const URL = 'http://localhost:8080/userprofile';
 
+    try {
+      if (user) {
+        const response = await axios.get(URL, user.nickName);
 
-  // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
+        setUserInfo({
+          imageUrl: response.data.imageUrl,
+          nickName: user.nickName,
+        });
+      } else {
+        window.alert('로그인 하지 않았습니다!');
+      }
+    } catch (error) {
+      console.error('데이터 통신 중 문제 발생: ', error);
+    }
+  };
+
+  // 🧑🏽 내가 저장한 레시피 가져오는 함수
+  const fetchMyPage = () => {
+    axios
+      .post('http://localhost:8080/board/myPage', 'test')
+      .then((response) => {
+        console.log('서버 응답 데이터:', response.data);
+
+        if (response.data && Array.isArray(response.data.items)) {
+          const formattedData = response.data.items.map((item) => {
+            return {
+              postId: item.ID,
+              title: item.title,
+              description: item.description,
+              imageUrl: item.imageUrl,
+            };
+          });
+          setRecipes(formattedData);
+        } else {
+          console.error('에러 내용1:', response.data);
+        }
+      })
+      .catch((error) => {
+        console.error('에러 내용2:', error);
+      });
+  };
+
+  // 🔥 좋아요 누른 게시물들 가져오는 함수
   const fetchLikeData = async () => {
-    const URL = 'http://localhost:8080/board/islike';
+    const URL = 'http://localhost:8080/board/mypage-like';
     const nickName = localStorage.getItem('nickName');
 
     try {
       const response = await axios.get(URL, nickName);
       if (response.data && Array.isArray(response.data.items)) {
-        const items = response.data.items.map((item) => item);
+        const items = response.data.items.map((item) => ({
+          id: item.ID,
+          title: item.title,
+          description: item.description,
+          imageUrl: item.imageUrl,
+          likeCount: item.likeCount,
+        }));
         setLikedItems(items);
+
         console.log('게시물 id', items);
       } else {
         console.error('에러 내용', response.data);
@@ -139,20 +179,20 @@ function MyPage() {
     }
   };
 
-  // 레시피 수정
-  const handleEdit = (postid) => {
-    navigate(`/editpost/${postid}`);
+  // 1️⃣ 레시피 수정
+  const handleEdit = (postId) => {
+    navigate(`/editpost/${postId}`);
   };
 
-  // 레시피 삭제
-  const deleteRecipe = async (postid) => {
+  // 2️⃣ 레시피 삭제
+  const deleteRecipe = async (postId) => {
     try {
       await axios.post(`http://localhost:8080/board/deleteBoard`, {
-        postId: postid,
+        postId: postId,
       });
 
       setRecipes((prevRecipes) =>
-        prevRecipes.filter((recipe) => recipe.postid !== postid)
+        prevRecipes.filter((recipe) => recipe.postId !== postId)
       );
     } catch (error) {
       console.error('레시피 삭제 에러내용:', error);
@@ -160,12 +200,12 @@ function MyPage() {
     }
   };
 
-  //레시피 삭제 확인
-  const handleDeleteConfirmation = async (postid) => {
+  // 3️⃣ 레시피 삭제 확인
+  const handleDeleteConfirmation = async (postId) => {
     const confirmDelete = window.confirm('정말로 삭제하시겠습니까?');
     if (confirmDelete) {
       try {
-        await deleteRecipe(postid);
+        await deleteRecipe(postId);
         console.log('레시피 삭제 성공');
       } catch (error) {
         console.error('레시피 삭제 실패:', error);
@@ -226,7 +266,7 @@ function MyPage() {
               !showMyRecipes ? 'bg-main text-white' : 'bg-gray-100 text-black'
             }`}
           >
-            나의 레시피 보기
+            내가 작성한 레시피
           </button>
           <button
             onClick={() => setShowMyRecipes(true)}
@@ -234,24 +274,41 @@ function MyPage() {
               showMyRecipes ? 'bg-main text-white' : 'bg-gray-100 text-black'
             }`}
           >
-            좋아한 레시피 보기
+            좋아요 누른 레시피
           </button>
         </div>
 
-        <div className="recipe-card-container w-full flex flex-wrap">
-          {currentRecipes.map((recipe) => (
-            <RecipeCard
-              key={recipe.postid}
-              postid={recipe.postid}
-              title={recipe.title}
-              description={recipe.description}
-              img={recipe.img}
-              showEditDeleteButtons={!showMyRecipes}
-              onDelete={handleDeleteConfirmation}
-              onEdit={handleEdit}
-            />
-          ))}
-        </div>
+        {/* 버튼 토글에 따른 Outlet 변경 */}
+        {showMyRecipes ? (
+          // 내가 저장한 레시피
+          <div className="recipe-card-container w-full flex flex-wrap">
+            {currentRecipes.map((recipe) => (
+              <SavedRecipe
+                key={recipe.postId}
+                postId={recipe.postId}
+                title={recipe.title}
+                description={recipe.description}
+                imageUrl={recipe.imageUrl}
+                showEditDeleteButtons={!showMyRecipes}
+                onDelete={handleDeleteConfirmation}
+                onEdit={handleEdit}
+              />
+            ))}
+          </div>
+        ) : (
+          // 좋아요 누른 레시피
+          <div className="recipe-card-container w-full flex flex-wrap">
+            {likedItems.map((recipe) => (
+              <LikedRecipe
+                key={recipe.postId}
+                postId={recipe.postId}
+                title={recipe.title}
+                description={recipe.description}
+                imageUrl={recipe.imageUrl}
+              />
+            ))}
+          </div>
+        )}
 
         <Pagination
           currentPage={currentPage}

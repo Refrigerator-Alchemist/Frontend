@@ -9,15 +9,15 @@ import Ranking from '../components/Ranking';
 import Navigation from '../components/Navigation';
 import axios from 'axios';
 
-// 🃏 레시피카드
-const RecipeCard = ({ postId, title, description, img }) => {
+// 🃏 레시피 카드
+const RecipeCard = ({ postId, title, description, img, likeCount }) => {
   const [Liked, setLiked] = useState(false);
   const [likedItems, setLikedItems] = useState([]); // 현재 계정으로 좋아요 누른 게시물들
   const nickName = localStorage.getItem('nickName');
 
   useEffect(() => {
     fetchLikeData();
-  }, [likedItems]);//
+  }, [likedItems]);
 
   useEffect(() => {
     setLiked(Array.isArray(likedItems) ? likedItems.includes(postId) : false);
@@ -86,7 +86,6 @@ const RecipeCard = ({ postId, title, description, img }) => {
     }
   };
 
-
   return (
     <div className="flex items-center bg-white mx-5 my-2 p-4 rounded-xl shadow">
       <Link to={`/board/${postId}`} className="flex-grow flex">
@@ -98,6 +97,9 @@ const RecipeCard = ({ postId, title, description, img }) => {
           <p className="text-gray-500 text-sm font-score">{description}</p>
         </div>
       </Link>
+      <div className="mr-2">
+        <span className="text-lg font-score font-semibold">{likeCount}</span>
+      </div>
       <button onClick={toggleLike} className="p-2">
         {Liked ? (
           <FaHeart className="text-red-500 text-2xl" />
@@ -163,7 +165,7 @@ function Board() {
     fetchRecipesByPage(currentPage);
   }, [currentPage]);
 
-  // 전체 레시피 수를 가져오는 함수
+  // 1️⃣ 전체 레시피 수를 가져오는 함수
   const fetchTotalRecipes = async () => {
     try {
       const response = await axios.get('http://localhost:8080/boardSize');
@@ -180,7 +182,7 @@ function Board() {
     }
   };
 
-  // 각 페이지에 해당하는 레시피들을 불러오는 함수
+  // 2️⃣ 각 페이지에 해당하는 레시피들을 불러오는 함수
   const fetchRecipesByPage = async (pageNumber) => {
     try {
       const response = await axios.post(
@@ -190,14 +192,11 @@ function Board() {
 
       if (response.data && Array.isArray(response.data.items)) {
         const formattedData = response.data.items.map((item) => ({
-          // postId: item.ID,
-          // title: item.title,
-          // description: item.Recipe,
-          // img: item.thumbnail,
           id: item.ID,
           title: item.title,
-          description: item.Recipe,
+          description: item.description,
           imageUrl: item.imageUrl,
+          likeCount: item.likeCount,
         }));
         setRecipes(formattedData);
       } else {
@@ -212,7 +211,7 @@ function Board() {
     fetchRecipesByPage(1);
   }, []);
 
-  //게시물 검색
+  // 3️⃣ 게시물 검색
   const handleSearch = (query) => {
     if (query.length > 0) {
       const results = recipes.filter((recipe) => recipe.title.includes(query));
@@ -223,13 +222,13 @@ function Board() {
     }
   };
 
-  // 페이지 번호를 받아와 해당 번호에서 1을 뺀 값을 서버로 보내는 함수
+  // 4️⃣ 페이지 번호를 받아와 해당 번호에서 1을 뺀 값을 서버로 보내는 함수
   const handlePageClick = (pageNumber) => {
     fetchRecipesByPage(pageNumber - 1);
     setCurrentPage(pageNumber);
   };
 
-  // 클릭할 페이지번호 순서대로
+  // 5️⃣ 클릭할 페이지번호 순서대로
   const pageNumbers = [];
   for (let i = 1; i <= totalPages; i++) {
     pageNumbers.push(i);
@@ -261,6 +260,7 @@ function Board() {
                   title={recipe.title}
                   description={recipe.description}
                   img={recipe.imageUrl}
+                  likeCount={recipe.likeCount}
                 />
               ))}
             </div>
@@ -280,16 +280,12 @@ function Board() {
               </span>
               {recipes.map((recipe) => (
                 <RecipeCard
-                  // key={recipe.postId}
-                  // postId={recipe.postId}
-                  // title={recipe.title}
-                  // description={recipe.description}
-                  // img={recipe.img}
                   key={recipe.id}
                   postId={recipe.id}
                   title={recipe.title}
                   description={recipe.description}
                   img={recipe.imageUrl}
+                  likeCount={recipe.likeCount}
                 />
               ))}
             </div>
@@ -329,13 +325,7 @@ function Board() {
 
 export default Board;
 
-
-
-
-
-
-
-// 좋아요 조회 테스트 
+// 좋아요 조회 테스트
 // import React, { useState, useEffect } from 'react';
 // import { FaHeart, FaRegHeart } from 'react-icons/fa';
 // import { Link } from 'react-router-dom';
