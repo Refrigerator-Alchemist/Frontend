@@ -175,11 +175,9 @@ function Board() {
     try {
       const response = await axios.post(URL, nickName);
       if (response.data) {
-
         const posts = response.data.map(Number);
         setLikedPosts(posts);
         console.log('좋아요 누른 게시물의 postId 목록:', posts);
-
       }
     } catch (error) {
       console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
@@ -274,7 +272,7 @@ function Board() {
         {isSearching ? (
           <>
             <div className="my-2 mt-4">
-              <span className="font-scoreExtraBold font-extrabold ml-6 text-2xl">
+              <span className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
                 검색 결과
               </span>
               {searchResults.map((recipe) => (
@@ -300,7 +298,7 @@ function Board() {
               <Ranking />
             </div>
             <div className="my-2">
-              <span className="font-scoreExtraBold font-extrabold ml-6 text-2xl">
+              <span className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
                 레시피🌮
               </span>
               {recipes.map((recipe) => (
