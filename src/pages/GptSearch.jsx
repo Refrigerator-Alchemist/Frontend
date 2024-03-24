@@ -12,10 +12,10 @@ const GptSearch = () => {
   const [inputValue, setInputValue] = useState('');
   const navigate = useNavigate();
   const inputRef = useRef(null);
-  const user = useUserState(); 
-  const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
+  const user = useUserState();
+  const accessToken = localStorage.getItem('accessToken');
 
-   // 입력 값 변경 시 상태 업데이트
+  // 입력 값 변경 시 상태 업데이트
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
@@ -24,14 +24,13 @@ const GptSearch = () => {
   const handleInputKeyDown = (e) => {
     if (e.key === 'Enter' && inputValue.trim() !== '') {
       addTag();
-      setInputValue(''); 
+      setInputValue('');
       e.preventDefault();
     } else if (e.key === 'Enter') {
       setInputValue('');
       e.preventDefault();
     }
   };
-  
 
   // 새 태그 추가 및 입력 필드 초기화
   const addTag = () => {
@@ -42,7 +41,7 @@ const GptSearch = () => {
     inputRef.current.focus();
   };
 
-  // 태그 삭제 - 배열에서 제거 
+  // 태그 삭제 - 배열에서 제거
   const handleDelete = (indexToDelete) => {
     setTags(tags.filter((_, index) => index !== indexToDelete));
     inputRef.current.focus();

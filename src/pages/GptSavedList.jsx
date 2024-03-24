@@ -14,7 +14,7 @@ const GptSavedList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage] = useState(7);
   const user = useUserState();
-  const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
+  const accessToken = localStorage.getItem('accessToken');
 
   //저장한 목록 보기
   useEffect(() => {
