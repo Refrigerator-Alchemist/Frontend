@@ -49,6 +49,7 @@ const GptSearch = () => {
 
   // Gpt로 레시피 검색 요청하는 함수
   const handleNextButtonClick = async () => {
+    toast.success('연금술을 시작합니다! ');
     // toast.error('임시 에러 메시지');
     try {
       const response = await axios.post(
@@ -69,6 +70,7 @@ const GptSearch = () => {
 
       if (recommendId) {
         navigate(`/recipe/recommend/${recommendId}`);
+        toast.success('연금술을 시작합니다! ');
       } else {
         console.error('recommendId를 찾을 수 없습니다.');
         toast.error('recommendId를 찾을 수 없습니다.');
@@ -97,6 +99,7 @@ const GptSearch = () => {
       }
     }
   };
+  
 
   return (
     <section className="bg-white min-h-screen px-4 py-8 flex flex-col">

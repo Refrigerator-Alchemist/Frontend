@@ -11,6 +11,7 @@ import axios from 'axios';
 
 import { IP_ADDRESS } from '../context/UserContext';
 
+
 // 🃏 레시피 카드
 const RecipeCard = ({
   postId,
@@ -40,7 +41,9 @@ const RecipeCard = ({
       if (Liked) {
         // ▶️ 좋아요 되어있는 상태면 취소
         const response = await axios.post(
+
           `${IP_ADDRESS}/board/dislike`,
+
           {
             nickName: nickName,
             postId: postId,
@@ -65,7 +68,9 @@ const RecipeCard = ({
       } else {
         // ▶️ 안 눌려져 있는 상태면 좋아요
         const response = await axios.post(
+
           `${IP_ADDRESS}/board/like`,
+
           {
             nickName: nickName,
             postId: postId,
@@ -116,25 +121,8 @@ const RecipeCard = ({
   );
 };
 
-// 🔎 게시물 검색
-const SearchBar = ({ onSearch }) => {
-  return (
-    <div className="font-score flex-grow flex items-center rounded-full bg-gray-50 p-2 shadow ">
-      <img
-        src={searchicon}
-        alt="검색아이콘"
-        className="w-5 h-5 ml-2"
-        style={{ opacity: 0.5 }}
-      />
-      <input
-        className="w-full pl-2 py-2 text-sm focus:outline-none bg-gray-50"
-        type="text"
-        placeholder="검색"
-        onChange={(e) => onSearch(e.target.value)}
-      />
-    </div>
-  );
-};
+
+
 
 // ✍️ 게시물 작성 페이지로 이동
 const WriteButton = () => {
@@ -171,7 +159,9 @@ function Board() {
 
   // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
   const fetchLikedPosts = async () => {
+
     const URL = `${IP_ADDRESS}/board/islike`;
+
     const nickName = localStorage.getItem('nickName');
 
     try {
@@ -189,7 +179,9 @@ function Board() {
   // 1️⃣ 전체 레시피 수를 가져오는 함수
   const fetchTotalRecipes = async () => {
     try {
+
       const response = await axios.get(`${IP_ADDRESS}/boardSize`);
+
 
       console.log(response.data);
       const totalRecipes = response.data;
@@ -207,7 +199,9 @@ function Board() {
   const fetchRecipesByPage = async (pageNumber) => {
     try {
       const response = await axios.post(
+
         `${IP_ADDRESS}/board/apiTest`,
+
         pageNumber
       );
 
@@ -220,7 +214,7 @@ function Board() {
           likeCount: item.likeCount,
         }));
         formattedData.forEach((recipe) => {
-          console.log(`Recipe ID: ${recipe.id}, Type: ${typeof recipe.id}`);
+          // console.log(`Recipe ID: ${recipe.id}, id의 타입: ${typeof recipe.id}`);
         });
         setRecipes(formattedData);
       } else {
@@ -235,27 +229,40 @@ function Board() {
     fetchRecipesByPage(1);
   }, []);
 
-  // 3️⃣ 게시물 검색
-  const handleSearch = (query) => {
-    if (query.length > 0) {
-      const results = recipes.filter((recipe) => recipe.title.includes(query));
-      setSearchResults(results);
-      setIsSearching(true);
+
+// 🔍 게시물 검색 함수
+const handleSearch = async (searchQuery) => {
+  setIsSearching(true); // 검색 시작
+  try {
+    const response = await axios.post('http://172.30.1.12:8080/board/searchTitle', {
+      title: searchQuery,
+    });
+    const data = response.data;
+
+    if (!Array.isArray(data)) {
+      console.error('Expected an array, but received:', data);
+      setSearchResults([]); 
     } else {
-      setIsSearching(false);
+      setSearchResults(data); 
     }
-  };
+  } catch (error) {
+    console.error('게시물 검색 에러:', error);
+  }
+  setIsSearching(false); 
+};
+
+
 
   // 4️⃣ 페이지 번호를 받아와 해당 번호에서 1을 뺀 값을 서버로 보내는 함수
   const handlePageClick = (pageNumber) => {
-    fetchRecipesByPage(pageNumber - 1);
+    fetchRecipesByPage(pageNumber - 2);
     setCurrentPage(pageNumber);
   };
 
   // 5️⃣ 클릭할 페이지번호 순서대로
   const pageNumbers = [];
-  for (let i = 1; i <= totalPages; i++) {
-    pageNumbers.push(i);
+  for (let i = 0; i <= totalPages; i++) {
+    pageNumbers.push(i+1);
   }
 
   return (
@@ -271,8 +278,10 @@ function Board() {
       </div>
 
       <main>
+        {/* Only show search results if isSearching is true; otherwise, show the main content */}
         {isSearching ? (
           <>
+
             <div className="my-2 mt-4">
               <span className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
                 검색 결과
@@ -289,14 +298,15 @@ function Board() {
                 />
               ))}
             </div>
+
           </>
         ) : (
           <>
+            {/* Render this section when not searching or no search results */}
             <div className="my-2 mt-4">
-              <span className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
+              <span className="font-scoreExtraBold font-extrabold ml-6 text-2xl">
                 TOP3 레시피🔥
               </span>
-
               <Ranking />
             </div>
             <div className="my-2">

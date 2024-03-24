@@ -18,7 +18,7 @@ const GptSavedList = () => {
 
   //저장한 목록 보기
   useEffect(() => {
-    toast.error('임시 에러 메시지');
+    // toast.error('임시 에러 메시지');
     const fetchRecipes = async () => {
       try {
         const response = await axios.get(`${IP_ADDRESS}/recipe/myRecipe`, {

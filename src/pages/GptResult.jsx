@@ -54,6 +54,7 @@ const RecipePage = () => {
   const handleSaveButtonClick = async () => {
     try {
       // 토큰이 없는 경우 에러 출력
+
       if (!accessToken) {
         toast.error('저장하기를 위해서는 로그인이 필요합니다.');
         return;
@@ -62,6 +63,7 @@ const RecipePage = () => {
         alert('저장하기를 위해서는 로그인이 필요합니다.');
         return;
       }
+
       await axios.post(
         `${IP_ADDRESS}/recipe/save`,
         {
