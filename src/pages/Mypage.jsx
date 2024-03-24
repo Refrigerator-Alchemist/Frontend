@@ -172,7 +172,9 @@ function MyPage() {
     const nickName = localStorage.getItem('nickName');
 
     try {
-      const response = await axios.get(URL, nickName);
+      const response = await axios.get(URL, {
+        params: { nickName } 
+      });
       if (response.data && Array.isArray(response.data.items)) {
         const items = response.data.items.map((item) => ({
           id: item.ID,
@@ -191,6 +193,7 @@ function MyPage() {
       console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
     }
   };
+
 
   // 1️⃣ 레시피 수정
   const handleEdit = (postId) => {
