@@ -15,6 +15,8 @@ const RecipeCard = ({ postId, title, description, img,  initialLikeCount,  isLik
   const [likedItems, setLikedItems] = useState([]); // 현재 계정으로 좋아요 누른 게시물들
   const [likeCount, setLikeCount] = useState(parseInt(initialLikeCount));
   const nickName = localStorage.getItem('nickName');
+  const [likedPosts, setLikedPosts] = useState([]);
+
 
   useEffect(() => {
     setLiked(isLiked); 
