@@ -293,7 +293,7 @@ function Board() {
         </span>
       </header>
       <div className="flex items-center mx-8 my-0">
-        {/* <SearchBar onSearch={handleSearch} /> */}
+        <SearchBar onSearch={handleSearch} />
         <WriteButton />
       </div>
 
