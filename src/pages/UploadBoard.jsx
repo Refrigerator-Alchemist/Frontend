@@ -21,7 +21,7 @@ function UploadBoard() {
   const addIngredientField = () => {
     setIngredients([...ingredients, '']);
   };
-
+  
   const handleSubmit = async (e) => {
     const nickName = localStorage.getItem('nickName');
     const email = localStorage.getItem('email');

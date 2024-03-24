@@ -21,13 +21,15 @@ const RecipePage = () => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          `http://localhost:8080/recipe/recommend/${recommendId}`,
+          `http://172.30.1.17:8080/recipe/recommend/${recommendId}`,
           {
             headers: {
               'Authorization-Access': accessToken,
             },
           }
         );
+
+        
         if (response.data) {
           setTitle(response.data.foodName);
           setIngredients(response.data.ingredients);
@@ -51,8 +53,17 @@ const RecipePage = () => {
   // gpt레시피 저장하기
   const handleSaveButtonClick = async () => {
     try {
+      // 토큰이 없는 경우 에러 출력
+  if (!accessToken) {
+    toast.error('저장하기를 위해서는 로그인이 필요합니다.');
+    return;
+  }
+  if (!accessToken) {
+    alert('저장하기를 위해서는 로그인이 필요합니다.');
+    return;
+  }
       await axios.post(
-        'http://localhost:8080/recipe/save',
+        'http://172.30.1.17:8080/recipe/save',
         {
           foodName: title,
           ingredients: ingredients,
@@ -127,18 +138,18 @@ const RecipePage = () => {
               </h2>
               <ul className="py-2 flex flex-wrap">
                 {ingredients.map((ingredient, index) => (
-                  <li
+                  <ul
                     key={index}
                     className="font-score text-gray-600 mr-4 mb-2"
                   >
                     {ingredient}
-                  </li>
+                  </ul>
                 ))}
               </ul>
               <h2 className="font-score text-lg font-bold text-gray-800 mt-4">
                 만드는 방법
               </h2>
-              <ol className="list-decimal list-inside">
+              <ol className="list-decimal list-inside" style={{ listStyleType: 'none' }}>
                 {steps.map((step, index) => (
                   <li key={index} className="font-score text-gray-600">
                     {step}
