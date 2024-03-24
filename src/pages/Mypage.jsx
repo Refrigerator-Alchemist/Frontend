@@ -119,9 +119,10 @@ function MyPage() {
 
     try {
       if (user) {
-        const response = await axios.get(URL, user.nickName, {
+        const response = await axios.get(URL, {
           headers: {
             'Authorization-Access': accessToken,
+            nickName: user.nickName,
           },
         });
 
@@ -140,9 +141,10 @@ function MyPage() {
   // 🧑🏽 내가 저장한 레시피 가져오는 함수
   const fetchMyPage = () => {
     axios
-      .get(`${IP_ADDRESS}/board/myPage`, user.nickName, {
+      .get(`${IP_ADDRESS}/board/myPage`, {
         headers: {
           'Authorization-Access': accessToken,
+          nickName: user.nickName,
         },
       })
       .then((response) => {
@@ -175,6 +177,7 @@ function MyPage() {
       const response = await axios.get(URL, user.nickName, {
         headers: {
           'Authorization-Access': accessToken,
+          nickName: user.nickName,
         },
       });
       if (response.data && Array.isArray(response.data.items)) {
