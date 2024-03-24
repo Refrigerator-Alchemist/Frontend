@@ -13,7 +13,7 @@ import axios from 'axios';
 const RecipeCard = ({ postId, title, description, img,  initialLikeCount }) => {
   const [Liked, setLiked] = useState(false);
   const [likedItems, setLikedItems] = useState([]); // 현재 계정으로 좋아요 누른 게시물들
-  const [likeCount, setLikeCount] = useState(initialLikeCount); 
+  const [likeCount, setLikeCount] = useState(parseInt(initialLikeCount));
   const nickName = localStorage.getItem('nickName');
 
   useEffect(() => {
@@ -21,9 +21,10 @@ const RecipeCard = ({ postId, title, description, img,  initialLikeCount }) => {
   }, [likedItems]);
 
   useEffect(() => {
-    setLiked(Array.isArray(likedItems) ? likedItems.includes(postId) : false);
-  }, [likedItems, postId]);
-  // likedItems 배열이 업데이트될 때마다, 해당 레시피의 좋아요 상태로 설정
+    setLiked(likedItems.includes(postId));
+}, [likedItems, postId]);
+  // 서버로부터 받아온 좋아요 누른 게시물들의 postId 배열(숫자 형태로 변환된)로
+  // 현재 게시물의 postId가 포함되어 있는지 확인하여 Liked 상태로 변경 
 
   // 💛 좋아요 / 취소
   const toggleLike = async () => {
@@ -43,9 +44,9 @@ const RecipeCard = ({ postId, title, description, img,  initialLikeCount }) => {
             },
           }
         );
-        if (response.status === 200) { 
+        if (response.status === 200) {
           setLiked(false);
-          setLikeCount(prev => prev - 1); // likeCount -1
+          setLikeCount(likeCount - 1); 
         }
 
         console.log(response);
@@ -67,7 +68,7 @@ const RecipeCard = ({ postId, title, description, img,  initialLikeCount }) => {
         );
         if (response.status === 200) {
           setLiked(true);
-          setLikeCount((prev) => prev + 1);
+          setLikeCount(likeCount + 1); 
         }
         console.log(response);
         setLiked(!Liked);
@@ -86,7 +87,7 @@ const RecipeCard = ({ postId, title, description, img,  initialLikeCount }) => {
       const response = await axios.get(URL, nickName);
       if (response.data && Array.isArray(response.data.items)) {
         // const items = response.data.items.map((item) => item);
-        const items = response.data.items.map((item) => String(item));
+        const items = response.data.items.map(item => parseInt(item));
         setLikedItems(items);
         console.log('게시물 id', items);
       } else {
@@ -339,41 +340,64 @@ export default Board;
 
 // 좋아한 postid 배열 조회 , likecount +1 테스트
 // import React, { useState, useEffect } from 'react';
-// import { FaHeart, FaRegHeart } from 'react-icons/fa';
 // import { Link } from 'react-router-dom';
+// import { FaHeart, FaRegHeart } from 'react-icons/fa';
+// import axios from 'axios';
 
-// // 🃏 레시피카드 컴포넌트
-// const RecipeCard = ({ postId, title, description, img }) => {
-//   const [Liked, setLiked] = useState(false);
-//   const [likedItems, setLikedItems] = useState([]); // 좋아요 누른 게시물들의 postId
-//   const [likeCount, setLikeCount] = useState(15); // 초기 좋아요 수, 실제로는 서버로부터 가져와야 함
+// function Board() {
+//   const [recipes, setRecipes] = useState([]);
 
 //   useEffect(() => {
-//     fetchLikeData(); // 페이지가 로드될 때 좋아요 누른 게시물 데이터를 가져옵니다.
+//     fetchRecipes();
 //   }, []);
 
-//   useEffect(() => {
-//     setLiked(likedItems.includes(String(postId))); // 해당 게시물이 좋아요 누른 목록에 있는지 확인하여 좋아요 상태를 설정합니다.
-//   }, [likedItems, postId]);
-
-//   // 💛 좋아요 / 취소 토글
-//   const toggleLike = () => {
-//     if (Liked) {
-//       setLikedItems(likedItems.filter(item => item !== String(postId)));
-//       setLikeCount(prev => prev - 1); // 좋아요 취소 시 좋아요 수 감소
-//     } else {
-//       setLikedItems([...likedItems, String(postId)]);
-//       setLikeCount(prev => prev + 1); // 좋아요 시 좋아요 수 증가
-//     }
-//     setLiked(!Liked);
+//   const fetchRecipes = async () => {
+//     const response = [
+//       { postId: 1, title: '레시피 1', description: '설명 1', img: 'img_url_1', likeCount: 10 },
+//       { postId: 2, title: '레시피 2', description: '설명 2', img: 'img_url_2', likeCount: 20 },
+//       { postId: 3, title: '레시피 3', description: '설명 3', img: 'img_url_3', likeCount: 5 },
+//     ];
+//     setRecipes(response);
 //   };
 
+//   return (
+//     <section className="Board pb-24">
+//       <div className="my-2">
+//         <span className="font-bold ml-6 text-2xl">레시피 목록</span>
+//         {recipes.map((recipe) => (
+//           <RecipeCard
+//             key={recipe.postId}
+//             postId={recipe.postId}
+//             title={recipe.title}
+//             description={recipe.description}
+//             img={recipe.img}
+//             initialLikeCount={recipe.likeCount}
+//           />
+//         ))}
+//       </div>
+//     </section>
+//   );
+// }
 
-//   // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
-//   const fetchLikeData = async () => {
-//     const fakeLikedItems = ["1", "3", "5"]; // 사용자가 좋아요를 누른 게시물들의 postId
+// // RecipeCard 컴포넌트
+// const RecipeCard = ({ postId, title, description, img, initialLikeCount }) => {
+//   const [liked, setLiked] = useState(false);
+//   const [likeCount, setLikeCount] = useState(initialLikeCount);
+//   const [likedItems, setLikedItems] = useState([]);
+
+//   useEffect(() => {
+//     const fakeLikedItems = [1, 3, 5];
 //     setLikedItems(fakeLikedItems);
-//     console.log('게시물 id', fakeLikedItems);
+//     setLiked(fakeLikedItems.includes(postId));
+//   }, [postId]);
+
+//   const toggleLike = () => {
+//     setLiked(!liked);
+//     if (!liked) {
+//       setLikeCount(likeCount + 1);
+//     } else {
+//       setLikeCount(likeCount - 1);
+//     }
 //   };
 
 //   return (
@@ -387,38 +411,14 @@ export default Board;
 //           <p className="text-gray-500 text-sm">{description}</p>
 //         </div>
 //       </Link>
-//       <span>{likeCount}</span>
+//       <div className="mr-2">
+//         <span className="text-lg font-semibold">{likeCount}</span>
+//       </div>
 //       <button onClick={toggleLike} className="p-2">
-//         {Liked ? <FaHeart className="text-red-500 text-2xl" /> : <FaRegHeart className="text-2xl" />}
+//         {liked ? <FaHeart className="text-red-500 text-2xl" /> : <FaRegHeart className="text-2xl" />}
 //       </button>
 //     </div>
 //   );
 // };
-
-// // ----------------------------게시판
-// function Board() {
-//   const recipesData = [
-//     { postId: 1, title: '레시피 1', description: '설명 1', img: 'img_url_1' },
-//     { postId: 2, title: '레시피 2', description: '설명 2', img: 'img_url_2' },
-//     { postId: 3, title: '레시피 3', description: '설명 3', img: 'img_url_3' },
-//   ];
-
-//   return (
-//     <section className="Board pb-24">
-//       <div className="my-2">
-//         <span className="font-bold ml-6 text-2xl">레시피 목록</span>
-//         {recipesData.map(recipe => (
-//           <RecipeCard
-//             key={recipe.postId}
-//             postId={recipe.postId}
-//             title={recipe.title}
-//             description={recipe.description}
-//             img={recipe.img}
-//           />
-//         ))}
-//       </div>
-//     </section>
-//   );
-// }
 
 // export default Board;
