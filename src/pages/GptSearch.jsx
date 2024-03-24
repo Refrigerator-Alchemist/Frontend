@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef ,useEffect} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import { CiSaveDown2 } from 'react-icons/ci';
@@ -12,6 +12,8 @@ const GptSearch = () => {
   const [inputValue, setInputValue] = useState('');
   const navigate = useNavigate();
   const inputRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(false); 
+  const [nickname, setNickname] = useState('');
   const user = useUserState();
   const accessToken = localStorage.getItem('accessToken');
 
@@ -47,10 +49,23 @@ const GptSearch = () => {
     inputRef.current.focus();
   };
 
+  useEffect(() => {
+    const fetchNickname = async () => {
+      try {
+        const response = await axios.get(`${IP_ADDRESS}/userNickname`);
+        setNickname(response.data.nickname);
+      } catch (error) {
+        console.error('닉네임 가져오기 실패:', error);
+      }
+    };
+
+    fetchNickname();
+  }, []);
+
+
   // Gpt로 레시피 검색 요청하는 함수
   const handleNextButtonClick = async () => {
-    // toast.success('연금술을 시작합니다! ');
-    // toast.error('임시 에러 메시지');
+    setIsLoading(true);
     try {
       const response = await axios.post(
         `${IP_ADDRESS}/recipe/recommend`,
@@ -70,7 +85,7 @@ const GptSearch = () => {
 
       if (recommendId) {
         navigate(`/recipe/recommend/${recommendId}`);
-        toast.success('연금술을 시작합니다! ');
+        // toast.success('연금술을 시작합니다! ');
       } else {
         console.error('recommendId를 찾을 수 없습니다.');
         toast.error('recommendId를 찾을 수 없습니다.');
@@ -97,8 +112,31 @@ const GptSearch = () => {
       } else {
         toast.error('서버와의 연결에 실패했습니다.');
       }
+    }finally{
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return (
+      <section className="flex flex-col items-center justify-center h-screen">
+        <img
+          src="https://media.discordapp.net/attachments/1197868473666248844/1213305395305652264/img_profile.png?ex=660772b4&is=65f4fdb4&hm=fa07101b219d5e41c1501989503c4255d4e8aaaae60a02a1f626e326ca970493&=&format=webp&quality=lossless&width=614&height=614"
+          alt="로딩중"
+          className="animate-bounce w-24 h-24 mb-4"
+        />
+        <h1 className=" font-score text-2xl font-bold text-gray-900 mb-4">
+          로딩 중
+        </h1>
+        <button
+          onClick={() => navigate('/main')}
+          className=" font-score text-sm text-gray-400"
+        >
+          취소
+        </button>
+      </section>
+    );
+  }
   
 
   return (
@@ -156,7 +194,7 @@ const GptSearch = () => {
           onClick={() => navigate('/recipe/myRecipe')}
         >
           <CiSaveDown2 className="mr-1 w-6 h-6" />
-          {`${user.nickName}의 연금술 레시피`}
+          {nickname ? `${nickname}의 연금술 레시피` : '연금술 레시피'} 
         </button>
         <button
           className="font-score transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer text-white font-bold py-2 px-4 rounded w-full"
