@@ -264,19 +264,30 @@ function Board() {
     fetchRecipesByPage(1);
   }, []);
 
-  // // 3️⃣ 게시물 검색
-  // const handleSearch = (query) => {
-  //   if (query.length > 0) {
-  //     const results = recipes.filter((recipe) => recipe.title.includes(query));
-  //     setSearchResults(results);
-  //     setIsSearching(true);
-  //   } else {
-  //     setIsSearching(false);
-  //   }
-  // };
-  const handleSearch = (results) => {
-    setSearchResults(results); // 검색 결과 상태 업데이트
-    setIsSearching(true);      // 검색 모드 활성화
+
+  // 🔍 게시물 검색 함수
+  const handleSearch = async (searchQuery) => {
+    setIsSearching(true); // 검색 시작
+    try {
+      const response = await axios.post(
+        'http://172.30.1.12:8080/board/searchTitle',
+        {
+          title: searchQuery,
+        }
+      );
+      const data = response.data;
+
+      if (!Array.isArray(data)) {
+        console.error('Expected an array, but received:', data);
+        setSearchResults([]);
+      } else {
+        setSearchResults(data);
+      }
+    } catch (error) {
+      console.error('게시물 검색 에러:', error);
+    }
+    setIsSearching(false);
+
   };
 
   // 4️⃣ 페이지 번호를 받아와 해당 번호에서 1을 뺀 값을 서버로 보내는 함수
@@ -287,7 +298,9 @@ function Board() {
 
   // 5️⃣ 클릭할 페이지번호 순서대로
   const pageNumbers = [];
-  for (let i = 1; i <= totalPages; i++) {
+
+  for (let i = 0; i <= totalPages; i++) {
+
     pageNumbers.push(i + 1);
   }
 
@@ -299,7 +312,7 @@ function Board() {
         </span>
       </header>
       <div className="flex items-center mx-8 my-0">
-        <SearchBar onSearch={handleSearch} />
+        {/* <SearchBar onSearch={handleSearch} /> */}
         <WriteButton />
       </div>
 
