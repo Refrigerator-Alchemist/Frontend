@@ -296,9 +296,9 @@ function MyPage() {
             ))}
           </div>
         ) : (
-          // 좋아요 누른 레시피
+          // 좋아요 누른 레시피 -> likeItems에 들어있는 postId만 사용하도록 변경해야 함. value들은 밑에 있는 대로 사용하기
           <div className="recipe-card-container w-full flex flex-wrap">
-            {likedItems.map((recipe) => (
+            {currentRecipes.map((recipe) => (
               <LikedRecipe
                 key={recipe.postId}
                 postId={recipe.postId}
