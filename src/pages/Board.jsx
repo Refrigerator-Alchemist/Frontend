@@ -10,22 +10,27 @@ import Navigation from '../components/Navigation';
 import axios from 'axios';
 
 // 🃏 레시피 카드
-const RecipeCard = ({ postId, title, description, img,  initialLikeCount,  isLiked  }) => {
+const RecipeCard = ({
+  postId,
+  title,
+  description,
+  img,
+  initialLikeCount,
+  isLiked,
+}) => {
   const [Liked, setLiked] = useState(isLiked);
   const [likedItems, setLikedItems] = useState([]); // 현재 계정으로 좋아요 누른 게시물들
   const [likeCount, setLikeCount] = useState(parseInt(initialLikeCount));
   const nickName = localStorage.getItem('nickName');
   const [likedPosts, setLikedPosts] = useState([]);
 
-
   useEffect(() => {
-    setLiked(isLiked); 
+    setLiked(isLiked);
   }, [isLiked]);
 
   // useEffect(() => {
   //   fetchLikeData();
   // }, [likedItems]);
-
 
   // 💛 좋아요 / 취소
   const toggleLike = async () => {
@@ -47,8 +52,10 @@ const RecipeCard = ({ postId, title, description, img,  initialLikeCount,  isLik
         );
         if (response.status === 200) {
           setLiked(false);
-          setLikeCount(likeCount - 1); 
-          setLikedPosts(prevLikedPosts => prevLikedPosts.filter(id => id !== postId));
+          setLikeCount(likeCount - 1);
+          setLikedPosts((prevLikedPosts) =>
+            prevLikedPosts.filter((id) => id !== postId)
+          );
         }
 
         console.log(response);
@@ -70,8 +77,8 @@ const RecipeCard = ({ postId, title, description, img,  initialLikeCount,  isLik
         );
         if (response.status === 200) {
           setLiked(true);
-          setLikeCount(likeCount + 1); 
-          setLikedPosts(prevLikedPosts => [...prevLikedPosts, postId]); 
+          setLikeCount(likeCount + 1);
+          setLikedPosts((prevLikedPosts) => [...prevLikedPosts, postId]);
         }
         console.log(response);
         console.log('***변경된 likedPosts:', likedPosts);
@@ -168,9 +175,11 @@ function Board() {
     try {
       const response = await axios.post(URL, nickName);
       if (response.data) {
-        const posts = response.data.map(Number); 
-      setLikedPosts(posts);
-      console.log('좋아요 누른 게시물의 postId 목록:', posts);
+
+        const posts = response.data.map(Number);
+        setLikedPosts(posts);
+        console.log('좋아요 누른 게시물의 postId 목록:', posts);
+
       }
     } catch (error) {
       console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
@@ -210,7 +219,7 @@ function Board() {
           imageUrl: item.imageUrl,
           likeCount: item.likeCount,
         }));
-        formattedData.forEach(recipe => {
+        formattedData.forEach((recipe) => {
           console.log(`Recipe ID: ${recipe.id}, Type: ${typeof recipe.id}`);
         });
         setRecipes(formattedData);
@@ -341,4 +350,3 @@ function Board() {
 }
 
 export default Board;
-

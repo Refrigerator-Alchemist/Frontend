@@ -4,11 +4,13 @@ import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
 
 function UploadBoard() {
-  const [foodName, setFoodName] = useState('');
+  const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [ingredients, setIngredients] = useState(['']);
-  const navigate = useNavigate();
+
   const fileInput = useRef(null);
+
+  const navigate = useNavigate();
 
   const handleIngredientChange = (index, event) => {
     const newIngredients = [...ingredients];
@@ -20,23 +22,19 @@ function UploadBoard() {
     setIngredients([...ingredients, '']);
   };
   
-  const emailandnickname = () => {
+  const handleSubmit = async (e) => {
+    const nickName = localStorage.getItem('nickName');
     const email = localStorage.getItem('email');
-    const nickname = localStorage.getItem('nickname');
-    return { email, nickname };
-  };
 
-  const handleSubmit = async (event) => {
-    //서버전송
-    event.preventDefault();
-    const { email, nickname } = emailandnickname();
+    // 서버전송
+    e.preventDefault();
 
     const formData = new FormData();
-    formData.append('email', email);
-    formData.append('nickname', nickname);
     formData.append('image', fileInput.current.files[0]);
-    formData.append('foodName', foodName);
+    formData.append('title', title);
     formData.append('description', description);
+    formData.append('nickName', nickName);
+    formData.append('email', email);
 
     ingredients.forEach((ingredient, index) => {
       if (ingredient.trim() !== '') {
@@ -97,9 +95,9 @@ function UploadBoard() {
           </label>
           <input
             type="text"
-            id="food-name"
-            value={foodName}
-            onChange={(e) => setFoodName(e.target.value)}
+            id="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
             placeholder="음식 이름을 입력하세요"
             className="font-score w-full border border-gray-300 rounded-md p-2 text-sm"
           />

@@ -61,7 +61,7 @@ const LikedRecipe = ({ postId, title, description, imageUrl }) => {
   return (
     <div className="text-black ml-6 mr-6 mt-2 w-full max-w-md">
       <div className="bg-white mx-2 my-2 p-4 rounded-xl shadow overflow-hidden relative flex flex-col md:flex-row">
-        <Link to={`/board/${postId}`} className="flex-grow flex items-center">
+        <Link to={`/board/${postId}`} className="flex flex-grow items-center">
           <div className="flex-none w-20 h-20 md:w-20 md:h-20 max-w-xs rounded-xl border-2 border-gray-300 overflow-hidden mr-4">
             <img
               className="w-full h-full object-cover"
@@ -75,7 +75,7 @@ const LikedRecipe = ({ postId, title, description, imageUrl }) => {
               {description}
             </p>
           </div>
-          <FaHeart className="text-red-500 text-2xl" />
+          <FaHeart className="text-red-500 text-2xl justify-end" />
         </Link>
       </div>
     </div>
@@ -87,11 +87,11 @@ function MyPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage, setRecipesPerPage] = useState(5);
 
-  const [showMyRecipes, setShowMyRecipes] = useState(false); // 내가 저장한 레시피 or 좋아요 누른 레시피
+  const [showMyRecipes, setShowMyRecipes] = useState(true); // 내가 저장한 레시피 or 좋아요 누른 레시피
   const [recipes, setRecipes] = useState([]); // 내가 저장한 레시피
   const [likedItems, setLikedItems] = useState([]); // 현재 계정으로 좋아요 누른 게시물들
   const [userInfo, setUserInfo] = useState({
-    name: '',
+    nickName: '',
     imageUrl: IMAGE_PROFILE,
   });
 
@@ -109,11 +109,11 @@ function MyPage() {
 
   // 🧑🏽‍🌾 현재 로그인 중인 유저 정보 : 프로필 이미지, 닉네임
   const fetchUserInfo = async () => {
-    const URL = 'http://localhost:8080/userprofile';
+    const URL = 'http://172.30.1.12:8080/userprofile';
 
     try {
       if (user) {
-        const response = await axios.get(URL, user.nickName);
+        const response = await axios.post(URL, 'test');
 
         setUserInfo({
           imageUrl: response.data.imageUrl,
@@ -130,7 +130,7 @@ function MyPage() {
   // 🧑🏽 내가 저장한 레시피 가져오는 함수
   const fetchMyPage = () => {
     axios
-      .post('http://localhost:8080/board/myPage', 'test')
+      .post('http://172.30.1.12:8080/board/myPage', 'test')
       .then((response) => {
         console.log('서버 응답 데이터:', response.data);
 
@@ -155,11 +155,11 @@ function MyPage() {
 
   // 🔥 좋아요 누른 게시물들 가져오는 함수
   const fetchLikeData = async () => {
-    const URL = 'http://localhost:8080/board/mypage-like';
+    const URL = 'http://172.30.1.12:8080/board/mypage-like';
     const nickName = localStorage.getItem('nickName');
 
     try {
-      const response = await axios.get(URL, nickName);
+      const response = await axios.get(URL, 'test');
       if (response.data && Array.isArray(response.data.items)) {
         const items = response.data.items.map((item) => ({
           id: item.ID,
@@ -187,7 +187,7 @@ function MyPage() {
   // 2️⃣ 레시피 삭제
   const deleteRecipe = async (postId) => {
     try {
-      await axios.post(`http://localhost:8080/board/deleteBoard`, {
+      await axios.post(`http://172.30.1.12:8080/board/deleteBoard`, {
         postId: postId,
       });
 
@@ -249,7 +249,7 @@ function MyPage() {
           />
         </div>
         <h1 className="font-score mt-5 text-xl font-semibold text-center">
-          {userInfo.name}
+          {userInfo.nickName}
         </h1>
 
         <button

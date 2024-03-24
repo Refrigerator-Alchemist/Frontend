@@ -10,7 +10,7 @@ const GptSavedDetail = () => {
   const [recipeData, setRecipeData] = useState({});
   const { recipeId } = useParams();
   const navigate = useNavigate();
-  const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
+  const accessToken = localStorage.getItem('accessToken');
 
   // id로 세부내용 불러오기
   useEffect(() => {
