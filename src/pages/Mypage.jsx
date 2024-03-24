@@ -1,323 +1,168 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { FaArrowLeft, FaHeart, FaRegHeart } from 'react-icons/fa';
 import Navigation from '../components/Navigation';
 import axios from 'axios';
-import { useUserDispatch, useUserState } from '../context/UserContext';
-import { FaTrash, FaHeart } from 'react-icons/fa';
-import IMAGE_PROFILE from '../assets/img/img_profile.png';
-import Pagination from '../components/Pagination';
-
-// 🃏 내가 저장한 게시물
-const SavedRecipe = ({
-  postId,
-  title,
-  description,
-  imageUrl,
-  onEdit,
-  onDelete,
-  showEditDeleteButtons = true,
-}) => {
-  return (
-    <div className="text-black ml-6 mr-6 mt-2 w-full max-w-md">
-      <div className="bg-white mx-2 my-2 p-4 rounded-xl shadow overflow-hidden relative flex flex-col md:flex-row">
-        <Link to={`/board/${postId}`} className="flex-grow flex items-center">
-          <div className="flex-none w-20 h-20 md:w-20 md:h-20 max-w-xs rounded-xl border-2 border-gray-300 overflow-hidden mr-4">
-            <img
-              className="w-full h-full object-cover"
-              src={imageUrl}
-              alt={title}
-            />
-          </div>
-          <div className="md:pl-4 mt-4 md:mt-0">
-            <h3 className="text-lg font-score font-semibold">{title}</h3>
-            <p className="text-gray-500 pt-1 text-sm font-score md:max-w-xs">
-              {description}
-            </p>
-          </div>
-        </Link>
-        {showEditDeleteButtons && (
-          <div className="absolute top-4 right-0 flex flex-col space-y-10">
-            <button
-              onClick={() => onDelete(postId)}
-              className="p-1 text-gray-400"
-            >
-              <FaTrash />
-            </button>
-            <button
-              onClick={() => onEdit(postId)}
-              className="pr-3 text-sm text-gray-300"
-            >
-              수정
-            </button>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-// 🃏 좋아요 누른 레시피
-const LikedRecipe = ({ postId, title, description, imageUrl }) => {
-  return (
-    <div className="text-black ml-6 mr-6 mt-2 w-full max-w-md">
-      <div className="bg-white mx-2 my-2 p-4 rounded-xl shadow overflow-hidden relative flex flex-col md:flex-row">
-        <Link to={`/board/${postId}`} className="flex-grow flex items-center">
-          <div className="flex-none w-20 h-20 md:w-20 md:h-20 max-w-xs rounded-xl border-2 border-gray-300 overflow-hidden mr-4">
-            <img
-              className="w-full h-full object-cover"
-              src={imageUrl}
-              alt={title}
-            />
-          </div>
-          <div className="md:pl-4 mt-4 md:mt-0">
-            <h3 className="text-lg font-score font-semibold">{title}</h3>
-            <p className="text-gray-500 pt-1 text-sm font-score md:max-w-xs">
-              {description}
-            </p>
-          </div>
-          <FaHeart className="text-red-500 text-2xl" />
-        </Link>
-      </div>
-    </div>
-  );
-};
-
-// 마이페이지
-function MyPage() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [recipesPerPage, setRecipesPerPage] = useState(5);
-
-  const [showMyRecipes, setShowMyRecipes] = useState(false); // 내가 저장한 레시피 or 좋아요 누른 레시피
-  const [recipes, setRecipes] = useState([]); // 내가 저장한 레시피
+const BoardDetail = () => {
+  const { postId } = useParams(); // 라우터 엔드포인트
+  const [imageUrl, setImageUrl] = useState(''); // 이미지
+  const [title, setTitle] = useState(''); // 레시피 글 제목
+  const [nickName, setNickName] = useState(''); // 작성자 닉네임
+  const [description, setDescription] = useState(''); // 내용
+  const [ingredients, setIngredients] = useState([]); // 재료
+  const [Liked, setLiked] = useState(false); // 좋아요 상태
   const [likedItems, setLikedItems] = useState([]); // 현재 계정으로 좋아요 누른 게시물들
-  const [userInfo, setUserInfo] = useState({
-    name: '',
-    imageUrl: IMAGE_PROFILE,
-  });
-
+  const [likeCount, setLikeCount] = useState(''); // 좋아요 수
+  const [likedPosts, setLikedPosts] = useState([]); // 좋아요 누른 postid 배열 
   const navigate = useNavigate();
 
-  const user = useUserState(); // 유저 데이터 : 로그인 상태면 존재
-
-  const { logout } = useUserDispatch();
-
-  // --------------------------------------------------------------------------------------------------------
   useEffect(() => {
+    fetchPostData(postId);
     fetchLikeData();
-    fetchUserInfo().then(fetchMyPage);
-  }, [showMyRecipes]);
+  }, [postId]);
 
-  // 🧑🏽‍🌾 유저 정보를 가져오는 함수 : 프로필 이미지, 닉네임
-  const fetchUserInfo = async () => {
-    const URL = 'http://localhost:8080/userprofile';
-
+  // 1️⃣ 서버에서 기존 정보들을 불러오는 함수
+  const fetchPostData = async (postId) => {
     try {
-      if (user) {
-        const response = await axios.get(URL, user.nickName);
-
-        setUserInfo({
-          imageUrl: response.data.imageUrl,
-          nickName: user.nickName,
-        });
+      const response = await axios.post(
+        `http://localhost:8080/board/specific`,
+        postId
+      );
+      if (response.data && Array.isArray(response.data.items)) {
+        const items = response.data.items.map((item) => ({
+          imageUrl: item.imageUrl,
+          title: item.title,
+          nickName: item.nickName,
+          description: item.description,
+          ingredients: item.ingredients.map((ingredient) => ingredient),
+          likeCount: item.likeCount,
+        }));
+        setImageUrl(items[0].imageUrl);
+        setTitle(items[0].title);
+        setNickName(items[0].nickName);
+        setDescription(items[0].description);
+        setIngredients(items[0].ingredients);
+        setLikeCount(items[0].likeCount);
       } else {
-        window.alert('로그인 하지 않았습니다!');
+        console.error('데이터 타입 오류:', response.data);
       }
     } catch (error) {
-      console.error('데이터 통신 중 문제 발생: ', error);
+      console.error('에러 내용:', error);
     }
   };
-
-  // 🧑🏽 내가 저장한 레시피 가져오는 함수
-  const fetchMyPage = () => {
-    axios
-      .post('http://localhost:8080/board/myPage', 'test')
-      .then((response) => {
-        console.log('서버 응답 데이터:', response.data);
-
-        if (response.data && Array.isArray(response.data.items)) {
-          const formattedData = response.data.items.map((item) => {
-            return {
-              postId: item.ID,
-              title: item.title,
-              description: item.description,
-              imageUrl: item.imageUrl,
-            };
-          });
-          setRecipes(formattedData);
-        } else {
-          console.error('에러 내용1:', response.data);
+  // 💛 좋아요 / 취소
+  const toggleLike = async () => {
+    try {
+      if (Liked) {
+        // ▶️ 좋아요 되어있는 상태면 취소
+        const response = await axios.post(
+          `http://localhost:8080/board/dislike`,
+          {
+            nickName: nickName,
+            postId: postId,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json;charset=UTF-8',
+              Accept: 'application/json',
+            },
+          }
+        );
+        if (response.status === 200) {
+          setLiked(false);
+          setLikeCount(likeCount - 1); 
+          setLikedPosts(prevLikedPosts => prevLikedPosts.filter(id => id !== postId));
         }
-      })
-      .catch((error) => {
-        console.error('에러 내용2:', error);
-      });
-  };
 
-  // 🔥 좋아요 누른 게시물들 가져오는 함수
+        console.log(response);
+        setLiked(!Liked);
+      } else {
+        // ▶️ 안 눌려져 있는 상태면 좋아요
+        const response = await axios.post(
+          `http://localhost:8080/board/like`,
+          {
+            nickName: nickName,
+            postId: postId,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json;charset=UTF-8',
+              Accept: 'application/json',
+            },
+          }
+        );
+        if (response.status === 200) {
+          setLiked(true);
+          setLikeCount(likeCount + 1); 
+          setLikedPosts(prevLikedPosts => [...prevLikedPosts, postId]); 
+        }
+        console.log(response);
+        console.log('***변경된 likedPosts:', likedPosts);
+        setLiked(!Liked);
+      }
+    } catch (error) {
+      console.error('좋아요 에러: ', error);
+    }
+  };
+  // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
   const fetchLikeData = async () => {
-    const URL = 'http://localhost:8080/board/mypage-like';
+    const URL = 'http://localhost:8080/board/islike';
     const nickName = localStorage.getItem('nickName');
 
     try {
       const response = await axios.get(URL, nickName);
-      if (response.data && Array.isArray(response.data.items)) {
-        const items = response.data.items.map((item) => ({
-          id: item.ID,
-          title: item.title,
-          description: item.description,
-          imageUrl: item.imageUrl,
-          likeCount: item.likeCount,
-        }));
-        setLikedItems(items);
-
-        console.log('게시물 id', items);
-      } else {
-        console.error('에러 내용', response.data);
+      
+      if (response.data) {
+        const posts = response.data.map(Number);
+      setLikedPosts(posts);
+      console.log('좋아요 누른 게시물의 postId 목록:', posts);
       }
     } catch (error) {
       console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
     }
   };
-
-  // 1️⃣ 레시피 수정
-  const handleEdit = (postId) => {
-    navigate(`/editpost/${postId}`);
-  };
-
-  // 2️⃣ 레시피 삭제
-  const deleteRecipe = async (postId) => {
-    try {
-      await axios.post(`http://localhost:8080/board/deleteBoard`, {
-        postId: postId,
-      });
-
-      setRecipes((prevRecipes) =>
-        prevRecipes.filter((recipe) => recipe.postId !== postId)
-      );
-    } catch (error) {
-      console.error('레시피 삭제 에러내용:', error);
-      throw error;
-    }
-  };
-
-  // 3️⃣ 레시피 삭제 확인
-  const handleDeleteConfirmation = async (postId) => {
-    const confirmDelete = window.confirm('정말로 삭제하시겠습니까?');
-    if (confirmDelete) {
-      try {
-        await deleteRecipe(postId);
-        console.log('레시피 삭제 성공');
-      } catch (error) {
-        console.error('레시피 삭제 실패:', error);
-      }
-    }
-  };
-
-  const indexOfLastRecipe = currentPage * recipesPerPage;
-  const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-  const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
   return (
-    <section className="Board flex flex-col items-center justify-center w-full">
-      <header className="flex justify-end w-full mt-2 space-x-2 mr-12">
-        <button
-          className="font-score text-gray-300"
-          onClick={(e) => {
-            e.preventDefault();
-            navigate('/delete-user');
-          }}
-        >
-          회원 탈퇴
-        </button>
-        <button
-          className="font-score outline-none font-semibold underline underline-offset-2 hover:text-red-500"
-          onClick={() => {
-            logout();
-          }}
-        >
-          로그아웃
-        </button>
-      </header>
-
-      <main className="flex flex-col items-center overflow-hidden">
-        <div className="bg-gray-300 rounded-full h-32 w-32 mt-20">
-          <img
-            src={userInfo.imageUrl}
-            alt="프로필 사진"
-            className="rounded-full h-32 w-32 object-cover"
-          />
-        </div>
-        <h1 className="font-score mt-5 text-xl font-semibold text-center">
-          {userInfo.name}
-        </h1>
-
-        <button
-          onClick={() => navigate('/profile')}
-          className="font-score my-2 bg-white py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-opacity-50 underline hover:text-red-500"
-        >
-          내 프로필 수정
-        </button>
-
-        <div className="flex">
-          <button
-            onClick={() => setShowMyRecipes(false)}
-            className={`font-score mx-1 py-2 px-4 rounded ${
-              !showMyRecipes ? 'bg-main text-white' : 'bg-gray-100 text-black'
-            }`}
-          >
-            내가 작성한 레시피
-          </button>
-          <button
-            onClick={() => setShowMyRecipes(true)}
-            className={`font-score mx-1 py-2 px-4 rounded ${
-              showMyRecipes ? 'bg-main text-white' : 'bg-gray-100 text-black'
-            }`}
-          >
-            좋아요 누른 레시피
-          </button>
-        </div>
-
-        {/* 버튼 토글에 따른 Outlet 변경 */}
-        {showMyRecipes ? (
-          // 내가 저장한 레시피
-          <div className="recipe-card-container w-full flex flex-wrap">
-            {currentRecipes.map((recipe) => (
-              <SavedRecipe
-                key={recipe.postId}
-                postId={recipe.postId}
-                title={recipe.title}
-                description={recipe.description}
-                imageUrl={recipe.imageUrl}
-                showEditDeleteButtons={!showMyRecipes}
-                onDelete={handleDeleteConfirmation}
-                onEdit={handleEdit}
-              />
-            ))}
-          </div>
-        ) : (
-          // 좋아요 누른 레시피 -> likeItems에 들어있는 postId만 사용하도록 변경해야 함. value들은 밑에 있는 대로 사용하기
-          <div className="recipe-card-container w-full flex flex-wrap">
-            {currentRecipes.map((recipe) => (
-              <LikedRecipe
-                key={recipe.postId}
-                postId={recipe.postId}
-                title={recipe.title}
-                description={recipe.description}
-                imageUrl={recipe.imageUrl}
-              />
-            ))}
-          </div>
-        )}
-
-        <Pagination
-          currentPage={currentPage}
-          recipesPerPage={recipesPerPage}
-          totalRecipes={recipes.length}
-          paginate={paginate}
+    <section>
+      <div
+        className="absolute top-5 left-42 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
+        onClick={() => navigate('/board')}
+      >
+        <FaArrowLeft />
+      </div>
+      <main className="pt-16">
+        <img
+          src={imageUrl}
+          alt={title}
+          className="mt-10 mb-4 w-80 h-60 object-cover rounded-lg mx-auto sm:w-80"
         />
-      </main>
 
+        <div className="flex flex-col items-center mt-12">
+          <div className=" items-center">
+            <h2 className="font-score text-2xl font-bold">{title}</h2>
+            <div>
+            <div className="flex items-center justify-center mt-2">
+       
+        <button onClick={toggleLike} className="p-1">
+          {Liked ? (
+            <FaHeart className="text-red-500 text-2xl" />
+          ) : (
+            <FaRegHeart className="text-2xl" />
+          )}
+        </button>
+      </div>
+            </div>
+          </div>
+          <div>
+            <h2 className="font-score text-lg font-bold m-2">
+              작성자: {nickName}
+            </h2>
+          </div>
+          <div className="font-score text-sm text-gray-500 my-2">
+            {ingredients ? ingredients.join(' · ') : ''}
+          </div>
+          <p className="text-gray-700 font-score pl-12 pr-12">{description}</p>
+        </div>
+      </main>
       <footer
         style={{
           position: 'fixed',
@@ -330,6 +175,5 @@ function MyPage() {
       </footer>
     </section>
   );
-}
-
-export default MyPage;
+};
+export default BoardDetail;
