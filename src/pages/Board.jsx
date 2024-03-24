@@ -20,9 +20,9 @@ const RecipeCard = ({ postId, title, description, img,  initialLikeCount,  isLik
     setLiked(isLiked); 
   }, [isLiked]);
 
-  useEffect(() => {
-    fetchLikeData();
-  }, [likedItems]);
+  // useEffect(() => {
+  //   fetchLikeData();
+  // }, [likedItems]);
 
 
   // 💛 좋아요 / 취소
@@ -31,7 +31,7 @@ const RecipeCard = ({ postId, title, description, img,  initialLikeCount,  isLik
       if (Liked) {
         // ▶️ 좋아요 되어있는 상태면 취소
         const response = await axios.post(
-          `/board/dislike`,
+          `http://localhost:8080/board/dislike`,
           {
             nickName: nickName,
             postId: postId,
@@ -53,7 +53,7 @@ const RecipeCard = ({ postId, title, description, img,  initialLikeCount,  isLik
       } else {
         // ▶️ 안 눌려져 있는 상태면 좋아요
         const response = await axios.post(
-          `/board/like`,
+          `http://localhost:8080/board/like`,
           {
             nickName: nickName,
             postId: postId,
@@ -76,26 +76,6 @@ const RecipeCard = ({ postId, title, description, img,  initialLikeCount,  isLik
       console.error('좋아요 에러: ', error);
     }
   };
-
-  // // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
-  // const fetchLikeData = async () => {
-  //   const URL = 'http://localhost:8080/board/islike';
-  //   const nickName = localStorage.getItem('nickName');
-
-  //   try {
-  //     const response = await axios.get(URL, nickName);
-  //     if (response.data && Array.isArray(response.data.items)) {
-  //       // const items = response.data.items.map((item) => item);
-  //       const items = response.data.items.map(item => parseInt(item));
-  //       setLikedItems(items);
-  //       console.log('게시물 id', items);
-  //     } else {
-  //       console.error('에러 내용', response.data);
-  //     }
-  //   } catch (error) {
-  //     console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
-  //   }
-  // };
 
   return (
     <div className="flex items-center bg-white mx-5 my-2 p-4 rounded-xl shadow">
@@ -181,9 +161,11 @@ function Board() {
     const nickName = localStorage.getItem('nickName');
 
     try {
-      const response = await axios.get(URL, nickName);
+      const response = await axios.post(URL, nickName);
       if (response.data) {
-        setLikedPosts(response.data.map(Number));  //숫자배열로
+        const posts = response.data.map(Number);
+      setLikedPosts(posts);
+      console.log('좋아요 누른 게시물의 postId 목록:', posts);
       }
     } catch (error) {
       console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
@@ -223,6 +205,9 @@ function Board() {
           imageUrl: item.imageUrl,
           likeCount: item.likeCount,
         }));
+        formattedData.forEach(recipe => {
+          console.log(`Recipe ID: ${recipe.id}, Type: ${typeof recipe.id}`);
+        });
         setRecipes(formattedData);
       } else {
         console.error('에러 내용1:', response.data);
@@ -286,7 +271,8 @@ function Board() {
                   description={recipe.description}
                   img={recipe.imageUrl}
                   initialLikeCount={recipe.likeCount}
-                  isLiked={likedPosts.includes(recipe.id)}
+                  isLiked={likedPosts.includes(Number(recipe.id))}
+                  // isLiked={likedPosts.includes(Number(recipe.postId))}
                 />
               ))}
             </div>
@@ -312,7 +298,8 @@ function Board() {
                   description={recipe.description}
                   img={recipe.imageUrl}
                   initialLikeCount={recipe.likeCount}
-                  isLiked={likedPosts.includes(recipe.id)}
+                  isLiked={likedPosts.includes(Number(recipe.id))}
+                  // isLiked={likedPosts.includes(Number(recipe.postId))}
                 />
               ))}
             </div>
