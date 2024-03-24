@@ -279,7 +279,9 @@ function Board() {
 
   // 5️⃣ 클릭할 페이지번호 순서대로
   const pageNumbers = [];
-  for (let i = 1; i <= totalPages; i++) {
+
+  for (let i = 0; i <= totalPages; i++) {
+
     pageNumbers.push(i + 1);
   }
 
@@ -291,7 +293,7 @@ function Board() {
         </span>
       </header>
       <div className="flex items-center mx-8 my-0">
-        <SearchBar onSearch={handleSearch} />
+        {/* <SearchBar onSearch={handleSearch} /> */}
         <WriteButton />
       </div>
 
