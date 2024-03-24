@@ -150,8 +150,9 @@ const SearchBar = ({ onSearch }) => {
         onKeyPress={handleKeyPress}
       />
       <button
-        className="w-auto h-full flex items-center justify-center rounded-full bg-transparent hover:bg-gray-200 px-3"
+        className="flex items-center justify-center bg-transparent hover:bg-gray-200 px-5 py-2 rounded-full"
         onClick={handleSearchClick}
+        style={{ minWidth: "30px", height: "40px", borderRadius: "30px" }} 
       >
         <img
           src={searchicon}
