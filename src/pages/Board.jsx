@@ -264,30 +264,11 @@ function Board() {
     fetchRecipesByPage(1);
   }, []);
 
+  // // 3️⃣ 게시물 검색
 
-  // 🔍 게시물 검색 함수
-  const handleSearch = async (searchQuery) => {
-    setIsSearching(true); // 검색 시작
-    try {
-      const response = await axios.post(
-        'http://172.30.1.12:8080/board/searchTitle',
-        {
-          title: searchQuery,
-        }
-      );
-      const data = response.data;
-
-      if (!Array.isArray(data)) {
-        console.error('Expected an array, but received:', data);
-        setSearchResults([]);
-      } else {
-        setSearchResults(data);
-      }
-    } catch (error) {
-      console.error('게시물 검색 에러:', error);
-    }
-    setIsSearching(false);
-
+  const handleSearch = (results) => {
+    setSearchResults(results); // 검색 결과 상태 업데이트
+    setIsSearching(true);      // 검색 모드 활성화
   };
 
   // 4️⃣ 페이지 번호를 받아와 해당 번호에서 1을 뺀 값을 서버로 보내는 함수
