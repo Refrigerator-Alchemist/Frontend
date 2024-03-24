@@ -117,7 +117,7 @@ function MyPage() {
 
     try {
       if (user) {
-        const response = await axios.post(URL, 'test');
+        const response = await axios.post(URL, user.nickName);
 
         setUserInfo({
           imageUrl: response.data.imageUrl,
@@ -163,7 +163,7 @@ function MyPage() {
     const nickName = localStorage.getItem('nickName');
 
     try {
-      const response = await axios.get(URL, 'test');
+      const response = await axios.get(URL, nickName);
       if (response.data && Array.isArray(response.data.items)) {
         const items = response.data.items.map((item) => ({
           id: item.ID,
