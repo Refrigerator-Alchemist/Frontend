@@ -4,6 +4,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
 import IMAGE_PROFILE from '../assets/img/img_profile.png';
+import { IP_ADDRESS } from '../context/UserContext';
 
 export default function EditProfile() {
   const [nickName, setNickName] = useState(''); // 원래 닉네임
@@ -21,7 +22,7 @@ export default function EditProfile() {
   // 1️⃣ 처음에 보여줄 기본 유저 정보
   useEffect(() => {
     const fetchUserData = async () => {
-      const URL = 'http://localhost:8080/profile';
+      const URL = `${IP_ADDRESS}/profile`;
       const accessToken = localStorage.getItem('accessToken');
 
       try {
@@ -59,7 +60,7 @@ export default function EditProfile() {
 
   // 3️⃣ 프로필 이미지 저장하기
   const uploadImage = async (file) => {
-    const URL = 'http://localhost:8080/change-profile';
+    const URL = `${IP_ADDRESS}/change-profile`;
     const accessToken = localStorage.getItem('accessToken');
 
     const formData = new FormData();
@@ -95,7 +96,7 @@ export default function EditProfile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const URL = 'http://localhost:8080/change-nickname';
+    const URL = `${IP_ADDRESS}/change-nickname`;
     const accessToken = localStorage.getItem('accessToken');
 
     try {

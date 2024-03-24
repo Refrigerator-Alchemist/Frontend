@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import axios from 'axios';
-import { useUserDispatch, useUserState } from '../context/UserContext';
+import {
+  useUserDispatch,
+  useUserState,
+  IP_ADDRESS,
+} from '../context/UserContext';
 import { FaTrash, FaHeart } from 'react-icons/fa';
 import IMAGE_PROFILE from '../assets/img/img_profile.png';
 import Pagination from '../components/Pagination';
@@ -109,7 +113,7 @@ function MyPage() {
 
   // 🧑🏽‍🌾 현재 로그인 중인 유저 정보 : 프로필 이미지, 닉네임
   const fetchUserInfo = async () => {
-    const URL = 'http://172.30.1.12:8080/userprofile';
+    const URL = `${IP_ADDRESS}/userprofile`;
 
     try {
       if (user) {
@@ -130,7 +134,7 @@ function MyPage() {
   // 🧑🏽 내가 저장한 레시피 가져오는 함수
   const fetchMyPage = () => {
     axios
-      .post('http://172.30.1.12:8080/board/myPage', 'test')
+      .post(`${IP_ADDRESS}/board/myPage`, 'test')
       .then((response) => {
         console.log('서버 응답 데이터:', response.data);
 
@@ -155,7 +159,7 @@ function MyPage() {
 
   // 🔥 좋아요 누른 게시물들 가져오는 함수
   const fetchLikeData = async () => {
-    const URL = 'http://172.30.1.12:8080/board/mypage-like';
+    const URL = `${IP_ADDRESS}/board/mypage-like`;
     const nickName = localStorage.getItem('nickName');
 
     try {
@@ -187,7 +191,7 @@ function MyPage() {
   // 2️⃣ 레시피 삭제
   const deleteRecipe = async (postId) => {
     try {
-      await axios.post(`http://172.30.1.12:8080/board/deleteBoard`, {
+      await axios.post(`${IP_ADDRESS}/board/deleteBoard`, {
         postId: postId,
       });
 

@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
+import { IP_ADDRESS } from '../context/UserContext';
 
 function UploadBoard() {
   const [title, setTitle] = useState('');
@@ -21,7 +22,7 @@ function UploadBoard() {
   const addIngredientField = () => {
     setIngredients([...ingredients, '']);
   };
-  
+
   const handleSubmit = async (e) => {
     const nickName = localStorage.getItem('nickName');
     const email = localStorage.getItem('email');
@@ -43,7 +44,7 @@ function UploadBoard() {
     });
 
     try {
-      const response = axios.post('http://localhost:8080/writeTest', formData, {
+      const response = axios.post(`${IP_ADDRESS}/writeTest`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

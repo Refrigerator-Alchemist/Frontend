@@ -5,7 +5,7 @@ import { CiSaveDown2 } from 'react-icons/ci';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useUserState } from '../context/UserContext';
+import { useUserState, IP_ADDRESS } from '../context/UserContext';
 
 const GptSearch = () => {
   const [tags, setTags] = useState([]);
@@ -52,7 +52,7 @@ const GptSearch = () => {
     // toast.error('임시 에러 메시지');
     try {
       const response = await axios.post(
-        'http://172.30.1.17:8080/recipe/recommend',
+        `${IP_ADDRESS}/recipe/recommend`,
         {
           ingredients: tags,
         },
