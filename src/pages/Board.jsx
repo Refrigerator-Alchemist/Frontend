@@ -9,6 +9,8 @@ import Ranking from '../components/Ranking';
 import Navigation from '../components/Navigation';
 import axios from 'axios';
 
+import { IP_ADDRESS } from '../context/UserContext';
+
 // 🃏 레시피 카드
 const RecipeCard = ({
   postId,
@@ -38,7 +40,7 @@ const RecipeCard = ({
       if (Liked) {
         // ▶️ 좋아요 되어있는 상태면 취소
         const response = await axios.post(
-          `http://localhost:8080/board/dislike`,
+          `${IP_ADDRESS}/board/dislike`,
           {
             nickName: nickName,
             postId: postId,
@@ -63,7 +65,7 @@ const RecipeCard = ({
       } else {
         // ▶️ 안 눌려져 있는 상태면 좋아요
         const response = await axios.post(
-          `http://localhost:8080/board/like`,
+          `${IP_ADDRESS}/board/like`,
           {
             nickName: nickName,
             postId: postId,
@@ -169,7 +171,7 @@ function Board() {
 
   // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
   const fetchLikedPosts = async () => {
-    const URL = 'http://localhost:8080/board/islike';
+    const URL = `${IP_ADDRESS}/board/islike`;
     const nickName = localStorage.getItem('nickName');
 
     try {
@@ -187,7 +189,7 @@ function Board() {
   // 1️⃣ 전체 레시피 수를 가져오는 함수
   const fetchTotalRecipes = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/boardSize');
+      const response = await axios.get(`${IP_ADDRESS}/boardSize`);
 
       console.log(response.data);
       const totalRecipes = response.data;
@@ -205,7 +207,7 @@ function Board() {
   const fetchRecipesByPage = async (pageNumber) => {
     try {
       const response = await axios.post(
-        'http://localhost:8080/board/apiTest',
+        `${IP_ADDRESS}/board/apiTest`,
         pageNumber
       );
 
