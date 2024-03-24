@@ -3,9 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ErrorCode from '../utils/ErrorCode';
 
+// 현재 IP 주소
+export const IP_ADDRESS = 'http://localhost:8080';
+
 // 📀 토큰 처리
 const instance = axios.create({
-  baseURL: 'http://localhost:8080/auth',
+  baseURL: `${IP_ADDRESS}/auth`,
 });
 
 // ❕ 요청 인터셉터 : 토큰 업데이트
@@ -65,15 +68,15 @@ export const UserProvider = ({ children }) => {
   const [nameDuplicated, setNameDuplicated] = useState(true); // 닉네임 중복 여부
 
   // 🙍‍♂️🙍‍♀️ SNS 로그인 엔드 포인트
-  const googleURL = `http://localhost:8080/oauth2/authorization/google`;
-  const kakaoURL = `http://localhost:8080/oauth2/authorization/kakao`;
-  const naverURL = `http://localhost:8080/oauth2/authorization/naver`;
+  const googleURL = `${IP_ADDRESS}/oauth2/authorization/google`;
+  const kakaoURL = `${IP_ADDRESS}/oauth2/authorization/kakao`;
+  const naverURL = `${IP_ADDRESS}/oauth2/authorization/naver`;
 
   const navigate = useNavigate();
 
   // 📧 이메일 인증 요청 (회원가입용) -------------------------------------------------
   const requestEmailForSignUp = async (email, emailType, socialType) => {
-    const URL = 'http://localhost:8080/auth/send-email';
+    const URL = `${IP_ADDRESS}/auth/send-email`;
 
     try {
       const response = await instance.post(URL, {
@@ -100,7 +103,7 @@ export const UserProvider = ({ children }) => {
 
   // 📧 이메일 인증 요청 (비밀번호 재설정용) ---------------------------------------------
   const requestEmailForReset = async (email, emailType, socialType) => {
-    const URL = 'http://localhost:8080/auth/send-email';
+    const URL = `${IP_ADDRESS}/auth/send-email`;
 
     try {
       const response = await instance.post(URL, {
@@ -153,18 +156,15 @@ export const UserProvider = ({ children }) => {
     }
 
     try {
-      const response = await instance.post(
-        'http://localhost:8080/auth/verify-email',
-        {
-          email,
-          emailType,
-          inputNum,
-          socialType,
-          // randomNum,
-          // takenTime,
-          // expireTime,
-        }
-      );
+      const response = await instance.post(`${IP_ADDRESS}/auth/verify-email`, {
+        email,
+        emailType,
+        inputNum,
+        socialType,
+        // randomNum,
+        // takenTime,
+        // expireTime,
+      });
 
       if (response.status === 204) {
         setVerified(true);
@@ -181,7 +181,7 @@ export const UserProvider = ({ children }) => {
   const checkNameDuplication = async (nickName) => {
     try {
       const response = await instance.post(
-        'http://localhost:8080/auth/verify-nickname',
+        `${IP_ADDRESS}/auth/verify-nickname`,
         {
           nickName,
         }
@@ -201,7 +201,7 @@ export const UserProvider = ({ children }) => {
 
   // 📝 회원가입 ---------------------------------------------------------------
   const signup = (email, password, nickName, socialType) => {
-    const URL = 'http://localhost:8080/auth/signup';
+    const URL = `${IP_ADDRESS}/auth/signup`;
 
     instance
       .post(
@@ -232,7 +232,7 @@ export const UserProvider = ({ children }) => {
 
   // 🚫 회원탈퇴 ---------------------------------------------------------------
   const deleteUser = async () => {
-    const URL = 'http://localhost:8080/auth/delete-user';
+    const URL = `${IP_ADDRESS}/auth/delete-user`;
     const socialId = localStorage.getItem('socialId');
 
     try {
@@ -251,7 +251,7 @@ export const UserProvider = ({ children }) => {
 
   // 🔐 로그인 ---------------------------------------------------------------
   const login = (email, password, socialType) => {
-    const URL = 'http://localhost:8080/auth/token/login';
+    const URL = `${IP_ADDRESS}/auth/token/login`;
 
     instance
       .post(
@@ -319,7 +319,7 @@ export const UserProvider = ({ children }) => {
 
   //🔓 로그아웃 ---------------------------------------------------------------
   const logout = async () => {
-    const URL = 'http://localhost:8080/auth/token/logout';
+    const URL = `${IP_ADDRESS}/auth/token/logout`;
     const socialId = localStorage.getItem('socialId');
     // const accessToken = localStorage.getItem('accessToken');
 
@@ -367,7 +367,7 @@ export const UserProvider = ({ children }) => {
   const resetPassword = async (email, password, rePassword, socialType) => {
     try {
       const response = await instance.post(
-        'http://localhost:8080/auth/reset-password',
+        `${IP_ADDRESS}/auth/reset-password`,
         {
           email,
           password,
@@ -390,7 +390,7 @@ export const UserProvider = ({ children }) => {
 
   // 🚀 새로운 액세스 토큰 발급 -----------------------------------------------------------
   const reIssue = async () => {
-    const URL = 'http://localhost:8080/auth/token/reissue';
+    const URL = `${IP_ADDRESS}/auth/token/reissue`;
     const socialId = localStorage.getItem('socialId');
     // const refreshToken = localStorage.getItem('refreshToken');
 

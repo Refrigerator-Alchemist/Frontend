@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
+import { IP_ADDRESS } from '../context/UserContext';
 
 export default function UploadBoard() {
   const { postId } = useParams(); // 라우터 엔드포인트
@@ -18,7 +19,7 @@ export default function UploadBoard() {
   const fetchData = async (postId) => {
     try {
       const response = await axios.post(
-        'http://localhost:8080/board/updateBoard',
+        `${IP_ADDRESS}/board/updateBoard`,
         postId
       );
 
@@ -55,7 +56,7 @@ export default function UploadBoard() {
 
   // 4️⃣ 수정 완료
   const handleSubmit = async () => {
-    const URL = 'http://localhost:8080/content/update';
+    const URL = `${IP_ADDRESS}/content/update`;
 
     const formData = {
       postId: postId,

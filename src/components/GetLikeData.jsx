@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { IP_ADDRESS } from '../context/UserContext';
 
 export default function GetLikeData() {
   const [likedItems, setLikedItems] = useState([]); // 현재 계정으로 좋아요 누른 게시물들
 
   const fetchLikeData = async () => {
-    const URL = 'http://localhost:8080/islike';
+    const URL = `${IP_ADDRESS}/islike`;
     const nickName = localStorage.getItem('nickName');
 
     try {

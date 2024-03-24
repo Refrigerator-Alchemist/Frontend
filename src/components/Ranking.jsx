@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { IP_ADDRESS } from '../context/UserContext';
 
 // 📋 아이템 카드
 function RankingItem({
@@ -58,7 +59,7 @@ export default function Ranking() {
   }, []);
 
   const fetchRanking = async () => {
-    const URL = 'http://localhost:8080/board/apiTestLikeCount';
+    const URL = `${IP_ADDRESS}/board/apiTestLikeCount`;
 
     try {
       const response = await axios.get(URL);

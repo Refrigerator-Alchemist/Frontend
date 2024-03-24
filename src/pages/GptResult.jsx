@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { IP_ADDRESS } from '../context/UserContext';
 
 const RecipePage = () => {
   const [ingredients, setIngredients] = useState([]);
@@ -21,7 +22,7 @@ const RecipePage = () => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          `http://172.30.1.17:8080/recipe/recommend/${recommendId}`,
+          `${IP_ADDRESS}/recipe/recommend/${recommendId}`,
           {
             headers: {
               'Authorization-Access': accessToken,
@@ -29,7 +30,6 @@ const RecipePage = () => {
           }
         );
 
-        
         if (response.data) {
           setTitle(response.data.foodName);
           setIngredients(response.data.ingredients);
@@ -54,13 +54,18 @@ const RecipePage = () => {
   const handleSaveButtonClick = async () => {
     try {
       // 토큰이 없는 경우 에러 출력
-  if (!accessToken) {
-    toast.error('저장하기를 위해서는 로그인이 필요합니다.');
-    return;
-  }
+
+      if (!accessToken) {
+        toast.error('저장하기를 위해서는 로그인이 필요합니다.');
+        return;
+      }
+      if (!accessToken) {
+        alert('저장하기를 위해서는 로그인이 필요합니다.');
+        return;
+      }
 
       await axios.post(
-        'http://172.30.1.17:8080/recipe/save',
+        `${IP_ADDRESS}/recipe/save`,
         {
           foodName: title,
           ingredients: ingredients,
@@ -146,7 +151,10 @@ const RecipePage = () => {
               <h2 className="font-score text-lg font-bold text-gray-800 mt-4">
                 만드는 방법
               </h2>
-              <ol className="list-decimal list-inside" style={{ listStyleType: 'none' }}>
+              <ol
+                className="list-decimal list-inside"
+                style={{ listStyleType: 'none' }}
+              >
                 {steps.map((step, index) => (
                   <li key={index} className="font-score text-gray-600">
                     {step}

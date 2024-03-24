@@ -6,7 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Pagination from '../components/Pagination';
 import Navigation from '../components/Navigation';
-import { useUserState } from '../context/UserContext';
+import { IP_ADDRESS, useUserState } from '../context/UserContext';
 
 const GptSavedList = () => {
   const navigate = useNavigate();
@@ -21,14 +21,11 @@ const GptSavedList = () => {
     // toast.error('임시 에러 메시지');
     const fetchRecipes = async () => {
       try {
-        const response = await axios.get(
-          'http://172.30.1.17:8080/recipe/myRecipe',
-          {
-            headers: {
-              'Authorization-Access': accessToken,
-            },
-          }
-        );
+        const response = await axios.get(`${IP_ADDRESS}/recipe/myRecipe`, {
+          headers: {
+            'Authorization-Access': accessToken,
+          },
+        });
         setRecipes(response.data);
       } catch (error) {
         console.error('에러내용:', error);

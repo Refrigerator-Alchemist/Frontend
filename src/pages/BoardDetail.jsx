@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft, FaHeart, FaRegHeart } from 'react-icons/fa';
 import Navigation from '../components/Navigation';
 import axios from 'axios';
+import { IP_ADDRESS } from '../context/UserContext';
 
 const BoardDetail = () => {
   const { postId } = useParams(); // 라우터 엔드포인트
@@ -15,7 +16,7 @@ const BoardDetail = () => {
   const [Liked, setLiked] = useState(false); // 좋아요 상태
   const [likedItems, setLikedItems] = useState([]); // 현재 계정으로 좋아요 누른 게시물들
   const [likeCount, setLikeCount] = useState(''); // 좋아요 수
-  const [likedPosts, setLikedPosts] = useState([]); // 좋아요 누른 postid 배열 
+  const [likedPosts, setLikedPosts] = useState([]); // 좋아요 누른 postid 배열
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,14 +24,12 @@ const BoardDetail = () => {
     fetchLikeData();
   }, [postId]);
 
-
   // 1️⃣ 서버에서 기존 정보들을 불러오는 함수
   const fetchPostData = async (postId) => {
     try {
-      const response = await axios.post(
-        `http://172.30.1.12:8080/board/specific`,
-        postId
-      );
+
+      const response = await axios.post(`${IP_ADDRESS}/board/specific`, postId);
+
 
       if (response.data && Array.isArray(response.data.items)) {
         const items = response.data.items.map((item) => ({
@@ -61,7 +60,9 @@ const BoardDetail = () => {
       if (Liked) {
         // ▶️ 좋아요 되어있는 상태면 취소
         const response = await axios.post(
-          `http://172.30.1.12:8080/board/dislike`,
+
+          `${IP_ADDRESS}/board/dislike`,
+
           {
             nickName: nickName,
             postId: postId,
@@ -75,8 +76,10 @@ const BoardDetail = () => {
         );
         if (response.status === 200) {
           setLiked(false);
-          setLikeCount(likeCount - 1); 
-          setLikedPosts(prevLikedPosts => prevLikedPosts.filter(id => id !== postId));
+          setLikeCount(likeCount - 1);
+          setLikedPosts((prevLikedPosts) =>
+            prevLikedPosts.filter((id) => id !== postId)
+          );
         }
 
         console.log(response);
@@ -84,7 +87,9 @@ const BoardDetail = () => {
       } else {
         // ▶️ 안 눌려져 있는 상태면 좋아요
         const response = await axios.post(
-          `http://172.30.1.12:8080/board/like`,
+
+          `${IP_ADDRESS}/board/like`,
+
           {
             nickName: nickName,
             postId: postId,
@@ -98,8 +103,8 @@ const BoardDetail = () => {
         );
         if (response.status === 200) {
           setLiked(true);
-          setLikeCount(likeCount + 1); 
-          setLikedPosts(prevLikedPosts => [...prevLikedPosts, postId]); 
+          setLikeCount(likeCount + 1);
+          setLikedPosts((prevLikedPosts) => [...prevLikedPosts, postId]);
         }
         console.log(response);
         console.log('***변경된 likedPosts:', likedPosts);
@@ -112,15 +117,15 @@ const BoardDetail = () => {
 
   // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
   const fetchLikeData = async () => {
-    const URL = 'http://localhost:8080/board/islike';
+    const URL = `${IP_ADDRESS}/board/islike`;
     const nickName = localStorage.getItem('nickName');
 
     try {
       const response = await axios.get(URL, nickName);
       if (response.data) {
         const posts = response.data.map(Number);
-      setLikedPosts(posts);
-      console.log('좋아요 누른 게시물의 postId 목록:', posts);
+        setLikedPosts(posts);
+        console.log('좋아요 누른 게시물의 postId 목록:', posts);
       }
     } catch (error) {
       console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
@@ -147,17 +152,19 @@ const BoardDetail = () => {
           <div className=" items-center">
             <h2 className="font-score text-2xl font-bold">{title}</h2>
             <div>
-            <div className="flex items-center justify-center mt-2">
-        <span className="text-sm font-score font-semibold mr-2">{likeCount}</span>
+              <div className="flex items-center justify-center mt-2">
+                <span className="text-sm font-score font-semibold mr-2">
+                  {likeCount}
+                </span>
 
-        <button onClick={toggleLike} className="p-1">
-          {Liked ? (
-            <FaHeart className="text-red-500 text-2xl" />
-          ) : (
-            <FaRegHeart className="text-2xl" />
-          )}
-        </button>
-      </div>
+                <button onClick={toggleLike} className="p-1">
+                  {Liked ? (
+                    <FaHeart className="text-red-500 text-2xl" />
+                  ) : (
+                    <FaRegHeart className="text-2xl" />
+                  )}
+                </button>
+              </div>
             </div>
           </div>
           <div>

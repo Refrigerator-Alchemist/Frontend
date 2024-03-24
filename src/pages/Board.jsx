@@ -9,31 +9,7 @@ import Ranking from '../components/Ranking';
 import Navigation from '../components/Navigation';
 import axios from 'axios';
 
-// 🔎 게시물 검색
-const SearchBar = ({ onSearch }) => {
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      onSearch(e.target.value); // 엔터를 누르면 onSearch 함수 호출
-    }
-  };
-
-  return (
-    <div className="font-score flex-grow flex items-center rounded-full bg-gray-50 p-2 shadow">
-      <img
-        src={searchicon}
-        alt="검색아이콘"
-        className="w-5 h-5 ml-2"
-        style={{ opacity: 0.5 }}
-      />
-      <input
-        className="w-full pl-2 py-2 text-sm focus:outline-none bg-gray-50"
-        type="text"
-        placeholder="검색"
-        onKeyPress={handleKeyPress} // 키 이벤트 핸들러 추가
-      />
-    </div>
-  );
-};
+import { IP_ADDRESS } from '../context/UserContext';
 
 
 // 🃏 레시피 카드
@@ -65,7 +41,9 @@ const RecipeCard = ({
       if (Liked) {
         // ▶️ 좋아요 되어있는 상태면 취소
         const response = await axios.post(
-          `http://172.30.1.12:8080/board/dislike`,
+
+          `${IP_ADDRESS}/board/dislike`,
+
           {
             nickName: nickName,
             postId: postId,
@@ -90,7 +68,9 @@ const RecipeCard = ({
       } else {
         // ▶️ 안 눌려져 있는 상태면 좋아요
         const response = await axios.post(
-          `http://172.30.1.12:8080/board/like`,
+
+          `${IP_ADDRESS}/board/like`,
+
           {
             nickName: nickName,
             postId: postId,
@@ -179,17 +159,17 @@ function Board() {
 
   // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
   const fetchLikedPosts = async () => {
-    const URL = 'http://172.30.1.12:8080/board/islike';
+
+    const URL = `${IP_ADDRESS}/board/islike`;
+
     const nickName = localStorage.getItem('nickName');
 
     try {
       const response = await axios.post(URL, nickName);
       if (response.data) {
-
         const posts = response.data.map(Number);
         setLikedPosts(posts);
         console.log('좋아요 누른 게시물의 postId 목록:', posts);
-
       }
     } catch (error) {
       console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
@@ -199,7 +179,9 @@ function Board() {
   // 1️⃣ 전체 레시피 수를 가져오는 함수
   const fetchTotalRecipes = async () => {
     try {
-      const response = await axios.get('http://172.30.1.12:8080/boardSize');
+
+      const response = await axios.get(`${IP_ADDRESS}/boardSize`);
+
 
       console.log(response.data);
       const totalRecipes = response.data;
@@ -217,7 +199,9 @@ function Board() {
   const fetchRecipesByPage = async (pageNumber) => {
     try {
       const response = await axios.post(
-        'http://172.30.1.12:8080/board/apiTest',
+
+        `${IP_ADDRESS}/board/apiTest`,
+
         pageNumber
       );
 
@@ -297,30 +281,24 @@ const handleSearch = async (searchQuery) => {
         {/* Only show search results if isSearching is true; otherwise, show the main content */}
         {isSearching ? (
           <>
-            {searchResults.length > 0 ? (
-              <div className="my-2 mt-4">
-                <span className="font-scoreExtraBold font-extrabold ml-6 text-2xl">
-                  검색 결과
-                </span>
-                {searchResults.map((recipe) => (
-                  <RecipeCard
-                    key={recipe.id}
-                    postId={recipe.id}
-                    title={recipe.title}
-                    description={recipe.description}
-                    img={recipe.imageUrl}
-                    initialLikeCount={recipe.likeCount}
-                    isLiked={likedPosts.includes(Number(recipe.id))}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center my-5">
-                <span className="font-scoreExtraBold font-extrabold text-xl">
-                  검색 결과가 없습니다.
-                </span>
-              </div>
-            )}
+
+            <div className="my-2 mt-4">
+              <span className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
+                검색 결과
+              </span>
+              {searchResults.map((recipe) => (
+                <RecipeCard
+                  key={recipe.id}
+                  postId={recipe.id}
+                  title={recipe.title}
+                  description={recipe.description}
+                  img={recipe.imageUrl}
+                  initialLikeCount={recipe.likeCount}
+                  isLiked={likedPosts.includes(Number(recipe.id))}
+                />
+              ))}
+            </div>
+
           </>
         ) : (
           <>
@@ -332,7 +310,7 @@ const handleSearch = async (searchQuery) => {
               <Ranking />
             </div>
             <div className="my-2">
-              <span className="font-scoreExtraBold font-extrabold ml-6 text-2xl">
+              <span className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
                 레시피🌮
               </span>
               {recipes.map((recipe) => (

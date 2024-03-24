@@ -5,6 +5,7 @@ import Navigation from '../components/Navigation';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { IP_ADDRESS } from '../context/UserContext';
 
 const GptSavedDetail = () => {
   const [recipeData, setRecipeData] = useState({});
@@ -22,7 +23,7 @@ const GptSavedDetail = () => {
         }
 
         const response = await axios.get(
-          `http://172.30.1.17:8080/recipe/myRecipe/${recipeId}`,
+          `${IP_ADDRESS}/recipe/myRecipe/${recipeId}`,
           {
             headers: {
               'Authorization-Access': accessToken,
