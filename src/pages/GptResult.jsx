@@ -58,10 +58,7 @@ const RecipePage = () => {
     toast.error('저장하기를 위해서는 로그인이 필요합니다.');
     return;
   }
-  if (!accessToken) {
-    alert('저장하기를 위해서는 로그인이 필요합니다.');
-    return;
-  }
+
       await axios.post(
         'http://172.30.1.17:8080/recipe/save',
         {

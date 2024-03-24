@@ -28,7 +28,7 @@ const BoardDetail = () => {
   const fetchPostData = async (postId) => {
     try {
       const response = await axios.post(
-        `http://localhost:8080/board/specific`,
+        `http://172.30.1.12:8080/board/specific`,
         postId
       );
 
@@ -61,7 +61,7 @@ const BoardDetail = () => {
       if (Liked) {
         // ▶️ 좋아요 되어있는 상태면 취소
         const response = await axios.post(
-          `http://localhost:8080/board/dislike`,
+          `http://172.30.1.12:8080/board/dislike`,
           {
             nickName: nickName,
             postId: postId,
@@ -84,7 +84,7 @@ const BoardDetail = () => {
       } else {
         // ▶️ 안 눌려져 있는 상태면 좋아요
         const response = await axios.post(
-          `http://localhost:8080/board/like`,
+          `http://172.30.1.12:8080/board/like`,
           {
             nickName: nickName,
             postId: postId,
