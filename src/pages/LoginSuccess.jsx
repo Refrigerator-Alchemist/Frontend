@@ -32,11 +32,11 @@ export default function LoginSuccess() {
     const socialId = urlParams.get('socialId');
     const email = urlParams.get('email');
 
-    // ▶ 4개 데이터 받아왔는지 판단
+    // ▶ 4개 데이터 받아왔는지 판단 : 토큰 앞에 Bearer 추가
     if (accessToken && socialId && refreshToken && email) {
-      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('accessToken', 'Bearer ' + accessToken);
+      localStorage.setItem('refreshToken', 'Bearer ' + refreshToken);
       localStorage.setItem('socialId', socialId);
-      localStorage.setItem('refreshToken', refreshToken);
       localStorage.setItem('email', email);
 
       console.log(`⭕ 로컬스토리지 저장 완료 : ${localStorage}`);

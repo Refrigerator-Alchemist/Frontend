@@ -105,6 +105,8 @@ function MyPage() {
 
   const { logout } = useUserDispatch();
 
+  const accessToken = localStorage.getItem('accessToken');
+
   // --------------------------------------------------------------------------------------------------------
   useEffect(() => {
     fetchLikeData();
@@ -117,7 +119,11 @@ function MyPage() {
 
     try {
       if (user) {
-        const response = await axios.post(URL, user.nickName);
+        const response = await axios.post(URL, user.nickName, {
+          headers: {
+            'Authorization-Access': accessToken,
+          },
+        });
 
         setUserInfo({
           imageUrl: response.data.imageUrl,
@@ -134,7 +140,11 @@ function MyPage() {
   // 🧑🏽 내가 저장한 레시피 가져오는 함수
   const fetchMyPage = () => {
     axios
-      .post(`${IP_ADDRESS}/board/myPage`, 'test')
+      .post(`${IP_ADDRESS}/board/myPage`, user.nickName, {
+        headers: {
+          'Authorization-Access': accessToken,
+        },
+      })
       .then((response) => {
         console.log('서버 응답 데이터:', response.data);
 
@@ -160,10 +170,13 @@ function MyPage() {
   // 🔥 좋아요 누른 게시물들 가져오는 함수
   const fetchLikeData = async () => {
     const URL = `${IP_ADDRESS}/board/mypage-like`;
-    const nickName = localStorage.getItem('nickName');
 
     try {
-      const response = await axios.get(URL, nickName);
+      const response = await axios.get(URL, user.nickName, {
+        headers: {
+          'Authorization-Access': accessToken,
+        },
+      });
       if (response.data && Array.isArray(response.data.items)) {
         const items = response.data.items.map((item) => ({
           id: item.ID,

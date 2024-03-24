@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ErrorCode from '../utils/ErrorCode';
 
-// 현재 IP 주소
+// 🧷 현재 IP 주소
 export const IP_ADDRESS = 'http://localhost:8080';
 
 // 📀 토큰 처리
@@ -16,11 +16,12 @@ instance.interceptors.request.use(
   function (config) {
     const accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
+
     if (accessToken) {
-      config.headers['Authorization-Access'] = 'Bearer ' + accessToken;
+      config.headers['Authorization-Access'] = accessToken;
     }
     if (refreshToken) {
-      config.headers['Authorization-Refresh'] = 'Bearer ' + refreshToken;
+      config.headers['Authorization-Refresh'] = refreshToken;
     }
     return config;
   },
@@ -97,7 +98,7 @@ export const UserProvider = ({ children }) => {
         window.alert('이미 서버에 존재하는 이메일입니다');
       }
     } catch (error) {
-      console.error('이메일 인증번호 요청 중 에러 발생: ', error);
+      console.error('💥 이메일 인증번호 요청 중 에러 발생: ', error);
     }
   };
 
@@ -127,7 +128,7 @@ export const UserProvider = ({ children }) => {
         window.alert('존재하지 않는 이메일입니다');
       }
     } catch (error) {
-      console.error('이메일 인증번호 요청 중 에러 발생: ', error);
+      console.error('💥 이메일 인증번호 요청 중 에러 발생: ', error);
     }
   };
 
@@ -161,9 +162,6 @@ export const UserProvider = ({ children }) => {
         emailType,
         inputNum,
         socialType,
-        // randomNum,
-        // takenTime,
-        // expireTime,
       });
 
       if (response.status === 204) {
@@ -173,7 +171,7 @@ export const UserProvider = ({ children }) => {
         window.alert('인증 실패;');
       }
     } catch (error) {
-      console.error('인증 완료 상태 전송 중 에러 발생: ', error);
+      console.error('💥 인증 확인 중 에러 발생: ', error);
     }
   };
 
@@ -195,7 +193,7 @@ export const UserProvider = ({ children }) => {
         window.alert('사용가능한 닉네임입니다:)');
       }
     } catch (error) {
-      console.error('닉네임 중복 확인 중 에러 발생: ', error);
+      console.error('💥 닉네임 중복 확인 중 에러 발생: ', error);
     }
   };
 
@@ -226,7 +224,7 @@ export const UserProvider = ({ children }) => {
       })
       .catch((error) => {
         console.log(error);
-        window.alert('회원가입이 정상적으로 완료되지 못했습니다;');
+        window.alert('💥 회원가입 중 에러 발생');
       });
   };
 
@@ -245,7 +243,7 @@ export const UserProvider = ({ children }) => {
 
       window.alert('회원탈퇴가 완료되었습니다.');
     } catch (error) {
-      console.error('회원탈퇴 요청 중 에러 발생: ', error);
+      console.error('💥 회원탈퇴 요청 중 에러 발생: ', error);
     }
   };
 
@@ -309,10 +307,10 @@ export const UserProvider = ({ children }) => {
               window.alert(ErrorCode.NOT_VALID_ACCESSTOKEN.message);
               break;
             default:
-              window.alert('로그인 실패!');
+              window.alert('💥 로그인 실패!');
           }
         } else {
-          window.alert('로그인 실패!');
+          window.alert('💥 로그인 실패!');
         }
       });
   };
@@ -321,7 +319,6 @@ export const UserProvider = ({ children }) => {
   const logout = async () => {
     const URL = `${IP_ADDRESS}/auth/token/logout`;
     const socialId = localStorage.getItem('socialId');
-    // const accessToken = localStorage.getItem('accessToken');
 
     try {
       const response = await instance.post(
@@ -332,7 +329,6 @@ export const UserProvider = ({ children }) => {
             'Content-Type': 'application/json;charset=UTF-8',
             Accept: 'application/json',
             'Access-Control-Allow-Origin': '*',
-            // 'authorization-access': accessToken,
           },
         }
       );
@@ -379,10 +375,10 @@ export const UserProvider = ({ children }) => {
       if (response.status === 204) {
         window.alert('비밀번호가 성공적으로 재설정되었습니다');
       } else {
-        window.alert('비밀번호 재설정에 실패하였습니다');
+        window.alert('💥 비밀번호 재설정에 실패하였습니다');
       }
     } catch (error) {
-      console.error('비밀번호 재설정 중 에러 발생: ', error);
+      console.error('💥 비밀번호 재설정 중 에러 발생: ', error);
     }
 
     navigate('/login');
@@ -392,29 +388,32 @@ export const UserProvider = ({ children }) => {
   const reIssue = async () => {
     const URL = `${IP_ADDRESS}/auth/token/reissue`;
     const socialId = localStorage.getItem('socialId');
-    // const refreshToken = localStorage.getItem('refreshToken');
+    const socialType = localStorage.getItem('socialType');
 
     try {
-      const response = await instance.post(
-        URL,
-        { socialId }
-        // {
-        // headers: {
-        // 'authorization-refresh': refreshToken,
-        // },
-        // }
-      );
+      const response = await instance.post(URL, { socialId });
 
-      if (response.status === 204) {
+      if (response.status === 204 && socialType === 'Refrigerator-Cleaner') {
         localStorage.setItem('accessToken', response.data.accessToken);
         console.log(
           `새로운 액세스 토큰을 발급받았습니다 : ${response.data.accessToken}`
         );
         navigate(window.location.pathname);
       }
+
+      if (response.status === 204 && socialType !== 'Refrigerator-Cleaner') {
+        localStorage.setItem(
+          'accessToken',
+          'Bearer ' + response.data.accessToken
+        );
+        console.log(
+          `새로운 액세스 토큰을 발급받았습니다 : ${response.data.accessToken}`
+        );
+        navigate(window.location.pathname);
+      }
     } catch (error) {
-      console.error(error);
-      window.alert('새로운 액세스 토큰 발급 실패');
+      console.error('💥 새로운 액세스 토큰 발급 실패', error);
+      window.alert('💥 새로운 액세스 토큰 발급 실패');
     }
   };
 
