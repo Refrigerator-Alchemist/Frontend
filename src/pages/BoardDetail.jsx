@@ -14,6 +14,7 @@ const BoardDetail = () => {
   const [ingredients, setIngredients] = useState([]); // 재료
   const [Liked, setLiked] = useState(false); // 좋아요 상태
   const [likedItems, setLikedItems] = useState([]); // 현재 계정으로 좋아요 누른 게시물들
+  const [likeCount, setLikeCount] = useState(''); // 좋아요 수
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,12 +41,14 @@ const BoardDetail = () => {
           nickName: item.nickName,
           description: item.description,
           ingredients: item.ingredients.map((ingredient) => ingredient),
+          likeCount: item.likeCount,
         }));
         setImageUrl(items[0].imageUrl);
         setTitle(items[0].title);
         setNickName(items[0].nickName);
         setDescription(items[0].description);
         setIngredients(items[0].ingredients);
+        setLikeCount(items[0].likeCount);
       } else {
         console.error('데이터 타입 오류:', response.data);
       }
@@ -136,6 +139,9 @@ const BoardDetail = () => {
           <div className="flex items-center gap-4">
             <h2 className="font-score text-2xl font-bold">{title}</h2>
 
+            <span className="text-lg font-score font-semibold mr-2">
+              {likeCount}
+            </span>
             <button onClick={toggleLike} className="ml-4">
               {Liked ? (
                 <FaHeart className="text-red-500 text-2xl" />
