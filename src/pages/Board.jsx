@@ -30,10 +30,6 @@ const RecipeCard = ({
     setLiked(isLiked);
   }, [isLiked]);
 
-  // useEffect(() => {
-  //   fetchLikeData();
-  // }, [likedItems]);
-
   // 💛 좋아요 / 취소
   const toggleLike = async () => {
     try {
@@ -41,7 +37,6 @@ const RecipeCard = ({
         // ▶️ 좋아요 되어있는 상태면 취소
         const response = await axios.post(
           `${IP_ADDRESS}/board/dislike`,
-
           {
             nickName: nickName,
             postId: postId,
@@ -67,7 +62,6 @@ const RecipeCard = ({
         // ▶️ 안 눌려져 있는 상태면 좋아요
         const response = await axios.post(
           `${IP_ADDRESS}/board/like`,
-
           {
             nickName: nickName,
             postId: postId,
@@ -118,6 +112,59 @@ const RecipeCard = ({
   );
 };
 
+// 🔎 게시물 검색
+const SearchBar = ({ onSearch }) => {
+  const [query, setQuery] = useState('');
+
+  const handleInputChange = (e) => {
+    setQuery(e.target.value);
+  };
+
+  const handleSearchClick = async () => {
+    if (query.trim() !== '') {
+      try {
+        const response = await axios.post(`${IP_ADDRESS}/board/searchTitle`, query.trim());
+        console.log('검색 결과:', response.data);
+        onSearch(response.data);
+        // setQuery(''); //검색 입력란 초기화
+      } catch (error) {
+        console.error('검색 결과 에러:', error);
+      }
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearchClick();
+    }
+  };
+
+  return (
+    <div className="font-score flex-grow flex items-center rounded-full bg-gray-50 p-2 shadow">
+      <input
+        className="w-full pl-2 py-2 text-sm focus:outline-none bg-gray-50"
+        type="text"
+        placeholder="검색"
+        value={query}
+        onChange={handleInputChange}
+        onKeyPress={handleKeyPress}
+      />
+      <button
+        className="w-auto h-full flex items-center justify-center rounded-full bg-transparent hover:bg-gray-200 px-3"
+        onClick={handleSearchClick}
+      >
+        <img
+          src={searchicon}
+          alt="검색아이콘"
+          className="w-5 h-5 ml-2"
+          style={{ opacity: 0.5 }}
+        />
+      </button>
+    </div>
+  );
+};
+
+
 // ✍️ 게시물 작성 페이지로 이동
 const WriteButton = () => {
   return (
@@ -154,7 +201,6 @@ function Board() {
   // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
   const fetchLikedPosts = async () => {
     const URL = `${IP_ADDRESS}/board/islike`;
-
     const nickName = localStorage.getItem('nickName');
 
     try {
@@ -191,7 +237,6 @@ function Board() {
     try {
       const response = await axios.post(
         `${IP_ADDRESS}/board/apiTest`,
-
         pageNumber
       );
 
@@ -204,7 +249,7 @@ function Board() {
           likeCount: item.likeCount,
         }));
         formattedData.forEach((recipe) => {
-          // console.log(`Recipe ID: ${recipe.id}, id의 타입: ${typeof recipe.id}`);
+          console.log(`Recipe ID: ${recipe.id}, Type: ${typeof recipe.id}`);
         });
         setRecipes(formattedData);
       } else {
@@ -218,6 +263,7 @@ function Board() {
   useEffect(() => {
     fetchRecipesByPage(1);
   }, []);
+
 
   // 🔍 게시물 검색 함수
   const handleSearch = async (searchQuery) => {
@@ -241,17 +287,20 @@ function Board() {
       console.error('게시물 검색 에러:', error);
     }
     setIsSearching(false);
+
   };
 
   // 4️⃣ 페이지 번호를 받아와 해당 번호에서 1을 뺀 값을 서버로 보내는 함수
   const handlePageClick = (pageNumber) => {
-    fetchRecipesByPage(pageNumber - 2);
+    fetchRecipesByPage(pageNumber - 1);
     setCurrentPage(pageNumber);
   };
 
   // 5️⃣ 클릭할 페이지번호 순서대로
   const pageNumbers = [];
+
   for (let i = 0; i <= totalPages; i++) {
+
     pageNumbers.push(i + 1);
   }
 
@@ -268,53 +317,49 @@ function Board() {
       </div>
 
       <main>
-        {/* Only show search results if isSearching is true; otherwise, show the main content */}
-        {isSearching ? (
-          <>
-            <div className="my-2 mt-4">
-              <span className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
-                검색 결과
-              </span>
-              {searchResults.map((recipe) => (
-                <RecipeCard
-                  key={recipe.id}
-                  postId={recipe.id}
-                  title={recipe.title}
-                  description={recipe.description}
-                  img={recipe.imageUrl}
-                  initialLikeCount={recipe.likeCount}
-                  isLiked={likedPosts.includes(Number(recipe.id))}
-                />
-              ))}
-            </div>
-          </>
-        ) : (
-          <>
-            {/* Render this section when not searching or no search results */}
-            <div className="my-2 mt-4">
-              <span className="font-scoreExtraBold font-extrabold ml-6 text-2xl">
-                TOP3 레시피🔥
-              </span>
-              <Ranking />
-            </div>
-            <div className="my-2">
-              <span className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
-                레시피🌮
-              </span>
-              {recipes.map((recipe) => (
-                <RecipeCard
-                  key={recipe.id}
-                  postId={recipe.id}
-                  title={recipe.title}
-                  description={recipe.description}
-                  img={recipe.imageUrl}
-                  initialLikeCount={recipe.likeCount}
-                  isLiked={likedPosts.includes(Number(recipe.id))}
-                />
-              ))}
-            </div>
-          </>
-        )}
+    {isSearching ? (
+      <div className="my-2 mt-4">
+        <span className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
+          검색 결과
+        </span>
+        {searchResults.map((recipe) => (
+          <RecipeCard
+            key={recipe.id}
+            postId={recipe.id}
+            title={recipe.title}
+            description={recipe.description}
+            img={recipe.imageUrl}
+            initialLikeCount={recipe.likeCount}
+            isLiked={likedPosts.includes(Number(recipe.id))}
+          />
+        ))}
+      </div>
+    ) : (
+      <>
+        <div className="my-2 mt-4">
+          <span className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
+            TOP3 레시피🔥
+          </span>
+          <Ranking />
+        </div>
+        <div className="my-2">
+          <span className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
+            레시피🌮
+          </span>
+          {recipes.map((recipe) => (
+            <RecipeCard
+              key={recipe.id}
+              postId={recipe.id}
+              title={recipe.title}
+              description={recipe.description}
+              img={recipe.imageUrl}
+              initialLikeCount={recipe.likeCount}
+              isLiked={likedPosts.includes(Number(recipe.id))}
+            />
+          ))}
+        </div>
+      </>
+    )}
 
         <div className="pagination flex justify-center my-4">
           {pageNumbers.map((number) => (
@@ -348,3 +393,4 @@ function Board() {
 }
 
 export default Board;
+
