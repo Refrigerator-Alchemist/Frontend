@@ -19,12 +19,21 @@ function UploadBoard() {
   const addIngredientField = () => {
     setIngredients([...ingredients, '']);
   };
+  
+  const emailandnickname = () => {
+    const email = localStorage.getItem('email');
+    const nickname = localStorage.getItem('nickname');
+    return { email, nickname };
+  };
 
   const handleSubmit = async (event) => {
     //서버전송
     event.preventDefault();
+    const { email, nickname } = emailandnickname();
 
     const formData = new FormData();
+    formData.append('email', email);
+    formData.append('nickname', nickname);
     formData.append('image', fileInput.current.files[0]);
     formData.append('foodName', foodName);
     formData.append('description', description);

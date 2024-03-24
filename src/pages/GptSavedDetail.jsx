@@ -22,7 +22,7 @@ const GptSavedDetail = () => {
         }
 
         const response = await axios.get(
-          `http://localhost:8080/recipe/myRecipe/${recipeId}`,
+          `http://172.30.1.17:8080/recipe/myRecipe/${recipeId}`,
           {
             headers: {
               'Authorization-Access': accessToken,

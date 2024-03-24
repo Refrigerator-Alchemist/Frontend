@@ -50,10 +50,10 @@ const GptSearch = () => {
 
   // Gpt로 레시피 검색 요청하는 함수
   const handleNextButtonClick = async () => {
-    toast.error('임시 에러 메시지. API 연결 전 UI 확인용.');
+    // toast.error('임시 에러 메시지');
     try {
       const response = await axios.post(
-        'http://localhost:8080/recipe/recommend',
+        'http://172.30.1.17:8080/recipe/recommend',
         {
           ingredients: tags,
         },

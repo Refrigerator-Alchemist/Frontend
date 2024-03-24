@@ -18,11 +18,11 @@ const GptSavedList = () => {
 
   //저장한 목록 보기
   useEffect(() => {
-    toast.error('임시 에러 메시지. API 연결 전 UI 확인용.');
+    toast.error('임시 에러 메시지');
     const fetchRecipes = async () => {
       try {
         const response = await axios.get(
-          'http://localhost:8080//recipe/myRecipe',
+          'http://172.30.1.17:8080/recipe/myRecipe',
           {
             headers: {
               'Authorization-Access': accessToken,
