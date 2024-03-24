@@ -10,9 +10,10 @@ import Navigation from '../components/Navigation';
 import axios from 'axios';
 
 // 🃏 레시피 카드
-const RecipeCard = ({ postId, title, description, img, likeCount }) => {
+const RecipeCard = ({ postId, title, description, img,  initialLikeCount }) => {
   const [Liked, setLiked] = useState(false);
   const [likedItems, setLikedItems] = useState([]); // 현재 계정으로 좋아요 누른 게시물들
+  const [likeCount, setLikeCount] = useState(initialLikeCount); 
   const nickName = localStorage.getItem('nickName');
 
   useEffect(() => {
@@ -42,6 +43,11 @@ const RecipeCard = ({ postId, title, description, img, likeCount }) => {
             },
           }
         );
+        if (response.status === 200) { 
+          setLiked(false);
+          setLikeCount(prev => prev - 1); // likeCount -1
+        }
+
         console.log(response);
         setLiked(!Liked);
       } else {
@@ -59,6 +65,10 @@ const RecipeCard = ({ postId, title, description, img, likeCount }) => {
             },
           }
         );
+        if (response.status === 200) {
+          setLiked(true);
+          setLikeCount((prev) => prev + 1);
+        }
         console.log(response);
         setLiked(!Liked);
       }
@@ -75,7 +85,8 @@ const RecipeCard = ({ postId, title, description, img, likeCount }) => {
     try {
       const response = await axios.get(URL, nickName);
       if (response.data && Array.isArray(response.data.items)) {
-        const items = response.data.items.map((item) => item);
+        // const items = response.data.items.map((item) => item);
+        const items = response.data.items.map((item) => String(item));
         setLikedItems(items);
         console.log('게시물 id', items);
       } else {
@@ -260,7 +271,7 @@ function Board() {
                   title={recipe.title}
                   description={recipe.description}
                   img={recipe.imageUrl}
-                  likeCount={recipe.likeCount}
+                  initialLikeCount={recipe.likeCount}
                 />
               ))}
             </div>
@@ -285,7 +296,7 @@ function Board() {
                   title={recipe.title}
                   description={recipe.description}
                   img={recipe.imageUrl}
-                  likeCount={recipe.likeCount}
+                  initialLikeCount={recipe.likeCount}
                 />
               ))}
             </div>
@@ -325,7 +336,8 @@ function Board() {
 
 export default Board;
 
-// 좋아요 조회 테스트
+
+// 좋아한 postid 배열 조회 , likecount +1 테스트
 // import React, { useState, useEffect } from 'react';
 // import { FaHeart, FaRegHeart } from 'react-icons/fa';
 // import { Link } from 'react-router-dom';
@@ -333,20 +345,35 @@ export default Board;
 // // 🃏 레시피카드 컴포넌트
 // const RecipeCard = ({ postId, title, description, img }) => {
 //   const [Liked, setLiked] = useState(false);
-//   const [likedItems, setLikedItems] = useState([1, 2]); // 초기에 postid 1, 2번 게시물에 좋아요가 되어있다고 가정
+//   const [likedItems, setLikedItems] = useState([]); // 좋아요 누른 게시물들의 postId
+//   const [likeCount, setLikeCount] = useState(15); // 초기 좋아요 수, 실제로는 서버로부터 가져와야 함
 
 //   useEffect(() => {
-//     setLiked(likedItems.includes(postId));
+//     fetchLikeData(); // 페이지가 로드될 때 좋아요 누른 게시물 데이터를 가져옵니다.
+//   }, []);
+
+//   useEffect(() => {
+//     setLiked(likedItems.includes(String(postId))); // 해당 게시물이 좋아요 누른 목록에 있는지 확인하여 좋아요 상태를 설정합니다.
 //   }, [likedItems, postId]);
 
 //   // 💛 좋아요 / 취소 토글
 //   const toggleLike = () => {
-//     setLiked(!Liked);
 //     if (Liked) {
-//       setLikedItems(likedItems.filter(item => item !== postId));
+//       setLikedItems(likedItems.filter(item => item !== String(postId)));
+//       setLikeCount(prev => prev - 1); // 좋아요 취소 시 좋아요 수 감소
 //     } else {
-//       setLikedItems([...likedItems, postId]);
+//       setLikedItems([...likedItems, String(postId)]);
+//       setLikeCount(prev => prev + 1); // 좋아요 시 좋아요 수 증가
 //     }
+//     setLiked(!Liked);
+//   };
+
+
+//   // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
+//   const fetchLikeData = async () => {
+//     const fakeLikedItems = ["1", "3", "5"]; // 사용자가 좋아요를 누른 게시물들의 postId
+//     setLikedItems(fakeLikedItems);
+//     console.log('게시물 id', fakeLikedItems);
 //   };
 
 //   return (
@@ -360,6 +387,7 @@ export default Board;
 //           <p className="text-gray-500 text-sm">{description}</p>
 //         </div>
 //       </Link>
+//       <span>{likeCount}</span>
 //       <button onClick={toggleLike} className="p-2">
 //         {Liked ? <FaHeart className="text-red-500 text-2xl" /> : <FaRegHeart className="text-2xl" />}
 //       </button>
