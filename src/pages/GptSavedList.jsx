@@ -11,6 +11,7 @@ import { IP_ADDRESS, useUserState } from '../context/UserContext';
 const GptSavedList = () => {
   const navigate = useNavigate();
   const [recipes, setRecipes] = useState([]);
+  const [nickname, setNickname] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage] = useState(7);
   const user = useUserState();
@@ -49,6 +50,20 @@ const GptSavedList = () => {
     fetchRecipes();
   }, [user.nickName]);
 
+
+  useEffect(() => {
+    const fetchNickname = async () => {
+      try {
+        const response = await axios.get(`${IP_ADDRESS}/userNickname`);
+        setNickname(response.data.nickname); 
+      } catch (error) {
+        console.error('닉네임 가져오기 실패:', error);
+      }
+    };
+
+    fetchNickname();
+  }, []);
+
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
   const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
@@ -74,13 +89,15 @@ const GptSavedList = () => {
       <ToastContainer position="top-center" />
       <div
         className="absolute top-5 left-45 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate('/main')}
+        onClick={() => navigate("/main")}
       >
         <FaArrowLeft />
       </div>
       <div className="my-2 mt-20 mb-4">
         <div className="titlebox mb-6 mt-2">
-          <span className="font-score font-extrabold ml-8 text-2xl">{`${user.nickName}의 연금술 레시피`}</span>
+          <span className="font-score font-extrabold ml-8 text-2xl">
+            {nickname ? `${nickname}의 연금술 레시피` : "연금술 레시피"}
+          </span>
         </div>
         {currentRecipes.map((recipe) => (
           <RecipeCard
@@ -99,10 +116,10 @@ const GptSavedList = () => {
       </div>
       <footer
         style={{
-          position: 'fixed',
-          bottom: '0',
-          width: '100%',
-          maxWidth: '31rem',
+          position: "fixed",
+          bottom: "0",
+          width: "100%",
+          maxWidth: "31rem",
         }}
       >
         <Navigation />

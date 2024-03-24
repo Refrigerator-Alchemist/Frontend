@@ -4,7 +4,7 @@ import axios from 'axios';
 import ErrorCode from '../utils/ErrorCode';
 
 // 현재 IP 주소
-export const IP_ADDRESS = 'http://localhost:8080';
+export const IP_ADDRESS = 'http://172.30.1.17:8080';
 
 // 📀 토큰 처리
 const instance = axios.create({

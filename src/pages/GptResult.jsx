@@ -57,9 +57,6 @@ const RecipePage = () => {
 
       if (!accessToken) {
         toast.error('저장하기를 위해서는 로그인이 필요합니다.');
-        return;
-      }
-      if (!accessToken) {
         alert('저장하기를 위해서는 로그인이 필요합니다.');
         return;
       }
