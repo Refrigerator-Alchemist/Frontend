@@ -15,6 +15,7 @@ const BoardDetail = () => {
   const [Liked, setLiked] = useState(false); // 좋아요 상태
   const [likedItems, setLikedItems] = useState([]); // 현재 계정으로 좋아요 누른 게시물들
   const [likeCount, setLikeCount] = useState(''); // 좋아요 수
+  const [likedPosts, setLikedPosts] = useState([]); // 좋아요 누른 postid 배열 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,9 +23,6 @@ const BoardDetail = () => {
     fetchLikeData();
   }, [postId]);
 
-  useEffect(() => {
-    setLiked(likedItems.includes(postId));
-  }, [likedItems, postId]);
 
   // 1️⃣ 서버에서 기존 정보들을 불러오는 함수
   const fetchPostData = async (postId) => {
@@ -63,7 +61,7 @@ const BoardDetail = () => {
       if (Liked) {
         // ▶️ 좋아요 되어있는 상태면 취소
         const response = await axios.post(
-          `/board/dislike`,
+          `http://localhost:8080/board/dislike`,
           {
             nickName: nickName,
             postId: postId,
@@ -75,12 +73,18 @@ const BoardDetail = () => {
             },
           }
         );
+        if (response.status === 200) {
+          setLiked(false);
+          setLikeCount(likeCount - 1); 
+          setLikedPosts(prevLikedPosts => prevLikedPosts.filter(id => id !== postId));
+        }
+
         console.log(response);
         setLiked(!Liked);
       } else {
         // ▶️ 안 눌려져 있는 상태면 좋아요
         const response = await axios.post(
-          `/board/like`,
+          `http://localhost:8080/board/like`,
           {
             nickName: nickName,
             postId: postId,
@@ -92,7 +96,13 @@ const BoardDetail = () => {
             },
           }
         );
+        if (response.status === 200) {
+          setLiked(true);
+          setLikeCount(likeCount + 1); 
+          setLikedPosts(prevLikedPosts => [...prevLikedPosts, postId]); 
+        }
         console.log(response);
+        console.log('***변경된 likedPosts:', likedPosts);
         setLiked(!Liked);
       }
     } catch (error) {
@@ -107,12 +117,10 @@ const BoardDetail = () => {
 
     try {
       const response = await axios.get(URL, nickName);
-      if (response.data && Array.isArray(response.data.items)) {
-        const items = response.data.items.map((item) => item);
-        setLikedItems(items);
-        console.log('게시물 id', items);
-      } else {
-        console.error('에러 내용', response.data);
+      if (response.data) {
+        const posts = response.data.map(Number);
+      setLikedPosts(posts);
+      console.log('좋아요 누른 게시물의 postId 목록:', posts);
       }
     } catch (error) {
       console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
@@ -136,22 +144,24 @@ const BoardDetail = () => {
         />
 
         <div className="flex flex-col items-center mt-12">
-          <div className="flex items-center gap-4">
+          <div className=" items-center">
             <h2 className="font-score text-2xl font-bold">{title}</h2>
+            <div>
+            <div className="flex items-center justify-center mt-2">
+        <span className="text-sm font-score font-semibold mr-2">{likeCount}</span>
 
-            <span className="text-lg font-score font-semibold mr-2">
-              {likeCount}
-            </span>
-            <button onClick={toggleLike} className="ml-4">
-              {Liked ? (
-                <FaHeart className="text-red-500 text-2xl" />
-              ) : (
-                <FaRegHeart className="text-2xl" />
-              )}
-            </button>
+        <button onClick={toggleLike} className="p-1">
+          {Liked ? (
+            <FaHeart className="text-red-500 text-2xl" />
+          ) : (
+            <FaRegHeart className="text-2xl" />
+          )}
+        </button>
+      </div>
+            </div>
           </div>
           <div>
-            <h2 className="font-score text-2xl font-bold">
+            <h2 className="font-score text-lg font-bold m-2">
               작성자: {nickName}
             </h2>
           </div>
