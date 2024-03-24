@@ -28,7 +28,7 @@ export default function EditProfile() {
       try {
         const response = await axios.get(URL, {
           headers: {
-            'Authorization-Access': 'Bearer ' + accessToken,
+            'Authorization-Access': accessToken,
           },
         });
 
@@ -73,7 +73,7 @@ export default function EditProfile() {
     try {
       await axios.post(URL, formData, {
         headers: {
-          'Authorization-Access': 'Bearer ' + accessToken,
+          'Authorization-Access': accessToken,
         },
       });
     } catch (error) {
@@ -113,7 +113,7 @@ export default function EditProfile() {
                 'Content-Type': 'application/json;charset=UTF-8',
                 Accept: 'application/json',
                 'Access-Control-Allow-Origin': '*',
-                'Authorization-Access': 'Bearer ' + accessToken,
+                'Authorization-Access': accessToken,
               },
             }
           )

@@ -11,7 +11,6 @@ import axios from 'axios';
 
 import { IP_ADDRESS } from '../context/UserContext';
 
-
 // 🃏 레시피 카드
 const RecipeCard = ({
   postId,
@@ -41,7 +40,6 @@ const RecipeCard = ({
       if (Liked) {
         // ▶️ 좋아요 되어있는 상태면 취소
         const response = await axios.post(
-
           `${IP_ADDRESS}/board/dislike`,
 
           {
@@ -68,7 +66,6 @@ const RecipeCard = ({
       } else {
         // ▶️ 안 눌려져 있는 상태면 좋아요
         const response = await axios.post(
-
           `${IP_ADDRESS}/board/like`,
 
           {
@@ -121,9 +118,6 @@ const RecipeCard = ({
   );
 };
 
-
-
-
 // ✍️ 게시물 작성 페이지로 이동
 const WriteButton = () => {
   return (
@@ -159,7 +153,6 @@ function Board() {
 
   // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
   const fetchLikedPosts = async () => {
-
     const URL = `${IP_ADDRESS}/board/islike`;
 
     const nickName = localStorage.getItem('nickName');
@@ -179,9 +172,7 @@ function Board() {
   // 1️⃣ 전체 레시피 수를 가져오는 함수
   const fetchTotalRecipes = async () => {
     try {
-
       const response = await axios.get(`${IP_ADDRESS}/boardSize`);
-
 
       console.log(response.data);
       const totalRecipes = response.data;
@@ -199,7 +190,6 @@ function Board() {
   const fetchRecipesByPage = async (pageNumber) => {
     try {
       const response = await axios.post(
-
         `${IP_ADDRESS}/board/apiTest`,
 
         pageNumber
@@ -229,29 +219,29 @@ function Board() {
     fetchRecipesByPage(1);
   }, []);
 
+  // 🔍 게시물 검색 함수
+  const handleSearch = async (searchQuery) => {
+    setIsSearching(true); // 검색 시작
+    try {
+      const response = await axios.post(
+        'http://172.30.1.12:8080/board/searchTitle',
+        {
+          title: searchQuery,
+        }
+      );
+      const data = response.data;
 
-// 🔍 게시물 검색 함수
-const handleSearch = async (searchQuery) => {
-  setIsSearching(true); // 검색 시작
-  try {
-    const response = await axios.post('http://172.30.1.12:8080/board/searchTitle', {
-      title: searchQuery,
-    });
-    const data = response.data;
-
-    if (!Array.isArray(data)) {
-      console.error('Expected an array, but received:', data);
-      setSearchResults([]); 
-    } else {
-      setSearchResults(data); 
+      if (!Array.isArray(data)) {
+        console.error('Expected an array, but received:', data);
+        setSearchResults([]);
+      } else {
+        setSearchResults(data);
+      }
+    } catch (error) {
+      console.error('게시물 검색 에러:', error);
     }
-  } catch (error) {
-    console.error('게시물 검색 에러:', error);
-  }
-  setIsSearching(false); 
-};
-
-
+    setIsSearching(false);
+  };
 
   // 4️⃣ 페이지 번호를 받아와 해당 번호에서 1을 뺀 값을 서버로 보내는 함수
   const handlePageClick = (pageNumber) => {
@@ -262,7 +252,7 @@ const handleSearch = async (searchQuery) => {
   // 5️⃣ 클릭할 페이지번호 순서대로
   const pageNumbers = [];
   for (let i = 0; i <= totalPages; i++) {
-    pageNumbers.push(i+1);
+    pageNumbers.push(i + 1);
   }
 
   return (
@@ -273,7 +263,7 @@ const handleSearch = async (searchQuery) => {
         </span>
       </header>
       <div className="flex items-center mx-8 my-0">
-        <SearchBar onSearch={handleSearch} />
+        {/* <SearchBar onSearch={handleSearch} /> */}
         <WriteButton />
       </div>
 
@@ -281,7 +271,6 @@ const handleSearch = async (searchQuery) => {
         {/* Only show search results if isSearching is true; otherwise, show the main content */}
         {isSearching ? (
           <>
-
             <div className="my-2 mt-4">
               <span className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
                 검색 결과
@@ -298,7 +287,6 @@ const handleSearch = async (searchQuery) => {
                 />
               ))}
             </div>
-
           </>
         ) : (
           <>
@@ -339,7 +327,7 @@ const handleSearch = async (searchQuery) => {
                   : 'bg-white text-main'
               }`}
             >
-              {number}
+              {number - 1}
             </button>
           ))}
         </div>
