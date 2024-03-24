@@ -26,6 +26,7 @@ function UploadBoard() {
   const handleSubmit = async (e) => {
     const nickName = localStorage.getItem('nickName');
     const email = localStorage.getItem('email');
+    const accessToken = localStorage.getItem('accessToken');
 
     // 서버전송
     e.preventDefault();
@@ -46,6 +47,7 @@ function UploadBoard() {
     try {
       const response = axios.post(`${IP_ADDRESS}/writeTest`, formData, {
         headers: {
+          'Authorization-Access': accessToken,
           'Content-Type': 'multipart/form-data',
         },
       });

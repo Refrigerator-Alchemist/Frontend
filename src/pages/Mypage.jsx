@@ -119,7 +119,7 @@ function MyPage() {
 
     try {
       if (user) {
-        const response = await axios.post(URL, user.nickName, {
+        const response = await axios.get(URL, user.nickName, {
           headers: {
             'Authorization-Access': accessToken,
           },
@@ -140,7 +140,7 @@ function MyPage() {
   // 🧑🏽 내가 저장한 레시피 가져오는 함수
   const fetchMyPage = () => {
     axios
-      .post(`${IP_ADDRESS}/board/myPage`, user.nickName, {
+      .get(`${IP_ADDRESS}/board/myPage`, user.nickName, {
         headers: {
           'Authorization-Access': accessToken,
         },
