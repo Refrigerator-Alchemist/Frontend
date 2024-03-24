@@ -279,14 +279,14 @@ export const UserProvider = ({ children }) => {
           response.headers['authorization-refresh']
         );
         localStorage.setItem('socialId', response.headers.get('socialId'));
-        localStorage.setItem('nickName', response.data.name);
+        localStorage.setItem('nickName', response.data.nickName);
         localStorage.setItem('email', response.data.email);
         localStorage.setItem('socialType', response.data.socialType);
 
         // ▶ 유저 데이터 저장
         let user = {
           socialId: response.headers['socialId'],
-          nickName: response.data.name,
+          nickName: response.data.nickName,
           email: response.data.email,
           password,
           socialType: socialType,
