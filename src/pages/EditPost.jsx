@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
+import { toast } from 'react-toastify';
+
 import { IP_ADDRESS } from '../context/UserContext';
 
 const accessToken = localStorage.getItem('accessToken');
@@ -85,12 +87,12 @@ export default function UploadBoard() {
 
       if (response.status === 200) {
         console.log('게시물 수정 완료');
-        window.alert('게시물 수정 완료');
+        toast.success('게시물 수정 완료');
         navigate(`/board/${postId}`);
       }
     } catch (error) {
       console.error('수정 중 에러가 발생했습니다', error);
-      window.alert('수정 중 에러가 발생했습니다');
+      toast.error('수정 중 에러가 발생했습니다');
 
     }
 };

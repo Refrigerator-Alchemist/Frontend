@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
 import { IP_ADDRESS } from '../context/UserContext';
+import { toast } from 'react-toastify';
 
 const nickName = localStorage.getItem('nickName');
 const email = localStorage.getItem('email');
@@ -52,7 +53,7 @@ function UploadBoard() {
       });
       console.log(response.data); 
       if (response.status === 200) {
-        window.alert('게시물을 업로드 했습니다');
+        toast.success('게시물을 업로드 했습니다');
         navigate(`/board/${response.data.postId}`); 
         // 서버에서 postId 보내는지 확인 - 수정 예정 
       }

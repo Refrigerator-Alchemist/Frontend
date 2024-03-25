@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
 import IMAGE_PROFILE from '../assets/img/img_profile.png';
 import { IP_ADDRESS, useUserState } from '../context/UserContext';
+import { toast } from 'react-toastify';
 
 export default function EditProfile() {
   const user = useUserState();
@@ -125,7 +126,7 @@ export default function EditProfile() {
           )
           .then((result) => {
             console.log(`닉네임 재설정 성공 : ${result}`);
-            window.alert('닉네임을 재설정 했습니다');
+            toast.success('닉네임을 재설정 했습니다');
           });
 
         navigate('/mypage');

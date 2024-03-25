@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft, FaHeart, FaRegHeart } from 'react-icons/fa';
 import Navigation from '../components/Navigation';
 import axios from 'axios';
+import {  toast } from 'react-toastify';
 import { IP_ADDRESS } from '../context/UserContext';
 
 const BoardDetail = () => {
@@ -62,6 +63,7 @@ const BoardDetail = () => {
 
     if (!accessToken) {    
       alert('로그인이 필요한 기능입니다.'); 
+      toast.error('로그인이 필요한 기능입니다.'); 
       return; 
 
     }
@@ -176,7 +178,7 @@ const BoardDetail = () => {
                   onClick={
                     accessToken
                       ? toggleLike
-                      : () => alert("로그인이 필요합니다.")
+                      : () => toast.error("로그인이 필요합니다.")
                   }
                 >
                   {accessToken ? (
