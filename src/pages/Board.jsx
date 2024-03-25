@@ -30,8 +30,13 @@ const RecipeCard = ({
     setLiked(isLiked);
   }, [isLiked]);
 
-  // 💛 좋아요 / 취소
+  // 💛 좋아요 / 취소  (로그인사용자만)
   const toggleLike = async () => {
+    const accessToken = localStorage.getItem('accessToken');  
+    if (!accessToken) {    // 로컬스토리지에 사용자 로그인정보 없다면 
+      alert('로그인이 필요한 기능입니다.'); // 사용자에게 로그인 페이지로 리다이렉트하도록 추가해야함 - toastify는 추후에 
+      return; 
+    }
     try {
       if (Liked) {
         // ▶️ 좋아요 되어있는 상태면 취소
@@ -182,6 +187,7 @@ const WriteButton = () => {
     </Link>
   );
 };
+
 
 // ----------------------------게시판
 function Board() {
