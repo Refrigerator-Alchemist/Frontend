@@ -108,11 +108,6 @@ function MyPage() {
   const nickName = localStorage.getItem('nickName');
 
   // --------------------------------------------------------------------------------------------------------
-  // useEffect(() => {
-  //   fetchLikeData();
-  //   fetchUserInfo().then(fetchMyPage);
-  // }, [showMyRecipes]);
-
   useEffect(() => {
     fetchUserInfo();
     if (showMyRecipes) {
@@ -145,9 +140,9 @@ function MyPage() {
     }
   };
 
-  // 🧑🏽 내가 저장한 레시피 가져오는 함수
+  // 🧑🏽 내가 작성한 레시피 가져오는 함수
   const fetchMyPage = async () => {
-    const URL = `${IP_ADDRESS}/userprofile`;
+    const URL = `${IP_ADDRESS}/board/myPage`;
 
     try {
       const response = await axios.get(URL, {
@@ -171,7 +166,7 @@ function MyPage() {
         window.alert('데이터가 배열이 아닙니다');
       }
     } catch (error) {
-      console.error('내가 저장한 레시피 로드 중 에러 발생', error);
+      console.error('내가 작성한 레시피 로드 중 에러 발생', error);
     }
   };
 
@@ -212,13 +207,18 @@ function MyPage() {
   // 2️⃣ 레시피 삭제
   const deleteRecipe = async (postId) => {
     try {
-      await axios.post(`${IP_ADDRESS}/board/deleteBoard`, {
-        postId: postId,
-      });
+      await axios.post(`${IP_ADDRESS}/board/deleteBoard`,  postId,
+      {
+        headers: {
+          'Authorization-Access': accessToken,
+        },
+      }
+      );
 
       setRecipes((prevRecipes) =>
         prevRecipes.filter((recipe) => recipe.postId !== postId)
       );
+      
     } catch (error) {
       console.error('레시피 삭제 에러 내용:', error);
       throw error;

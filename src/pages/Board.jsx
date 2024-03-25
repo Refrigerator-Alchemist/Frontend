@@ -10,6 +10,7 @@ import Navigation from '../components/Navigation';
 import axios from 'axios';
 
 import { IP_ADDRESS } from '../context/UserContext';
+const accessToken = localStorage.getItem('accessToken');  
 
 // 🃏 레시피 카드
 const RecipeCard = ({
@@ -32,9 +33,8 @@ const RecipeCard = ({
 
   // 💛 좋아요 / 취소  (로그인사용자만)
   const toggleLike = async () => {
-    const accessToken = localStorage.getItem('accessToken');  
-    if (!accessToken) {    // 로컬스토리지에 사용자 로그인정보 없다면 
-      alert('로그인이 필요한 기능입니다.'); // 사용자에게 로그인 페이지로 리다이렉트하도록 추가해야함 - toastify는 추후에 
+    if (!accessToken) {    
+      alert('로그인이 필요한 기능입니다.'); 
       return; 
     }
     try {
@@ -48,9 +48,9 @@ const RecipeCard = ({
           },
           {
             headers: {
-              'Content-Type': 'application/json;charset=UTF-8',
-              Accept: 'application/json',
-              'Authorization': `Bearer ${accessToken}` 
+              "Content-Type": "application/json;charset=UTF-8",
+              Accept: "application/json",
+              "Authorization-Access": accessToken,
             },
           }
         );
@@ -75,8 +75,8 @@ const RecipeCard = ({
           {
             headers: {
               'Content-Type': 'application/json;charset=UTF-8',
-              Accept: 'application/json',
-              'Authorization': `Bearer ${accessToken}` 
+            Accept: 'application/json',
+              'Authorization-Access' :accessToken
             },
           }
         );
@@ -108,11 +108,18 @@ const RecipeCard = ({
       <div className="mr-2">
         <span className="text-lg font-score font-semibold">{likeCount}</span>
       </div>
-      <button onClick={toggleLike} className="p-2">
-        {Liked ? (
-          <FaHeart className="text-red-500 text-2xl" />
+      <button className="p-2">
+        {accessToken ? (
+          Liked ? (
+            <FaHeart className="text-red-500 text-2xl" onClick={toggleLike} />
+          ) : (
+            <FaRegHeart className="text-2xl" onClick={toggleLike} />
+          )
         ) : (
-          <FaRegHeart className="text-2xl" />
+          <FaRegHeart
+            className="text-2xl opacity-20 cursor-not-allowed hover:opacity-40"
+            title="로그인이 필요합니다."
+          />
         )}
       </button>
     </div>
@@ -202,30 +209,35 @@ function Board() {
   const recipesPerPage = 6;
 
   useEffect(() => {
-    fetchTotalRecipes();
     fetchLikedPosts();
   }, []);
+
   useEffect(() => {
+    fetchTotalRecipes();
     fetchRecipesByPage(currentPage);
-  }, [currentPage]); 
+  }, [currentPage]);
 
   // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
   const fetchLikedPosts = async () => {
-    const URL = `${IP_ADDRESS}/board/islike`;
-    const nickName = localStorage.getItem('nickName');
+    const nickName = localStorage.getItem("nickName");
+    const URL = `${IP_ADDRESS}/board/islike?id=${nickName}`;
 
     try {
       const response = await axios.get(URL, {
-        params: { nickName }
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+          Accept: "application/json",
+          "Authorization-Access": accessToken,
+        },
       });
-      
+
       if (response.data) {
         const posts = response.data.map(Number);
         setLikedPosts(posts);
-        console.log('좋아요 누른 게시물의 postId 목록:', posts);
+        console.log("좋아요 누른 게시물의 postId 목록:", posts);
       }
     } catch (error) {
-      console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
+      console.error("좋아요 누른 기록 받아오는 중 에러 발생", error);
     }
   };
 
@@ -240,9 +252,9 @@ function Board() {
       const totalPages = Math.ceil(totalRecipes / recipesPerPage);
       setTotalPages(totalPages);
 
-      console.log('총 페이지 수:', totalPages);
+      console.log("총 페이지 수:", totalPages);
     } catch (error) {
-      console.error('전체 레시피 수 가져오기 에러:', error);
+      console.error("전체 레시피 수 가져오기 에러:", error);
     }
   };
 
@@ -250,9 +262,9 @@ function Board() {
   const fetchRecipesByPage = async (pageNumber) => {
     try {
       const response = await axios.get(`${IP_ADDRESS}/board/apiTest`, {
-        params: { data: pageNumber.toString() }
+        // params: { data: pageNumber.toString() }
+        params: { data: (pageNumber - 1).toString() },
       });
-  
 
       if (response.data && Array.isArray(response.data.items)) {
         const formattedData = response.data.items.map((item) => ({
@@ -262,39 +274,39 @@ function Board() {
           imageUrl: item.imageUrl,
           likeCount: item.likeCount,
         }));
-        formattedData.forEach((recipe) => {
-          console.log(`Recipe ID: ${recipe.id}, Type: ${typeof recipe.id}`);
-        });
+
         setRecipes(formattedData);
       } else {
-        console.error('에러 내용1:', response.data);
+        console.error("에러 내용1:", response.data);
       }
     } catch (error) {
-      console.error('에러 내용2:', error);
+      console.error("에러 내용2:", error);
     }
   };
 
-  // useEffect(() => {
-  //   fetchRecipesByPage(1);
-  // }, []);
-
-  // // 3️⃣ 게시물 검색
-
+  // 3️⃣ 게시물 검색
   const handleSearch = (results) => {
     setSearchResults(results); // 검색 결과 상태 업데이트
-    setIsSearching(true);      // 검색 모드 활성화
+    setIsSearching(true); // 검색 모드 활성화
   };
 
   // 4️⃣ 페이지 번호를 받아와 해당 번호에서 1을 뺀 값을 서버로 보내는 함수
+  // const handlePageClick = (pageNumber) => {
+  //   fetchRecipesByPage(pageNumber - 1);
+  //   setCurrentPage(pageNumber);
+  // };
   const handlePageClick = (pageNumber) => {
-    fetchRecipesByPage(pageNumber - 1);
     setCurrentPage(pageNumber);
   };
 
   // 5️⃣ 클릭할 페이지번호 순서대로
+  // const pageNumbers = [];
+  // for (let i = 0; i <= totalPages; i++) {
+  //   pageNumbers.push(i + 1);
+  // }
   const pageNumbers = [];
-  for (let i = 0; i <= totalPages; i++) {
-    pageNumbers.push(i + 1);
+  for (let i = 1; i <= totalPages; i++) {
+    pageNumbers.push(i);
   }
 
   return (
@@ -310,49 +322,49 @@ function Board() {
       </div>
 
       <main>
-    {isSearching ? (
-      <div className="my-2 mt-4">
-        <span className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
-          검색 결과
-        </span>
-        {searchResults.map((recipe) => (
-          <RecipeCard
-            key={recipe.id}
-            postId={recipe.id}
-            title={recipe.title}
-            description={recipe.description}
-            img={recipe.imageUrl}
-            initialLikeCount={recipe.likeCount}
-            isLiked={likedPosts.includes(Number(recipe.id))}
-          />
-        ))}
-      </div>
-    ) : (
-      <>
-        <div className="my-2 mt-4">
-          <span className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
-            TOP3 레시피🔥
-          </span>
-          <Ranking />
-        </div>
-        <div className="my-2">
-          <span className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
-            레시피🌮
-          </span>
-          {recipes.map((recipe) => (
-            <RecipeCard
-              key={recipe.id}
-              postId={recipe.id}
-              title={recipe.title}
-              description={recipe.description}
-              img={recipe.imageUrl}
-              initialLikeCount={recipe.likeCount}
-              isLiked={likedPosts.includes(Number(recipe.id))}
-            />
-          ))}
-        </div>
-      </>
-    )}
+        {isSearching ? (
+          <div className="my-2 mt-4">
+            <span className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
+              검색 결과
+            </span>
+            {searchResults.map((recipe) => (
+              <RecipeCard
+                key={recipe.id}
+                postId={recipe.id}
+                title={recipe.title}
+                description={recipe.description}
+                img={recipe.imageUrl}
+                initialLikeCount={recipe.likeCount}
+                isLiked={likedPosts.includes(Number(recipe.id))}
+              />
+            ))}
+          </div>
+        ) : (
+          <>
+            <div className="my-2 mt-4">
+              <span className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
+                TOP3 레시피🔥
+              </span>
+              <Ranking />
+            </div>
+            <div className="my-2">
+              <span className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
+                레시피🌮
+              </span>
+              {recipes.map((recipe) => (
+                <RecipeCard
+                  key={recipe.id}
+                  postId={recipe.id}
+                  title={recipe.title}
+                  description={recipe.description}
+                  img={recipe.imageUrl}
+                  initialLikeCount={recipe.likeCount}
+                  isLiked={likedPosts.includes(Number(recipe.id))}
+                />
+              ))}
+            </div>
+          </>
+        )}
 
         <div className="pagination flex justify-center my-4">
           {pageNumbers.map((number) => (
@@ -361,8 +373,8 @@ function Board() {
               onClick={() => handlePageClick(number)}
               className={`px-4 py-2 border rounded-full m-1 ${
                 currentPage === number
-                  ? 'bg-main text-white'
-                  : 'bg-white text-main'
+                  ? "bg-main text-white"
+                  : "bg-white text-main"
               }`}
             >
               {number - 1}
@@ -373,10 +385,10 @@ function Board() {
 
       <footer
         style={{
-          position: 'fixed',
-          bottom: '0',
-          width: '100%',
-          maxWidth: '31rem',
+          position: "fixed",
+          bottom: "0",
+          width: "100%",
+          maxWidth: "31rem",
         }}
       >
         <Navigation />
@@ -386,4 +398,3 @@ function Board() {
 }
 
 export default Board;
-

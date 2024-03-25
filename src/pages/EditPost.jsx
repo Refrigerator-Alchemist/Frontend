@@ -4,12 +4,15 @@ import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
 import { IP_ADDRESS } from '../context/UserContext';
 
+const accessToken = localStorage.getItem('accessToken');
+
 export default function UploadBoard() {
   const { postId } = useParams(); // 라우터 엔드포인트
   const [title, setTitle] = useState(''); // 레시피 글 제목
   const [description, setDescription] = useState(''); // 내용
   const [ingredients, setIngredients] = useState([]); // 재료
   const navigate = useNavigate();
+
 
   useEffect(() => {
     fetchData(postId);
@@ -20,7 +23,12 @@ export default function UploadBoard() {
     try {
       const response = await axios.post(
         `${IP_ADDRESS}/board/updateBoard`,
-        postId
+        postId,{
+          headers: {
+            
+            'Authorization-Access': accessToken,
+          },
+        }
       );
 
       if (response.data) {
@@ -54,35 +62,38 @@ export default function UploadBoard() {
     setIngredients([...ingredients, '']);
   };
 
-  // 4️⃣ 수정 완료
-  const handleSubmit = async () => {
-    const URL = `${IP_ADDRESS}/content/update`;
+ // 4️⃣ 수정 완료
+  
+ const handleSubmit = async (e) => {
+  e.preventDefault()
+  const URL = `${IP_ADDRESS}/content/update`;
 
-    const formData = {
-      postId: postId,
-      title: title,
-      description: description,
-      ingredients: ingredients,
-    };
-
-    try {
-      const response = await axios.post(URL, formData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response) {
-        console.log('게시물 수정 완료');
-        window.alert('게시물 수정 완료');
-      }
-
-      navigate(`/board/${postId}`);
-    } catch (error) {
-      console.error('수정 중 에러가 발생했습니다', error);
-      window.alert('수정 중 에러가 발생했습니다');
-    }
+  const formData = {
+    postId: postId,
+    title: title,
+    description: description,
+    ingredients: ingredients,
   };
+
+  try {
+    const response = await axios.post(URL, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization-Access': accessToken,
+      },
+    });
+
+    if (response) {
+      console.log('게시물 수정 완료');
+      window.alert('게시물 수정 완료');
+    }
+
+    navigate(`/board/${postId}`);
+  } catch (error) {
+    console.error('수정 중 에러가 발생했습니다', error);
+    window.alert('수정 중 에러가 발생했습니다');
+  }
+};
 
   // 5️⃣ 취소
   const handleCancel = () => {

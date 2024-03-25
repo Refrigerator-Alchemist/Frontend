@@ -51,8 +51,13 @@ function UploadBoard() {
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log(response.data); // 모달띄우기 작성 성공됐다는
-      navigate('/board');
+      console.log(response.data); 
+      if (response.status === 200) {
+        window.alert('게시물 작성 완료');
+        navigate(`/board/${response.data.postId}`); 
+        // 서버에서 postId 보내는지 확인 - 수정 예정 
+      }
+
     } catch (error) {
       console.error('에러 내용:', error);
     }
