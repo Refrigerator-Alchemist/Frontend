@@ -27,9 +27,9 @@ const BoardDetail = () => {
   // 1️⃣ 서버에서 기존 정보들을 불러오는 함수
   const fetchPostData = async (postId) => {
     try {
-
-      const response = await axios.post(`${IP_ADDRESS}/board/specific`, postId);
-
+      const response = await axios.get(
+        `${IP_ADDRESS}/board/specific?postId=${postId}`
+      );
 
       if (response.data && Array.isArray(response.data.items)) {
         const items = response.data.items.map((item) => ({
@@ -60,7 +60,6 @@ const BoardDetail = () => {
       if (Liked) {
         // ▶️ 좋아요 되어있는 상태면 취소
         const response = await axios.post(
-
           `${IP_ADDRESS}/board/dislike`,
 
           {
@@ -87,7 +86,6 @@ const BoardDetail = () => {
       } else {
         // ▶️ 안 눌려져 있는 상태면 좋아요
         const response = await axios.post(
-
           `${IP_ADDRESS}/board/like`,
 
           {

@@ -1,15 +1,14 @@
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import Pagination from '../components/Pagination';
 import Navigation from '../components/Navigation';
-import axios from 'axios';
+import { FaTrash, FaHeart } from 'react-icons/fa';
 import {
   useUserDispatch,
   useUserState,
   IP_ADDRESS,
 } from '../context/UserContext';
-import { FaTrash, FaHeart } from 'react-icons/fa';
-import IMAGE_PROFILE from '../assets/img/img_profile.png';
-import Pagination from '../components/Pagination';
 
 // 🃏 내가 저장한 게시물
 const SavedRecipe = ({
@@ -88,16 +87,14 @@ const LikedRecipe = ({ postId, title, description, imageUrl }) => {
 
 // 📂 마이페이지
 function MyPage() {
+  const [imageUrl, setImageUrl] = useState('');
+
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage, setRecipesPerPage] = useState(5);
 
-  const [showMyRecipes, setShowMyRecipes] = useState(true); // 내가 저장한 레시피 or 좋아요 누른 레시피
-  const [recipes, setRecipes] = useState([]); // 내가 저장한 레시피
-  const [likedItems, setLikedItems] = useState([]); // 현재 계정으로 좋아요 누른 게시물들
-  const [userInfo, setUserInfo] = useState({
-    nickName: '',
-    imageUrl: IMAGE_PROFILE,
-  });
+  const [showMyRecipes, setShowMyRecipes] = useState(true); // 토글 기능 - true : 저장한 레시피 / false : 좋아요 누른 레시피
+  const [recipes, setRecipes] = useState([]); // 내가 저장한 레시피들
+  const [likedItems, setLikedItems] = useState([]); // 좋아요 누른 레시피들
 
   const navigate = useNavigate();
 
@@ -106,6 +103,7 @@ function MyPage() {
   const { logout } = useUserDispatch();
 
   const accessToken = localStorage.getItem('accessToken');
+  const nickName = localStorage.getItem('nickName');
 
   // --------------------------------------------------------------------------------------------------------
   useEffect(() => {
@@ -122,14 +120,12 @@ function MyPage() {
         const response = await axios.get(URL, {
           headers: {
             'Authorization-Access': accessToken,
-            nickName: user.nickName,
+            nickName: nickName,
           },
         });
 
-        setUserInfo({
-          imageUrl: response.data.imageUrl,
-          nickName: user.nickName,
-        });
+        // ▶️ 이미지 url 저장 : data인지 headers인지 확인해봐야 함
+        setImageUrl(response.data.imageUrl);
       } else {
         window.alert('로그인 하지 않았습니다!');
       }
@@ -139,34 +135,33 @@ function MyPage() {
   };
 
   // 🧑🏽 내가 저장한 레시피 가져오는 함수
-  const fetchMyPage = () => {
-    axios
-      .get(`${IP_ADDRESS}/board/myPage`, {
+  const fetchMyPage = async () => {
+    const URL = `${IP_ADDRESS}/userprofile`;
+
+    try {
+      const response = await axios.get(URL, {
         headers: {
           'Authorization-Access': accessToken,
-          nickName: user.nickName,
+          nickName: nickName,
         },
-      })
-      .then((response) => {
-        console.log('서버 응답 데이터:', response.data);
-
-        if (response.data && Array.isArray(response.data.items)) {
-          const formattedData = response.data.items.map((item) => {
-            return {
-              postId: item.ID,
-              title: item.title,
-              description: item.description,
-              imageUrl: item.imageUrl,
-            };
-          });
-          setRecipes(formattedData);
-        } else {
-          console.error('에러 내용1:', response.data);
-        }
-      })
-      .catch((error) => {
-        console.error('에러 내용2:', error);
       });
+
+      if (response.data && Array.isArray(response.data.items)) {
+        const items = response.data.items.map((item) => {
+          return {
+            postId: item.ID,
+            title: item.title,
+            description: item.description,
+            imageUrl: item.imageUrl,
+          };
+        });
+        setRecipes(items);
+      } else {
+        window.alert('데이터가 배열이 아닙니다');
+      }
+    } catch (error) {
+      console.error('내가 저장한 레시피 로드 중 에러 발생', error);
+    }
   };
 
   // 🔥 좋아요 누른 게시물들 가져오는 함수
@@ -174,10 +169,10 @@ function MyPage() {
     const URL = `${IP_ADDRESS}/board/mypage-like`;
 
     try {
-      const response = await axios.get(URL, user.nickName, {
+      const response = await axios.get(URL, {
         headers: {
           'Authorization-Access': accessToken,
-          nickName: user.nickName,
+          nickName: nickName,
         },
       });
       if (response.data && Array.isArray(response.data.items)) {
@@ -189,10 +184,8 @@ function MyPage() {
           likeCount: item.likeCount,
         }));
         setLikedItems(items);
-
-        console.log('게시물 id', items);
       } else {
-        console.error('에러 내용', response.data);
+        window.alert('데이터가 배열이 아닙니다!');
       }
     } catch (error) {
       console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
@@ -215,7 +208,7 @@ function MyPage() {
         prevRecipes.filter((recipe) => recipe.postId !== postId)
       );
     } catch (error) {
-      console.error('레시피 삭제 에러내용:', error);
+      console.error('레시피 삭제 에러 내용:', error);
       throw error;
     }
   };
@@ -263,13 +256,13 @@ function MyPage() {
       <main className="flex flex-col items-center overflow-hidden">
         <div className="bg-gray-300 rounded-full h-32 w-32 mt-20">
           <img
-            src={userInfo.imageUrl}
+            src={imageUrl}
             alt="프로필 사진"
             className="rounded-full h-32 w-32 object-cover"
           />
         </div>
         <h1 className="font-score mt-5 text-xl font-semibold text-center">
-          {userInfo.nickName}
+          {nickName}
         </h1>
 
         <button
@@ -283,7 +276,9 @@ function MyPage() {
           <button
             onClick={() => setShowMyRecipes(true)} // 내가 작성한 레시피 on
             className={`font-score mx-1 py-2 px-4 rounded ${
-              showMyRecipes ? 'bg-main text-white' : 'bg-gray-100 text-black'
+              showMyRecipes === true
+                ? 'bg-main text-white'
+                : 'bg-gray-100 text-black'
             }`}
           >
             내가 작성한 레시피
@@ -291,14 +286,16 @@ function MyPage() {
           <button
             onClick={() => setShowMyRecipes(false)} // 좋아요 누른 레시피 on
             className={`font-score mx-1 py-2 px-4 rounded ${
-              !showMyRecipes ? 'bg-main text-white' : 'bg-gray-100 text-black'
+              showMyRecipes === false
+                ? 'bg-main text-white'
+                : 'bg-gray-100 text-black'
             }`}
           >
             좋아요 누른 레시피
           </button>
         </div>
 
-        {/* 버튼 토글에 따른 Outlet 변경 */}
+        {/* true : 내가 저장한 레시피 */}
         {showMyRecipes ? (
           // 내가 저장한 레시피
           <div className="recipe-card-container w-full flex flex-wrap">
@@ -316,7 +313,7 @@ function MyPage() {
             ))}
           </div>
         ) : (
-          // 좋아요 누른 레시피 -> likeItems에 들어있는 postId만 사용하도록 변경해야 함. value들은 밑에 있는 대로 사용하기
+          // 좋아요 누른 레시피 -> likeItems에 들어있는 postId만 사용하도록 변경해야 함
           <div className="recipe-card-container w-full flex flex-wrap">
             {currentRecipes.map((recipe) => (
               <LikedRecipe
