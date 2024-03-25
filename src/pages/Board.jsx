@@ -51,7 +51,9 @@ const RecipeCard = ({
             headers: {
               'Content-Type': 'application/json;charset=UTF-8',
               Accept: 'application/json',
+
               'Authorization-Access': accessToken,
+
             },
           }
         );
@@ -77,6 +79,7 @@ const RecipeCard = ({
             headers: {
               'Content-Type': 'application/json;charset=UTF-8',
               Accept: 'application/json',
+              
               'Authorization-Access': accessToken,
             },
           }
@@ -276,9 +279,9 @@ function Board() {
     }
   };
 
-  useEffect(() => {
-    fetchRecipesByPage(1);
-  }, []);
+  // useEffect(() => {
+  //   fetchRecipesByPage(1);
+  // }, []);
 
   // 3️⃣ 게시물 검색
   const handleSearch = (results) => {
