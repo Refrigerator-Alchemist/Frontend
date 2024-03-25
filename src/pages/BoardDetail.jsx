@@ -171,15 +171,19 @@ const BoardDetail = () => {
                   {likeCount}
                 </span>
 
-                <button className="p-2">
+                <button
+                  className="p-2"
+                  onClick={
+                    accessToken
+                      ? toggleLike
+                      : () => alert("로그인이 필요합니다.")
+                  }
+                >
                   {accessToken ? (
                     Liked ? (
-                      <FaHeart
-                        className="text-red-500 text-2xl"
-                        onClick={toggleLike}
-                      />
+                      <FaHeart className="text-red-500 text-2xl" />
                     ) : (
-                      <FaRegHeart className="text-2xl" onClick={toggleLike} />
+                      <FaRegHeart className="text-2xl opacity-100 hover:opacity-100" />
                     )
                   ) : (
                     <FaRegHeart

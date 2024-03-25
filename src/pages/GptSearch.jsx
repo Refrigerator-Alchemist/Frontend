@@ -1,5 +1,5 @@
-import React, { useState, useRef ,useEffect} from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import { CiSaveDown2 } from 'react-icons/ci';
 import axios from 'axios';
@@ -13,9 +13,8 @@ const GptSearch = () => {
   const navigate = useNavigate();
   const inputRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false); 
-  const [nickname, setNickname] = useState('');
-  const user = useUserState();
   const accessToken = localStorage.getItem('accessToken');
+  const [nickname, setNickname] = useState(localStorage.getItem('nickname') || '사용자'); 
 
   // 입력 값 변경 시 상태 업데이트
   const handleInputChange = (e) => {
@@ -24,15 +23,12 @@ const GptSearch = () => {
 
   // Enter 키 입력 시 태그 추가
   const handleInputKeyDown = (e) => {
-    if (e.key === 'Enter' && inputValue.trim() !== '') {
-      e.preventDefault();
-      addTag();
+    if (e.key === 'Enter') {
+      e.preventDefault(); 
+      if (inputValue.trim() !== '' && !tags.includes(inputValue.trim())) {
+        setTags([...tags, inputValue.trim()]);
+      }
       setInputValue('');
-      
-    } else if (e.key === 'Enter') {
-      e.preventDefault();
-      setInputValue('');
-    
     }
   };
 
@@ -50,19 +46,6 @@ const GptSearch = () => {
     setTags(tags.filter((_, index) => index !== indexToDelete));
     inputRef.current.focus();
   };
-
-  useEffect(() => {
-    const fetchNickname = async () => {
-      try {
-        const response = await axios.get(`${IP_ADDRESS}/userNickname`);
-        setNickname(response.data.nickname);
-      } catch (error) {
-        console.error('닉네임 가져오기 실패:', error);
-      }
-    };
-
-    fetchNickname();
-  }, []);
 
 
   // Gpt로 레시피 검색 요청하는 함수
@@ -98,9 +81,6 @@ const GptSearch = () => {
         switch (error.response.status) {
           case 400:
             toast.error('입력된 재료가 없습니다. 재료를 입력해 주세요.');
-            break;
-          case 400:
-            toast.error('recommendId를 찾을 수 없습니다.');
             break;
           case 406:
             toast.error('적절하지 못한 재료가 있습니다.');
@@ -146,7 +126,7 @@ const GptSearch = () => {
       <ToastContainer position="top-center" />
       <div
         className="absolute top-5 left-45 ml-0 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate('/main')}
+        onClick={() => navigate("/main")}
       >
         <FaArrowLeft />
       </div>
@@ -193,10 +173,16 @@ const GptSearch = () => {
         <button
           className="flex justify-center font-score transition ease-in-out delay-150 text-black bg-white hover:bg-white hover:scale-125 hover:cursor-pointer font-bold py-2 px-4 rounded w-full mb-4"
           type="button"
-          onClick={() => navigate('/recipe/myRecipe')}
+          onClick={() => {
+            if (!accessToken) {
+              toast.error("로그인이 필요합니다.");
+            } else {
+              navigate("/recipe/myRecipe");
+            }
+          }}
         >
           <CiSaveDown2 className="mr-1 w-6 h-6" />
-          {nickname ? `${nickname}의 연금술 레시피` : '연금술 레시피'} 
+          {accessToken ? `${nickname}의 연금술 레시피` : "연금술 레시피"}
         </button>
         <button
           className="font-score transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer text-white font-bold py-2 px-4 rounded w-full"
