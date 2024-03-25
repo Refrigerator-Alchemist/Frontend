@@ -96,7 +96,7 @@ export const UserProvider = ({ children }) => {
         toast.success('인증번호가 발송되었습니다');
       } else {
         setEmailExists(true);
-        toast.info('이미 서버에 존재하는 이메일입니다');
+        toast.warning('이미 서버에 존재하는 이메일입니다');
       }
     } catch (error) {
       console.error('💥 이메일 인증번호 요청 중 에러 발생: ', error);
@@ -188,7 +188,7 @@ export const UserProvider = ({ children }) => {
 
       if (response.data.isDuplicated) {
         setNameDuplicated(true);
-        toast.info('이미 존재하는 닉네임입니다');
+        toast.warning('이미 존재하는 닉네임입니다');
       } else {
         setNameDuplicated(false);
         toast.success('사용가능한 닉네임입니다:)');
