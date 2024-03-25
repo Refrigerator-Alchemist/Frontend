@@ -5,14 +5,13 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import Pagination from '../components/Pagination';
 import Navigation from '../components/Navigation';
-import { IP_ADDRESS, useUserState } from '../context/UserContext';
+import { IP_ADDRESS } from '../context/UserContext';
 
 const GptSavedList = () => {
   const navigate = useNavigate();
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage] = useState(7);
-  const user = useUserState();
   const accessToken = localStorage.getItem('accessToken');
   const [nickname, setNickname] = useState(localStorage.getItem('nickname') || ''); 
 
@@ -47,7 +46,7 @@ const GptSavedList = () => {
       }
     };
     fetchRecipes();
-  }, [user.nickName]);
+  }, [accessToken]);
 
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;

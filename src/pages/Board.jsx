@@ -34,7 +34,6 @@ const RecipeCard = ({
   // 💛 좋아요 / 취소 (로그인해야 가능)
   const toggleLike = async () => {
     if (!accessToken) {    
-      alert('로그인이 필요한 기능입니다.'); 
       toast.error('로그인이 필요한 기능입니다.');
       return; 
 

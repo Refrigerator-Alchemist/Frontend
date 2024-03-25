@@ -13,9 +13,6 @@ export default function UploadBoard() {
   const [title, setTitle] = useState(''); // 레시피 글 제목
   const [description, setDescription] = useState(''); // 내용
   const [ingredients, setIngredients] = useState([]); // 재료
-
-  const accessToken = localStorage.getItem('accessToken');
-
   const navigate = useNavigate();
 
 

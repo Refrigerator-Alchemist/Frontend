@@ -8,6 +8,7 @@ import {
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useUserDispatch } from '../context/UserContext';
+import {  toast } from 'react-toastify';
 
 export default function ResetPassword() {
   const [email, setEmail] = useState(''); // 이메일
@@ -44,7 +45,7 @@ export default function ResetPassword() {
     console.log(`입력한 이메일 : ${email}`);
 
     if (!email) {
-      alert('이메일을 입력해주세요');
+      toast.error('이메일을 입력해주세요');
       return;
     }
 

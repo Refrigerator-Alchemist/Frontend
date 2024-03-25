@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import { CiSaveDown2 } from 'react-icons/ci';
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 import { useUserState, IP_ADDRESS } from '../context/UserContext';
 
 const GptSearch = () => {
@@ -50,7 +49,6 @@ const GptSearch = () => {
 
   // Gpt로 레시피 검색 요청하는 함수
   const handleNextButtonClick = async () => {
-    
     setIsLoading(true);
     try {
       const response = await axios.post(
@@ -71,7 +69,7 @@ const GptSearch = () => {
 
       if (recommendId) {
         navigate(`/recipe/recommend/${recommendId}`);
-        // toast.success('연금술을 시작합니다!');
+        toast('연금술을 시작합니다!');
       } else {
         console.error('recommendId를 찾을 수 없습니다.');
         toast.error('recommendId를 찾을 수 없습니다.');
@@ -124,7 +122,6 @@ const GptSearch = () => {
 
   return (
     <section className="bg-white min-h-screen px-4 py-8 flex flex-col">
-      <ToastContainer position="top-center" />
       <div
         className="absolute top-5 left-45 ml-0 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
         onClick={() => navigate("/main")}
