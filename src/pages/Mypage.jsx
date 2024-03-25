@@ -105,6 +105,8 @@ function MyPage() {
 
   const { logout } = useUserDispatch();
 
+  const accessToken = localStorage.getItem('accessToken');
+
   // --------------------------------------------------------------------------------------------------------
   // useEffect(() => {
   //   fetchLikeData();
@@ -126,7 +128,12 @@ function MyPage() {
 
     try {
       if (user) {
-        const response = await axios.post(URL, user.nickName);
+        const response = await axios.get(URL, {
+          headers: {
+            'Authorization-Access': accessToken,
+            nickName: user.nickName,
+          },
+        });
 
         setUserInfo({
           imageUrl: response.data.imageUrl,
@@ -143,7 +150,12 @@ function MyPage() {
   // 🧑🏽 내가 저장한 레시피 가져오는 함수
   const fetchMyPage = () => {
     axios
-      .post(`${IP_ADDRESS}/board/myPage`, 'test')
+      .get(`${IP_ADDRESS}/board/myPage`, {
+        headers: {
+          'Authorization-Access': accessToken,
+          nickName: user.nickName,
+        },
+      })
       .then((response) => {
         console.log('서버 응답 데이터:', response.data);
 
@@ -169,11 +181,15 @@ function MyPage() {
   // 🔥 좋아요 누른 게시물들 가져오는 함수
   const fetchLikeData = async () => {
     const URL = `${IP_ADDRESS}/board/mypage-like`;
-    const nickName = localStorage.getItem('nickName');
 
     try {
-      const response = await axios.get(URL, {
-        params: { nickName } 
+      // const response = await axios.get(URL, {
+      //   params: { nickName } 
+      const response = await axios.get(URL, user.nickName, {
+        headers: {
+          'Authorization-Access': accessToken,
+          nickName: user.nickName,
+        },
       });
       if (response.data && Array.isArray(response.data.items)) {
         const items = response.data.items.map((item) => ({

@@ -80,11 +80,13 @@ export default function SignUp() {
   const onCheckName = (e) => {
     e.preventDefault();
 
-    const pattern = /^[가-힣]{2,}$|^[A-Za-z]{3,}$/;
+    const pattern = /^[가-힣0-9]{2,}$|^[A-Za-z0-9]{3,}$/;
 
     if (!pattern.test(nickName)) {
       console.log(`입력한 닉네임 : ${nickName}`);
-      setNameError('한글은 최소 2글자, 영문은 최소 3글자 이상 입력하세요');
+      setNameError(
+        '한글은 최소 2글자, 영문은 최소 3글자 이상 입력하세요. 숫자는 선택적으로 포함할 수 있습니다.'
+      );
       setNickName('');
     } else {
       console.log(`입력한 닉네임 : ${nickName}`);

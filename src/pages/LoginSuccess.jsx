@@ -30,13 +30,17 @@ export default function LoginSuccess() {
     const accessToken = urlParams.get('accessToken');
     const refreshToken = urlParams.get('refreshToken');
     const socialId = urlParams.get('socialId');
+    const socialType = urlParams.get('socialType');
     const email = urlParams.get('email');
+    const nickName = urlParams.get('nickName');
 
-    // ▶ 4개 데이터 받아왔는지 판단
+    // ▶ 4개 데이터 받아왔는지 판단 : 토큰 앞에 Bearer 추가
     if (accessToken && socialId && refreshToken && email) {
-      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('accessToken', 'Bearer ' + accessToken);
+      localStorage.setItem('refreshToken', 'Bearer ' + refreshToken);
+      localStorage.setItem('nickName', nickName);
       localStorage.setItem('socialId', socialId);
-      localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('socialType', socialType);
       localStorage.setItem('email', email);
 
       console.log(`⭕ 로컬스토리지 저장 완료 : ${localStorage}`);
