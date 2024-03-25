@@ -11,6 +11,9 @@ import axios from 'axios';
 
 import { IP_ADDRESS } from '../context/UserContext';
 
+const accessToken = localStorage.getItem('accessToken');
+const nickName = localStorage.getItem('nickName');
+
 // 🃏 레시피 카드
 const RecipeCard = ({
   postId,
@@ -21,21 +24,19 @@ const RecipeCard = ({
   isLiked,
 }) => {
   const [Liked, setLiked] = useState(isLiked);
-  const [likedItems, setLikedItems] = useState([]); // 현재 계정으로 좋아요 누른 게시물들
   const [likeCount, setLikeCount] = useState(parseInt(initialLikeCount));
-  const nickName = localStorage.getItem('nickName');
   const [likedPosts, setLikedPosts] = useState([]);
 
   useEffect(() => {
     setLiked(isLiked);
   }, [isLiked]);
 
-  // 💛 좋아요 / 취소  (로그인사용자만)
+  // 💛 좋아요 / 취소 (로그인해야 가능)
   const toggleLike = async () => {
-    const accessToken = localStorage.getItem('accessToken');  
-    if (!accessToken) {    // 로컬스토리지에 사용자 로그인정보 없다면 
-      alert('로그인이 필요한 기능입니다.'); // 사용자에게 로그인 페이지로 리다이렉트하도록 추가해야함 - toastify는 추후에 
-      return; 
+    if (!accessToken) {
+      // 로컬스토리지에 사용자 로그인 정보 없다면 -> disabled 걸어서 클릭 막아야함
+      alert('로그인이 필요한 기능입니다.');
+      return;
     }
     try {
       if (Liked) {
@@ -50,6 +51,7 @@ const RecipeCard = ({
             headers: {
               'Content-Type': 'application/json;charset=UTF-8',
               Accept: 'application/json',
+              'Authorization-Access': accessToken,
             },
           }
         );
@@ -75,6 +77,7 @@ const RecipeCard = ({
             headers: {
               'Content-Type': 'application/json;charset=UTF-8',
               Accept: 'application/json',
+              'Authorization-Access': accessToken,
             },
           }
         );
@@ -128,7 +131,10 @@ const SearchBar = ({ onSearch }) => {
   const handleSearchClick = async () => {
     if (query.trim() !== '') {
       try {
-        const response = await axios.post(`${IP_ADDRESS}/board/searchTitle`, query.trim());
+        const response = await axios.post(
+          `${IP_ADDRESS}/board/searchTitle`,
+          query.trim()
+        );
         console.log('검색 결과:', response.data);
         onSearch(response.data);
         // setQuery(''); //검색 입력란 초기화
@@ -157,7 +163,7 @@ const SearchBar = ({ onSearch }) => {
       <button
         className="flex items-center justify-center bg-transparent hover:bg-gray-200 px-5 py-2 rounded-full"
         onClick={handleSearchClick}
-        style={{ minWidth: "30px", height: "40px", borderRadius: "30px" }} 
+        style={{ minWidth: '30px', height: '40px', borderRadius: '30px' }}
       >
         <img
           src={searchicon}
@@ -169,7 +175,6 @@ const SearchBar = ({ onSearch }) => {
     </div>
   );
 };
-
 
 // ✍️ 게시물 작성 페이지로 이동
 const WriteButton = () => {
@@ -188,7 +193,6 @@ const WriteButton = () => {
   );
 };
 
-
 // ----------------------------게시판
 function Board() {
   const [recipes, setRecipes] = useState([]);
@@ -200,21 +204,24 @@ function Board() {
   const recipesPerPage = 6;
 
   useEffect(() => {
-    fetchTotalRecipes();
-    fetchRecipesByPage(1);
     fetchLikedPosts();
   }, []);
+  useEffect(() => {
+    fetchTotalRecipes();
+    fetchRecipesByPage(currentPage);
+  }, [currentPage]);
 
   // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
   const fetchLikedPosts = async () => {
-    const URL = `${IP_ADDRESS}/board/islike`;
-    const nickName = localStorage.getItem('nickName');
+    const URL = `${IP_ADDRESS}/board/islike?id=${nickName}`;
 
     try {
       const response = await axios.get(URL, {
-        params: { nickName }
+        headers: {
+          'Authorization-Access': accessToken,
+        },
       });
-      
+
       if (response.data) {
         const posts = response.data.map(Number);
         setLikedPosts(posts);
@@ -246,9 +253,8 @@ function Board() {
   const fetchRecipesByPage = async (pageNumber) => {
     try {
       const response = await axios.get(`${IP_ADDRESS}/board/apiTest`, {
-        params: { page: pageNumber }
+        params: { data: pageNumber.toString() },
       });
-  
 
       if (response.data && Array.isArray(response.data.items)) {
         const formattedData = response.data.items.map((item) => ({
@@ -274,11 +280,10 @@ function Board() {
     fetchRecipesByPage(1);
   }, []);
 
-  // // 3️⃣ 게시물 검색
-
+  // 3️⃣ 게시물 검색
   const handleSearch = (results) => {
     setSearchResults(results); // 검색 결과 상태 업데이트
-    setIsSearching(true);      // 검색 모드 활성화
+    setIsSearching(true); // 검색 모드 활성화
   };
 
   // 4️⃣ 페이지 번호를 받아와 해당 번호에서 1을 뺀 값을 서버로 보내는 함수
@@ -306,49 +311,49 @@ function Board() {
       </div>
 
       <main>
-    {isSearching ? (
-      <div className="my-2 mt-4">
-        <span className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
-          검색 결과
-        </span>
-        {searchResults.map((recipe) => (
-          <RecipeCard
-            key={recipe.id}
-            postId={recipe.id}
-            title={recipe.title}
-            description={recipe.description}
-            img={recipe.imageUrl}
-            initialLikeCount={recipe.likeCount}
-            isLiked={likedPosts.includes(Number(recipe.id))}
-          />
-        ))}
-      </div>
-    ) : (
-      <>
-        <div className="my-2 mt-4">
-          <span className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
-            TOP3 레시피🔥
-          </span>
-          <Ranking />
-        </div>
-        <div className="my-2">
-          <span className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
-            레시피🌮
-          </span>
-          {recipes.map((recipe) => (
-            <RecipeCard
-              key={recipe.id}
-              postId={recipe.id}
-              title={recipe.title}
-              description={recipe.description}
-              img={recipe.imageUrl}
-              initialLikeCount={recipe.likeCount}
-              isLiked={likedPosts.includes(Number(recipe.id))}
-            />
-          ))}
-        </div>
-      </>
-    )}
+        {isSearching ? (
+          <div className="my-2 mt-4">
+            <span className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
+              검색 결과
+            </span>
+            {searchResults.map((recipe) => (
+              <RecipeCard
+                key={recipe.id}
+                postId={recipe.id}
+                title={recipe.title}
+                description={recipe.description}
+                img={recipe.imageUrl}
+                initialLikeCount={recipe.likeCount}
+                isLiked={likedPosts.includes(Number(recipe.id))}
+              />
+            ))}
+          </div>
+        ) : (
+          <>
+            <div className="my-2 mt-4">
+              <span className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
+                TOP3 레시피🔥
+              </span>
+              <Ranking />
+            </div>
+            <div className="my-2">
+              <span className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
+                레시피🌮
+              </span>
+              {recipes.map((recipe) => (
+                <RecipeCard
+                  key={recipe.id}
+                  postId={recipe.id}
+                  title={recipe.title}
+                  description={recipe.description}
+                  img={recipe.imageUrl}
+                  initialLikeCount={recipe.likeCount}
+                  isLiked={likedPosts.includes(Number(recipe.id))}
+                />
+              ))}
+            </div>
+          </>
+        )}
 
         <div className="pagination flex justify-center my-4">
           {pageNumbers.map((number) => (
@@ -382,4 +387,3 @@ function Board() {
 }
 
 export default Board;
-

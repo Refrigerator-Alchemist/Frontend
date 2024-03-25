@@ -9,6 +9,9 @@ export default function UploadBoard() {
   const [title, setTitle] = useState(''); // 레시피 글 제목
   const [description, setDescription] = useState(''); // 내용
   const [ingredients, setIngredients] = useState([]); // 재료
+
+  const accessToken = localStorage.getItem('accessToken');
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,11 +20,13 @@ export default function UploadBoard() {
 
   // 1️⃣ 서버에서 기존 정보들을 불러오는 함수
   const fetchData = async (postId) => {
+    const URL = `${IP_ADDRESS}/board/updateBoard?postId=${postId}`;
     try {
-      const response = await axios.post(
-        `${IP_ADDRESS}/board/updateBoard`,
-        postId
-      );
+      const response = await axios.get(URL, {
+        headers: {
+          'Authorization-Access': accessToken,
+        },
+      });
 
       if (response.data) {
         if (response.data && Array.isArray(response.data.items)) {
@@ -55,7 +60,8 @@ export default function UploadBoard() {
   };
 
   // 4️⃣ 수정 완료
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const URL = `${IP_ADDRESS}/content/update`;
 
     const formData = {
@@ -68,16 +74,16 @@ export default function UploadBoard() {
     try {
       const response = await axios.post(URL, formData, {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
+          'Authorization-Access': accessToken,
         },
       });
 
-      if (response) {
+      if (response.status === 200) {
         console.log('게시물 수정 완료');
         window.alert('게시물 수정 완료');
+        navigate(`/board/${postId}`);
       }
-
-      navigate(`/board/${postId}`);
     } catch (error) {
       console.error('수정 중 에러가 발생했습니다', error);
       window.alert('수정 중 에러가 발생했습니다');

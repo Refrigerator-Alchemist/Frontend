@@ -14,9 +14,11 @@ const BoardDetail = () => {
   const [description, setDescription] = useState(''); // 내용
   const [ingredients, setIngredients] = useState([]); // 재료
   const [Liked, setLiked] = useState(false); // 좋아요 상태
-  const [likedItems, setLikedItems] = useState([]); // 현재 계정으로 좋아요 누른 게시물들
   const [likeCount, setLikeCount] = useState(''); // 좋아요 수
   const [likedPosts, setLikedPosts] = useState([]); // 좋아요 누른 postid 배열
+
+  const accessToken = localStorage.getItem('accessToken');
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,14 +26,12 @@ const BoardDetail = () => {
     fetchLikeData();
   }, [postId]);
 
-  // 1️⃣ 서버에서 기존 정보들을 불러오는 함수 
+  // 1️⃣ 서버에서 기존 정보들을 불러오는 함수
   const fetchPostData = async (postId) => {
     try {
-
       const response = await axios.get(
         `${IP_ADDRESS}/board/specific?postId=${postId}`
       );
-
 
       if (response.data && Array.isArray(response.data.items)) {
         const items = response.data.items.map((item) => ({
@@ -56,13 +56,12 @@ const BoardDetail = () => {
     }
   };
 
-
-  // 💛 좋아요 / 취소  (로그인사용자만)
+  // 💛 좋아요 / 취소  (로그인 사용자만)
   const toggleLike = async () => {
-    const accessToken = localStorage.getItem('accessToken');  
-    if (!accessToken) {    // 로컬스토리지에 사용자 로그인정보 없다면 
-      alert('로그인이 필요한 기능입니다.'); // 사용자에게 로그인 페이지로 리다이렉트하도록 추가해야함 - toastify는 추후에 
-      return; 
+    if (!accessToken) {
+      // 로컬스토리지에 사용자 로그인정보 없다면
+      alert('로그인이 필요한 기능입니다.'); // 사용자에게 로그인 페이지로 리다이렉트하도록 추가해야함 - toastify는 추후에
+      return;
     }
     try {
       if (Liked) {
@@ -77,6 +76,7 @@ const BoardDetail = () => {
             headers: {
               'Content-Type': 'application/json;charset=UTF-8',
               Accept: 'application/json',
+              'Authorization-Access': accessToken,
             },
           }
         );
@@ -103,6 +103,7 @@ const BoardDetail = () => {
             headers: {
               'Content-Type': 'application/json;charset=UTF-8',
               Accept: 'application/json',
+              'Authorization-Access': accessToken,
             },
           }
         );
@@ -122,14 +123,15 @@ const BoardDetail = () => {
 
   // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
   const fetchLikeData = async () => {
-    const URL = `${IP_ADDRESS}/board/islike`;
-    const nickName = localStorage.getItem('nickName');
+    const URL = `${IP_ADDRESS}/board/islike?id=${nickName}`;
 
     try {
       const response = await axios.get(URL, {
-        params: { nickName } 
+        headers: {
+          'Authorization-Access': accessToken,
+        },
       });
-      
+
       if (response.data) {
         const posts = response.data.map(Number);
         setLikedPosts(posts);
