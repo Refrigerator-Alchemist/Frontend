@@ -4,6 +4,8 @@ import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
 import { IP_ADDRESS } from '../context/UserContext';
 
+const accessToken = localStorage.getItem('accessToken');
+
 export default function UploadBoard() {
   const { postId } = useParams(); // 라우터 엔드포인트
   const [title, setTitle] = useState(''); // 레시피 글 제목
@@ -14,6 +16,7 @@ export default function UploadBoard() {
 
   const navigate = useNavigate();
 
+
   useEffect(() => {
     fetchData(postId);
   }, [postId]);
@@ -22,12 +25,13 @@ export default function UploadBoard() {
   const fetchData = async (postId) => {
     const URL = `${IP_ADDRESS}/board/updateBoard?postId=${postId}`;
     try {
+
       const response = await axios.get(URL, {
         headers: {
           'Authorization-Access': accessToken,
         },
       });
-
+      
       if (response.data) {
         if (response.data && Array.isArray(response.data.items)) {
           const items = response.data.items.map((item) => ({
@@ -87,8 +91,15 @@ export default function UploadBoard() {
     } catch (error) {
       console.error('수정 중 에러가 발생했습니다', error);
       window.alert('수정 중 에러가 발생했습니다');
+
     }
-  };
+
+    navigate(`/board/${postId}`);
+  } catch (error) {
+    console.error('수정 중 에러가 발생했습니다', error);
+    window.alert('수정 중 에러가 발생했습니다');
+  }
+};
 
   // 5️⃣ 취소
   const handleCancel = () => {

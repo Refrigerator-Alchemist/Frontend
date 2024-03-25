@@ -106,11 +106,6 @@ function MyPage() {
   const nickName = localStorage.getItem('nickName');
 
   // --------------------------------------------------------------------------------------------------------
-  // useEffect(() => {
-  //   fetchLikeData();
-  //   fetchUserInfo().then(fetchMyPage);
-  // }, [showMyRecipes]);
-
   useEffect(() => {
     fetchUserInfo();
     if (showMyRecipes) {
@@ -143,7 +138,7 @@ function MyPage() {
     }
   };
 
-  // 🧑🏽 내가 저장한 레시피 가져오는 함수
+  // 🧑🏽 내가 작성한 레시피 가져오는 함수
   const fetchMyPage = async () => {
     const URL = `${IP_ADDRESS}/board/myPage`;
 
@@ -169,7 +164,7 @@ function MyPage() {
         window.alert('데이터가 배열이 아닙니다');
       }
     } catch (error) {
-      console.error('내가 저장한 레시피 로드 중 에러 발생', error);
+      console.error('내가 작성한 레시피 로드 중 에러 발생', error);
     }
   };
 
@@ -214,7 +209,6 @@ function MyPage() {
           'Authorization-Access': accessToken,
         },
       });
-
       setRecipes((prevRecipes) =>
         prevRecipes.filter((recipe) => recipe.postId !== postId)
       );

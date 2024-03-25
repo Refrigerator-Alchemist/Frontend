@@ -50,11 +50,14 @@ function UploadBoard() {
           'Authorization-Access': accessToken,
         },
       });
-      // 모달띄우기 작성 성공됐다는
-      if (response) {
+      console.log(response.data); 
+      if (response.status === 200) {
         window.alert('게시물을 업로드 했습니다');
-        navigate('/board');
+        navigate(`/board/${response.data.postId}`); 
+        // 서버에서 postId 보내는지 확인 - 수정 예정 
       }
+
+
     } catch (error) {
       console.error('에러 내용:', error);
     }

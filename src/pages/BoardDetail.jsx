@@ -21,9 +21,11 @@ const BoardDetail = () => {
 
   const navigate = useNavigate();
 
+  const accessToken = localStorage.getItem('accessToken');  
+
   useEffect(() => {
     fetchPostData(postId);
-    fetchLikeData();
+    fetchLikedPosts();
   }, [postId]);
 
   // 1️⃣ 서버에서 기존 정보들을 불러오는 함수
@@ -58,10 +60,11 @@ const BoardDetail = () => {
 
   // 💛 좋아요 / 취소  (로그인 사용자만)
   const toggleLike = async () => {
-    if (!accessToken) {
-      // 로컬스토리지에 사용자 로그인정보 없다면
-      alert('로그인이 필요한 기능입니다.'); // 사용자에게 로그인 페이지로 리다이렉트하도록 추가해야함 - toastify는 추후에
-      return;
+
+    if (!accessToken) {    
+      alert('로그인이 필요한 기능입니다.'); 
+      return; 
+
     }
     try {
       if (Liked) {
@@ -74,9 +77,11 @@ const BoardDetail = () => {
           },
           {
             headers: {
+
               'Content-Type': 'application/json;charset=UTF-8',
               Accept: 'application/json',
               'Authorization-Access': accessToken,
+
             },
           }
         );
@@ -122,7 +127,7 @@ const BoardDetail = () => {
   };
 
   // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
-  const fetchLikeData = async () => {
+  const fetchLikedPosts = async () => {
     const URL = `${IP_ADDRESS}/board/islike?id=${nickName}`;
 
     try {
@@ -146,7 +151,7 @@ const BoardDetail = () => {
     <section>
       <div
         className="absolute top-5 left-42 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate('/board')}
+        onClick={() => navigate("/board")}
       >
         <FaArrowLeft />
       </div>
@@ -167,11 +172,21 @@ const BoardDetail = () => {
                   {likeCount}
                 </span>
 
-                <button onClick={toggleLike} className="p-1">
-                  {Liked ? (
-                    <FaHeart className="text-red-500 text-2xl" />
+                <button className="p-2">
+                  {accessToken ? (
+                    Liked ? (
+                      <FaHeart
+                        className="text-red-500 text-2xl"
+                        onClick={toggleLike}
+                      />
+                    ) : (
+                      <FaRegHeart className="text-2xl" onClick={toggleLike} />
+                    )
                   ) : (
-                    <FaRegHeart className="text-2xl" />
+                    <FaRegHeart
+                      className="text-2xl opacity-20 cursor-not-allowed hover:opacity-40"
+                      title="로그인이 필요합니다."
+                    />
                   )}
                 </button>
               </div>
@@ -183,7 +198,7 @@ const BoardDetail = () => {
             </h2>
           </div>
           <div className="font-score text-sm text-gray-500 my-2">
-            {ingredients ? ingredients.join(' · ') : ''}
+            {ingredients ? ingredients.join(" · ") : ""}
           </div>
           <p className="text-gray-700 font-score pl-12 pr-12">{description}</p>
         </div>
@@ -191,10 +206,10 @@ const BoardDetail = () => {
 
       <footer
         style={{
-          position: 'fixed',
-          bottom: '0',
-          width: '100%',
-          maxWidth: '31rem',
+          position: "fixed",
+          bottom: "0",
+          width: "100%",
+          maxWidth: "31rem",
         }}
       >
         <Navigation />
