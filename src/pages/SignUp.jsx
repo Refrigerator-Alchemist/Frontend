@@ -80,11 +80,13 @@ export default function SignUp() {
   const onCheckName = (e) => {
     e.preventDefault();
 
-    const pattern = /^[가-힣]{2,}$|^[A-Za-z]{3,}$/;
+    const pattern = /^[가-힣0-9]{2,}$|^[A-Za-z0-9]{3,}$/;
 
     if (!pattern.test(nickName)) {
       console.log(`입력한 닉네임 : ${nickName}`);
-      setNameError('한글은 최소 2글자, 영문은 최소 3글자 이상 입력하세요');
+      setNameError(
+        '한글은 최소 2글자, 영문은 최소 3글자 이상 입력하세요. 숫자는 선택적으로 포함할 수 있습니다.'
+      );
       setNickName('');
     } else {
       console.log(`입력한 닉네임 : ${nickName}`);
@@ -169,7 +171,7 @@ export default function SignUp() {
                 {/* 인증 요청 */}
                 <button
                   onClick={onRequest}
-                  className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtraBold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
+                  className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtrabold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
                 >
                   인증 요청
                 </button>
@@ -210,7 +212,7 @@ export default function SignUp() {
               </div>
               <button
                 onClick={onCheckCode}
-                className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtraBold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
+                className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtrabold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
               >
                 인증 확인
               </button>
@@ -236,7 +238,7 @@ export default function SignUp() {
                 {/* 중복확인 */}
                 <button
                   onClick={onCheckName}
-                  className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtraBold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
+                  className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtrabold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
                 >
                   중복 확인
                 </button>
@@ -369,7 +371,7 @@ export default function SignUp() {
                   isPasswordValid(password) === false &&
                   !passwordMessage
                 }
-                className={`p-3 mx-20 mt-3 rounded-3xl font-scoreExtraBold font-extrabold text-xl transition ease-in-out duration-300
+                className={`p-3 mx-20 mt-3 rounded-3xl font-scoreExtrabold font-extrabold text-xl transition ease-in-out duration-300
               ${
                 passwordMessage
                   ? 'text-white bg-main hover:bg-[#15ed79] hover:text-black hover:cursor-pointer hover:-translate-y-1 hover:scale-110'

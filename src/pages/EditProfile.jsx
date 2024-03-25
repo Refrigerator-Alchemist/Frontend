@@ -4,10 +4,13 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
 import IMAGE_PROFILE from '../assets/img/img_profile.png';
+import { IP_ADDRESS, useUserState } from '../context/UserContext';
 
 export default function EditProfile() {
-  const [nickName, setNickName] = useState(''); // 원래 닉네임
-  const [changNickName, setChangeNickName] = useState(nickName); // 새로 바꿀 닉네임
+  const user = useUserState();
+
+  const [nickName, setNickName] = useState(user.nickName); // 원래 닉네임
+  const [changeNickName, setChangeNickName] = useState(''); // 새로 바꿀 닉네임
   const [nameError, setNameError] = useState(false);
   const [email, setEmail] = useState('');
   const [image, setImage] = useState(
@@ -21,13 +24,13 @@ export default function EditProfile() {
   // 1️⃣ 처음에 보여줄 기본 유저 정보
   useEffect(() => {
     const fetchUserData = async () => {
-      const URL = 'http://localhost:8080/profile';
+      const URL = `${IP_ADDRESS}/profile`;
       const accessToken = localStorage.getItem('accessToken');
 
       try {
         const response = await axios.get(URL, {
           headers: {
-            'Authorization-Access': 'Bearer ' + accessToken,
+            'Authorization-Access': accessToken,
           },
         });
 
@@ -40,6 +43,11 @@ export default function EditProfile() {
 
     fetchUserData();
   }, []);
+
+  // input에 닉네임 수정 적용
+  useEffect(() => {
+    setChangeNickName(nickName);
+  }, [nickName]);
 
   // 2️⃣ 이미지 파일 업로드
   const handleImageChange = (e) => {
@@ -59,7 +67,7 @@ export default function EditProfile() {
 
   // 3️⃣ 프로필 이미지 저장하기
   const uploadImage = async (file) => {
-    const URL = 'http://localhost:8080/change-profile';
+    const URL = `${IP_ADDRESS}/change-profile`;
     const accessToken = localStorage.getItem('accessToken');
 
     const formData = new FormData();
@@ -72,7 +80,7 @@ export default function EditProfile() {
     try {
       await axios.post(URL, formData, {
         headers: {
-          'Authorization-Access': 'Bearer ' + accessToken,
+          'Authorization-Access': accessToken,
         },
       });
     } catch (error) {
@@ -84,7 +92,7 @@ export default function EditProfile() {
   const handleNameChange = (e) => {
     setChangeNickName(e.target.value);
 
-    if (!e.target.value.match(/^[가-힣]{2,}$|^[A-Za-z]{3,}$/)) {
+    if (!e.target.value.match(/^[가-힣0-9]{2,}$|^[A-Za-z0-9]{3,}$/)) {
       setNameError('한글은 최소 2글자, 영문은 최소 3글자 이상 입력하세요');
     } else {
       setNameError(false);
@@ -95,7 +103,7 @@ export default function EditProfile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const URL = 'http://localhost:8080/change-nickname';
+    const URL = `${IP_ADDRESS}/change-nickname`;
     const accessToken = localStorage.getItem('accessToken');
 
     try {
@@ -105,14 +113,14 @@ export default function EditProfile() {
             URL,
             {
               presentNickName: nickName,
-              changeNickName: changNickName,
+              changeNickName: changeNickName,
             },
             {
               headers: {
                 'Content-Type': 'application/json;charset=UTF-8',
                 Accept: 'application/json',
                 'Access-Control-Allow-Origin': '*',
-                'Authorization-Access': 'Bearer ' + accessToken,
+                'Authorization-Access': accessToken,
               },
             }
           )
@@ -187,7 +195,7 @@ export default function EditProfile() {
               className="shadow appearance-none border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="nickName"
               type="text"
-              value={changNickName || nickName}
+              value={changeNickName || nickName}
               onChange={handleNameChange}
             />
             {nameError ? (

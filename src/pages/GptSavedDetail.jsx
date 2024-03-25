@@ -5,16 +5,17 @@ import Navigation from '../components/Navigation';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { IP_ADDRESS } from '../context/UserContext';
 
 const GptSavedDetail = () => {
   const [recipeData, setRecipeData] = useState({});
   const { recipeId } = useParams();
   const navigate = useNavigate();
-  const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
+  const accessToken = localStorage.getItem('accessToken');
 
   // id로 세부내용 불러오기
   useEffect(() => {
-    toast.error('임시 에러 메시지. API 연결 전 UI 확인용.');
+    // toast.error('임시 에러 메시지.');
     const fetchRecipeData = async () => {
       try {
         if (!recipeId) {
@@ -22,7 +23,7 @@ const GptSavedDetail = () => {
         }
 
         const response = await axios.get(
-          `http://localhost:8080/recipe/myRecipe/${recipeId}`,
+          `${IP_ADDRESS}/recipe/myRecipe/${recipeId}`,
           {
             headers: {
               'Authorization-Access': accessToken,

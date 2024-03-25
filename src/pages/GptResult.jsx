@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { IP_ADDRESS } from '../context/UserContext';
 
 const RecipePage = () => {
   const [ingredients, setIngredients] = useState([]);
@@ -13,21 +14,22 @@ const RecipePage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const { recommendId } = useParams();
-  const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
+  const accessToken = localStorage.getItem('accessToken');
 
-  //gpt 레시피 결과 불러오는 함수 
+  //gpt 레시피 결과 불러오는 함수
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          `http://localhost:8080/recipe/recommend/${recommendId}`,
+          `${IP_ADDRESS}/recipe/recommend/${recommendId}`,
           {
             headers: {
               'Authorization-Access': accessToken,
             },
           }
         );
+
         if (response.data) {
           setTitle(response.data.foodName);
           setIngredients(response.data.ingredients);
@@ -51,8 +53,16 @@ const RecipePage = () => {
   // gpt레시피 저장하기
   const handleSaveButtonClick = async () => {
     try {
+      // 토큰이 없는 경우 에러 출력
+
+      if (!accessToken) {
+        toast.error('저장하기를 위해서는 로그인이 필요합니다.');
+        alert('저장하기를 위해서는 로그인이 필요합니다.');
+        return;
+      }
+
       await axios.post(
-        'http://localhost:8080/recipe/save',
+        `${IP_ADDRESS}/recipe/save`,
         {
           foodName: title,
           ingredients: ingredients,
@@ -90,9 +100,11 @@ const RecipePage = () => {
         <img
           src="https://media.discordapp.net/attachments/1197868473666248844/1213305395305652264/img_profile.png?ex=660772b4&is=65f4fdb4&hm=fa07101b219d5e41c1501989503c4255d4e8aaaae60a02a1f626e326ca970493&=&format=webp&quality=lossless&width=614&height=614"
           alt="로딩중"
-          className="animate-bounce w-24 h-24 mb-4" 
+          className="animate-bounce w-24 h-24 mb-4"
         />
-        <h1 className=" font-score text-2xl font-bold text-gray-900 mb-4">로딩 중</h1>
+        <h1 className=" font-score text-2xl font-bold text-gray-900 mb-4">
+          로딩 중
+        </h1>
         <button
           onClick={() => navigate('/main')}
           className=" font-score text-sm text-gray-400"
@@ -102,7 +114,7 @@ const RecipePage = () => {
       </section>
     );
   }
-  
+
   return (
     <section className="bg-white min-h-screen p-6">
       <div
@@ -125,18 +137,21 @@ const RecipePage = () => {
               </h2>
               <ul className="py-2 flex flex-wrap">
                 {ingredients.map((ingredient, index) => (
-                  <li
+                  <ul
                     key={index}
                     className="font-score text-gray-600 mr-4 mb-2"
                   >
                     {ingredient}
-                  </li>
+                  </ul>
                 ))}
               </ul>
               <h2 className="font-score text-lg font-bold text-gray-800 mt-4">
                 만드는 방법
               </h2>
-              <ol className="list-decimal list-inside">
+              <ol
+                className="list-decimal list-inside"
+                style={{ listStyleType: 'none' }}
+              >
                 {steps.map((step, index) => (
                   <li key={index} className="font-score text-gray-600">
                     {step}

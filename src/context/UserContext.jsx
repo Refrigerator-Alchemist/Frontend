@@ -1,11 +1,14 @@
 import React, { useState, useReducer, createContext, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import ErrorCode from '../components/ErrorCode';
+import ErrorCode from '../utils/ErrorCode';
+
+// 🧷 현재 IP 주소
+export const IP_ADDRESS = 'http://localhost:8080';
 
 // 📀 토큰 처리
 const instance = axios.create({
-  baseURL: 'http://localhost:8080/auth',
+  baseURL: `${IP_ADDRESS}/auth`,
 });
 
 // ❕ 요청 인터셉터 : 토큰 업데이트
@@ -13,11 +16,12 @@ instance.interceptors.request.use(
   function (config) {
     const accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
+
     if (accessToken) {
-      config.headers['Authorization-Access'] = 'Bearer ' + accessToken;
+      config.headers['Authorization-Access'] = accessToken;
     }
     if (refreshToken) {
-      config.headers['Authorization-Refresh'] = 'Bearer ' + refreshToken;
+      config.headers['Authorization-Refresh'] = refreshToken;
     }
     return config;
   },
@@ -65,15 +69,15 @@ export const UserProvider = ({ children }) => {
   const [nameDuplicated, setNameDuplicated] = useState(true); // 닉네임 중복 여부
 
   // 🙍‍♂️🙍‍♀️ SNS 로그인 엔드 포인트
-  const googleURL = `http://localhost:8080/oauth2/authorization/google`;
-  const kakaoURL = `http://localhost:8080/oauth2/authorization/kakao`;
-  const naverURL = `http://localhost:8080/oauth2/authorization/naver`;
+  const googleURL = `${IP_ADDRESS}/oauth2/authorization/google`;
+  const kakaoURL = `${IP_ADDRESS}/oauth2/authorization/kakao`;
+  const naverURL = `${IP_ADDRESS}/oauth2/authorization/naver`;
 
   const navigate = useNavigate();
 
   // 📧 이메일 인증 요청 (회원가입용) -------------------------------------------------
   const requestEmailForSignUp = async (email, emailType, socialType) => {
-    const URL = 'http://localhost:8080/auth/send-email';
+    const URL = `${IP_ADDRESS}/auth/send-email`;
 
     try {
       const response = await instance.post(URL, {
@@ -94,13 +98,13 @@ export const UserProvider = ({ children }) => {
         window.alert('이미 서버에 존재하는 이메일입니다');
       }
     } catch (error) {
-      console.error('이메일 인증번호 요청 중 에러 발생: ', error);
+      console.error('💥 이메일 인증번호 요청 중 에러 발생: ', error);
     }
   };
 
   // 📧 이메일 인증 요청 (비밀번호 재설정용) ---------------------------------------------
   const requestEmailForReset = async (email, emailType, socialType) => {
-    const URL = 'http://localhost:8080/auth/send-email';
+    const URL = `${IP_ADDRESS}/auth/send-email`;
 
     try {
       const response = await instance.post(URL, {
@@ -124,7 +128,7 @@ export const UserProvider = ({ children }) => {
         window.alert('존재하지 않는 이메일입니다');
       }
     } catch (error) {
-      console.error('이메일 인증번호 요청 중 에러 발생: ', error);
+      console.error('💥 이메일 인증번호 요청 중 에러 발생: ', error);
     }
   };
 
@@ -153,18 +157,12 @@ export const UserProvider = ({ children }) => {
     }
 
     try {
-      const response = await instance.post(
-        'http://localhost:8080/auth/verify-email',
-        {
-          email,
-          emailType,
-          inputNum,
-          socialType,
-          // randomNum,
-          // takenTime,
-          // expireTime,
-        }
-      );
+      const response = await instance.post(`${IP_ADDRESS}/auth/verify-email`, {
+        email,
+        emailType,
+        inputNum,
+        socialType,
+      });
 
       if (response.status === 204) {
         setVerified(true);
@@ -173,7 +171,7 @@ export const UserProvider = ({ children }) => {
         window.alert('인증 실패;');
       }
     } catch (error) {
-      console.error('인증 완료 상태 전송 중 에러 발생: ', error);
+      console.error('💥 인증 확인 중 에러 발생: ', error);
     }
   };
 
@@ -181,7 +179,7 @@ export const UserProvider = ({ children }) => {
   const checkNameDuplication = async (nickName) => {
     try {
       const response = await instance.post(
-        'http://localhost:8080/auth/verify-nickname',
+        `${IP_ADDRESS}/auth/verify-nickname`,
         {
           nickName,
         }
@@ -195,13 +193,13 @@ export const UserProvider = ({ children }) => {
         window.alert('사용가능한 닉네임입니다:)');
       }
     } catch (error) {
-      console.error('닉네임 중복 확인 중 에러 발생: ', error);
+      console.error('💥 닉네임 중복 확인 중 에러 발생: ', error);
     }
   };
 
   // 📝 회원가입 ---------------------------------------------------------------
   const signup = (email, password, nickName, socialType) => {
-    const URL = 'http://localhost:8080/auth/signup';
+    const URL = `${IP_ADDRESS}/auth/signup`;
 
     instance
       .post(
@@ -226,13 +224,13 @@ export const UserProvider = ({ children }) => {
       })
       .catch((error) => {
         console.log(error);
-        window.alert('회원가입이 정상적으로 완료되지 못했습니다;');
+        window.alert('💥 회원가입 중 에러 발생');
       });
   };
 
   // 🚫 회원탈퇴 ---------------------------------------------------------------
   const deleteUser = async () => {
-    const URL = 'http://localhost:8080/auth/delete-user';
+    const URL = `${IP_ADDRESS}/auth/delete-user`;
     const socialId = localStorage.getItem('socialId');
 
     try {
@@ -245,13 +243,13 @@ export const UserProvider = ({ children }) => {
 
       window.alert('회원탈퇴가 완료되었습니다.');
     } catch (error) {
-      console.error('회원탈퇴 요청 중 에러 발생: ', error);
+      console.error('💥 회원탈퇴 요청 중 에러 발생: ', error);
     }
   };
 
   // 🔐 로그인 ---------------------------------------------------------------
   const login = (email, password, socialType) => {
-    const URL = 'http://localhost:8080/auth/token/login';
+    const URL = `${IP_ADDRESS}/auth/token/login`;
 
     instance
       .post(
@@ -281,14 +279,14 @@ export const UserProvider = ({ children }) => {
           response.headers['authorization-refresh']
         );
         localStorage.setItem('socialId', response.headers.get('socialId'));
-        localStorage.setItem('nickName', response.data.name);
+        localStorage.setItem('nickName', response.data.nickName);
         localStorage.setItem('email', response.data.email);
         localStorage.setItem('socialType', response.data.socialType);
 
         // ▶ 유저 데이터 저장
         let user = {
           socialId: response.headers['socialId'],
-          nickName: response.data.name,
+          nickName: response.data.nickName,
           email: response.data.email,
           password,
           socialType: socialType,
@@ -309,19 +307,18 @@ export const UserProvider = ({ children }) => {
               window.alert(ErrorCode.NOT_VALID_ACCESSTOKEN.message);
               break;
             default:
-              window.alert('로그인 실패!');
+              window.alert('💥 로그인 실패!');
           }
         } else {
-          window.alert('로그인 실패!');
+          window.alert('💥 로그인 실패!');
         }
       });
   };
 
   //🔓 로그아웃 ---------------------------------------------------------------
   const logout = async () => {
-    const URL = 'http://localhost:8080/auth/token/logout';
+    const URL = `${IP_ADDRESS}/auth/token/logout`;
     const socialId = localStorage.getItem('socialId');
-    // const accessToken = localStorage.getItem('accessToken');
 
     try {
       const response = await instance.post(
@@ -332,7 +329,6 @@ export const UserProvider = ({ children }) => {
             'Content-Type': 'application/json;charset=UTF-8',
             Accept: 'application/json',
             'Access-Control-Allow-Origin': '*',
-            // 'authorization-access': accessToken,
           },
         }
       );
@@ -367,7 +363,7 @@ export const UserProvider = ({ children }) => {
   const resetPassword = async (email, password, rePassword, socialType) => {
     try {
       const response = await instance.post(
-        'http://localhost:8080/auth/reset-password',
+        `${IP_ADDRESS}/auth/reset-password`,
         {
           email,
           password,
@@ -379,10 +375,10 @@ export const UserProvider = ({ children }) => {
       if (response.status === 204) {
         window.alert('비밀번호가 성공적으로 재설정되었습니다');
       } else {
-        window.alert('비밀번호 재설정에 실패하였습니다');
+        window.alert('💥 비밀번호 재설정에 실패하였습니다');
       }
     } catch (error) {
-      console.error('비밀번호 재설정 중 에러 발생: ', error);
+      console.error('💥 비밀번호 재설정 중 에러 발생: ', error);
     }
 
     navigate('/login');
@@ -390,31 +386,34 @@ export const UserProvider = ({ children }) => {
 
   // 🚀 새로운 액세스 토큰 발급 -----------------------------------------------------------
   const reIssue = async () => {
-    const URL = 'http://localhost:8080/auth/token/reissue';
+    const URL = `${IP_ADDRESS}/auth/token/reissue`;
     const socialId = localStorage.getItem('socialId');
-    // const refreshToken = localStorage.getItem('refreshToken');
+    const socialType = localStorage.getItem('socialType');
 
     try {
-      const response = await instance.post(
-        URL,
-        { socialId }
-        // {
-        // headers: {
-        // 'authorization-refresh': refreshToken,
-        // },
-        // }
-      );
+      const response = await instance.post(URL, { socialId });
 
-      if (response.status === 204) {
+      if (response.status === 204 && socialType === 'Refrigerator-Cleaner') {
         localStorage.setItem('accessToken', response.data.accessToken);
         console.log(
           `새로운 액세스 토큰을 발급받았습니다 : ${response.data.accessToken}`
         );
         navigate(window.location.pathname);
       }
+
+      if (response.status === 204 && socialType !== 'Refrigerator-Cleaner') {
+        localStorage.setItem(
+          'accessToken',
+          'Bearer ' + response.data.accessToken
+        );
+        console.log(
+          `새로운 액세스 토큰을 발급받았습니다 : ${response.data.accessToken}`
+        );
+        navigate(window.location.pathname);
+      }
     } catch (error) {
-      console.error(error);
-      window.alert('새로운 액세스 토큰 발급 실패');
+      console.error('💥 새로운 액세스 토큰 발급 실패', error);
+      window.alert('💥 새로운 액세스 토큰 발급 실패');
     }
   };
 
