@@ -12,6 +12,9 @@ import axios from 'axios';
 import { IP_ADDRESS } from '../context/UserContext';
 const accessToken = localStorage.getItem('accessToken');  
 
+const accessToken = localStorage.getItem('accessToken');
+const nickName = localStorage.getItem('nickName');
+
 // 🃏 레시피 카드
 const RecipeCard = ({
   postId,
@@ -22,20 +25,19 @@ const RecipeCard = ({
   isLiked,
 }) => {
   const [Liked, setLiked] = useState(isLiked);
-  const [likedItems, setLikedItems] = useState([]); // 현재 계정으로 좋아요 누른 게시물들
   const [likeCount, setLikeCount] = useState(parseInt(initialLikeCount));
-  const nickName = localStorage.getItem('nickName');
   const [likedPosts, setLikedPosts] = useState([]);
 
   useEffect(() => {
     setLiked(isLiked);
   }, [isLiked]);
 
-  // 💛 좋아요 / 취소  (로그인사용자만)
+  // 💛 좋아요 / 취소 (로그인해야 가능)
   const toggleLike = async () => {
     if (!accessToken) {    
       alert('로그인이 필요한 기능입니다.'); 
       return; 
+
     }
     try {
       if (Liked) {
@@ -48,9 +50,12 @@ const RecipeCard = ({
           },
           {
             headers: {
-              "Content-Type": "application/json;charset=UTF-8",
-              Accept: "application/json",
-              "Authorization-Access": accessToken,
+
+              'Content-Type': 'application/json;charset=UTF-8',
+              Accept: 'application/json',
+
+              'Authorization-Access': accessToken,
+
             },
           }
         );
@@ -75,8 +80,11 @@ const RecipeCard = ({
           {
             headers: {
               'Content-Type': 'application/json;charset=UTF-8',
-            Accept: 'application/json',
-              'Authorization-Access' :accessToken
+
+              Accept: 'application/json',
+              
+              'Authorization-Access': accessToken,
+
             },
           }
         );
@@ -137,7 +145,10 @@ const SearchBar = ({ onSearch }) => {
   const handleSearchClick = async () => {
     if (query.trim() !== '') {
       try {
-        const response = await axios.post(`${IP_ADDRESS}/board/searchTitle`, query.trim());
+        const response = await axios.post(
+          `${IP_ADDRESS}/board/searchTitle`,
+          query.trim()
+        );
         console.log('검색 결과:', response.data);
         onSearch(response.data);
         // setQuery(''); //검색 입력란 초기화
@@ -166,7 +177,7 @@ const SearchBar = ({ onSearch }) => {
       <button
         className="flex items-center justify-center bg-transparent hover:bg-gray-200 px-5 py-2 rounded-full"
         onClick={handleSearchClick}
-        style={{ minWidth: "30px", height: "40px", borderRadius: "30px" }} 
+        style={{ minWidth: '30px', height: '40px', borderRadius: '30px' }}
       >
         <img
           src={searchicon}
@@ -178,7 +189,6 @@ const SearchBar = ({ onSearch }) => {
     </div>
   );
 };
-
 
 // ✍️ 게시물 작성 페이지로 이동
 const WriteButton = () => {
@@ -196,7 +206,6 @@ const WriteButton = () => {
     </Link>
   );
 };
-
 
 // ----------------------------게시판
 function Board() {
@@ -219,15 +228,14 @@ function Board() {
 
   // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
   const fetchLikedPosts = async () => {
-    const nickName = localStorage.getItem("nickName");
+
     const URL = `${IP_ADDRESS}/board/islike?id=${nickName}`;
 
     try {
       const response = await axios.get(URL, {
         headers: {
-          "Content-Type": "application/json;charset=UTF-8",
-          Accept: "application/json",
-          "Authorization-Access": accessToken,
+          'Authorization-Access': accessToken,
+
         },
       });
 
@@ -262,8 +270,10 @@ function Board() {
   const fetchRecipesByPage = async (pageNumber) => {
     try {
       const response = await axios.get(`${IP_ADDRESS}/board/apiTest`, {
+
         // params: { data: pageNumber.toString() }
         params: { data: (pageNumber - 1).toString() },
+
       });
 
       if (response.data && Array.isArray(response.data.items)) {
@@ -283,6 +293,7 @@ function Board() {
       console.error("에러 내용2:", error);
     }
   };
+
 
   // 3️⃣ 게시물 검색
   const handleSearch = (results) => {

@@ -4,6 +4,10 @@ import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
 import { IP_ADDRESS } from '../context/UserContext';
 
+const nickName = localStorage.getItem('nickName');
+const email = localStorage.getItem('email');
+const accessToken = localStorage.getItem('accessToken');
+
 function UploadBoard() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -24,11 +28,6 @@ function UploadBoard() {
   };
 
   const handleSubmit = async (e) => {
-    const nickName = localStorage.getItem('nickName');
-    const email = localStorage.getItem('email');
-    const accessToken = localStorage.getItem('accessToken');
-
-    // 서버전송
     e.preventDefault();
 
     const formData = new FormData();
@@ -47,16 +46,17 @@ function UploadBoard() {
     try {
       const response = axios.post(`${IP_ADDRESS}/writeTest`, formData, {
         headers: {
-          'Authorization-Access': accessToken,
           'Content-Type': 'multipart/form-data',
+          'Authorization-Access': accessToken,
         },
       });
       console.log(response.data); 
       if (response.status === 200) {
-        window.alert('게시물 작성 완료');
+        window.alert('게시물을 업로드 했습니다');
         navigate(`/board/${response.data.postId}`); 
         // 서버에서 postId 보내는지 확인 - 수정 예정 
       }
+
 
     } catch (error) {
       console.error('에러 내용:', error);

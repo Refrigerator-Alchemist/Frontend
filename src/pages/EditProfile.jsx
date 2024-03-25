@@ -23,7 +23,7 @@ export default function EditProfile() {
 
   const accessToken = localStorage.getItem('accessToken');
 
-  // ⭕️ 닉네임 입력 창에 입력가능하도록 처리
+  // ⭕️ 닉네임 입력 창에 입력 가능하도록 처리
   useEffect(() => {
     setChangeNickName(nickName);
   }, [nickName]);

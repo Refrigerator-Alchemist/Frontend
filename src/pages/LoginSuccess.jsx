@@ -47,10 +47,10 @@ export default function LoginSuccess() {
 
       // ▶ 유저 데이터 저장
       let user = {
-        accessToken: localStorage.getItem('accessToken'),
-        email: localStorage.getItem('email'),
         socialId: localStorage.getItem('socialId'),
         socialType: localStorage.getItem('socialType'),
+        nickName: localStorage.getItem('nickName'),
+        email: localStorage.getItem('email'),
       };
 
       console.log(`⭕ 유저 데이터 저장 완료`);
