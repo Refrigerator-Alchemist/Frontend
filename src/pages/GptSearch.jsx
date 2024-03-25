@@ -25,12 +25,14 @@ const GptSearch = () => {
   // Enter 키 입력 시 태그 추가
   const handleInputKeyDown = (e) => {
     if (e.key === 'Enter' && inputValue.trim() !== '') {
+      e.preventDefault();
       addTag();
       setInputValue('');
-      e.preventDefault();
+      
     } else if (e.key === 'Enter') {
-      setInputValue('');
       e.preventDefault();
+      setInputValue('');
+    
     }
   };
 
