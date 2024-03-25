@@ -114,12 +114,15 @@ const RecipeCard = ({
       <div className="mr-2">
         <span className="text-lg font-score font-semibold">{likeCount}</span>
       </div>
-      <button className="p-2">
+      <button
+        className="p-2"
+        onClick={accessToken ? toggleLike : () => alert("로그인이 필요합니다.")}
+      >
         {accessToken ? (
           Liked ? (
-            <FaHeart className="text-red-500 text-2xl" onClick={toggleLike} />
+            <FaHeart className="text-red-500 text-2xl" />
           ) : (
-            <FaRegHeart className="text-2xl" onClick={toggleLike} />
+            <FaRegHeart className="text-2xl opacity-100 hover:opacity-100" />
           )
         ) : (
           <FaRegHeart
@@ -149,7 +152,7 @@ const SearchBar = ({ onSearch }) => {
         );
         console.log('검색 결과:', response.data);
         onSearch(response.data);
-        // setQuery(''); //검색 입력란 초기화
+        setQuery(''); //검색 입력란 초기화
       } catch (error) {
         console.error('검색 결과 에러:', error);
       }
@@ -216,13 +219,18 @@ function Board() {
   const recipesPerPage = 6;
 
   useEffect(() => {
-    fetchLikedPosts();
+    fetchLikedPosts(); 
+    fetchTotalRecipes(); 
   }, []);
 
   useEffect(() => {
-    fetchTotalRecipes();
-    fetchRecipesByPage(currentPage);
+    fetchRecipesByPage(currentPage); //현재페이지 바뀔때마다 
   }, [currentPage]);
+
+  useEffect(() => {
+    fetchRecipesByPage(currentPage);
+  }, []); // 페이지 이동할때마다 최신데이터
+
 
   // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
   const fetchLikedPosts = async () => {

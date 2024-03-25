@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { GoHome } from 'react-icons/go';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { IP_ADDRESS } from '../context/UserContext';
 
 const RecipePage = () => {
@@ -53,11 +51,9 @@ const RecipePage = () => {
   // gpt레시피 저장하기
   const handleSaveButtonClick = async () => {
     try {
-      // 토큰이 없는 경우 에러 출력
-
       if (!accessToken) {
-        toast.error('저장하기를 위해서는 로그인이 필요합니다.');
-        alert('저장하기를 위해서는 로그인이 필요합니다.');
+        toast.error('로그인이 필요합니다.');
+        console.log(" 로그인 필요")
         return;
       }
 
@@ -119,7 +115,7 @@ const RecipePage = () => {
     <section className="bg-white min-h-screen p-6">
       <div
         className="absolute top-5 left-30 ml-0 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate('/board')}
+        onClick={() => navigate("/board")}
       >
         <FaArrowLeft />
       </div>
@@ -150,7 +146,7 @@ const RecipePage = () => {
               </h2>
               <ol
                 className="list-decimal list-inside"
-                style={{ listStyleType: 'none' }}
+                style={{ listStyleType: "none" }}
               >
                 {steps.map((step, index) => (
                   <li key={index} className="font-score text-gray-600">
@@ -165,11 +161,11 @@ const RecipePage = () => {
       <footer className="fixed bottom-5 left-0 right-0 px-6">
         <div
           className="mx-auto flex justify-between"
-          style={{ maxWidth: '400px' }}
+          style={{ maxWidth: "400px" }}
         >
           <button
             className="font-score bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-8 rounded-full"
-            onClick={() => navigate('/recipe/recommend')}
+            onClick={() => navigate("/recipe/recommend")}
           >
             다시 할래요
           </button>

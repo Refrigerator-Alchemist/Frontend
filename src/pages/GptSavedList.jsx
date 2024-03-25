@@ -11,11 +11,11 @@ import { IP_ADDRESS, useUserState } from '../context/UserContext';
 const GptSavedList = () => {
   const navigate = useNavigate();
   const [recipes, setRecipes] = useState([]);
-  const [nickname, setNickname] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage] = useState(7);
   const user = useUserState();
   const accessToken = localStorage.getItem('accessToken');
+  const [nickname, setNickname] = useState(localStorage.getItem('nickname') || ''); 
 
   //저장한 목록 보기
   useEffect(() => {
@@ -50,20 +50,6 @@ const GptSavedList = () => {
     fetchRecipes();
   }, [user.nickName]);
 
-
-  useEffect(() => {
-    const fetchNickname = async () => {
-      try {
-        const response = await axios.get(`${IP_ADDRESS}/userNickname`);
-        setNickname(response.data.nickname); 
-      } catch (error) {
-        console.error('닉네임 가져오기 실패:', error);
-      }
-    };
-
-    fetchNickname();
-  }, []);
-
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
   const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
@@ -96,7 +82,7 @@ const GptSavedList = () => {
       <div className="my-2 mt-20 mb-4">
         <div className="titlebox mb-6 mt-2">
           <span className="font-score font-extrabold ml-8 text-2xl">
-            {nickname ? `${nickname}의 연금술 레시피` : "연금술 레시피"}
+          {accessToken ? `${nickname}의 연금술 레시피` : '연금술 레시피'}
           </span>
         </div>
         {currentRecipes.map((recipe) => (
