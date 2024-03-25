@@ -50,6 +50,7 @@ const RecipeCard = ({
             headers: {
               'Content-Type': 'application/json;charset=UTF-8',
               Accept: 'application/json',
+              'Authorization': `Bearer ${accessToken}` 
             },
           }
         );
@@ -201,9 +202,11 @@ function Board() {
 
   useEffect(() => {
     fetchTotalRecipes();
-    fetchRecipesByPage(1);
     fetchLikedPosts();
   }, []);
+  useEffect(() => {
+    fetchRecipesByPage(currentPage);
+  }, [currentPage]); 
 
   // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
   const fetchLikedPosts = async () => {
@@ -246,7 +249,7 @@ function Board() {
   const fetchRecipesByPage = async (pageNumber) => {
     try {
       const response = await axios.get(`${IP_ADDRESS}/board/apiTest`, {
-        params: { page: pageNumber }
+        params: { data: pageNumber.toString() }
       });
   
 
@@ -270,9 +273,9 @@ function Board() {
     }
   };
 
-  useEffect(() => {
-    fetchRecipesByPage(1);
-  }, []);
+  // useEffect(() => {
+  //   fetchRecipesByPage(1);
+  // }, []);
 
   // // 3️⃣ 게시물 검색
 
