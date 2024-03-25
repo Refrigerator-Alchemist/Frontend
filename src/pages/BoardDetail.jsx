@@ -27,9 +27,11 @@ const BoardDetail = () => {
   // 1️⃣ 서버에서 기존 정보들을 불러오는 함수 
   const fetchPostData = async (postId) => {
     try {
-      const response = await axios.get(`${IP_ADDRESS}/board/specific`, {
-        params: { postId: postId } // 쿼리 파라미터로 postId를 추가
-      });
+
+      const response = await axios.get(
+        `${IP_ADDRESS}/board/specific?postId=${postId}`
+      );
+
 
       if (response.data && Array.isArray(response.data.items)) {
         const items = response.data.items.map((item) => ({

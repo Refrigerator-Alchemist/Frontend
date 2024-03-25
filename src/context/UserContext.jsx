@@ -279,15 +279,15 @@ export const UserProvider = ({ children }) => {
           response.headers['authorization-refresh']
         );
         localStorage.setItem('socialId', response.headers.get('socialId'));
-        localStorage.setItem('nickName', response.data.nickName);
-        localStorage.setItem('email', response.data.email);
-        localStorage.setItem('socialType', response.data.socialType);
+        localStorage.setItem('nickName', response.headers.get('nickName'));
+        localStorage.setItem('email', email);
+        localStorage.setItem('socialType', socialType);
 
         // ▶ 유저 데이터 저장
         let user = {
           socialId: response.headers['socialId'],
-          nickName: response.data.nickName,
-          email: response.data.email,
+          nickName: response.headers['nickName'],
+          email,
           password,
           socialType: socialType,
         };

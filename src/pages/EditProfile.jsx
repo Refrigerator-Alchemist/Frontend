@@ -21,11 +21,17 @@ export default function EditProfile() {
 
   const navigate = useNavigate();
 
+  const accessToken = localStorage.getItem('accessToken');
+
+  // ⭕️ 닉네임 입력 창에 입력가능하도록 처리
+  useEffect(() => {
+    setChangeNickName(nickName);
+  }, [nickName]);
+
   // 1️⃣ 처음에 보여줄 기본 유저 정보
   useEffect(() => {
     const fetchUserData = async () => {
       const URL = `${IP_ADDRESS}/profile`;
-      const accessToken = localStorage.getItem('accessToken');
 
       try {
         const response = await axios.get(URL, {
@@ -43,11 +49,6 @@ export default function EditProfile() {
 
     fetchUserData();
   }, []);
-
-  // input에 닉네임 수정 적용
-  useEffect(() => {
-    setChangeNickName(nickName);
-  }, [nickName]);
 
   // 2️⃣ 이미지 파일 업로드
   const handleImageChange = (e) => {
@@ -68,7 +69,6 @@ export default function EditProfile() {
   // 3️⃣ 프로필 이미지 저장하기
   const uploadImage = async (file) => {
     const URL = `${IP_ADDRESS}/change-profile`;
-    const accessToken = localStorage.getItem('accessToken');
 
     const formData = new FormData();
     const nickNameBlob = new Blob([JSON.stringify({ nickName })], {
@@ -104,7 +104,6 @@ export default function EditProfile() {
     e.preventDefault();
 
     const URL = `${IP_ADDRESS}/change-nickname`;
-    const accessToken = localStorage.getItem('accessToken');
 
     try {
       if (nameError === false) {
