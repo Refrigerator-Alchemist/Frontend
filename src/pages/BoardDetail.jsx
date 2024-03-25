@@ -21,7 +21,6 @@ const BoardDetail = () => {
 
   const navigate = useNavigate();
 
-  const accessToken = localStorage.getItem('accessToken');  
 
   useEffect(() => {
     fetchPostData(postId);

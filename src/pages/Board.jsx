@@ -10,8 +10,6 @@ import Navigation from '../components/Navigation';
 import axios from 'axios';
 
 import { IP_ADDRESS } from '../context/UserContext';
-const accessToken = localStorage.getItem('accessToken');  
-
 const accessToken = localStorage.getItem('accessToken');
 const nickName = localStorage.getItem('nickName');
 
