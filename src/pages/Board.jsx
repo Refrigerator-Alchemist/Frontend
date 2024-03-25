@@ -30,8 +30,13 @@ const RecipeCard = ({
     setLiked(isLiked);
   }, [isLiked]);
 
-  // 💛 좋아요 / 취소
+  // 💛 좋아요 / 취소  (로그인사용자만)
   const toggleLike = async () => {
+    const accessToken = localStorage.getItem('accessToken');  
+    if (!accessToken) {    // 로컬스토리지에 사용자 로그인정보 없다면 
+      alert('로그인이 필요한 기능입니다.'); // 사용자에게 로그인 페이지로 리다이렉트하도록 추가해야함 - toastify는 추후에 
+      return; 
+    }
     try {
       if (Liked) {
         // ▶️ 좋아요 되어있는 상태면 취소
@@ -183,6 +188,7 @@ const WriteButton = () => {
   );
 };
 
+
 // ----------------------------게시판
 function Board() {
   const [recipes, setRecipes] = useState([]);
@@ -205,7 +211,10 @@ function Board() {
     const nickName = localStorage.getItem('nickName');
 
     try {
-      const response = await axios.post(URL, nickName);
+      const response = await axios.get(URL, {
+        params: { nickName }
+      });
+      
       if (response.data) {
         const posts = response.data.map(Number);
         setLikedPosts(posts);
@@ -236,10 +245,10 @@ function Board() {
   // 2️⃣ 각 페이지에 해당하는 레시피들을 불러오는 함수
   const fetchRecipesByPage = async (pageNumber) => {
     try {
-      const response = await axios.post(
-        `${IP_ADDRESS}/board/apiTest`,
-        pageNumber
-      );
+      const response = await axios.get(`${IP_ADDRESS}/board/apiTest`, {
+        params: { page: pageNumber }
+      });
+  
 
       if (response.data && Array.isArray(response.data.items)) {
         const formattedData = response.data.items.map((item) => ({

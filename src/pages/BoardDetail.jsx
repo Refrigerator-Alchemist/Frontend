@@ -24,12 +24,14 @@ const BoardDetail = () => {
     fetchLikeData();
   }, [postId]);
 
-  // 1️⃣ 서버에서 기존 정보들을 불러오는 함수
+  // 1️⃣ 서버에서 기존 정보들을 불러오는 함수 
   const fetchPostData = async (postId) => {
     try {
+
       const response = await axios.get(
         `${IP_ADDRESS}/board/specific?postId=${postId}`
       );
+
 
       if (response.data && Array.isArray(response.data.items)) {
         const items = response.data.items.map((item) => ({
@@ -54,14 +56,19 @@ const BoardDetail = () => {
     }
   };
 
-  // 💛 좋아요 / 취소
+
+  // 💛 좋아요 / 취소  (로그인사용자만)
   const toggleLike = async () => {
+    const accessToken = localStorage.getItem('accessToken');  
+    if (!accessToken) {    // 로컬스토리지에 사용자 로그인정보 없다면 
+      alert('로그인이 필요한 기능입니다.'); // 사용자에게 로그인 페이지로 리다이렉트하도록 추가해야함 - toastify는 추후에 
+      return; 
+    }
     try {
       if (Liked) {
         // ▶️ 좋아요 되어있는 상태면 취소
         const response = await axios.post(
           `${IP_ADDRESS}/board/dislike`,
-
           {
             nickName: nickName,
             postId: postId,
@@ -119,7 +126,10 @@ const BoardDetail = () => {
     const nickName = localStorage.getItem('nickName');
 
     try {
-      const response = await axios.get(URL, nickName);
+      const response = await axios.get(URL, {
+        params: { nickName } 
+      });
+      
       if (response.data) {
         const posts = response.data.map(Number);
         setLikedPosts(posts);

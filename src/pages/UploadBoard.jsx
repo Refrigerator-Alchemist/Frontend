@@ -133,7 +133,7 @@ function UploadBoard() {
                 value={ingredient}
                 onChange={(e) => handleIngredientChange(index, e)}
                 placeholder="재료를 입력하세요"
-                className="border border-gray-300 rounded-md p-2 text-sm flex-grow"
+                className="border border-gray-300 rounded-md p-2 text-sm flex-grow mb-2"
               />
               {ingredients.length > 1 && (
                 <button

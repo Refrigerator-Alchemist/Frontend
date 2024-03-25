@@ -92,9 +92,11 @@ function MyPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage, setRecipesPerPage] = useState(5);
 
+
   const [showMyRecipes, setShowMyRecipes] = useState(true); // 토글 기능 - true : 저장한 레시피 / false : 좋아요 누른 레시피
   const [recipes, setRecipes] = useState([]); // 내가 저장한 레시피들
   const [likedItems, setLikedItems] = useState([]); // 좋아요 누른 레시피들
+
 
   const navigate = useNavigate();
 
@@ -106,9 +108,18 @@ function MyPage() {
   const nickName = localStorage.getItem('nickName');
 
   // --------------------------------------------------------------------------------------------------------
+  // useEffect(() => {
+  //   fetchLikeData();
+  //   fetchUserInfo().then(fetchMyPage);
+  // }, [showMyRecipes]);
+
   useEffect(() => {
-    fetchLikeData();
-    fetchUserInfo().then(fetchMyPage);
+    fetchUserInfo();
+    if (showMyRecipes) {
+      fetchMyPage();
+    } else {
+      fetchLikeData();
+    }
   }, [showMyRecipes]);
 
   // 🧑🏽‍🌾 현재 로그인 중인 유저 정보 : 프로필 이미지, 닉네임
@@ -191,6 +202,7 @@ function MyPage() {
       console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
     }
   };
+
 
   // 1️⃣ 레시피 수정
   const handleEdit = (postId) => {
@@ -315,7 +327,7 @@ function MyPage() {
         ) : (
           // 좋아요 누른 레시피 -> likeItems에 들어있는 postId만 사용하도록 변경해야 함
           <div className="recipe-card-container w-full flex flex-wrap">
-            {currentRecipes.map((recipe) => (
+            {likedItems.map((recipe) => (
               <LikedRecipe
                 key={recipe.postId}
                 postId={recipe.postId}
