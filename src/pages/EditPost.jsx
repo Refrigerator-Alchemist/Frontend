@@ -93,12 +93,6 @@ export default function UploadBoard() {
       window.alert('수정 중 에러가 발생했습니다');
 
     }
-
-    navigate(`/board/${postId}`);
-  } catch (error) {
-    console.error('수정 중 에러가 발생했습니다', error);
-    window.alert('수정 중 에러가 발생했습니다');
-  }
 };
 
   // 5️⃣ 취소
