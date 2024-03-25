@@ -2,6 +2,7 @@ import React from 'react';
 import searchicon from '../assets/img/search.png';
 import writingicon from '../assets/img/writing.png';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -34,6 +35,7 @@ const RecipeCard = ({
   const toggleLike = async () => {
     if (!accessToken) {    
       alert('로그인이 필요한 기능입니다.'); 
+      toast.error('로그인이 필요한 기능입니다.');
       return; 
 
     }
@@ -116,7 +118,7 @@ const RecipeCard = ({
       </div>
       <button
         className="p-2"
-        onClick={accessToken ? toggleLike : () => alert("로그인이 필요합니다.")}
+        onClick={accessToken ? toggleLike : () => toast.error("로그인이 필요합니다.")}
       >
         {accessToken ? (
           Liked ? (
@@ -176,14 +178,14 @@ const SearchBar = ({ onSearch }) => {
         onKeyPress={handleKeyPress}
       />
       <button
-        className="flex items-center justify-center bg-transparent hover:bg-gray-200 px-5 py-2 rounded-full"
+        className="flex items-center justify-center  hover:bg-gray-200 px-3 py-2 rounded-full"
         onClick={handleSearchClick}
-        style={{ minWidth: '30px', height: '40px', borderRadius: '30px' }}
+        style={{ minWidth: '40px', height: '40px', borderRadius: '30px' }}
       >
         <img
           src={searchicon}
           alt="검색아이콘"
-          className="w-5 h-5 ml-2"
+          className="w-7 h-6"
           style={{ opacity: 0.5 }}
         />
       </button>

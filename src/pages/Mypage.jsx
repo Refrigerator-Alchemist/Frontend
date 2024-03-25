@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import Pagination from '../components/Pagination';
 import Navigation from '../components/Navigation';
 import { FaTrash, FaHeart } from 'react-icons/fa';
+import { toast } from 'react-toastify';
+
 import {
   useUserDispatch,
   useUserState,
@@ -131,7 +133,7 @@ function MyPage() {
         // ▶️ 이미지 url 저장 : data인지 headers인지 확인해봐야 함
         setImageUrl(response.data.imageUrl);
       } else {
-        window.alert('로그인 하지 않았습니다!');
+        toast.error('로그인 하지 않았습니다!');
       }
     } catch (error) {
       console.error('데이터 통신 중 문제 발생: ', error);
@@ -161,7 +163,7 @@ function MyPage() {
         });
         setRecipes(items);
       } else {
-        window.alert('데이터가 배열이 아닙니다');
+        toast.error('데이터가 배열이 아닙니다');
       }
     } catch (error) {
       console.error('내가 작성한 레시피 로드 중 에러 발생', error);
@@ -189,7 +191,7 @@ function MyPage() {
         }));
         setLikedItems(items);
       } else {
-        window.alert('데이터가 배열이 아닙니다!');
+        toast.error('데이터가 배열이 아닙니다!');
       }
     } catch (error) {
       console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
@@ -225,7 +227,7 @@ function MyPage() {
     if (confirmDelete) {
       try {
         await deleteRecipe(postId);
-        console.log('레시피 삭제 성공');
+        toast.success('레시피 삭제 성공');
       } catch (error) {
         console.error('레시피 삭제 실패:', error);
       }
