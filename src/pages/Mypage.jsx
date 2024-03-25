@@ -91,7 +91,7 @@ function MyPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage, setRecipesPerPage] = useState(5);
 
-  const [showMyRecipes, setShowMyRecipes] = useState(true); // 내가 저장한 레시피 or 좋아요 누른 레시피
+  const [showMyRecipes, setShowMyRecipes] = useState(); // 내가 저장한 레시피 or 좋아요 누른 레시피
   const [recipes, setRecipes] = useState([]); // 내가 저장한 레시피
   const [likedItems, setLikedItems] = useState([]); // 현재 계정으로 좋아요 누른 게시물들
   const [userInfo, setUserInfo] = useState({
@@ -108,9 +108,18 @@ function MyPage() {
   const accessToken = localStorage.getItem('accessToken');
 
   // --------------------------------------------------------------------------------------------------------
+  // useEffect(() => {
+  //   fetchLikeData();
+  //   fetchUserInfo().then(fetchMyPage);
+  // }, [showMyRecipes]);
+
   useEffect(() => {
-    fetchLikeData();
-    fetchUserInfo().then(fetchMyPage);
+    fetchUserInfo();
+    if (showMyRecipes) {
+      fetchMyPage();
+    } else {
+      fetchLikeData();
+    }
   }, [showMyRecipes]);
 
   // 🧑🏽‍🌾 현재 로그인 중인 유저 정보 : 프로필 이미지, 닉네임
@@ -174,6 +183,8 @@ function MyPage() {
     const URL = `${IP_ADDRESS}/board/mypage-like`;
 
     try {
+      // const response = await axios.get(URL, {
+      //   params: { nickName } 
       const response = await axios.get(URL, user.nickName, {
         headers: {
           'Authorization-Access': accessToken,
@@ -198,6 +209,7 @@ function MyPage() {
       console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
     }
   };
+
 
   // 1️⃣ 레시피 수정
   const handleEdit = (postId) => {
