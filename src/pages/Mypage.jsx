@@ -92,11 +92,9 @@ function MyPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage, setRecipesPerPage] = useState(5);
 
-
   const [showMyRecipes, setShowMyRecipes] = useState(true); // 토글 기능 - true : 저장한 레시피 / false : 좋아요 누른 레시피
   const [recipes, setRecipes] = useState([]); // 내가 저장한 레시피들
   const [likedItems, setLikedItems] = useState([]); // 좋아요 누른 레시피들
-
 
   const navigate = useNavigate();
 
@@ -147,7 +145,7 @@ function MyPage() {
 
   // 🧑🏽 내가 저장한 레시피 가져오는 함수
   const fetchMyPage = async () => {
-    const URL = `${IP_ADDRESS}/userprofile`;
+    const URL = `${IP_ADDRESS}/board/myPage`;
 
     try {
       const response = await axios.get(URL, {
@@ -203,7 +201,6 @@ function MyPage() {
     }
   };
 
-
   // 1️⃣ 레시피 수정
   const handleEdit = (postId) => {
     navigate(`/editpost/${postId}`);
@@ -212,13 +209,16 @@ function MyPage() {
   // 2️⃣ 레시피 삭제
   const deleteRecipe = async (postId) => {
     try {
-      await axios.post(`${IP_ADDRESS}/board/deleteBoard`, {
-        postId: postId,
+      await axios.post(`${IP_ADDRESS}/board/deleteBoard`, postId, {
+        headers: {
+          'Authorization-Access': accessToken,
+        },
       });
 
       setRecipes((prevRecipes) =>
         prevRecipes.filter((recipe) => recipe.postId !== postId)
       );
+      fetchMyPage();
     } catch (error) {
       console.error('레시피 삭제 에러 내용:', error);
       throw error;
