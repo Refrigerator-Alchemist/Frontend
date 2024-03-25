@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useUserDispatch, useUserState } from '../context/UserContext';
+import {  toast } from 'react-toastify';
 
 export default function DeleteUser() {
   const [password, setPassword] = useState('');
@@ -20,7 +21,7 @@ export default function DeleteUser() {
     e.preventDefault();
 
     if (password !== user.password) {
-      alert('비밀번호가 일치하지 않습니다');
+      toast.error('비밀번호가 일치하지 않습니다');
       return;
     }
 

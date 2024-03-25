@@ -2,6 +2,7 @@ import React, { useState, useReducer, createContext, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ErrorCode from '../utils/ErrorCode';
+import {  toast } from 'react-toastify';
 
 // 🧷 현재 IP 주소
 export const IP_ADDRESS = 'http://localhost:8080';
@@ -92,10 +93,10 @@ export const UserProvider = ({ children }) => {
       if (response.status === 204) {
         setEmailExists(false);
         setTakenTime(new Date());
-        window.alert('인증번호가 발송되었습니다');
+        toast.success('인증번호가 발송되었습니다');
       } else {
         setEmailExists(true);
-        window.alert('이미 서버에 존재하는 이메일입니다');
+        toast.info('이미 서버에 존재하는 이메일입니다');
       }
     } catch (error) {
       console.error('💥 이메일 인증번호 요청 중 에러 발생: ', error);
@@ -122,10 +123,10 @@ export const UserProvider = ({ children }) => {
         setExpireTime(
           new Date(new Date().setMinutes(new Date().getMinutes() + 10))
         );
-        window.alert('인증번호가 발송되었습니다');
+        toast.success('인증번호가 발송되었습니다');
       } else {
         setEmailExists(false);
-        window.alert('존재하지 않는 이메일입니다');
+        toast.error('존재하지 않는 이메일입니다');
       }
     } catch (error) {
       console.error('💥 이메일 인증번호 요청 중 에러 발생: ', error);
@@ -144,7 +145,7 @@ export const UserProvider = ({ children }) => {
 
     // ▶ 인증번호 입력 여부 확인
     if (!inputNum) {
-      window.alert(NO_CODE_ERROR);
+      toast.error(NO_CODE_ERROR);
       return;
     }
 
@@ -152,7 +153,7 @@ export const UserProvider = ({ children }) => {
     const timeDifference = (expireTime - takenTime) / 1000 / 60;
 
     if (timeDifference > 10) {
-      window.alert(EXPIRED_CODE_ERROR);
+      toast.error(EXPIRED_CODE_ERROR);
       return;
     }
 
@@ -166,9 +167,9 @@ export const UserProvider = ({ children }) => {
 
       if (response.status === 204) {
         setVerified(true);
-        window.alert('인증 완료!');
+        toast.success('인증 완료!');
       } else {
-        window.alert('인증 실패;');
+        toast.error('인증 실패;');
       }
     } catch (error) {
       console.error('💥 인증 확인 중 에러 발생: ', error);
@@ -187,10 +188,10 @@ export const UserProvider = ({ children }) => {
 
       if (response.data.isDuplicated) {
         setNameDuplicated(true);
-        window.alert('이미 존재하는 닉네임입니다');
+        toast.info('이미 존재하는 닉네임입니다');
       } else {
         setNameDuplicated(false);
-        window.alert('사용가능한 닉네임입니다:)');
+        toast.success('사용가능한 닉네임입니다:)');
       }
     } catch (error) {
       console.error('💥 닉네임 중복 확인 중 에러 발생: ', error);
@@ -219,12 +220,12 @@ export const UserProvider = ({ children }) => {
       )
       .then((result) => {
         console.log(`회원가입 요청 성공 : ${result}`);
-        window.alert('회원가입이 완료되었습니다!');
+        toast.sucess('회원가입이 완료되었습니다!');
         navigate('/login');
       })
       .catch((error) => {
         console.log(error);
-        window.alert('💥 회원가입 중 에러 발생');
+        toast.error('💥 회원가입 중 에러 발생');
       });
   };
 
@@ -241,7 +242,7 @@ export const UserProvider = ({ children }) => {
       // ▶ 로그아웃 처리
       logout();
 
-      window.alert('회원탈퇴가 완료되었습니다.');
+      toast.success('회원탈퇴가 완료되었습니다.');
     } catch (error) {
       console.error('💥 회원탈퇴 요청 중 에러 발생: ', error);
     }
@@ -293,7 +294,7 @@ export const UserProvider = ({ children }) => {
         };
 
         dispatch({ type: SET_USER, user });
-        window.alert('로그인 되었습니다!');
+        toast.success('로그인 되었습니다!');
         navigate('/main');
       })
       .catch((error) => {
@@ -301,16 +302,16 @@ export const UserProvider = ({ children }) => {
         if (error.response && error.response.status) {
           switch (error.response.status) {
             case ErrorCode.NOT_EXIST_USER_EMAIL_SOCIALTYPE.status:
-              window.alert(ErrorCode.NOT_EXIST_USER_EMAIL_SOCIALTYPE.message);
+              toast.error(ErrorCode.NOT_EXIST_USER_EMAIL_SOCIALTYPE.message);
               break;
             case ErrorCode.NOT_VALID_ACCESSTOKEN.status:
-              window.alert(ErrorCode.NOT_VALID_ACCESSTOKEN.message);
+              toast.error(ErrorCode.NOT_VALID_ACCESSTOKEN.message);
               break;
             default:
-              window.alert('💥 로그인 실패!');
+              toast.error('💥 로그인 실패!');
           }
         } else {
-          window.alert('💥 로그인 실패!');
+          toast.error('💥 로그인 실패!');
         }
       });
   };
@@ -348,14 +349,14 @@ export const UserProvider = ({ children }) => {
         dispatch({ type: SET_USER, user: null });
 
         // ▶ 유저 상태 초기화
-        window.alert('로그아웃 되었습니다!');
+        toast.success('로그아웃 되었습니다!');
 
         // ▶ Redirect
         navigate('/main');
       }
     } catch (error) {
       console.log(error);
-      window.alert('💥 로그아웃에 문제가 생겼습니다!');
+      toast.error('💥 로그아웃에 문제가 생겼습니다!');
     }
   };
 
@@ -373,9 +374,9 @@ export const UserProvider = ({ children }) => {
       );
 
       if (response.status === 204) {
-        window.alert('비밀번호가 성공적으로 재설정되었습니다');
+        toast.success('비밀번호가 성공적으로 재설정되었습니다');
       } else {
-        window.alert('💥 비밀번호 재설정에 실패하였습니다');
+        toast.error('💥 비밀번호 재설정에 실패하였습니다');
       }
     } catch (error) {
       console.error('💥 비밀번호 재설정 중 에러 발생: ', error);
@@ -413,7 +414,7 @@ export const UserProvider = ({ children }) => {
       }
     } catch (error) {
       console.error('💥 새로운 액세스 토큰 발급 실패', error);
-      window.alert('💥 새로운 액세스 토큰 발급 실패');
+      toast.error('💥 새로운 액세스 토큰 발급 실패');
     }
   };
 

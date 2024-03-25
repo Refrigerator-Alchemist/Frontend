@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useUserState, useUserDispatch } from '../context/UserContext.jsx';
 import { useNavigate } from 'react-router-dom';
+import {  toast } from 'react-toastify';
 
 export default function LoginSuccess() {
   const user = useUserState();
@@ -62,7 +63,7 @@ export default function LoginSuccess() {
     } else {
       // ▶ 데이터가 하나라도 모자라면 발생
       console.log('❌ 서버에서 데이터 받는 중 문제 발생');
-      window.alert('❌ 서버에서 데이터 받는 중 문제 발생');
+      toast.error('❌ 서버에서 데이터 받는 중 문제 발생');
     }
   };
 
