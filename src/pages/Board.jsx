@@ -303,6 +303,7 @@ function Board() {
       console.error('에러 내용2:', error);
     }
   };
+  
   useEffect(() => {
     if (isSearching) {
       setTotalPages(Math.ceil(searchResultCount / recipesPerPage));

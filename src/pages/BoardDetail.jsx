@@ -23,11 +23,8 @@ const BoardDetail = () => {
   const accessToken = localStorage.getItem('accessToken');
 
   const navigate = useNavigate();
-  useEffect(() => {
-    if (postId) {
-      fetchPostData(postId);
-    }
-  }, [postId]);
+  
+  
   
   useEffect(() => {
     // 🔥 현재 계정으로 좋아요 누른 게시물을 배열로 받아오는 함수
@@ -44,6 +41,7 @@ const BoardDetail = () => {
         if (response.data) {
           const posts = response.data.map(Number);
           setLikedPosts(posts);
+          setLiked(posts.includes(parseInt(postId)));
           console.log('좋아요 누른 게시물의 postId 목록:', posts);
         }
       } catch (error) {
