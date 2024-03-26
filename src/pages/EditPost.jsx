@@ -1,54 +1,61 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
 import { IP_ADDRESS } from '../context/UserContext';
 
-const accessToken = localStorage.getItem('accessToken');
-
 export default function UploadBoard() {
   const { postId } = useParams(); // 라우터 엔드포인트
   const [title, setTitle] = useState(''); // 레시피 글 제목
   const [description, setDescription] = useState(''); // 내용
   const [ingredients, setIngredients] = useState([]); // 재료
+
+  const accessToken = localStorage.getItem('accessToken');
+
   const navigate = useNavigate();
+  const location = useLocation();
 
-
+  // 🚷 비로그인 유저 접근 금지
   useEffect(() => {
-    fetchData(postId);
-  }, [postId]);
+    if (!accessToken) {
+      toast.error('마 로그인 해라ㅋㅋ');
+      navigate(-1);
+    }
+  }, [navigate, location, accessToken]);
 
   // 1️⃣ 서버에서 기존 정보들을 불러오는 함수
-  const fetchData = async (postId) => {
-    const URL = `${IP_ADDRESS}/board/updateBoard?postId=${postId}`;
-    try {
+  useEffect(() => {
+    const fetchData = async (postId) => {
+      const URL = `${IP_ADDRESS}/board/updateBoard?postId=${postId}`;
+      try {
+        const response = await axios.get(URL, {
+          headers: {
+            'Authorization-Access': accessToken,
+          },
+        });
 
-      const response = await axios.get(URL, {
-        headers: {
-          'Authorization-Access': accessToken,
-        },
-      });
-      
-      if (response.data) {
-        if (response.data && Array.isArray(response.data.items)) {
-          const items = response.data.items.map((item) => ({
-            title: item.title,
-            description: item.description,
-            ingredients: item.ingredients.map((ingredient) => ingredient),
-          }));
-          setTitle(items[0].title);
-          setDescription(items[0].description);
-          setIngredients(items[0].ingredients);
+        if (response.data) {
+          if (response.data && Array.isArray(response.data.items)) {
+            const items = response.data.items.map((item) => ({
+              title: item.title,
+              description: item.description,
+              ingredients: item.ingredients.map((ingredient) => ingredient),
+            }));
+            setTitle(items[0].title);
+            setDescription(items[0].description);
+            setIngredients(items[0].ingredients);
+          }
+        } else {
+          console.error('데이터 타입 오류:', response.data);
         }
-      } else {
-        console.error('데이터 타입 오류:', response.data);
+      } catch (error) {
+        console.error('데이터 전송 오류:', error);
       }
-    } catch (error) {
-      console.error('데이터 전송 오류:', error);
-    }
-  };
+    };
+    fetchData(postId);
+  }, [postId, accessToken]);
 
   // 2️⃣ 재료 입력
   const handleIngredientChange = (index, e) => {
@@ -90,9 +97,8 @@ export default function UploadBoard() {
     } catch (error) {
       console.error('수정 중 에러가 발생했습니다', error);
       toast.error('수정 중 에러가 발생했습니다');
-
     }
-};
+  };
 
   // 5️⃣ 취소
   const handleCancel = () => {

@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
 import { IP_ADDRESS } from '../context/UserContext';
@@ -9,7 +9,7 @@ const nickName = localStorage.getItem('nickName');
 const email = localStorage.getItem('email');
 const accessToken = localStorage.getItem('accessToken');
 
-function UploadBoard() {
+export default function UploadBoard() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [ingredients, setIngredients] = useState(['']);
@@ -17,6 +17,8 @@ function UploadBoard() {
   const fileInput = useRef(null);
 
   const navigate = useNavigate();
+
+  const location = useLocation();
 
   const handleIngredientChange = (index, event) => {
     const newIngredients = [...ingredients];
@@ -51,14 +53,12 @@ function UploadBoard() {
           'Authorization-Access': accessToken,
         },
       });
-      console.log(response.data); 
+      console.log(response.data);
       if (response.status === 200) {
         toast.success('게시물을 업로드 했습니다');
-        navigate(`/board/${response.data.postId}`); 
-        // 서버에서 postId 보내는지 확인 - 수정 예정 
+        navigate(`/board/${response.data.postId}`);
+        // 서버에서 postId 보내는지 확인 - 수정 예정
       }
-
-
     } catch (error) {
       console.error('에러 내용:', error);
     }
@@ -67,6 +67,14 @@ function UploadBoard() {
   const handleCancel = () => {
     navigate(-1);
   };
+
+  // 🚷 비로그인 유저 접근 금지
+  useEffect(() => {
+    if (!accessToken) {
+      toast.error('마 로그인 해라ㅋㅋ');
+      navigate(-1);
+    }
+  }, [navigate, location]);
 
   return (
     <section className="pt-16">
@@ -185,5 +193,3 @@ function UploadBoard() {
     </section>
   );
 }
-
-export default UploadBoard;
