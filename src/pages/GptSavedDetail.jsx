@@ -15,7 +15,6 @@ const GptSavedDetail = () => {
 
   // id로 세부내용 불러오기
   useEffect(() => {
-    // toast.error('임시 에러 메시지.');
     const fetchRecipeData = async () => {
       try {
         if (!recipeId) {

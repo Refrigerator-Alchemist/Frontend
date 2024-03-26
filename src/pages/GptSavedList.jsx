@@ -13,11 +13,15 @@ const GptSavedList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage] = useState(7);
   const accessToken = localStorage.getItem('accessToken');
-  const [nickname, setNickname] = useState(localStorage.getItem('nickname') || ''); 
+  const nickname = localStorage.getItem('nickName') || ' ';
+
 
   //저장한 목록 보기
   useEffect(() => {
-    // toast.error('임시 에러 메시지');
+    if (!accessToken) {
+      console.log("토큰없음");
+      return; 
+    }
     const fetchRecipes = async () => {
       try {
         const response = await axios.get(`${IP_ADDRESS}/recipe/myRecipe`, {
