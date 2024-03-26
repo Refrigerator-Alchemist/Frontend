@@ -294,8 +294,11 @@ function Board() {
 
   // 4️⃣ 페이지 번호를 받아와 해당 번호에서 1을 뺀 값을 서버로 보내는 함수
   const handlePageClick = (pageNumber) => {
-    fetchRecipesByPage(pageNumber - 1);
-    setCurrentPage(pageNumber);
+    const newPage = pageNumber - 1;
+    if (newPage !== currentPage && newPage >= 0) { // 현재 페이지와 선택된 페이지가 다르고 0 이상인 경우에만 페이지 변경
+      fetchRecipesByPage(newPage);
+      setCurrentPage(pageNumber);
+    }
   };
   
   // 5️⃣ 클릭할 페이지번호 순서대로
