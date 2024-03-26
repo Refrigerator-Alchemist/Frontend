@@ -51,20 +51,21 @@ export default function UploadBoard() {
     });
 
     try {
-      const response = axios.post(`${IP_ADDRESS}/writeTest`, formData, {
+      const response = await axios.post(`${IP_ADDRESS}/writeTest`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization-Access': accessToken,
         },
       });
-      console.log(response.data);
+      console.log("response.data : ", response.data);
       if (response.status === 200) {
         const postId = response.data; 
         toast.success('게시물을 업로드 했습니다');
         navigate(`/board/specific?postId=${postId}`);
       }
     } catch (error) {
-      console.error('에러 내용:', error);
+      console.error('게시물 업로드 중 에러 내용:', error);
+      toast.error('게시물 업로드에 실패했습니다.');
     }
   };
 
