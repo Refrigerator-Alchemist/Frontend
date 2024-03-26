@@ -59,9 +59,9 @@ export default function UploadBoard() {
       });
       console.log(response.data);
       if (response.status === 200) {
+        const postId = response.data; 
         toast.success('게시물을 업로드 했습니다');
-        navigate(`/board/${response.data.postId}`);
-        // 서버에서 postId 보내는지 확인 - 수정 예정
+        navigate(`/board/specific?postId=${postId}`);
       }
     } catch (error) {
       console.error('에러 내용:', error);
