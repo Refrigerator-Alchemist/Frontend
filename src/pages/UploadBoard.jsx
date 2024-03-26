@@ -61,7 +61,7 @@ export default function UploadBoard() {
       if (response.status === 200) {
         const postId = response.data; 
         toast.success('게시물을 업로드 했습니다');
-        navigate(`/board/specific?postId=${postId}`);
+        navigate(`/board/${postId}`);
       }
     } catch (error) {
       console.error('게시물 업로드 중 에러 내용:', error);

@@ -229,6 +229,7 @@ function Board() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [likedPosts, setLikedPosts] = useState([]); // 좋아요 누른 게시물의 postId 목록
+  const [searchResultCount, setSearchResultCount] = useState(0);
   const recipesPerPage = 6;
 
   useEffect(() => {
@@ -302,11 +303,26 @@ function Board() {
       console.error('에러 내용2:', error);
     }
   };
+  useEffect(() => {
+    if (isSearching) {
+      setTotalPages(Math.ceil(searchResultCount / recipesPerPage));
+    } else {
+      fetchTotalRecipes();
+    }
+  }, [searchResultCount, isSearching]);
 
-  // 3️⃣ 게시물 검색
+  // // 3️⃣ 게시물 검색
+  // const handleSearch = (results) => {
+  //   setSearchResults(results); // 검색 결과 상태 업데이트
+  //   setIsSearching(true); // 검색 모드 활성화
+  // };
+
+
   const handleSearch = (results) => {
-    setSearchResults(results); // 검색 결과 상태 업데이트
-    setIsSearching(true); // 검색 모드 활성화
+    setSearchResults(results);
+    setIsSearching(true);
+    setSearchResultCount(results.length);
+    setCurrentPage(1); 
   };
 
   // 4️⃣ 페이지 번호를 받아와 해당 번호에서 1을 뺀 값을 서버로 보내는 함수
@@ -317,6 +333,7 @@ function Board() {
       setCurrentPage(pageNumber);
     }
   };
+  
   
   // 5️⃣ 클릭할 페이지번호 순서대로
   const pageNumbers = [];
