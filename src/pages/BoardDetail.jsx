@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft, FaHeart, FaRegHeart } from 'react-icons/fa';
 import Navigation from '../components/Navigation';
 import axios from 'axios';
-import {  toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { IP_ADDRESS } from '../context/UserContext';
 
 const BoardDetail = () => {
@@ -14,21 +14,42 @@ const BoardDetail = () => {
 
   const [description, setDescription] = useState(''); // 내용
   const [ingredients, setIngredients] = useState([]); // 재료
+
   const [Liked, setLiked] = useState(false); // 좋아요 상태
   const [likeCount, setLikeCount] = useState(''); // 좋아요 수
-  const [likedPosts, setLikedPosts] = useState([]); // 좋아요 누른 postid 배열
+  const [likedPosts, setLikedPosts] = useState([]); // 좋아요 누른 게시물들(배열)
 
   const accessToken = localStorage.getItem('accessToken');
 
   const navigate = useNavigate();
 
-
   useEffect(() => {
+    // 🔥 현재 계정으로 좋아요 누른 게시물을 배열로 받아오는 함수
+    const fetchLikedPosts = async () => {
+      const URL = `${IP_ADDRESS}/board/islike?id=${nickName}`;
+
+      try {
+        const response = await axios.get(URL, {
+          headers: {
+            'Authorization-Access': accessToken,
+          },
+        });
+
+        if (response.data) {
+          const posts = response.data.map(Number);
+          setLikedPosts(posts);
+          console.log('좋아요 누른 게시물의 postId 목록:', posts);
+        }
+      } catch (error) {
+        console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
+      }
+    };
+
     fetchPostData(postId);
     fetchLikedPosts();
-  }, [postId]);
+  }, [postId, accessToken, nickName]);
 
-  // 1️⃣ 서버에서 기존 정보들을 불러오는 함수
+  // 1️⃣ 현재 게시물 정보
   const fetchPostData = async (postId) => {
     try {
       const response = await axios.get(
@@ -58,13 +79,11 @@ const BoardDetail = () => {
     }
   };
 
-  // 💛 좋아요 / 취소  (로그인 사용자만)
+  // 💛 좋아요 / 취소  (로그인 유저만 누를 수 있음)
   const toggleLike = async () => {
-
-    if (!accessToken) {    
-      toast.error('로그인이 필요한 기능입니다.'); 
-      return; 
-
+    if (!accessToken) {
+      toast.error('로그인이 필요한 기능입니다.');
+      return;
     }
     try {
       if (Liked) {
@@ -77,11 +96,9 @@ const BoardDetail = () => {
           },
           {
             headers: {
-
               'Content-Type': 'application/json;charset=UTF-8',
               Accept: 'application/json',
               'Authorization-Access': accessToken,
-
             },
           }
         );
@@ -126,32 +143,11 @@ const BoardDetail = () => {
     }
   };
 
-  // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
-  const fetchLikedPosts = async () => {
-    const URL = `${IP_ADDRESS}/board/islike?id=${nickName}`;
-
-    try {
-      const response = await axios.get(URL, {
-        headers: {
-          'Authorization-Access': accessToken,
-        },
-      });
-
-      if (response.data) {
-        const posts = response.data.map(Number);
-        setLikedPosts(posts);
-        console.log('좋아요 누른 게시물의 postId 목록:', posts);
-      }
-    } catch (error) {
-      console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
-    }
-  };
-
   return (
     <section>
       <div
         className="absolute top-5 left-42 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate("/board")}
+        onClick={() => navigate('/board')}
       >
         <FaArrowLeft />
       </div>
@@ -177,7 +173,7 @@ const BoardDetail = () => {
                   onClick={
                     accessToken
                       ? toggleLike
-                      : () => toast.error("로그인이 필요합니다.")
+                      : () => toast.error('로그인이 필요합니다.')
                   }
                 >
                   {accessToken ? (
@@ -202,7 +198,7 @@ const BoardDetail = () => {
             </h2>
           </div>
           <div className="font-score text-sm text-gray-500 my-2">
-            {ingredients ? ingredients.join(" · ") : ""}
+            {ingredients ? ingredients.join(' · ') : ''}
           </div>
           <p className="text-gray-700 font-score pl-12 pr-12">{description}</p>
         </div>
@@ -210,10 +206,10 @@ const BoardDetail = () => {
 
       <footer
         style={{
-          position: "fixed",
-          bottom: "0",
-          width: "100%",
-          maxWidth: "31rem",
+          position: 'fixed',
+          bottom: '0',
+          width: '100%',
+          maxWidth: '31rem',
         }}
       >
         <Navigation />

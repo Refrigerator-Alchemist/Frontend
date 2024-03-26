@@ -9,6 +9,7 @@ const nickName = localStorage.getItem('nickName');
 const email = localStorage.getItem('email');
 const accessToken = localStorage.getItem('accessToken');
 
+// ✍️ 게시물 작성
 export default function UploadBoard() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -20,16 +21,19 @@ export default function UploadBoard() {
 
   const location = useLocation();
 
+  // 재료 입력
   const handleIngredientChange = (index, event) => {
     const newIngredients = [...ingredients];
     newIngredients[index] = event.target.value;
     setIngredients(newIngredients);
   };
 
+  // 재료들에 재료 추가
   const addIngredientField = () => {
     setIngredients([...ingredients, '']);
   };
 
+  // 게시물 작성 버튼
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -84,6 +88,8 @@ export default function UploadBoard() {
       >
         <FaArrowLeft />
       </div>
+
+      {/* main */}
       <form
         onSubmit={handleSubmit}
         className="flex flex-col space-y-6 mx-auto p-8"

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IP_ADDRESS } from '../context/UserContext';
 
-// 📋 아이템 카드
+// 📋 각 게시물
 function RankingItem({
   rank,
   imageUrl,
@@ -49,37 +49,38 @@ function RankingItem({
   );
 }
 
-// 🏆 Top 3 아이템들
+// 🏆 Top3 게시물
 export default function Ranking() {
   const [topItems, setTopItems] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
+    // 게시물 정보 불러오기
+    const fetchRanking = async () => {
+      const URL = `${IP_ADDRESS}/board/apiTestLikeCount`;
+
+      try {
+        const response = await axios.get(URL);
+
+        if (response.data && Array.isArray(response.data.items)) {
+          const items = response.data.items.map((item) => ({
+            id: item.ID,
+            imageUrl: item.imageUrl,
+            title: item.title,
+            ingredients: item.ingredients.map((ingredient) => ingredient),
+            likeCount: item.likeCount,
+          }));
+          setTopItems(items);
+        } else {
+          console.error('서버에서 데이터 전송 중 오류 발생');
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     fetchRanking();
   }, []);
-
-  const fetchRanking = async () => {
-    const URL = `${IP_ADDRESS}/board/apiTestLikeCount`;
-
-    try {
-      const response = await axios.get(URL);
-
-      if (response.data && Array.isArray(response.data.items)) {
-        const items = response.data.items.map((item) => ({
-          id: item.ID,
-          imageUrl: item.imageUrl,
-          title: item.title,
-          ingredients: item.ingredients.map((ingredient) => ingredient),
-          likeCount: item.likeCount,
-        }));
-        setTopItems(items);
-      } else {
-        console.error('서버에서 데이터 전송 중 오류 발생');
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   return (
     <article

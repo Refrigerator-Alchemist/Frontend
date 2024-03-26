@@ -14,7 +14,7 @@ const RecipePage = () => {
   const { recommendId } = useParams();
   const accessToken = localStorage.getItem('accessToken');
 
-  //gpt 레시피 결과 불러오는 함수
+  // 🤖 GPT 레시피 결과 불러오는 함수
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -46,14 +46,14 @@ const RecipePage = () => {
     };
 
     fetchData();
-  }, [recommendId]);
+  }, [recommendId, accessToken]);
 
   // gpt레시피 저장하기
   const handleSaveButtonClick = async () => {
     try {
       if (!accessToken) {
         toast.error('로그인이 필요합니다.');
-        console.log(" 로그인 필요")
+        console.log(' 로그인 필요');
         return;
       }
 
@@ -115,7 +115,7 @@ const RecipePage = () => {
     <section className="bg-white min-h-screen p-6">
       <div
         className="absolute top-5 left-30 ml-0 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate("/board")}
+        onClick={() => navigate('/board')}
       >
         <FaArrowLeft />
       </div>
@@ -146,7 +146,7 @@ const RecipePage = () => {
               </h2>
               <ol
                 className="list-decimal list-inside"
-                style={{ listStyleType: "none" }}
+                style={{ listStyleType: 'none' }}
               >
                 {steps.map((step, index) => (
                   <li key={index} className="font-score text-gray-600">
@@ -161,11 +161,11 @@ const RecipePage = () => {
       <footer className="fixed bottom-5 left-0 right-0 px-6">
         <div
           className="mx-auto flex justify-between"
-          style={{ maxWidth: "400px" }}
+          style={{ maxWidth: '400px' }}
         >
           <button
             className="font-score bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-8 rounded-full"
-            onClick={() => navigate("/recipe/recommend")}
+            onClick={() => navigate('/recipe/recommend')}
           >
             다시 할래요
           </button>

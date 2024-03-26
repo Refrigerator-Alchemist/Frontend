@@ -65,7 +65,7 @@ const GptSavedDetail = () => {
     };
 
     fetchRecipeData();
-  }, [recipeId]);
+  }, [recipeId, accessToken]);
 
   return (
     <>
