@@ -4,54 +4,31 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
 import IMAGE_PROFILE from '../assets/img/img_profile.png';
-import { IP_ADDRESS, useUserState } from '../context/UserContext';
+import { IP_ADDRESS } from '../context/UserContext';
 import { toast } from 'react-toastify';
 
 export default function EditProfile() {
-  const user = useUserState();
-
-  const [nickName, setNickName] = useState(user.nickName); // 원래 닉네임
   const [changeNickName, setChangeNickName] = useState(''); // 새로 바꿀 닉네임
   const [nameError, setNameError] = useState(false);
-  const [email, setEmail] = useState('');
+
+  const nickName = localStorage.getItem('nickName'); // 원래 닉네임
+  const email = localStorage.getItem('email'); // 이메일
+  const accessToken = localStorage.getItem('accessToken'); // 액세스 토큰
+
   const [image, setImage] = useState(
-    localStorage.getItem('imageUrl') || IMAGE_PROFILE
+    localStorage.getItem('imageUrl') || IMAGE_PROFILE // 프로필 이미지
   );
 
   const fileInput = useRef(null);
 
   const navigate = useNavigate();
 
-  const accessToken = localStorage.getItem('accessToken');
-
-  // ⭕️ 닉네임 입력 창에 입력 가능하도록 처리
+  // ⭕️ 바꿀 닉네임 초기값은 원래 닉네임으로 처리해서 입력 가능하게 수정
   useEffect(() => {
     setChangeNickName(nickName);
   }, [nickName]);
 
-  // 1️⃣ 처음에 보여줄 기본 유저 정보
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const URL = `${IP_ADDRESS}/profile`;
-
-      try {
-        const response = await axios.get(URL, {
-          headers: {
-            'Authorization-Access': accessToken,
-          },
-        });
-
-        setNickName(response.data.nickName);
-        setEmail(response.data.email);
-      } catch (error) {
-        console.error(`유저 데이터 불러오는 중 문제 발생 : ${error}`);
-      }
-    };
-
-    fetchUserData();
-  }, []);
-
-  // 2️⃣ 이미지 파일 업로드
+  // 1️⃣ 이미지 파일 업로드
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
       const reader = new FileReader();
@@ -67,7 +44,7 @@ export default function EditProfile() {
     }
   };
 
-  // 3️⃣ 프로필 이미지 저장하기
+  // 2️⃣ 프로필 이미지 저장하기
   const uploadImage = async (file) => {
     const URL = `${IP_ADDRESS}/change-profile`;
 
@@ -89,7 +66,7 @@ export default function EditProfile() {
     }
   };
 
-  // 4️⃣ 닉네임 유효성 검사
+  // 3️⃣ 닉네임 유효성 검사
   const handleNameChange = (e) => {
     setChangeNickName(e.target.value);
 
@@ -100,7 +77,7 @@ export default function EditProfile() {
     }
   };
 
-  // 5️⃣ 닉네임 저장하기
+  // 4️⃣ 닉네임 저장하기
   const handleSubmit = async (e) => {
     e.preventDefault();
 

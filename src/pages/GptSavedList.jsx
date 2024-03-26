@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
@@ -8,12 +8,25 @@ import Navigation from '../components/Navigation';
 import { IP_ADDRESS } from '../context/UserContext';
 
 const GptSavedList = () => {
-  const navigate = useNavigate();
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage] = useState(7);
+  const [nickname, setNickname] = useState(
+    localStorage.getItem('nickname') || ''
+  );
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const accessToken = localStorage.getItem('accessToken');
-  const [nickname, setNickname] = useState(localStorage.getItem('nickname') || ''); 
+
+  // 🚷 비로그인 유저 접근 금지
+  useEffect(() => {
+    if (!accessToken) {
+      toast.error('마 로그인 해라ㅋㅋ');
+      navigate(-1);
+    }
+  }, [navigate, location, accessToken]);
 
   //저장한 목록 보기
   useEffect(() => {
@@ -73,14 +86,14 @@ const GptSavedList = () => {
       <ToastContainer position="top-center" />
       <div
         className="absolute top-5 left-45 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate("/main")}
+        onClick={() => navigate('/main')}
       >
         <FaArrowLeft />
       </div>
       <div className="my-2 mt-20 mb-4">
         <div className="titlebox mb-6 mt-2">
           <span className="font-score font-extrabold ml-8 text-2xl">
-          {accessToken ? `${nickname}의 연금술 레시피` : '연금술 레시피'}
+            {accessToken ? `${nickname}의 연금술 레시피` : '연금술 레시피'}
           </span>
         </div>
         {currentRecipes.map((recipe) => (
@@ -100,10 +113,10 @@ const GptSavedList = () => {
       </div>
       <footer
         style={{
-          position: "fixed",
-          bottom: "0",
-          width: "100%",
-          maxWidth: "31rem",
+          position: 'fixed',
+          bottom: '0',
+          width: '100%',
+          maxWidth: '31rem',
         }}
       >
         <Navigation />
