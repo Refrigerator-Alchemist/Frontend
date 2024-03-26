@@ -4,16 +4,17 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { CiSaveDown2 } from 'react-icons/ci';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { useUserState, IP_ADDRESS } from '../context/UserContext';
+import { IP_ADDRESS } from '../context/UserContext';
 
 const GptSearch = () => {
   const [tags, setTags] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const navigate = useNavigate();
   const inputRef = useRef(null);
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
   const accessToken = localStorage.getItem('accessToken');
-  const [nickname, setNickname] = useState(localStorage.getItem('nickName') || '사용자'); 
+
+  const nickname = localStorage.getItem('nickname') || '사용자';
 
   // 입력 값 변경 시 상태 업데이트
   const handleInputChange = (e) => {
@@ -23,7 +24,7 @@ const GptSearch = () => {
   // Enter 키 입력 시 태그 추가
   const handleInputKeyDown = (e) => {
     if (e.key === 'Enter') {
-      e.preventDefault(); 
+      e.preventDefault();
       if (inputValue.trim() !== '' && !tags.includes(inputValue.trim())) {
         setTags([...tags, inputValue.trim()]);
       }
@@ -45,7 +46,6 @@ const GptSearch = () => {
     setTags(tags.filter((_, index) => index !== indexToDelete));
     inputRef.current.focus();
   };
-
 
   // Gpt로 레시피 검색 요청하는 함수
   const handleNextButtonClick = async () => {
@@ -97,7 +97,7 @@ const GptSearch = () => {
       } else {
         toast.error('서버와의 연결에 실패했습니다.');
       }
-    }finally{
+    } finally {
       setIsLoading(false);
     }
   };
@@ -122,13 +122,12 @@ const GptSearch = () => {
       </section>
     );
   }
-  
 
   return (
     <section className="bg-white min-h-screen px-4 py-8 flex flex-col">
       <div
         className="absolute top-5 left-45 ml-0 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate("/main")}
+        onClick={() => navigate('/main')}
       >
         <FaArrowLeft />
       </div>
@@ -177,14 +176,14 @@ const GptSearch = () => {
           type="button"
           onClick={() => {
             if (!accessToken) {
-              toast.error("로그인이 필요합니다.");
+              toast.error('로그인이 필요합니다.');
             } else {
-              navigate("/recipe/myRecipe");
+              navigate('/recipe/myRecipe');
             }
           }}
         >
           <CiSaveDown2 className="mr-1 w-6 h-6" />
-          {accessToken ? `${nickname}의 연금술 레시피` : "연금술 레시피"}
+          {accessToken ? `${nickname}의 연금술 레시피` : '연금술 레시피'}
         </button>
         <button
           className="font-score transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer text-white font-bold py-2 px-4 rounded w-full"

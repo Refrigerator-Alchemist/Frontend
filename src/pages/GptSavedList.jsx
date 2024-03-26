@@ -11,7 +11,8 @@ const GptSavedList = () => {
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage] = useState(7);
-   const nickname = localStorage.getItem('nickName') || ' ';
+
+  const nickname = localStorage.getItem('nickname') || '';
   const navigate = useNavigate();
   const location = useLocation();
 

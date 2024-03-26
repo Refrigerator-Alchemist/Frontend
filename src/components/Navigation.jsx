@@ -9,11 +9,12 @@ import { useUserState } from '../context/UserContext';
 
 export default function Navigation() {
   const { selected, setSelected } = useContext(NavigationContext);
-  const { user } = useUserState(); // user 객체가 존재하거나, 로컬스토리지에 nickName이 존재할 때
-
-  const location = useLocation();
+  const { user } = useUserState();
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const iconStyle = `mx-12 text-4xl text-main cursor-pointer hover:text-main-dark hover:scale-110 transition-all duration-300`;
 
   useEffect(() => {
     const currentPath = location.pathname;
@@ -34,8 +35,6 @@ export default function Navigation() {
       setSelected('profile');
     }
   }, [location.pathname, setSelected]);
-
-  const iconStyle = `mx-12 text-4xl text-main cursor-pointer hover:text-main-dark hover:scale-110 transition-all duration-300`;
 
   return (
     <div
@@ -66,9 +65,10 @@ export default function Navigation() {
         style={{ position: 'relative' }}
         onClick={() => {
           setSelected('profile');
+          // ▶️ 로그인에 따라 경로가 바뀜
           navigate(
             user || localStorage.getItem('nickName') ? '/mypage' : '/login'
-          ); // 로그인에 따라 경로가 바뀜
+          );
         }}
         className={`${iconStyle} ${
           selected === 'profile' ? 'selected-icon' : ''

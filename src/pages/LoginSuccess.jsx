@@ -1,18 +1,60 @@
 import React, { useEffect } from 'react';
 import { useUserState, useUserDispatch } from '../context/UserContext.jsx';
 import { useNavigate } from 'react-router-dom';
-import {  toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 export default function LoginSuccess() {
   const user = useUserState();
-
-  const { dispatch } = useUserDispatch();
 
   const navigate = useNavigate();
 
   const SET_USER = 'SET_USER';
 
+  const { dispatch } = useUserDispatch();
+
   useEffect(() => {
+    // 1️⃣ 서버에서 SNS 로그인 데이터를 받아오는 함수
+    const fetchLoginData = async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const accessToken = urlParams.get('accessToken');
+      const refreshToken = urlParams.get('refreshToken');
+      const socialId = urlParams.get('socialId');
+      const socialType = urlParams.get('socialType');
+      const email = urlParams.get('email');
+      const nickName = urlParams.get('nickName');
+
+      // ▶ 4개 데이터 받아왔는지 판단 : 토큰 앞에 Bearer 추가
+      if (accessToken && socialId && refreshToken && email) {
+        localStorage.setItem('accessToken', 'Bearer ' + accessToken);
+        localStorage.setItem('refreshToken', 'Bearer ' + refreshToken);
+        localStorage.setItem('nickName', nickName);
+        localStorage.setItem('socialId', socialId);
+        localStorage.setItem('socialType', socialType);
+        localStorage.setItem('email', email);
+
+        console.log(`⭕ 로컬스토리지 저장 완료 : ${localStorage}`);
+
+        // ▶ 유저 데이터 저장
+        let user = {
+          socialId: localStorage.getItem('socialId'),
+          socialType: localStorage.getItem('socialType'),
+          nickName: localStorage.getItem('nickName'),
+          email: localStorage.getItem('email'),
+        };
+
+        console.log(`⭕ 유저 데이터 저장 완료`);
+
+        // ▶ dispatch로 리듀서에 저장
+        dispatch({ type: SET_USER, user });
+
+        return user;
+      } else {
+        // ▶ 데이터가 하나라도 모자라면 발생
+        console.log('❌ 서버에서 데이터 받는 중 문제 발생');
+        toast.error('❌ 서버에서 데이터 받는 중 문제 발생');
+      }
+    };
+
     fetchLoginData()
       .then((user) => {
         if (user) {
@@ -23,49 +65,7 @@ export default function LoginSuccess() {
       .catch((error) => {
         console.error(error);
       });
-  }, []);
-
-  // 1️⃣ 서버에서 SNS 로그인 데이터를 받아오는 함수
-  const fetchLoginData = async () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const accessToken = urlParams.get('accessToken');
-    const refreshToken = urlParams.get('refreshToken');
-    const socialId = urlParams.get('socialId');
-    const socialType = urlParams.get('socialType');
-    const email = urlParams.get('email');
-    const nickName = urlParams.get('nickName');
-
-    // ▶ 4개 데이터 받아왔는지 판단 : 토큰 앞에 Bearer 추가
-    if (accessToken && socialId && refreshToken && email) {
-      localStorage.setItem('accessToken', 'Bearer ' + accessToken);
-      localStorage.setItem('refreshToken', 'Bearer ' + refreshToken);
-      localStorage.setItem('nickName', nickName);
-      localStorage.setItem('socialId', socialId);
-      localStorage.setItem('socialType', socialType);
-      localStorage.setItem('email', email);
-
-      console.log(`⭕ 로컬스토리지 저장 완료 : ${localStorage}`);
-
-      // ▶ 유저 데이터 저장
-      let user = {
-        socialId: localStorage.getItem('socialId'),
-        socialType: localStorage.getItem('socialType'),
-        nickName: localStorage.getItem('nickName'),
-        email: localStorage.getItem('email'),
-      };
-
-      console.log(`⭕ 유저 데이터 저장 완료`);
-
-      // ▶ dispatch로 리듀서에 저장
-      dispatch({ type: SET_USER, user });
-
-      return user;
-    } else {
-      // ▶ 데이터가 하나라도 모자라면 발생
-      console.log('❌ 서버에서 데이터 받는 중 문제 발생');
-      toast.error('❌ 서버에서 데이터 받는 중 문제 발생');
-    }
-  };
+  }, [navigate, dispatch]);
 
   return (
     <section>
