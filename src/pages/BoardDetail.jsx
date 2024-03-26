@@ -23,7 +23,12 @@ const BoardDetail = () => {
   const accessToken = localStorage.getItem('accessToken');
 
   const navigate = useNavigate();
-
+  useEffect(() => {
+    if (postId) {
+      fetchPostData(postId);
+    }
+  }, [postId]);
+  
   useEffect(() => {
     // 🔥 현재 계정으로 좋아요 누른 게시물을 배열로 받아오는 함수
     const fetchLikedPosts = async () => {
