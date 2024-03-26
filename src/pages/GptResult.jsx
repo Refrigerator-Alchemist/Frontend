@@ -36,7 +36,7 @@ const RecipePage = () => {
       } catch (error) {
         console.error('에러내용:', error);
         if (error.response && error.response.status === 404) {
-          toast.error('해당 recommendId가 존재하지 않습니다.');
+          // toast.error('해당 recommendId가 존재하지 않습니다.');
         } else {
           toast.error('레시피 정보를 불러오는 중 에러가 발생했습니다.');
         }
@@ -170,8 +170,13 @@ const RecipePage = () => {
             다시 할래요
           </button>
           <button
-            className="font-score bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-8 rounded-full"
-            onClick={handleSaveButtonClick}
+            className={`font-score font-bold py-2 px-8 rounded-full ${
+              accessToken
+                ? "bg-yellow-500 hover:bg-yellow-600 cursor-pointer"
+                : "bg-yellow-500 cursor-not-allowed"
+            } text-white`}
+            onClick={accessToken ? handleSaveButtonClick : undefined}
+            title={!accessToken ? "로그인이 필요합니다." : ""}
           >
             저장할래요
           </button>
