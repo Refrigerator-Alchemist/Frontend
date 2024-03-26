@@ -142,18 +142,35 @@ const SearchBar = ({ onSearch }) => {
   const handleSearchClick = async () => {
     if (query.trim() !== '') {
       try {
-        const response = await axios.post(
-          `${IP_ADDRESS}/board/searchTitle`,
-          query.trim()
+        const response = await axios.get(
+          `${IP_ADDRESS}/board/searchTitle?title=${query.trim()}`,
+          {
+            headers: {
+              'Content-Type': 'application/json;charset=UTF-8',
+              Accept: 'application/json',
+              'Authorization-Access': accessToken,
+            },
+          }
         );
-        console.log('검색 결과:', response.data);
-        onSearch(response.data);
-        setQuery(''); //검색 입력란 초기화
+        if (response.data && Array.isArray(response.data.items)) {
+          const formattedData = response.data.items.map((item) => ({
+            id: item.ID,
+            title: item.title,
+            description: item.description,
+            imageUrl: item.imageUrl,
+            likeCount: item.likeCount,
+          }));
+  
+          onSearch(formattedData);
+        } else {
+          console.error('검색결과가 배열이 아닙ㄴ다ㅣ', response.data);
+        }
+        setQuery('');
       } catch (error) {
-        console.error('검색 결과 에러:', error);
+        console.error('검색결과 에러 :', error);
       }
-    }
-  };
+    };
+  }
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -375,7 +392,7 @@ function Board() {
                   : 'bg-white text-main'
               }`}
             >
-              {number - 1}
+              {number}
             </button>
           ))}
         </div>
