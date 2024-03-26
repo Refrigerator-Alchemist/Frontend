@@ -12,7 +12,7 @@ import axios from 'axios';
 
 import { IP_ADDRESS } from '../context/UserContext';
 const accessToken = localStorage.getItem('accessToken');
-const nickName = localStorage.getItem('nickName');
+const email = localStorage.getItem('email');
 
 // 🃏 레시피 카드
 const RecipeCard = ({
@@ -43,7 +43,7 @@ const RecipeCard = ({
         const response = await axios.post(
           `${IP_ADDRESS}/board/dislike`,
           {
-            nickName: nickName,
+            email: email,
             postId: postId,
           },
           {
@@ -69,7 +69,7 @@ const RecipeCard = ({
         const response = await axios.post(
           `${IP_ADDRESS}/board/like`,
           {
-            nickName: nickName,
+            email: email,
             postId: postId,
           },
           {
@@ -225,7 +225,7 @@ function Board() {
 
   // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
   const fetchLikedPosts = async () => {
-    const URL = `${IP_ADDRESS}/board/islike?id=${nickName}`;
+    const URL = `${IP_ADDRESS}/board/islike?id=${email}`;
 
     try {
       const response = await axios.get(URL, {
@@ -265,8 +265,7 @@ function Board() {
   const fetchRecipesByPage = async (pageNumber) => {
     try {
       const response = await axios.get(`${IP_ADDRESS}/board/apiTest`, {
-        // params: { data: pageNumber.toString() }
-        params: { data: (pageNumber - 1).toString() },
+        params: { data: pageNumber.toString() }
       });
 
       if (response.data && Array.isArray(response.data.items)) {
@@ -294,24 +293,17 @@ function Board() {
   };
 
   // 4️⃣ 페이지 번호를 받아와 해당 번호에서 1을 뺀 값을 서버로 보내는 함수
-  // const handlePageClick = (pageNumber) => {
-  //   fetchRecipesByPage(pageNumber - 1);
-  //   setCurrentPage(pageNumber);
-  // };
   const handlePageClick = (pageNumber) => {
+    fetchRecipesByPage(pageNumber - 1);
     setCurrentPage(pageNumber);
   };
-
+  
   // 5️⃣ 클릭할 페이지번호 순서대로
-  // const pageNumbers = [];
-  // for (let i = 0; i <= totalPages; i++) {
-  //   pageNumbers.push(i + 1);
-  // }
   const pageNumbers = [];
-  for (let i = 1; i <= totalPages; i++) {
-    pageNumbers.push(i);
+  for (let i = 0; i <= totalPages; i++) {
+    pageNumbers.push(i + 1);
   }
-
+ 
   return (
     <section className="Board pb-24">
       <header className="bg-white px-6 py-7">

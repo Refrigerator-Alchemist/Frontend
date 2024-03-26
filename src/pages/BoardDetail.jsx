@@ -11,6 +11,7 @@ const BoardDetail = () => {
   const [imageUrl, setImageUrl] = useState(''); // 이미지
   const [title, setTitle] = useState(''); // 레시피 글 제목
   const [nickName, setNickName] = useState(''); // 작성자 닉네임
+  const [email, setEmail] = useState(''); // 작성자 이메일
 
   const [description, setDescription] = useState(''); // 내용
   const [ingredients, setIngredients] = useState([]); // 재료
@@ -26,7 +27,7 @@ const BoardDetail = () => {
   useEffect(() => {
     // 🔥 현재 계정으로 좋아요 누른 게시물을 배열로 받아오는 함수
     const fetchLikedPosts = async () => {
-      const URL = `${IP_ADDRESS}/board/islike?id=${nickName}`;
+      const URL = `${IP_ADDRESS}/board/islike?id=${email}`;
 
       try {
         const response = await axios.get(URL, {
@@ -47,7 +48,7 @@ const BoardDetail = () => {
 
     fetchPostData(postId);
     fetchLikedPosts();
-  }, [postId, accessToken, nickName]);
+  }, [postId, accessToken, email]);
 
   // 1️⃣ 현재 게시물 정보
   const fetchPostData = async (postId) => {
@@ -60,14 +61,14 @@ const BoardDetail = () => {
         const items = response.data.items.map((item) => ({
           imageUrl: item.imageUrl,
           title: item.title,
-          nickName: item.nickName,
+          email: item.email,
           description: item.description,
           ingredients: item.ingredients.map((ingredient) => ingredient),
           likeCount: item.likeCount,
         }));
         setImageUrl(items[0].imageUrl);
         setTitle(items[0].title);
-        setNickName(items[0].nickName);
+        setEmail(items[0].email);
         setDescription(items[0].description);
         setIngredients(items[0].ingredients);
         setLikeCount(items[0].likeCount);
@@ -91,7 +92,7 @@ const BoardDetail = () => {
         const response = await axios.post(
           `${IP_ADDRESS}/board/dislike`,
           {
-            nickName: nickName,
+            email: email,
             postId: postId,
           },
           {
@@ -118,7 +119,7 @@ const BoardDetail = () => {
           `${IP_ADDRESS}/board/like`,
 
           {
-            nickName: nickName,
+            email: email,
             postId: postId,
           },
           {
