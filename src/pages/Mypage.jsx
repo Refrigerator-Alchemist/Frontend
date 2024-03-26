@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Pagination from '../components/Pagination';
 import Navigation from '../components/Navigation';
 import { FaTrash, FaHeart } from 'react-icons/fa';
@@ -88,7 +88,7 @@ const LikedRecipe = ({ postId, title, description, imageUrl }) => {
 };
 
 // 📂 마이페이지
-function MyPage() {
+export default function MyPage() {
   const [imageUrl, setImageUrl] = useState('');
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -98,14 +98,22 @@ function MyPage() {
   const [recipes, setRecipes] = useState([]); // 내가 저장한 레시피들
   const [likedItems, setLikedItems] = useState([]); // 좋아요 누른 레시피들
 
-  const navigate = useNavigate();
-
   const user = useUserState(); // 유저 데이터 : 로그인 상태면 존재
-
   const { logout } = useUserDispatch();
 
   const accessToken = localStorage.getItem('accessToken');
   const nickName = localStorage.getItem('nickName');
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // 🚷 비로그인 유저 접근 금지
+  useEffect(() => {
+    if (!accessToken) {
+      toast.error('마 로그인 해라ㅋㅋ');
+      navigate(-1);
+    }
+  }, [navigate, location, accessToken]);
 
   // --------------------------------------------------------------------------------------------------------
   useEffect(() => {
@@ -356,5 +364,3 @@ function MyPage() {
     </section>
   );
 }
-
-export default MyPage;

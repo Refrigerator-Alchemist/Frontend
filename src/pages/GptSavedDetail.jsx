@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import Navigation from '../components/Navigation';
 import axios from 'axios';
@@ -10,8 +10,19 @@ import { IP_ADDRESS } from '../context/UserContext';
 const GptSavedDetail = () => {
   const [recipeData, setRecipeData] = useState({});
   const { recipeId } = useParams();
+
   const navigate = useNavigate();
+  const location = useLocation();
+
   const accessToken = localStorage.getItem('accessToken');
+
+  // 🚷 비로그인 유저 접근 금지
+  useEffect(() => {
+    if (!accessToken) {
+      toast.error('마 로그인 해라ㅋㅋ');
+      navigate(-1);
+    }
+  }, [navigate, location, accessToken]);
 
   // id로 세부내용 불러오기
   useEffect(() => {
