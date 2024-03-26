@@ -11,14 +11,12 @@ const GptSavedList = () => {
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage] = useState(7);
-  const [nickname, setNickname] = useState(
-    localStorage.getItem('nickname') || ''
-  );
-
+   const nickname = localStorage.getItem('nickName') || ' ';
   const navigate = useNavigate();
   const location = useLocation();
 
   const accessToken = localStorage.getItem('accessToken');
+
 
   // 🚷 비로그인 유저 접근 금지
   useEffect(() => {
@@ -28,9 +26,9 @@ const GptSavedList = () => {
     }
   }, [navigate, location, accessToken]);
 
+
   //저장한 목록 보기
   useEffect(() => {
-    // toast.error('임시 에러 메시지');
     const fetchRecipes = async () => {
       try {
         const response = await axios.get(`${IP_ADDRESS}/recipe/myRecipe`, {

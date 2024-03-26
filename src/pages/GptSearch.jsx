@@ -13,7 +13,7 @@ const GptSearch = () => {
   const inputRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false); 
   const accessToken = localStorage.getItem('accessToken');
-  const [nickname, setNickname] = useState(localStorage.getItem('nickname') || '사용자'); 
+  const [nickname, setNickname] = useState(localStorage.getItem('nickName') || '사용자'); 
 
   // 입력 값 변경 시 상태 업데이트
   const handleInputChange = (e) => {
@@ -49,7 +49,11 @@ const GptSearch = () => {
 
   // Gpt로 레시피 검색 요청하는 함수
   const handleNextButtonClick = async () => {
+    toast('연금술을 시작합니다!', {
+      autoClose: 5000 
+    });
     setIsLoading(true);
+
     try {
       const response = await axios.post(
         `${IP_ADDRESS}/recipe/recommend`,
@@ -69,7 +73,7 @@ const GptSearch = () => {
 
       if (recommendId) {
         navigate(`/recipe/recommend/${recommendId}`);
-        toast('연금술을 시작합니다!');
+        
       } else {
         console.error('recommendId를 찾을 수 없습니다.');
         toast.error('recommendId를 찾을 수 없습니다.');
