@@ -6,7 +6,7 @@ export default function ReIssue() {
 
   useEffect(() => {
     reIssue();
-  }, []);
+  }, [reIssue]);
 
   return <div>Refreshing...</div>;
 }

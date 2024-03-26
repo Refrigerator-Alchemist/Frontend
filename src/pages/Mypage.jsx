@@ -5,7 +5,6 @@ import Pagination from '../components/Pagination';
 import Navigation from '../components/Navigation';
 import { FaTrash, FaHeart } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-
 import {
   useUserDispatch,
   useUserState,
@@ -117,20 +116,34 @@ export default function MyPage() {
 
   // --------------------------------------------------------------------------------------------------------
   useEffect(() => {
-    fetchUserInfo();
-    if (showMyRecipes) {
-      fetchMyPage();
-    } else {
-      fetchLikeData();
-    }
-  }, [showMyRecipes]);
+    // 🧑🏽‍🌾 현재 로그인 중인 유저 정보 : 프로필 이미지, 닉네임
+    const fetchUserInfo = async () => {
+      const URL = `${IP_ADDRESS}/userprofile`;
 
-  // 🧑🏽‍🌾 현재 로그인 중인 유저 정보 : 프로필 이미지, 닉네임
-  const fetchUserInfo = async () => {
-    const URL = `${IP_ADDRESS}/userprofile`;
+      try {
+        if (user) {
+          const response = await axios.get(URL, {
+            headers: {
+              'Authorization-Access': accessToken,
+              nickName: nickName,
+            },
+          });
 
-    try {
-      if (user) {
+          // ▶️ 이미지 url 저장 : data인지 headers인지 확인해봐야 함
+          setImageUrl(response.data.imageUrl);
+        } else {
+          toast.error('로그인 하지 않았습니다!');
+        }
+      } catch (error) {
+        console.error('데이터 통신 중 문제 발생: ', error);
+      }
+    };
+
+    // 🧑🏽 내가 작성한 레시피 가져오는 함수
+    const fetchMyPage = async () => {
+      const URL = `${IP_ADDRESS}/board/myPage`;
+
+      try {
         const response = await axios.get(URL, {
           headers: {
             'Authorization-Access': accessToken,
@@ -138,73 +151,59 @@ export default function MyPage() {
           },
         });
 
-        // ▶️ 이미지 url 저장 : data인지 headers인지 확인해봐야 함
-        setImageUrl(response.data.imageUrl);
-      } else {
-        toast.error('로그인 하지 않았습니다!');
+        if (response.data && Array.isArray(response.data.items)) {
+          const items = response.data.items.map((item) => {
+            return {
+              postId: item.ID,
+              title: item.title,
+              description: item.description,
+              imageUrl: item.imageUrl,
+            };
+          });
+          setRecipes(items);
+        } else {
+          toast.error('데이터가 배열이 아닙니다');
+        }
+      } catch (error) {
+        console.error('내가 작성한 레시피 로드 중 에러 발생', error);
       }
-    } catch (error) {
-      console.error('데이터 통신 중 문제 발생: ', error);
-    }
-  };
+    };
 
-  // 🧑🏽 내가 작성한 레시피 가져오는 함수
-  const fetchMyPage = async () => {
-    const URL = `${IP_ADDRESS}/board/myPage`;
+    // 🔥 좋아요 누른 게시물들 가져오는 함수
+    const fetchLikeData = async () => {
+      const URL = `${IP_ADDRESS}/board/mypage-like`;
 
-    try {
-      const response = await axios.get(URL, {
-        headers: {
-          'Authorization-Access': accessToken,
-          nickName: nickName,
-        },
-      });
-
-      if (response.data && Array.isArray(response.data.items)) {
-        const items = response.data.items.map((item) => {
-          return {
-            postId: item.ID,
+      try {
+        const response = await axios.get(URL, {
+          headers: {
+            'Authorization-Access': accessToken,
+            nickName: nickName,
+          },
+        });
+        if (response.data && Array.isArray(response.data.items)) {
+          const items = response.data.items.map((item) => ({
+            id: item.ID,
             title: item.title,
             description: item.description,
             imageUrl: item.imageUrl,
-          };
-        });
-        setRecipes(items);
-      } else {
-        toast.error('데이터가 배열이 아닙니다');
+            likeCount: item.likeCount,
+          }));
+          setLikedItems(items);
+        } else {
+          toast.error('데이터가 배열이 아닙니다!');
+        }
+      } catch (error) {
+        console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
       }
-    } catch (error) {
-      console.error('내가 작성한 레시피 로드 중 에러 발생', error);
-    }
-  };
+    };
 
-  // 🔥 좋아요 누른 게시물들 가져오는 함수
-  const fetchLikeData = async () => {
-    const URL = `${IP_ADDRESS}/board/mypage-like`;
-
-    try {
-      const response = await axios.get(URL, {
-        headers: {
-          'Authorization-Access': accessToken,
-          nickName: nickName,
-        },
-      });
-      if (response.data && Array.isArray(response.data.items)) {
-        const items = response.data.items.map((item) => ({
-          id: item.ID,
-          title: item.title,
-          description: item.description,
-          imageUrl: item.imageUrl,
-          likeCount: item.likeCount,
-        }));
-        setLikedItems(items);
-      } else {
-        toast.error('데이터가 배열이 아닙니다!');
-      }
-    } catch (error) {
-      console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
+    fetchUserInfo();
+    if (showMyRecipes) {
+      fetchMyPage();
+    } else {
+      fetchLikeData();
     }
-  };
+  }, [showMyRecipes, accessToken, nickName, user]);
 
   // 1️⃣ 레시피 수정
   const handleEdit = (postId) => {
@@ -222,7 +221,6 @@ export default function MyPage() {
       setRecipes((prevRecipes) =>
         prevRecipes.filter((recipe) => recipe.postId !== postId)
       );
-      fetchMyPage();
     } catch (error) {
       console.error('레시피 삭제 에러 내용:', error);
       throw error;

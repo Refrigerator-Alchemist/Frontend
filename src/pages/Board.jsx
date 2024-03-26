@@ -33,10 +33,9 @@ const RecipeCard = ({
 
   // 💛 좋아요 / 취소 (로그인해야 가능)
   const toggleLike = async () => {
-    if (!accessToken) {    
+    if (!accessToken) {
       toast.error('로그인이 필요한 기능입니다.');
-      return; 
-
+      return;
     }
     try {
       if (Liked) {
@@ -49,12 +48,9 @@ const RecipeCard = ({
           },
           {
             headers: {
-
               'Content-Type': 'application/json;charset=UTF-8',
               Accept: 'application/json',
-
               'Authorization-Access': accessToken,
-
             },
           }
         );
@@ -79,11 +75,8 @@ const RecipeCard = ({
           {
             headers: {
               'Content-Type': 'application/json;charset=UTF-8',
-
               Accept: 'application/json',
-              
               'Authorization-Access': accessToken,
-
             },
           }
         );
@@ -117,7 +110,9 @@ const RecipeCard = ({
       </div>
       <button
         className="p-2"
-        onClick={accessToken ? toggleLike : () => toast.error("로그인이 필요합니다.")}
+        onClick={
+          accessToken ? toggleLike : () => toast.error('로그인이 필요합니다.')
+        }
       >
         {accessToken ? (
           Liked ? (
@@ -220,39 +215,32 @@ function Board() {
   const recipesPerPage = 6;
 
   useEffect(() => {
-    fetchLikedPosts(); 
-    fetchTotalRecipes(); 
+    fetchLikedPosts();
+    fetchTotalRecipes();
   }, []);
 
   useEffect(() => {
-    fetchRecipesByPage(currentPage); //현재페이지 바뀔때마다 
-  }, [currentPage]);
-
-  useEffect(() => {
     fetchRecipesByPage(currentPage);
-  }, []); // 페이지 이동할때마다 최신데이터
-
+  }, [currentPage]); // 페이지 이동할때마다 최신데이터
 
   // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
   const fetchLikedPosts = async () => {
-
     const URL = `${IP_ADDRESS}/board/islike?id=${nickName}`;
 
     try {
       const response = await axios.get(URL, {
         headers: {
           'Authorization-Access': accessToken,
-
         },
       });
 
       if (response.data) {
         const posts = response.data.map(Number);
         setLikedPosts(posts);
-        console.log("좋아요 누른 게시물의 postId 목록:", posts);
+        console.log('좋아요 누른 게시물의 postId 목록:', posts);
       }
     } catch (error) {
-      console.error("좋아요 누른 기록 받아오는 중 에러 발생", error);
+      console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
     }
   };
 
@@ -267,9 +255,9 @@ function Board() {
       const totalPages = Math.ceil(totalRecipes / recipesPerPage);
       setTotalPages(totalPages);
 
-      console.log("총 페이지 수:", totalPages);
+      console.log('총 페이지 수:', totalPages);
     } catch (error) {
-      console.error("전체 레시피 수 가져오기 에러:", error);
+      console.error('전체 레시피 수 가져오기 에러:', error);
     }
   };
 
@@ -277,10 +265,8 @@ function Board() {
   const fetchRecipesByPage = async (pageNumber) => {
     try {
       const response = await axios.get(`${IP_ADDRESS}/board/apiTest`, {
-
         // params: { data: pageNumber.toString() }
         params: { data: (pageNumber - 1).toString() },
-
       });
 
       if (response.data && Array.isArray(response.data.items)) {
@@ -294,13 +280,12 @@ function Board() {
 
         setRecipes(formattedData);
       } else {
-        console.error("에러 내용1:", response.data);
+        console.error('에러 내용1:', response.data);
       }
     } catch (error) {
-      console.error("에러 내용2:", error);
+      console.error('에러 내용2:', error);
     }
   };
-
 
   // 3️⃣ 게시물 검색
   const handleSearch = (results) => {
@@ -391,8 +376,8 @@ function Board() {
               onClick={() => handlePageClick(number)}
               className={`px-4 py-2 border rounded-full m-1 ${
                 currentPage === number
-                  ? "bg-main text-white"
-                  : "bg-white text-main"
+                  ? 'bg-main text-white'
+                  : 'bg-white text-main'
               }`}
             >
               {number - 1}
@@ -403,10 +388,10 @@ function Board() {
 
       <footer
         style={{
-          position: "fixed",
-          bottom: "0",
-          width: "100%",
-          maxWidth: "31rem",
+          position: 'fixed',
+          bottom: '0',
+          width: '100%',
+          maxWidth: '31rem',
         }}
       >
         <Navigation />
