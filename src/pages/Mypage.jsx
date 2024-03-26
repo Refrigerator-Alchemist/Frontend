@@ -102,6 +102,7 @@ export default function MyPage() {
 
   const accessToken = localStorage.getItem('accessToken');
   const nickName = localStorage.getItem('nickName');
+  const email = localStorage.getItem('email');
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -125,7 +126,7 @@ export default function MyPage() {
           const response = await axios.get(URL, {
             headers: {
               'Authorization-Access': accessToken,
-              nickName: nickName,
+              email: email,
             },
           });
 
@@ -147,7 +148,7 @@ export default function MyPage() {
         const response = await axios.get(URL, {
           headers: {
             'Authorization-Access': accessToken,
-            nickName: nickName,
+            email: email,
           },
         });
 
@@ -177,7 +178,7 @@ export default function MyPage() {
         const response = await axios.get(URL, {
           headers: {
             'Authorization-Access': accessToken,
-            nickName: nickName,
+            email: email,
           },
         });
         if (response.data && Array.isArray(response.data.items)) {
@@ -203,7 +204,7 @@ export default function MyPage() {
     } else {
       fetchLikeData();
     }
-  }, [showMyRecipes, accessToken, nickName, user]);
+  }, [showMyRecipes, accessToken, email, user]);
 
   // 1️⃣ 레시피 수정
   const handleEdit = (postId) => {
