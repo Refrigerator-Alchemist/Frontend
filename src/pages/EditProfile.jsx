@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useState, useEffect, useRef } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
 import IMAGE_PROFILE from '../assets/img/img_profile.png';
 import { IP_ADDRESS } from '../context/UserContext';
@@ -22,6 +22,17 @@ export default function EditProfile() {
   const fileInput = useRef(null);
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // 🚷 비로그인 유저 접근 금지
+  useEffect(() => {
+    if (!accessToken) {
+      toast.error('마 로그인 해라ㅋㅋ');
+      setTimeout(() => {
+        navigate(-1);
+      }, 2000);
+    }
+  }, [navigate, location, accessToken]);
 
   // ⭕️ 바꿀 닉네임 초기값은 원래 닉네임으로 처리해서 입력 가능하게 수정
   useEffect(() => {

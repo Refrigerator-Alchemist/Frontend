@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft, FaHeart, FaRegHeart } from 'react-icons/fa';
@@ -22,6 +23,30 @@ const BoardDetail = () => {
 
   const accessToken = localStorage.getItem('accessToken');
 
+
+  // ⏯️ 실행: 처음 렌더링, 게시물 검색 후
+  useEffect(() => {
+    // 📝 게시물 정보
+    const fetchPostData = async () => {
+      try {
+        const response = await axios.get(
+          `${IP_ADDRESS}/board/specific?postId=${postId}`
+        );
+        if (response.data && response.data.items) {
+          const item = response.data.items[0];
+          setImageUrl(item.imageUrl);
+          setTitle(item.title);
+          setEmail(item.email);
+          setDescription(item.description);
+          setIngredients(item.ingredients);
+          setLikeCount(item.likeCount);
+        }
+      } catch (error) {
+        console.error('데이터받아오는중:', error);
+      }
+    };
+
+    // 🔥 좋아요 누른 게시물들 가져오는 함수
   const navigate = useNavigate();
   
   

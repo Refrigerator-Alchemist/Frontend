@@ -27,6 +27,7 @@ const RecipeCard = ({
   const [likeCount, setLikeCount] = useState(parseInt(initialLikeCount));
   const [likedPosts, setLikedPosts] = useState([]);
 
+  // ⏯️ 실행: 처음 렌더링, 좋아요 업데이트
   useEffect(() => {
     setLiked(isLiked);
   }, [isLiked]);
@@ -160,7 +161,7 @@ const SearchBar = ({ onSearch }) => {
             imageUrl: item.imageUrl,
             likeCount: item.likeCount,
           }));
-  
+
           onSearch(formattedData);
         } else {
           console.error('검색결과가 배열이 아닙ㄴ다ㅣ', response.data);
@@ -169,8 +170,8 @@ const SearchBar = ({ onSearch }) => {
       } catch (error) {
         console.error('검색결과 에러 :', error);
       }
-    };
-  }
+    }
+  };
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -232,14 +233,16 @@ function Board() {
   const [searchResultCount, setSearchResultCount] = useState(0);
   const recipesPerPage = 6;
 
+  // ⏯️ 실행: 처음 렌더링 1번
   useEffect(() => {
     fetchLikedPosts();
     fetchTotalRecipes();
   }, []);
 
+  // ⏯️ 실행: 처음 렌더링, 페이지별 정보가 업데이트 될 때마다
   useEffect(() => {
     fetchRecipesByPage(currentPage);
-  }, [currentPage]); // 페이지 이동할때마다 최신데이터
+  }, [currentPage]);
 
   // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
   const fetchLikedPosts = async () => {
@@ -283,7 +286,7 @@ function Board() {
   const fetchRecipesByPage = async (pageNumber) => {
     try {
       const response = await axios.get(`${IP_ADDRESS}/board/apiTest`, {
-        params: { data: pageNumber.toString() }
+        params: { data: pageNumber.toString() },
       });
 
       if (response.data && Array.isArray(response.data.items)) {
@@ -304,6 +307,7 @@ function Board() {
     }
   };
 
+  // ⏯️ 실행: 처음 렌더링, 게시물 검색 후
   useEffect(() => {
     if (isSearching) {
       setTotalPages(Math.ceil(searchResultCount / recipesPerPage));
@@ -313,35 +317,29 @@ function Board() {
   }, [searchResultCount, isSearching]);
 
   // // 3️⃣ 게시물 검색
-  // const handleSearch = (results) => {
-  //   setSearchResults(results); // 검색 결과 상태 업데이트
-  //   setIsSearching(true); // 검색 모드 활성화
-  // };
-
-
   const handleSearch = (results) => {
-    setSearchResults(results);
-    setIsSearching(true);
+    setSearchResults(results); // 검색 결과 상태 업데이트
+    setIsSearching(true); // 검색 모드 활성화
     setSearchResultCount(results.length);
-    setCurrentPage(1); 
+    setCurrentPage(1);
   };
 
   // 4️⃣ 페이지 번호를 받아와 해당 번호에서 1을 뺀 값을 서버로 보내는 함수
   const handlePageClick = (pageNumber) => {
     const newPage = pageNumber - 1;
-    if (newPage !== currentPage && newPage >= 0) { // 현재 페이지와 선택된 페이지가 다르고 0 이상인 경우에만 페이지 변경
+    if (newPage !== currentPage && newPage >= 0) {
+      // 현재 페이지와 선택된 페이지가 다르고 0 이상인 경우에만 페이지 변경
       fetchRecipesByPage(newPage);
       setCurrentPage(pageNumber);
     }
   };
-  
-  
+
   // 5️⃣ 클릭할 페이지번호 순서대로
   const pageNumbers = [];
   for (let i = 0; i <= totalPages; i++) {
     pageNumbers.push(i + 1);
   }
- 
+
   return (
     <section className="Board pb-24">
       <header className="bg-white px-6 py-7">
