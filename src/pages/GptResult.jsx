@@ -64,7 +64,6 @@ const RecipePage = () => {
           foodName: title,
           ingredients: ingredients,
           recipe: steps,
-          recommendId: recommendId,
         },
         {
           headers: {
