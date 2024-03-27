@@ -7,12 +7,12 @@ import { toast } from 'react-toastify';
 // 🧷 현재 IP 주소
 export const IP_ADDRESS = 'http://localhost:8080';
 
-// 📀 토큰 처리
+// 📀 axios 인스턴스 : 베이스 URL 조절 가능
 const instance = axios.create({
-  baseURL: `${IP_ADDRESS}/auth`,
+  baseURL: `${IP_ADDRESS}`,
 });
 
-// ❕ 요청 인터셉터 : 토큰 업데이트
+// ❕ 요청 인터셉터 : 토큰에 Bearer 처리시 일괄적으로 제어
 instance.interceptors.request.use(
   function (config) {
     const accessToken = localStorage.getItem('accessToken');

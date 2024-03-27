@@ -21,7 +21,9 @@ export default function UploadBoard() {
   useEffect(() => {
     if (!accessToken) {
       toast.error('마 로그인 해라ㅋㅋ');
-      navigate(-1);
+      setTimeout(() => {
+        navigate(-1);
+      }, 2000);
     }
   }, [navigate, location, accessToken]);
 

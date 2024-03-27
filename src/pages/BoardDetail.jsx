@@ -23,9 +23,7 @@
 //   const accessToken = localStorage.getItem('accessToken');
 
 //   const navigate = useNavigate();
-  
-  
-  
+
 //   useEffect(() => {
 //     // 🔥 현재 계정으로 좋아요 누른 게시물을 배열로 받아오는 함수
 //     const fetchLikedPosts = async () => {
@@ -224,7 +222,6 @@
 
 // export default BoardDetail;
 
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft, FaHeart, FaRegHeart } from 'react-icons/fa';
@@ -250,15 +247,19 @@ const BoardDetail = () => {
   const accessToken = localStorage.getItem('accessToken');
   const navigate = useNavigate();
 
+  // ⏯️ 실행: 처음 렌더링, 게시물 검색 후
   useEffect(() => {
+    // 📝 게시물 정보
     const fetchPostData = async () => {
       try {
-        const response = await axios.get(`${IP_ADDRESS}/board/specific?postId=${postId}`);
+        const response = await axios.get(
+          `${IP_ADDRESS}/board/specific?postId=${postId}`
+        );
         if (response.data && response.data.items) {
-          const item = response.data.items[0]; 
+          const item = response.data.items[0];
           setImageUrl(item.imageUrl);
           setTitle(item.title);
-          setEmail(item.email); 
+          setEmail(item.email);
           setDescription(item.description);
           setIngredients(item.ingredients);
           setLikeCount(item.likeCount);
@@ -268,6 +269,7 @@ const BoardDetail = () => {
       }
     };
 
+    // 🔥 좋아요 누른 게시물들 가져오는 함수
     const fetchLikedPosts = async () => {
       if (!accessToken) return;
 
@@ -276,7 +278,7 @@ const BoardDetail = () => {
         const response = await axios.get(URL, {
           headers: { 'Authorization-Access': accessToken },
         });
-        
+
         if (response.data) {
           const posts = response.data.map(Number);
           setLikedPosts(posts);

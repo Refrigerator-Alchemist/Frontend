@@ -57,9 +57,9 @@ export default function UploadBoard() {
           'Authorization-Access': accessToken,
         },
       });
-      console.log("response.data : ", response.data);
+      console.log('response.data : ', response.data);
       if (response.status === 200) {
-        const postId = response.data; 
+        const postId = response.data;
         toast.success('게시물을 업로드 했습니다');
         navigate(`/board/${postId}`);
       }
@@ -77,7 +77,9 @@ export default function UploadBoard() {
   useEffect(() => {
     if (!accessToken) {
       toast.error('마 로그인 해라ㅋㅋ');
-      navigate(-1);
+      setTimeout(() => {
+        navigate(-1);
+      }, 2000);
     }
   }, [navigate, location]);
 

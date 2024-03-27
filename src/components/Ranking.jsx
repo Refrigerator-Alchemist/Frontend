@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IP_ADDRESS } from '../context/UserContext';
+import { toast } from 'react-toastify';
 
 // 📋 각 게시물
 function RankingItem({
@@ -54,10 +55,10 @@ export default function Ranking() {
   const [topItems, setTopItems] = useState([]);
   const navigate = useNavigate();
 
+  // ⏯️ 실행: 처음 렌더링, topItems 업데이트
   useEffect(() => {
-    // 게시물 정보 불러오기
     const fetchRanking = async () => {
-      const URL = `${IP_ADDRESS}/board/apiTestLikeCount`;
+      const URL = `${IP_ADDRESS}/ranking/top3`;
 
       try {
         const response = await axios.get(URL);
@@ -72,7 +73,7 @@ export default function Ranking() {
           }));
           setTopItems(items);
         } else {
-          console.error('서버에서 데이터 전송 중 오류 발생');
+          toast.error('Top3 게시물 정보 받는 중 오류');
         }
       } catch (error) {
         console.error(error);
@@ -80,7 +81,7 @@ export default function Ranking() {
     };
 
     fetchRanking();
-  }, []);
+  }, [topItems]);
 
   return (
     <article
