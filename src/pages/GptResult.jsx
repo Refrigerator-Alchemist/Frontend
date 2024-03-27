@@ -45,9 +45,11 @@ const RecipePage = () => {
         setIsLoading(false);
       }
     };
-
-    fetchData();
-  }, [recommendId, accessToken]);
+    if (recommendId) {
+      fetchData();
+    }
+    
+  }, [recommendId,accessToken]);
 
   // gpt레시피 저장하기
   const handleSaveButtonClick = async () => {
@@ -167,13 +169,8 @@ const RecipePage = () => {
             다시 할래요
           </button>
           <button
-            className={`font-score font-bold py-2 px-8 rounded-full ${
-              accessToken
-                ? "bg-yellow-500 hover:bg-yellow-600 cursor-pointer"
-                : "bg-yellow-500 cursor-not-allowed"
-            } text-white`}
-            onClick={accessToken ? handleSaveButtonClick : undefined}
-            title={!accessToken ? "로그인이 필요합니다." : ""}
+            className="font-score font-bold py-2 px-8 rounded-full bg-yellow-500 hover:bg-yellow-600 cursor-pointer text-white"
+            onClick={handleSaveButtonClick}
           >
             저장할래요
           </button>

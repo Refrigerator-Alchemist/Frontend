@@ -92,11 +92,13 @@ export default function MyPage() {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage] = useState(5);
+  const [totalMyRecipes, setTotalMyRecipes] = useState(0);
+  const [totalLikedRecipes, setTotalLikedRecipes] = useState(0);
 
   const [showMyRecipes, setShowMyRecipes] = useState(true); // 토글 기능 - true : 저장한 레시피 / false : 좋아요 누른 레시피
   const [recipes, setRecipes] = useState([]); // 내가 저장한 레시피들
   const [likedItems, setLikedItems] = useState([]); // 좋아요 누른 레시피들
-
+  
   const user = useUserState(); // 유저 데이터 : 로그인 상태면 존재
   const { logout } = useUserDispatch();
 
@@ -164,6 +166,7 @@ export default function MyPage() {
             };
           });
           setRecipes(items);
+          setTotalMyRecipes(response.data.length); 
         } else {
           toast.error('데이터가 배열이 아닙니다');
         }
@@ -192,6 +195,7 @@ export default function MyPage() {
             likeCount: item.likeCount,
           }));
           setLikedItems(items);
+          setTotalLikedRecipes(response.data.length);
         } else {
           toast.error('데이터가 배열이 아닙니다!');
         }
@@ -243,13 +247,12 @@ export default function MyPage() {
     }
   };
 
-  const indexOfLastRecipe = currentPage * recipesPerPage;
-  const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const handlePageChange = pageNumber => setCurrentPage(pageNumber);
   const currentRecipes = showMyRecipes
         ? recipes.slice((currentPage - 1) * recipesPerPage, currentPage * recipesPerPage)
         : likedItems.slice((currentPage - 1) * recipesPerPage, currentPage * recipesPerPage);
+  
+  const totalRecipes = showMyRecipes ? totalMyRecipes : totalLikedRecipes;
 
   return (
     <section className="Board flex flex-col items-center justify-center w-full">
@@ -350,8 +353,8 @@ export default function MyPage() {
         <Pagination
           currentPage={currentPage}
           recipesPerPage={recipesPerPage}
-          totalRecipes={recipes.length}
-          paginate={paginate}
+          totalRecipes={totalRecipes}
+          paginate={handlePageChange}
         />
       </main>
 

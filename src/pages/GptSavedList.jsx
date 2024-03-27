@@ -38,26 +38,23 @@ const GptSavedList = () => {
         setRecipes(response.data);
       } catch (error) {
         console.error('에러내용:', error);
-        let message = '오류가 발생했습니다. 다시 시도해주세요.';
-        if (error.response) {
-          switch (error.response.status) {
-            case 401:
-              message = '인증되지 않은 유저입니다.';
-              break;
-            case 500:
-              message = '레시피 목록 조회에 실패했습니다.';
-              break;
-            default:
-              message = '알 수 없는 오류가 발생했습니다.';
-              break;
-          }
-        }
-        toast.error(message);
-      }
+        console.log("에러 상태 코드:", error.response?.status);
+        const statusCode = error.response?.status;
 
-    };
+        if (statusCode === 401) {
+            toast.error('인증되지 않은 유저입니다.');
+        } else if (statusCode === 500) {
+            toast.error('레시피 목록 조회에 실패했습니다.');
+        } else {
+            toast.error('서버와의 연결에 실패했습니다.');
+        }
+    }
+};
+
+if (accessToken) {
     fetchRecipes();
-  }, [accessToken]);
+}
+}, [accessToken]);
 
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;

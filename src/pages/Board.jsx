@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import Ranking from '../components/Ranking';
 import Navigation from '../components/Navigation';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 
 import { IP_ADDRESS } from '../context/UserContext';
 const accessToken = localStorage.getItem('accessToken');
@@ -231,13 +232,14 @@ function Board() {
   const [totalPages, setTotalPages] = useState(0);
   const [likedPosts, setLikedPosts] = useState([]); // 좋아요 누른 게시물의 postId 목록
   const [searchResultCount, setSearchResultCount] = useState(0);
+  const location = useLocation();
   const recipesPerPage = 6;
 
   // ⏯️ 실행: 처음 렌더링 1번
   useEffect(() => {
     fetchLikedPosts();
     fetchTotalRecipes();
-  }, []);
+  }, [location]);
 
   // ⏯️ 실행: 처음 렌더링, 페이지별 정보가 업데이트 될 때마다
   useEffect(() => {
@@ -322,6 +324,10 @@ function Board() {
     setIsSearching(true); // 검색 모드 활성화
     setSearchResultCount(results.length);
     setCurrentPage(1);
+
+    if (results.length <= recipesPerPage) {
+      setTotalPages(1);
+  }
   };
 
   // 4️⃣ 페이지 번호를 받아와 해당 번호에서 1을 뺀 값을 서버로 보내는 함수
