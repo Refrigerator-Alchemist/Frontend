@@ -398,28 +398,29 @@ function Board() {
         )}
 
         <div className="pagination flex justify-center my-4">
-          {pageNumbers.map((number) => (
-            <button
-              key={number}
-              onClick={() => handlePageClick(number)}
-              className={`px-4 py-2 border rounded-full m-1 ${
-                currentPage === number
-                  ? 'bg-main text-white'
-                  : 'bg-white text-main'
-              }`}
-            >
-              {number}
-            </button>
-          ))}
+          {totalPages > 0 &&
+            pageNumbers.map((number) => (
+              <button
+                key={number}
+                onClick={() => handlePageClick(number)}
+                className={`px-4 py-2 border rounded-full m-1 ${
+                  currentPage === number
+                    ? "bg-main text-white"
+                    : "bg-white text-main"
+                }`}
+              >
+                {number}
+              </button>
+            ))}
         </div>
       </main>
 
       <footer
         style={{
-          position: 'fixed',
-          bottom: '0',
-          width: '100%',
-          maxWidth: '31rem',
+          position: "fixed",
+          bottom: "0",
+          width: "100%",
+          maxWidth: "31rem",
         }}
       >
         <Navigation />
