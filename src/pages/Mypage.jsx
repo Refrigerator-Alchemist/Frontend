@@ -91,7 +91,7 @@ export default function MyPage() {
   const [imageUrl, setImageUrl] = useState('');
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [recipesPerPage, setRecipesPerPage] = useState(5);
+  const [recipesPerPage] = useState(5);
 
   const [showMyRecipes, setShowMyRecipes] = useState(true); // 토글 기능 - true : 저장한 레시피 / false : 좋아요 누른 레시피
   const [recipes, setRecipes] = useState([]); // 내가 저장한 레시피들
@@ -245,8 +245,11 @@ export default function MyPage() {
 
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-  const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const handlePageChange = pageNumber => setCurrentPage(pageNumber);
+  const currentRecipes = showMyRecipes
+        ? recipes.slice((currentPage - 1) * recipesPerPage, currentPage * recipesPerPage)
+        : likedItems.slice((currentPage - 1) * recipesPerPage, currentPage * recipesPerPage);
 
   return (
     <section className="Board flex flex-col items-center justify-center w-full">

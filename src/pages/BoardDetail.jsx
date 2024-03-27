@@ -10,7 +10,6 @@ const BoardDetail = () => {
   const { postId } = useParams();
   const [imageUrl, setImageUrl] = useState('');
   const [title, setTitle] = useState('');
-  const [nickName, setNickName] = useState('');
   const [email, setEmail] = useState('');
 
   const [description, setDescription] = useState('');
@@ -21,6 +20,7 @@ const BoardDetail = () => {
   const [likedPosts, setLikedPosts] = useState([]);
 
   const accessToken = localStorage.getItem('accessToken');
+  const nickName = localStorage.getItem('nickName');
   const navigate = useNavigate();
 
   // ⏯️ 실행: 처음 렌더링, 게시물 검색 후
@@ -112,10 +112,9 @@ const BoardDetail = () => {
         );
         if (response.status === 200) {
           setLiked(false);
-          setLikeCount(likeCount - 1);
-          setLikedPosts((prevLikedPosts) =>
-            prevLikedPosts.filter((id) => id !== postId)
-          );
+          
+          setLikeCount(prevCount => Number(prevCount) - 1);
+          setLikedPosts(prevLikedPosts => prevLikedPosts.filter(id => id !== postId));
         }
 
         console.log(response);
@@ -139,8 +138,8 @@ const BoardDetail = () => {
         );
         if (response.status === 200) {
           setLiked(true);
-          setLikeCount(likeCount + 1);
-          setLikedPosts((prevLikedPosts) => [...prevLikedPosts, postId]);
+          setLikeCount(prevCount => Number(prevCount) + 1);
+          setLikedPosts(prevLikedPosts => [...prevLikedPosts, postId]);
         }
         console.log(response);
         console.log('***변경된 likedPosts:', likedPosts);
