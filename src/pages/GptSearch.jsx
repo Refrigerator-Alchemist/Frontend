@@ -14,7 +14,7 @@ const GptSearch = () => {
   const [isLoading, setIsLoading] = useState(false);
   const accessToken = localStorage.getItem('accessToken');
 
-  const nickname = localStorage.getItem('nickname') || '사용자';
+  const nickname = localStorage.getItem('nickName') || '';
 
   // 입력 값 변경 시 상태 업데이트
   const handleInputChange = (e) => {
@@ -50,7 +50,7 @@ const GptSearch = () => {
   // Gpt로 레시피 검색 요청하는 함수
   const handleNextButtonClick = async () => {
     toast('연금술을 시작합니다!', {
-      autoClose: 5000 
+      autoClose: 6000 
     });
     setIsLoading(true);
 
@@ -66,34 +66,33 @@ const GptSearch = () => {
           },
         }
       );
-
+      
       console.log('서버 응답:', response.data);
 
       const recommendId = response.data;
 
       if (recommendId) {
+       
         navigate(`/recipe/recommend/${recommendId}`);
         
       } else {
         console.error('recommendId를 찾을 수 없습니다.');
-        toast.error('recommendId를 찾을 수 없습니다.');
+        toast.error('추천 레시피 생성에 실패했습니다..');
       }
     } catch (error) {
       console.error('에러내용:', error);
-      if (error.response) {
-        switch (error.response.status) {
-          case 400:
-            toast.error('입력된 재료가 없습니다. 재료를 입력해 주세요.');
-            break;
-          case 406:
-            toast.error('적절하지 못한 재료가 있습니다.');
-            break;
-          case 500:
-            toast.error('추천 레시피 생성에 실패했습니다.');
-            break;
-          default:
-            toast.error('알 수 없는 에러가 발생했습니다.');
-        }
+      console.log("에러 상태 코드:", error.response?.status);
+      const statusCode = error.response?.status;
+      if (statusCode === 400) {
+        toast.error('입력된 재료가 없습니다. 재료를 입력해 주세요.');
+      } else if (statusCode === 406) {
+        toast.error('적절하지 못한 재료가 있습니다.');
+        
+      }else if (statusCode === 404) {
+        toast.error('레시피가 존재하지 않습니다.');
+      } 
+      else if (statusCode === 500) {
+        toast.error('추천 레시피 생성에 실패했습니다.');
       } else {
         toast.error('서버와의 연결에 실패했습니다.');
       }
