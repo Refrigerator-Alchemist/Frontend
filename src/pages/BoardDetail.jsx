@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft, FaHeart, FaRegHeart } from 'react-icons/fa';
@@ -8,54 +7,27 @@ import { toast } from 'react-toastify';
 import { IP_ADDRESS } from '../context/UserContext';
 
 const BoardDetail = () => {
-  const { postId } = useParams(); // 라우터 엔드포인트
-  const [imageUrl, setImageUrl] = useState(''); // 이미지
-  const [title, setTitle] = useState(''); // 레시피 글 제목
-  const [nickName, setNickName] = useState(''); // 작성자 닉네임
-  const [email, setEmail] = useState(''); // 작성자 이메일
+  const { postId } = useParams();
+  const [imageUrl, setImageUrl] = useState('');
+  const [title, setTitle] = useState('');
+  const [nickName, setNickName] = useState('');
+  const [email, setEmail] = useState('');
 
-  const [description, setDescription] = useState(''); // 내용
-  const [ingredients, setIngredients] = useState([]); // 재료
+  const [description, setDescription] = useState('');
+  const [ingredients, setIngredients] = useState([]);
 
-  const [Liked, setLiked] = useState(false); // 좋아요 상태
-  const [likeCount, setLikeCount] = useState(''); // 좋아요 수
-  const [likedPosts, setLikedPosts] = useState([]); // 좋아요 누른 게시물들(배열)
+  const [Liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState('');
+  const [likedPosts, setLikedPosts] = useState([]);
 
   const accessToken = localStorage.getItem('accessToken');
-
+  const navigate = useNavigate();
 
   // ⏯️ 실행: 처음 렌더링, 게시물 검색 후
   useEffect(() => {
-    // 📝 게시물 정보
-    const fetchPostData = async () => {
-      try {
-        const response = await axios.get(
-          `${IP_ADDRESS}/board/specific?postId=${postId}`
-        );
-        if (response.data && response.data.items) {
-          const item = response.data.items[0];
-          setImageUrl(item.imageUrl);
-          setTitle(item.title);
-          setEmail(item.email);
-          setDescription(item.description);
-          setIngredients(item.ingredients);
-          setLikeCount(item.likeCount);
-        }
-      } catch (error) {
-        console.error('데이터받아오는중:', error);
-      }
-    };
-
     // 🔥 좋아요 누른 게시물들 가져오는 함수
-  const navigate = useNavigate();
-  
-  
-  
-  useEffect(() => {
-    // 🔥 현재 계정으로 좋아요 누른 게시물을 배열로 받아오는 함수
     const fetchLikedPosts = async () => {
       const URL = `${IP_ADDRESS}/board/islike?id=${email}`;
-                                    // id가 맞는지 
       try {
         const response = await axios.get(URL, {
           headers: {
@@ -64,17 +36,18 @@ const BoardDetail = () => {
         });
 
         if (response.data) {
-          const posts = response.data.map(Number); 
+          const posts = response.data.map(Number);
           setLikedPosts(posts);
           // setLiked(posts.includes(parseInt(postId)));
           setLiked(posts.includes(Number(postId)));
 
           console.log('좋아요 누른 게시물의 postId 목록:', posts);
           console.log('현재 게시물의 postId:', postId);
-          console.log(`현재 게시물(${postId})의 좋아요 상태:`, posts.includes(parseInt(postId)));
+          console.log(
+            `현재 게시물(${postId})의 좋아요 상태:`,
+            posts.includes(parseInt(postId))
+          );
         }
-        
-
       } catch (error) {
         console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
       }
@@ -84,8 +57,7 @@ const BoardDetail = () => {
     fetchLikedPosts();
   }, [postId, accessToken, email]);
 
-
-  // 1️⃣ 현재 게시물 정보
+  // 📝 게시물 정보
   const fetchPostData = async (postId) => {
     try {
       const response = await axios.get(
@@ -121,7 +93,6 @@ const BoardDetail = () => {
       toast.error('로그인이 필요한 기능입니다.');
       return;
     }
-
     try {
       if (Liked) {
         // ▶️ 좋아요 되어있는 상태면 취소
@@ -140,7 +111,7 @@ const BoardDetail = () => {
           }
         );
         if (response.status === 200) {
-          setLiked(!Liked);
+          setLiked(false);
           setLikeCount(likeCount - 1);
           setLikedPosts((prevLikedPosts) =>
             prevLikedPosts.filter((id) => id !== postId)
@@ -167,7 +138,7 @@ const BoardDetail = () => {
           }
         );
         if (response.status === 200) {
-          setLiked(Liked);
+          setLiked(true);
           setLikeCount(likeCount + 1);
           setLikedPosts((prevLikedPosts) => [...prevLikedPosts, postId]);
         }
