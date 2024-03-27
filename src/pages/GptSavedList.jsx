@@ -12,7 +12,7 @@ const GptSavedList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage] = useState(7);
 
-  const nickname = localStorage.getItem('nickname') || '';
+  const nickname = localStorage.getItem('nickName') || '';
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -41,6 +41,7 @@ const GptSavedList = () => {
       } catch (error) {
         console.error('에러내용:', error);
         let message = '오류가 발생했습니다. 다시 시도해주세요.';
+        const statusCode = error.response?.status;
         if (error.response) {
           switch (error.response.status) {
             case 401:
@@ -56,6 +57,7 @@ const GptSavedList = () => {
         }
         toast.error(message);
       }
+      
     };
     fetchRecipes();
   }, [accessToken]);

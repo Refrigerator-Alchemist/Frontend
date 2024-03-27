@@ -16,7 +16,7 @@ export default function App() {
           <Outlet />
           <ToastContainer position="top-center"
            autoClose={3000}
-           newestOnTop={true} // 새 알림이 위에 표시될지 여부
+           newestOnTop={false} // 새 알림이 위에 표시될지 여부
            draggable  // 드래그 해서 닫기 
            theme="light" 
             />
