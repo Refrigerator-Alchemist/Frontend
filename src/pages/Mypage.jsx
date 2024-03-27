@@ -119,7 +119,7 @@ export default function MyPage() {
   useEffect(() => {
     // 🧑🏽‍🌾 현재 로그인 중인 유저 정보 : 프로필 이미지, 닉네임
     const fetchUserInfo = async () => {
-      const URL = `${IP_ADDRESS}/userprofile`;
+      const URL = `${IP_ADDRESS}/userinfo`;
 
       try {
         if (user) {
@@ -142,7 +142,7 @@ export default function MyPage() {
 
     // 🧑🏽 내가 작성한 레시피 가져오는 함수
     const fetchMyPage = async () => {
-      const URL = `${IP_ADDRESS}/board/myPage`;
+      const URL = `${IP_ADDRESS}/mypost`;
 
       try {
         const response = await axios.get(URL, {
@@ -172,7 +172,7 @@ export default function MyPage() {
 
     // 🔥 좋아요 누른 게시물들 가져오는 함수
     const fetchLikeData = async () => {
-      const URL = `${IP_ADDRESS}/board/mypage-like`;
+      const URL = `${IP_ADDRESS}/likedpost`;
 
       try {
         const response = await axios.get(URL, {
@@ -214,7 +214,7 @@ export default function MyPage() {
   // 2️⃣ 레시피 삭제
   const deleteRecipe = async (postId) => {
     try {
-      await axios.post(`${IP_ADDRESS}/board/deleteBoard`, postId, {
+      await axios.post(`${IP_ADDRESS}/mypost/delete`, postId, {
         headers: {
           'Authorization-Access': accessToken,
         },
@@ -281,7 +281,7 @@ export default function MyPage() {
         </h1>
 
         <button
-          onClick={() => navigate('/profile')}
+          onClick={() => navigate('/mypage/edit/profile')}
           className="font-score my-2 bg-white py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-opacity-50 underline hover:text-red-500"
         >
           내 프로필 수정
