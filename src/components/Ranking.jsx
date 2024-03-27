@@ -81,7 +81,7 @@ export default function Ranking() {
     };
 
     fetchRanking();
-  }, [topItems]);
+  }, []);
 
   return (
     <article
