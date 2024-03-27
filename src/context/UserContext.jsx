@@ -322,20 +322,14 @@ export const UserProvider = ({ children }) => {
   //🔓 로그아웃 ---------------------------------------------------------------
   const logout = async () => {
     const URL = `${IP_ADDRESS}/logout`;
-    const socialId = localStorage.getItem('socialId');
+    const accessToken = localStorage.getItem('accessToken');
 
     try {
-      const response = await instance.post(
-        URL,
-        { socialId },
-        {
-          headers: {
-            'Content-Type': 'application/json;charset=UTF-8',
-            Accept: 'application/json',
-            'Access-Control-Allow-Origin': '*',
-          },
-        }
-      );
+      const response = await instance.post(URL, {
+        headers: {
+          'Authorization-Access': accessToken,
+        },
+      });
 
       if (response.status === 204) {
         console.log(response.status);
@@ -391,13 +385,19 @@ export const UserProvider = ({ children }) => {
   // 🚀 새로운 액세스 토큰 발급 -----------------------------------------------------------
   const reIssue = async () => {
     const URL = `${IP_ADDRESS}/reissue`;
-    const socialId = localStorage.getItem('socialId');
     const socialType = localStorage.getItem('socialType');
+    const accessToken = localStorage.getItem('accessToken');
+    const refreshToken = localStorage.getItem('refreshToken');
 
     try {
-      const response = await instance.post(URL, { socialId });
+      const response = await instance.post(URL, {
+        headers: {
+          'Authorization-Access': accessToken,
+          'Authorization-Refresh': refreshToken,
+        },
+      });
 
-      if (response.status === 204 && socialType === 'Refrigerator-Cleaner') {
+      if (response.status === 204 && socialType === 'Refrigerator-Alchemist') {
         localStorage.setItem('accessToken', response.data.accessToken);
         console.log(
           `새로운 액세스 토큰을 발급받았습니다 : ${response.data.accessToken}`
@@ -405,7 +405,7 @@ export const UserProvider = ({ children }) => {
         navigate(window.location.pathname);
       }
 
-      if (response.status === 204 && socialType !== 'Refrigerator-Cleaner') {
+      if (response.status === 204 && socialType !== 'Refrigerator-Alchemist') {
         localStorage.setItem(
           'accessToken',
           'Bearer ' + response.data.accessToken
