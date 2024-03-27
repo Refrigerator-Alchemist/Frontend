@@ -6,6 +6,8 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { IP_ADDRESS } from '../context/UserContext';
 
+import { useLocation } from 'react-router-dom';
+
 const BoardDetail = () => {
   const { postId } = useParams();
   const [imageUrl, setImageUrl] = useState('');
@@ -22,6 +24,7 @@ const BoardDetail = () => {
   const accessToken = localStorage.getItem('accessToken');
   const nickName = localStorage.getItem('nickName');
   const navigate = useNavigate();
+  const location = useLocation();
 
   // ⏯️ 실행: 처음 렌더링, 게시물 검색 후
   useEffect(() => {
@@ -55,7 +58,7 @@ const BoardDetail = () => {
 
     fetchPostData(postId);
     fetchLikedPosts();
-  }, [postId, accessToken, email]);
+  }, [postId, accessToken, email,location]);
 
   // 📝 게시물 정보
   const fetchPostData = async (postId) => {
