@@ -314,7 +314,7 @@ function Board() {
     } else {
       fetchTotalRecipes();
     }
-  }, [searchResultCount, isSearching]);
+  }, [searchResultCount, isSearching,recipesPerPage]);
 
   // // 3️⃣ 게시물 검색
   const handleSearch = (results) => {
