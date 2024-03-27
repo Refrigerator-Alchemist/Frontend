@@ -23,7 +23,7 @@
 //   // 🚷 비로그인 유저 접근 금지
 //   useEffect(() => {
 //     if (!accessToken) {
-//       toast.error('마 로그인 해라ㅋㅋ');
+//       window.alert('마 로그인 해라ㅋㅋ');
 //       navigate(-1);
 //     }
 //   }, [navigate, location, accessToken]);
@@ -56,7 +56,7 @@
 //               break;
 //           }
 //         }
-//         toast.error(message);
+//         window.alert(message);
 //       }
 //     };
   
@@ -138,7 +138,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
+// import { ToastContainer, toast } from 'react-toastify';
 import Navigation from '../components/Navigation';
 import { IP_ADDRESS } from '../context/UserContext';
 
@@ -148,16 +148,16 @@ const GptSavedList = () => {
 
   const nickname = localStorage.getItem('nickName') || '';
   const navigate = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
   const accessToken = localStorage.getItem('accessToken');
 
   // 🚷 비로그인 유저 접근 금지
   useEffect(() => {
     if (!accessToken) {
-      toast.error('로그인이 필요합니다.');
+      window.alert('로그인이 필요합니다.');
       navigate(-1);
     }
-  }, [navigate, location, accessToken]);
+  }, [navigate,  accessToken]);
 
   // 저장한 목록 보기
   useEffect(() => {
@@ -172,7 +172,7 @@ const GptSavedList = () => {
           setRecipes(response.data);
         } catch (error) {
           console.error('에러내용:', error);
-          toast.error('오류가 발생했습니다. 다시 시도해주세요.');
+          window.alert('오류가 발생했습니다. 다시 시도해주세요.');
         } finally {
           setLoading(false); // 데이터 로드 완료
         }
@@ -202,7 +202,7 @@ const GptSavedList = () => {
 
   return (
     <section className="history">
-      <ToastContainer position="top-center" />
+      {/* <ToastContainer position="top-center" /> */}
       <div
         className="absolute top-5 left-45 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
         onClick={() => navigate('/main')}
