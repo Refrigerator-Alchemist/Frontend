@@ -46,7 +46,7 @@ export default function EditProfile() {
 
   // 2️⃣ 프로필 이미지 저장하기
   const uploadImage = async (file) => {
-    const URL = `${IP_ADDRESS}/change-profile`;
+    const URL = `${IP_ADDRESS}/reset/profile`;
 
     const formData = new FormData();
     const nickNameBlob = new Blob([JSON.stringify({ nickName })], {
@@ -81,7 +81,7 @@ export default function EditProfile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const URL = `${IP_ADDRESS}/change-nickname`;
+    const URL = `${IP_ADDRESS}/reset/nickname`;
 
     try {
       if (nameError === false) {
@@ -102,6 +102,7 @@ export default function EditProfile() {
             }
           )
           .then((result) => {
+            localStorage.setItem('nickName', changeNickName); // 로컬스토리지에도 바꾼 닉네임 저장
             console.log(`닉네임 재설정 성공 : ${result}`);
             toast.success('닉네임을 재설정 했습니다');
           });

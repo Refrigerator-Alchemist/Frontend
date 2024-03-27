@@ -78,7 +78,7 @@ export const UserProvider = ({ children }) => {
 
   // 📧 이메일 인증 요청 (회원가입용) -------------------------------------------------
   const requestEmailForSignUp = async (email, emailType, socialType) => {
-    const URL = `${IP_ADDRESS}/auth/send-email`;
+    const URL = `${IP_ADDRESS}/auth/email`;
 
     try {
       const response = await instance.post(URL, {
@@ -105,7 +105,7 @@ export const UserProvider = ({ children }) => {
 
   // 📧 이메일 인증 요청 (비밀번호 재설정용) ---------------------------------------------
   const requestEmailForReset = async (email, emailType, socialType) => {
-    const URL = `${IP_ADDRESS}/auth/send-email`;
+    const URL = `${IP_ADDRESS}/auth/email`;
 
     try {
       const response = await instance.post(URL, {
@@ -158,12 +158,15 @@ export const UserProvider = ({ children }) => {
     }
 
     try {
-      const response = await instance.post(`${IP_ADDRESS}/auth/verify-email`, {
-        email,
-        emailType,
-        inputNum,
-        socialType,
-      });
+      const response = await instance.post(
+        `${IP_ADDRESS}/auth/register/authentication/number`,
+        {
+          email,
+          emailType,
+          inputNum,
+          socialType,
+        }
+      );
 
       if (response.status === 204) {
         setVerified(true);
@@ -180,7 +183,7 @@ export const UserProvider = ({ children }) => {
   const checkNameDuplication = async (nickName) => {
     try {
       const response = await instance.post(
-        `${IP_ADDRESS}/auth/verify-nickname`,
+        `${IP_ADDRESS}/auth/register/authentication/nickname`,
         {
           nickName,
         }
@@ -200,7 +203,7 @@ export const UserProvider = ({ children }) => {
 
   // 📝 회원가입 ---------------------------------------------------------------
   const signup = (email, password, nickName, socialType) => {
-    const URL = `${IP_ADDRESS}/auth/signup`;
+    const URL = `${IP_ADDRESS}/auth/register`;
 
     instance
       .post(
@@ -318,7 +321,7 @@ export const UserProvider = ({ children }) => {
 
   //🔓 로그아웃 ---------------------------------------------------------------
   const logout = async () => {
-    const URL = `${IP_ADDRESS}/auth/token/logout`;
+    const URL = `${IP_ADDRESS}/logout`;
     const socialId = localStorage.getItem('socialId');
 
     try {
@@ -364,7 +367,7 @@ export const UserProvider = ({ children }) => {
   const resetPassword = async (email, password, rePassword, socialType) => {
     try {
       const response = await instance.post(
-        `${IP_ADDRESS}/auth/reset-password`,
+        `${IP_ADDRESS}/auth/reset/password`,
         {
           email,
           password,
@@ -387,7 +390,7 @@ export const UserProvider = ({ children }) => {
 
   // 🚀 새로운 액세스 토큰 발급 -----------------------------------------------------------
   const reIssue = async () => {
-    const URL = `${IP_ADDRESS}/auth/token/reissue`;
+    const URL = `${IP_ADDRESS}/reissue`;
     const socialId = localStorage.getItem('socialId');
     const socialType = localStorage.getItem('socialType');
 
