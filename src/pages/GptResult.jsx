@@ -35,9 +35,11 @@ const RecipePage = () => {
         }
       } catch (error) {
         console.error('에러내용:', error);
-        if (error.response && error.response.status === 404) {
+        console.log("에러 상태 코드:", error.response?.status);
+        const statusCode = error.response?.status;
+        if (statusCode=== 404) {
         } else {
-          toast.error('레시피 정보를 불러오는 중 에러가 발생했습니다.');
+          toast.error('레시피가 존재하지 않습니다.');
         }
       } finally {
         setIsLoading(false);
