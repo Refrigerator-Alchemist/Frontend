@@ -74,7 +74,7 @@ export default function UploadBoard() {
   // 4️⃣ 수정 완료
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const URL = `${IP_ADDRESS}/content/update`;
+    const URL = `${IP_ADDRESS}/editpost/update`;
 
     const formData = {
       postId: postId,

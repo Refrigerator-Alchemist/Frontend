@@ -180,6 +180,7 @@ export default function MyPage() {
         console.error('내가 작성한 레시피 로드 중 에러 발생', error);
       }
     };
+
     // 내가 작성한 레시피 총 갯수 가져오는 함수 
     const fetchMyRecipesCount = async () => {
       try {
@@ -190,7 +191,11 @@ export default function MyPage() {
               },
           });
           console.log(response.data)
-          setTotalMyRecipes(response.data.total);
+          
+          const totalRecipes = response.data;
+          const totalPages = Math.ceil(totalRecipes / recipesPerPage);
+      console.log("총 페이지 수:", totalPages);
+          setTotalMyRecipes(totalPages);
           console.log(response.data.total)
       } catch (error) {
           console.error('내 레시피 총 개수 정보 가져오기 실패:', error);
