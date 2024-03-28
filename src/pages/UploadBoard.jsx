@@ -51,7 +51,7 @@ export default function UploadBoard() {
     });
 
     try {
-      const response = await axios.post(`${IP_ADDRESS}/writeTest`, formData, {
+      const response = await axios.post(`${IP_ADDRESS}/board/upload/post`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization-Access': accessToken,

@@ -287,7 +287,7 @@ function Board() {
   // 1️⃣ 전체 레시피 수를 가져오는 함수
   const fetchTotalRecipes = async () => {
     try {
-      const response = await axios.get(`${IP_ADDRESS}/boardSize`);
+      const response = await axios.get(`${IP_ADDRESS}/board/total`);
 
       console.log(response.data);
       const totalRecipes = response.data;
@@ -304,7 +304,7 @@ function Board() {
   // 2️⃣ 각 페이지에 해당하는 레시피들을 불러오는 함수
   const fetchRecipesByPage = async (pageNumber) => {
     try {
-      const response = await axios.get(`${IP_ADDRESS}/board/apiTest`, {
+      const response = await axios.get(`${IP_ADDRESS}/board/page`, {
         params: { data: pageNumber.toString() },
       });
 
@@ -375,7 +375,7 @@ function Board() {
   for (let i = 1; i <= Math.min(totalPages, 5); i++) {
     pageNumbers.push(i);
   }
-  
+
   return (
     <section className="Board pb-24">
       <header className="bg-white px-6 py-7">

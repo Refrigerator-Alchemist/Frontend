@@ -89,6 +89,7 @@ const LikedRecipe = ({ postId, title, description, imageUrl }) => {
 // 📂 마이페이지
 export default function MyPage() {
   const [imageUrl, setImageUrl] = useState('');
+  const [currentRecipes, setCurrentRecipes] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage] = useState(6);
@@ -168,9 +169,9 @@ export default function MyPage() {
             };
           });
           setRecipes(items);
-          setTotalMyRecipes(response.data.length); 
-          setRecipes(response.data.items);
-          setTotalMyRecipesPages(Math.ceil(response.data.total / recipesPerPage));
+          const totalRecipes = response.data.total;
+          const totalPages = Math.ceil(totalRecipes / recipesPerPage);
+          showMyRecipes ? setTotalMyRecipesPages(totalPages) : setTotalLikedRecipesPages(totalPages);
         } else {
           toast.error('데이터가 배열이 아닙니다');
         }
@@ -178,6 +179,28 @@ export default function MyPage() {
         console.error('내가 작성한 레시피 로드 중 에러 발생', error);
       }
     };
+
+    // 내가 작성한 레시피 총 갯수 가져오는 함수 
+    const fetchMyRecipesCount = async () => {
+      try {
+          const response = await axios.get(`${IP_ADDRESS}/mypost/size`, {
+              headers: {
+                  'Authorization-Access': accessToken,
+                  email: email,
+              },
+          });
+          console.log(response.data)
+          
+          const totalRecipes = response.data;
+          const totalPages = Math.ceil(totalRecipes / recipesPerPage);
+      console.log("총 페이지 수:", totalPages);
+          setTotalMyRecipes(totalPages);
+          console.log(response.data.total)
+      } catch (error) {
+          console.error('내 레시피 총 개수 정보 가져오기 실패:', error);
+          toast.error('레시피 정보를 가져오는데 실패했습니다.');
+      }
+  };
 
     // 🔥 좋아요 누른 게시물들 가져오는 함수
     const fetchLikeData = async () => {
@@ -199,7 +222,7 @@ export default function MyPage() {
             likeCount: item.likeCount,
           }));
           setLikedItems(items);
-          setTotalLikedRecipes(response.data.length);
+          setTotalLikedRecipes(response.data.total);
           setLikedItems(response.data.items);
           setTotalLikedRecipesPages(Math.ceil(response.data.total / recipesPerPage));
         } else {
@@ -209,6 +232,27 @@ export default function MyPage() {
         console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
       }
     };
+
+    // 내가 좋아요누른 총 갯수 가져오는 함수 
+    const fetchLikedRecipesCount = async () => {
+      try {
+          const response = await axios.get(`${IP_ADDRESS}/likedpost/size`, {
+              headers: {
+                  'Authorization-Access': accessToken,
+                  email: email,
+              },
+          });
+          console.log(response.data)
+          setTotalLikedRecipes(response.data.total); 
+          console.log(response.data.total)
+      } catch (error) {
+          console.error('좋아요 누른 레시피 총 개수 정보 가져오기 실패:', error);
+          toast.error('좋아요 레시피 정보를 가져오는데 실패했습니다.');
+      }
+  };
+
+
+
 
     fetchUserInfo();
     if (showMyRecipes) {
@@ -257,30 +301,6 @@ export default function MyPage() {
     setCurrentPage(1); // 목록을 전환할 때마다 첫 페이지로 설정
   };
   
-  // const handlePageChange = pageNumber => setCurrentPage(pageNumber);
-  // const currentRecipes = showMyRecipes
-  //       ? recipes.slice((currentPage - 1) * recipesPerPage, currentPage * recipesPerPage)
-  //       : likedItems.slice((currentPage - 1) * recipesPerPage, currentPage * recipesPerPage);
-  
-  //       // 보여줄 레시피 목록에 따라 총 레시피 수를 결정
-  // const totalRecipes = showMyRecipes ? totalMyRecipes : totalLikedRecipes;
-  // 페이지 변경 핸들러
-const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
-
-// 현재 페이지에 따라 레시피 목록 가져오기
-const currentRecipes = showMyRecipes
-  ? recipes.slice((currentPage - 1) * recipesPerPage, currentPage * recipesPerPage)
-  : likedItems.slice((currentPage - 1) * recipesPerPage, currentPage * recipesPerPage);
-
-// 총 페이지 수 계산
-const totalRecipes = showMyRecipes ? totalMyRecipes : totalLikedRecipes;
-const totalRecipePages = Math.ceil(totalRecipes / recipesPerPage);
-
-// 페이지 번호 배열 생성
-const pageNumbers = [];
-for (let i = 1; i <= totalRecipePages; i++) {
-  pageNumbers.push(i);
-}
 
   return (
     <section className="Board flex flex-col items-center justify-center w-full">
@@ -378,21 +398,7 @@ for (let i = 1; i <= totalRecipePages; i++) {
           </div>
         )}
 
-        <div id="pagination" className="flex justify-center items-center mt-4 mb-24">
-          {pageNumbers.map((number) => (
-            <button
-              key={number}
-              onClick={() => handlePageChange(number)}
-              className={`px-4 py-2 border rounded-full m-1 ${
-                currentPage === number
-                  ? "bg-main text-white"
-                  : "bg-white text-main"
-              }`}
-            >
-              {number}
-            </button>
-          ))}
-        </div>
+       
       </main>
 
       <footer
