@@ -165,7 +165,7 @@ const SearchBar = ({ onSearch }) => {
 
           onSearch(formattedData);
         } else {
-          console.error('검색결과가 배열이 아닙ㄴ다ㅣ', response.data);
+          console.error('검색결과가 배열이 아닙니다', response.data);
         }
         setQuery('');
       } catch (error) {
@@ -342,7 +342,7 @@ function Board() {
 
   // 5️⃣ 클릭할 페이지번호 순서대로
   const pageNumbers = [];
-  for (let i = 0; i <= totalPages; i++) {
+  for (let i = 0; i < totalPages; i++) {
     pageNumbers.push(i + 1);
   }
 
