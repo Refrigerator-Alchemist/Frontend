@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import Navigation from '../components/Navigation';
 import axios from 'axios';
@@ -12,19 +12,8 @@ const GptSavedDetail = () => {
   const { recipeId } = useParams();
 
   const navigate = useNavigate();
-  const location = useLocation();
 
   const accessToken = localStorage.getItem('accessToken');
-
-  // 🚷 비로그인 유저 접근 금지
-  useEffect(() => {
-    if (!accessToken) {
-      toast.error('마 로그인 해라ㅋㅋ');
-      setTimeout(() => {
-        navigate(-1);
-      }, 2000);
-    }
-  }, [navigate, location, accessToken]);
 
   // id로 세부내용 불러오기
   useEffect(() => {
@@ -48,7 +37,7 @@ const GptSavedDetail = () => {
         if (error.response) {
           switch (error.response.status) {
             case 401:
-              message = 'socialId가 존재하지 않습니다.';
+              message = '로그인을 먼저 해야합니다';
               break;
             case 406:
               message = '해당 recipeId가 존재하지 않습니다.';

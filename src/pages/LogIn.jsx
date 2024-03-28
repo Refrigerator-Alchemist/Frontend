@@ -22,7 +22,7 @@ export default function Login() {
 
   const navigate = useNavigate();
 
-  const socialType = 'Refrigerator-Cleaner';
+  const socialType = 'Refrigerator-Alchemist';
 
   // 1️⃣ 이메일 입력값 저장
   const handleEmailChange = (e) => {

@@ -20,7 +20,7 @@ export default function UploadBoard() {
   // 🚷 비로그인 유저 접근 금지
   useEffect(() => {
     if (!accessToken) {
-      toast.error('마 로그인 해라ㅋㅋ');
+      toast.error('로그인을 먼저 해야합니다');
       setTimeout(() => {
         navigate(-1);
       }, 2000);
