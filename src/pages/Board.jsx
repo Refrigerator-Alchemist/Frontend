@@ -372,10 +372,10 @@ function Board() {
   //   pageNumbers.push(i + 1);
   // }
   const pageNumbers = [];
-  for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) {
+  for (let i = 1; i <= Math.min(totalPages, 5); i++) {
     pageNumbers.push(i);
   }
-
+  
   return (
     <section className="Board pb-24">
       <header className="bg-white px-6 py-7">
@@ -450,18 +450,33 @@ function Board() {
             ))}
         </div> */}
          <div className="pagination flex justify-center my-4">
-          {totalPages > 0 &&
-            pageNumbers.map((number) => (
-              <button
-                key={number}
-                onClick={() => handlePageClick(number)}
-                className={`px-4 py-2 border rounded-full m-1 ${
-                  currentPage === number ? 'bg-main text-white' : 'bg-white text-main'
-                }`}
-              >
-                {number}
-              </button>
-            ))}
+          {currentPage > 1 && (
+            <button
+              onClick={() => handlePageClick(currentPage - 1)}
+              className="px-4 py-2 border rounded-full m-1 bg-white text-main"
+            >
+              이전
+            </button>
+          )}
+          {pageNumbers.map((number) => (
+            <button
+              key={number}
+              onClick={() => handlePageClick(number)}
+              className={`px-4 py-2 border rounded-full m-1 ${
+                currentPage === number ? 'bg-main text-white' : 'bg-white text-main'
+              }`}
+            >
+              {number}
+            </button>
+          ))}
+          {currentPage < totalPages && (
+            <button
+              onClick={() => handlePageClick(currentPage + 1)}
+              className="px-4 py-2 border rounded-full m-1 bg-white text-main"
+            >
+              다음
+            </button>
+          )}
         </div>
       </main>
 
