@@ -253,13 +253,23 @@ export default function MyPage() {
   };
   
   
-  const handlePageChange = pageNumber => setCurrentPage(pageNumber);
-  const currentRecipes = showMyRecipes
-        ? recipes.slice((currentPage - 1) * recipesPerPage, currentPage * recipesPerPage)
-        : likedItems.slice((currentPage - 1) * recipesPerPage, currentPage * recipesPerPage);
+  // const handlePageChange = pageNumber => setCurrentPage(pageNumber);
+  // const currentRecipes = showMyRecipes
+  //       ? recipes.slice((currentPage - 1) * recipesPerPage, currentPage * recipesPerPage)
+  //       : likedItems.slice((currentPage - 1) * recipesPerPage, currentPage * recipesPerPage);
   
-        // 보여줄 레시피 목록에 따라 총 레시피 수를 결정
-  const totalRecipes = showMyRecipes ? totalMyRecipes : totalLikedRecipes;
+  //       // 보여줄 레시피 목록에 따라 총 레시피 수를 결정
+  // const totalRecipes = showMyRecipes ? totalMyRecipes : totalLikedRecipes;
+  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+
+  const currentRecipes = showMyRecipes
+    ? recipes.slice((currentPage - 1) * recipesPerPage, currentPage * recipesPerPage)
+    : likedItems.slice((currentPage - 1) * recipesPerPage, currentPage * recipesPerPage);
+
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil((showMyRecipes ? totalMyRecipes : totalLikedRecipes) / recipesPerPage); i++) {
+    pageNumbers.push(i);
+  }
 
   return (
     <section className="Board flex flex-col items-center justify-center w-full">
@@ -268,7 +278,7 @@ export default function MyPage() {
           className="font-score text-gray-300"
           onClick={(e) => {
             e.preventDefault();
-            navigate('/delete-user');
+            navigate("/delete-user");
           }}
         >
           회원 탈퇴
@@ -296,7 +306,7 @@ export default function MyPage() {
         </h1>
 
         <button
-          onClick={() => navigate('/mypage/edit/profile')}
+          onClick={() => navigate("/mypage/edit/profile")}
           className="font-score my-2 bg-white py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-opacity-50 underline hover:text-red-500"
         >
           내 프로필 수정
@@ -304,21 +314,21 @@ export default function MyPage() {
 
         <div className="flex">
           <button
-            onClick={() => toggleRecipeView(true)}  // 내가 작성한 레시피 on
+            onClick={() => toggleRecipeView(true)} // 내가 작성한 레시피 on
             className={`font-score mx-1 py-2 px-4 rounded ${
               showMyRecipes === true
-                ? 'bg-main text-white'
-                : 'bg-gray-100 text-black'
+                ? "bg-main text-white"
+                : "bg-gray-100 text-black"
             }`}
           >
             내가 작성한 레시피
           </button>
           <button
-            onClick={() => toggleRecipeView(false)}  // 좋아요 누른 레시피 on
+            onClick={() => toggleRecipeView(false)} // 좋아요 누른 레시피 on
             className={`font-score mx-1 py-2 px-4 rounded ${
               showMyRecipes === false
-                ? 'bg-main text-white'
-                : 'bg-gray-100 text-black'
+                ? "bg-main text-white"
+                : "bg-gray-100 text-black"
             }`}
           >
             좋아요 누른 레시피
@@ -357,20 +367,28 @@ export default function MyPage() {
           </div>
         )}
 
-        <Pagination
-          currentPage={currentPage}
-          recipesPerPage={recipesPerPage}
-          totalRecipes={totalRecipes}
-          paginate={handlePageChange}
-        />
+        <div id="pagination" className="flex justify-center items-center mt-4">
+        {pageNumbers.map((number) => (
+            <button
+              key={number}
+              onClick={() => handlePageChange(number)}
+              className={`px-4 py-2 border rounded-full m-1 ${
+                currentPage === number ? 'bg-main text-white' : 'bg-white text-main'
+              }`}
+            >
+              {number}
+            </button>
+          ))}
+        </div>
+
       </main>
 
       <footer
         style={{
-          position: 'fixed',
-          bottom: '0',
-          width: '100%',
-          maxWidth: '31rem',
+          position: "fixed",
+          bottom: "0",
+          width: "100%",
+          maxWidth: "31rem",
         }}
       >
         <Navigation />
