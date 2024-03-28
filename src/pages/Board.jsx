@@ -372,10 +372,10 @@ function Board() {
   //   pageNumbers.push(i + 1);
   // }
   const pageNumbers = [];
-  for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) {
+  for (let i = 1; i <= Math.min(totalPages, 5); i++) {
     pageNumbers.push(i);
   }
-
+  
   return (
     <section className="Board pb-24">
       <header className="bg-white px-6 py-7">
