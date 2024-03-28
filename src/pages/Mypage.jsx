@@ -94,6 +94,8 @@ export default function MyPage() {
   const [recipesPerPage] = useState(6);
   const [totalMyRecipes, setTotalMyRecipes] = useState(0);
   const [totalLikedRecipes, setTotalLikedRecipes] = useState(0);
+  const [totalMyRecipesPages, setTotalMyRecipesPages] = useState(0);
+  const [totalLikedRecipesPages, setTotalLikedRecipesPages] = useState(0);
 
   const [showMyRecipes, setShowMyRecipes] = useState(true); // 토글 기능 - true : 저장한 레시피 / false : 좋아요 누른 레시피
   const [recipes, setRecipes] = useState([]); // 내가 저장한 레시피들
@@ -168,6 +170,8 @@ export default function MyPage() {
           });
           setRecipes(items);
           setTotalMyRecipes(response.data.length); 
+          setRecipes(response.data.items);
+          setTotalMyRecipesPages(Math.ceil(response.data.total / recipesPerPage));
         } else {
           toast.error('데이터가 배열이 아닙니다');
         }
@@ -197,6 +201,8 @@ export default function MyPage() {
           }));
           setLikedItems(items);
           setTotalLikedRecipes(response.data.length);
+          setLikedItems(response.data.items);
+          setTotalLikedRecipesPages(Math.ceil(response.data.total / recipesPerPage));
         } else {
           toast.error('데이터가 배열이 아닙니다!');
         }
@@ -260,16 +266,24 @@ export default function MyPage() {
   
   //       // 보여줄 레시피 목록에 따라 총 레시피 수를 결정
   // const totalRecipes = showMyRecipes ? totalMyRecipes : totalLikedRecipes;
-  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+  // 페이지 변경 핸들러
+const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
-  const currentRecipes = showMyRecipes
-    ? recipes.slice((currentPage - 1) * recipesPerPage, currentPage * recipesPerPage)
-    : likedItems.slice((currentPage - 1) * recipesPerPage, currentPage * recipesPerPage);
+// 현재 페이지에 따라 레시피 목록 가져오기
+const currentRecipes = showMyRecipes
+  ? recipes.slice((currentPage - 1) * recipesPerPage, currentPage * recipesPerPage)
+  : likedItems.slice((currentPage - 1) * recipesPerPage, currentPage * recipesPerPage);
 
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil((showMyRecipes ? totalMyRecipes : totalLikedRecipes) / recipesPerPage); i++) {
-    pageNumbers.push(i);
-  }
+// 총 페이지 수 계산
+const totalRecipes = showMyRecipes ? totalMyRecipes : totalLikedRecipes;
+const totalRecipePages = Math.ceil(totalRecipes / recipesPerPage);
+
+// 페이지 번호 배열 생성
+const pageNumbers = [];
+for (let i = 1; i <= totalRecipePages; i++) {
+  pageNumbers.push(i);
+}
+
 
   return (
     <section className="Board flex flex-col items-center justify-center w-full">
@@ -367,20 +381,21 @@ export default function MyPage() {
           </div>
         )}
 
-        <div id="pagination" className="flex justify-center items-center mt-4">
-        {pageNumbers.map((number) => (
+        <div id="pagination" className="flex justify-center items-center mt-4 mb-24">
+          {pageNumbers.map((number) => (
             <button
               key={number}
               onClick={() => handlePageChange(number)}
               className={`px-4 py-2 border rounded-full m-1 ${
-                currentPage === number ? 'bg-main text-white' : 'bg-white text-main'
+                currentPage === number
+                  ? "bg-main text-white"
+                  : "bg-white text-main"
               }`}
             >
               {number}
             </button>
           ))}
         </div>
-
       </main>
 
       <footer
