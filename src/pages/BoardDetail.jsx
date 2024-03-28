@@ -39,6 +39,7 @@ const BoardDetail = () => {
         });
 
         if (response.data) {
+          console.log(response);
           const posts = response.data.map(Number);
           setLikedPosts(posts);
           // setLiked(posts.includes(parseInt(postId)));
@@ -48,7 +49,7 @@ const BoardDetail = () => {
           console.log('현재 게시물의 postId:', postId);
           console.log(
             `현재 게시물(${postId})의 좋아요 상태:`,
-            posts.includes(parseInt(postId))
+            posts.includes(Number(postId))
           );
         }
       } catch (error) {
