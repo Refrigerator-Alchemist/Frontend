@@ -144,6 +144,7 @@ export default function MyPage() {
       }
     };
 
+
     // 🧑🏽 내가 작성한 레시피 가져오는 함수
     const fetchMyPage = async () => {
       const URL = `${IP_ADDRESS}/mypost`;
@@ -246,12 +247,18 @@ export default function MyPage() {
       }
     }
   };
-
+  const toggleRecipeView = (view) => {
+    setShowMyRecipes(view);
+    setCurrentPage(1); // 목록을 전환할 때마다 첫 페이지로 설정
+  };
+  
+  
   const handlePageChange = pageNumber => setCurrentPage(pageNumber);
   const currentRecipes = showMyRecipes
         ? recipes.slice((currentPage - 1) * recipesPerPage, currentPage * recipesPerPage)
         : likedItems.slice((currentPage - 1) * recipesPerPage, currentPage * recipesPerPage);
   
+        // 보여줄 레시피 목록에 따라 총 레시피 수를 결정
   const totalRecipes = showMyRecipes ? totalMyRecipes : totalLikedRecipes;
 
   return (
@@ -297,7 +304,7 @@ export default function MyPage() {
 
         <div className="flex">
           <button
-            onClick={() => setShowMyRecipes(true)} // 내가 작성한 레시피 on
+            onClick={() => toggleRecipeView(true)}  // 내가 작성한 레시피 on
             className={`font-score mx-1 py-2 px-4 rounded ${
               showMyRecipes === true
                 ? 'bg-main text-white'
@@ -307,7 +314,7 @@ export default function MyPage() {
             내가 작성한 레시피
           </button>
           <button
-            onClick={() => setShowMyRecipes(false)} // 좋아요 누른 레시피 on
+            onClick={() => toggleRecipeView(false)}  // 좋아요 누른 레시피 on
             className={`font-score mx-1 py-2 px-4 rounded ${
               showMyRecipes === false
                 ? 'bg-main text-white'
