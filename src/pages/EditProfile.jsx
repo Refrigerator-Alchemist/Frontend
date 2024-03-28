@@ -27,12 +27,14 @@ export default function EditProfile() {
   // 🚷 비로그인 유저 접근 금지
   useEffect(() => {
     if (!accessToken) {
-      toast.error('마 로그인 해라ㅋㅋ');
+      toast.error('로그인을 먼저 해야합니다');
       setTimeout(() => {
         navigate(-1);
       }, 2000);
     }
   }, [navigate, location, accessToken]);
+
+  // 닉네임 이메일 받아오는 get 요청 구현하기
 
   // ⭕️ 바꿀 닉네임 초기값은 원래 닉네임으로 처리해서 입력 가능하게 수정
   useEffect(() => {

@@ -100,7 +100,7 @@ export default function MyPage() {
   const [showMyRecipes, setShowMyRecipes] = useState(true); // 토글 기능 - true : 저장한 레시피 / false : 좋아요 누른 레시피
   const [recipes, setRecipes] = useState([]); // 내가 저장한 레시피들
   const [likedItems, setLikedItems] = useState([]); // 좋아요 누른 레시피들
-  
+
   const user = useUserState(); // 유저 데이터 : 로그인 상태면 존재
   const { logout } = useUserDispatch();
 
@@ -114,7 +114,7 @@ export default function MyPage() {
   // 🚷 비로그인 유저 접근 금지
   useEffect(() => {
     if (!accessToken) {
-      toast.error('마 로그인 해라ㅋㅋ');
+      toast.error('로그인을 먼저 해야합니다');
       setTimeout(() => {
         navigate(-1);
       }, 2000);
@@ -145,7 +145,6 @@ export default function MyPage() {
         console.error('데이터 통신 중 문제 발생: ', error);
       }
     };
-
 
     // 🧑🏽 내가 작성한 레시피 가져오는 함수
     const fetchMyPage = async () => {
@@ -258,7 +257,6 @@ export default function MyPage() {
     setCurrentPage(1); // 목록을 전환할 때마다 첫 페이지로 설정
   };
   
-  
   // const handlePageChange = pageNumber => setCurrentPage(pageNumber);
   // const currentRecipes = showMyRecipes
   //       ? recipes.slice((currentPage - 1) * recipesPerPage, currentPage * recipesPerPage)
@@ -283,7 +281,6 @@ const pageNumbers = [];
 for (let i = 1; i <= totalRecipePages; i++) {
   pageNumbers.push(i);
 }
-
 
   return (
     <section className="Board flex flex-col items-center justify-center w-full">
