@@ -235,11 +235,28 @@ function Board() {
   const location = useLocation();
   const recipesPerPage = 6;
 
+  // useEffect(() => {
+  //   checkTokenAndFetchData();
+  // }, [location.pathname]);
+
+
+  // const checkTokenAndFetchData = async () => {
+  //   const accessToken = localStorage.getItem('accessToken');
+  //   const email = localStorage.getItem('email');
+    
+  //   if (accessToken && email) {
+  //     await fetchLikedPosts(email, accessToken);
+  //     fetchTotalRecipes();
+  //   } else {
+  //     Navigation('/login');
+  //   }
+  // };
+
   // ⏯️ 실행: 처음 렌더링 1번
   useEffect(() => {
     fetchLikedPosts();
     fetchTotalRecipes();
-  }, [location]);
+  }, [location.pathname]);
 
   // ⏯️ 실행: 처음 렌더링, 페이지별 정보가 업데이트 될 때마다
   useEffect(() => {
@@ -266,7 +283,7 @@ function Board() {
       console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
     }
   };
-
+  
   // 1️⃣ 전체 레시피 수를 가져오는 함수
   const fetchTotalRecipes = async () => {
     try {
@@ -331,19 +348,32 @@ function Board() {
   };
 
   // 4️⃣ 페이지 번호를 받아와 해당 번호에서 1을 뺀 값을 서버로 보내는 함수
+  // const handlePageClick = (pageNumber) => {
+  //   const newPage = pageNumber - 1;
+  //   if (newPage !== currentPage-1 && newPage >= 0) {
+  //     // 현재 페이지와 선택된 페이지가 다르고 0 이상인 경우에만 페이지 변경
+  //     fetchRecipesByPage(newPage);
+  //     setCurrentPage(pageNumber);
+  //   }
+  // };
   const handlePageClick = (pageNumber) => {
-    const newPage = pageNumber - 1;
-    if (newPage !== currentPage && newPage >= 0) {
-      // 현재 페이지와 선택된 페이지가 다르고 0 이상인 경우에만 페이지 변경
-      fetchRecipesByPage(newPage);
-      setCurrentPage(pageNumber);
+    const newPage = pageNumber - 1; 
+    if (newPage !== currentPage - 1 && newPage >= 0) { 
+      fetchRecipesByPage(newPage).then(() => {
+        setCurrentPage(pageNumber); 
+      });
     }
   };
+  
 
   // 5️⃣ 클릭할 페이지번호 순서대로
+  // const pageNumbers = [];
+  // for (let i = 0; i < totalPages; i++) {
+  //   pageNumbers.push(i + 1);
+  // }
   const pageNumbers = [];
-  for (let i = 0; i < totalPages; i++) {
-    pageNumbers.push(i + 1);
+  for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) {
+    pageNumbers.push(i);
   }
 
   return (
@@ -403,7 +433,7 @@ function Board() {
           </>
         )}
 
-        <div className="pagination flex justify-center my-4">
+        {/* <div className="pagination flex justify-center my-4">
           {totalPages > 0 &&
             pageNumbers.map((number) => (
               <button
@@ -413,6 +443,20 @@ function Board() {
                   currentPage === number
                     ? "bg-main text-white"
                     : "bg-white text-main"
+                }`}
+              >
+                {number}
+              </button>
+            ))}
+        </div> */}
+         <div className="pagination flex justify-center my-4">
+          {totalPages > 0 &&
+            pageNumbers.map((number) => (
+              <button
+                key={number}
+                onClick={() => handlePageClick(number)}
+                className={`px-4 py-2 border rounded-full m-1 ${
+                  currentPage === number ? 'bg-main text-white' : 'bg-white text-main'
                 }`}
               >
                 {number}
