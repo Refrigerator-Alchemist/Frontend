@@ -23,6 +23,7 @@ const BoardDetail = () => {
 
   const accessToken = localStorage.getItem('accessToken');
   const nickName = localStorage.getItem('nickName');
+  const myEmail  = localStorage.getItem('email');
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -30,7 +31,7 @@ const BoardDetail = () => {
   useEffect(() => {
     // 🔥 좋아요 누른 게시물들 가져오는 함수
     const fetchLikedPosts = async () => {
-      const URL = `${IP_ADDRESS}/board/islike?id=${email}`;
+      const URL = `${IP_ADDRESS}/board/islike?id=${myEmail}`;
       try {
         const response = await axios.get(URL, {
           headers: {
@@ -43,6 +44,14 @@ const BoardDetail = () => {
           const posts = response.data.map(Number);
           setLikedPosts(posts);
           // setLiked(posts.includes(parseInt(postId)));
+          // for (const item of posts) {
+          //   if (item ===Number(postId) ){
+              
+          //     setLiked(Number(postId));
+          //     break;
+          //   }
+          //   console.log(item)
+          // }
           setLiked(posts.includes(Number(postId)));
 
           console.log('좋아요 누른 게시물의 postId 목록:', posts);
@@ -51,6 +60,7 @@ const BoardDetail = () => {
             `현재 게시물(${postId})의 좋아요 상태:`,
             posts.includes(Number(postId))
           );
+          
         }
       } catch (error) {
         console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
@@ -103,7 +113,7 @@ const BoardDetail = () => {
         const response = await axios.post(
           `${IP_ADDRESS}/board/dislike`,
           {
-            email: email,
+            email: myEmail,
             postId: postId,
           },
           {
@@ -129,7 +139,7 @@ const BoardDetail = () => {
           `${IP_ADDRESS}/board/like`,
 
           {
-            email: email,
+            email:  myEmail,
             postId: postId,
           },
           {
