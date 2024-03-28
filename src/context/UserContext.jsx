@@ -253,7 +253,7 @@ export const UserProvider = ({ children }) => {
 
   // 🔐 로그인 ---------------------------------------------------------------
   const login = (email, password, socialType) => {
-    const URL = `${IP_ADDRESS}/auth/token/login`;
+    const URL = `${IP_ADDRESS}/token/login`;
 
     instance
       .post(
@@ -321,7 +321,7 @@ export const UserProvider = ({ children }) => {
 
   //🔓 로그아웃 ---------------------------------------------------------------
   const logout = async () => {
-    const URL = `${IP_ADDRESS}/logout`;
+    const URL = `${IP_ADDRESS}/token/logout`;
     const accessToken = localStorage.getItem('accessToken');
 
     try {

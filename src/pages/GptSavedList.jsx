@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
-import {  toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import Pagination from '../components/Pagination';
 import Navigation from '../components/Navigation';
 import { IP_ADDRESS } from '../context/UserContext';
@@ -14,17 +14,8 @@ const GptSavedList = () => {
 
   const nickname = localStorage.getItem('nickName') || '';
   const navigate = useNavigate();
-  const location = useLocation();
 
   const accessToken = localStorage.getItem('accessToken');
-
-  // 🚷 비로그인 유저 접근 금지
-  useEffect(() => {
-    if (!accessToken) {
-      toast.error('마 로그인 해라ㅋㅋ');
-      navigate(-1);
-    }
-  }, [navigate, location, accessToken]);
 
   //저장한 목록 보기
   useEffect(() => {
@@ -38,23 +29,24 @@ const GptSavedList = () => {
         setRecipes(response.data);
       } catch (error) {
         console.error('에러내용:', error);
-        console.log("에러 상태 코드:", error.response?.status);
+        console.log('에러 상태 코드:', error.response?.status);
         const statusCode = error.response?.status;
 
         if (statusCode === 401) {
-            toast.error('인증되지 않은 유저입니다.');
+          // 🚷 비로그인 유저 접근 금지
+          toast.error('로그인을 먼저 해야합니다');
         } else if (statusCode === 500) {
-            toast.error('레시피 목록 조회에 실패했습니다.');
+          toast.error('레시피 목록 조회에 실패했습니다.');
         } else {
-            toast.error('서버와의 연결에 실패했습니다.');
+          toast.error('서버와의 연결에 실패했습니다.');
         }
-    }
-};
+      }
+    };
 
-if (accessToken) {
-    fetchRecipes();
-}
-}, [accessToken]);
+    if (accessToken) {
+      fetchRecipes();
+    }
+  }, [accessToken]);
 
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
