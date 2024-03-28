@@ -91,7 +91,7 @@ export default function MyPage() {
   const [imageUrl, setImageUrl] = useState('');
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [recipesPerPage] = useState(5);
+  const [recipesPerPage] = useState(6);
   const [totalMyRecipes, setTotalMyRecipes] = useState(0);
   const [totalLikedRecipes, setTotalLikedRecipes] = useState(0);
 

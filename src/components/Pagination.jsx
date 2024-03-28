@@ -7,19 +7,17 @@ const Pagination = ({ currentPage, recipesPerPage, totalRecipes, paginate }) => 
   }
 
   return (
-    <div className="pagination flex justify-center my-4 mb-24">
-      {pageNumbers.map((number) => (
-        <button
-          key={number}
-          onClick={() => paginate(number)}
-          className={`px-4 py-2 border rounded-full m-1 ${
-            currentPage === number ? 'bg-main text-white' : 'bg-white text-main'
-          }`}
-        >
-          {number}
-        </button>
-      ))}
-    </div>
+    <nav>
+      <ul className='pagination'>
+        {pageNumbers.map(number => (
+          <li key={number} className='page-item'>
+            <button onClick={() => paginate(number)} className='page-link'>
+              {number}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 };
 
