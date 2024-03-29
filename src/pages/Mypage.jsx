@@ -111,14 +111,15 @@ export default function MyPage() {
   const navigate = useNavigate();
   const location = useLocation();
   // 🚷 비로그인 유저 접근 금지
-  // useEffect(() => {
-  //   if (!accessToken) {
-  //     toast.error('마 로그인 해라ㅋㅋ');
-  //     setTimeout(() => {
-  //       navigate(-1);
-  //     }, 2000);
-  //   }
-  // }, [navigate, location, accessToken]);
+  useEffect(() => {
+    if (!accessToken) {
+      toast.error('로그인을 먼저 해야합니다');
+      setTimeout(() => {
+        navigate(-1);
+      }, 2000);
+    }
+  }, [navigate, location, accessToken]);
+
   // --------------------------------------------------------------------------------------------------------
   
   
@@ -144,7 +145,6 @@ export default function MyPage() {
         console.error('데이터 통신 중 문제 발생: ', error);
       }
     };
-
 
     // 🧑🏽 내가 작성한 레시피 가져오는 함수
     const fetchMyPage = async () => {
@@ -286,6 +286,7 @@ export default function MyPage() {
     setShowMyRecipes(view);
     setCurrentPage(1); // 목록을 전환할 때마다 첫 페이지로 설정
   };
+  
 
   // Active 상태에 따라 현재 페이지 번호와 레시피 목록 계산
 let currentRecipes;

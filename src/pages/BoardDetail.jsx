@@ -23,13 +23,13 @@ const BoardDetail = () => {
 
   const accessToken = localStorage.getItem('accessToken');
   const nickName = localStorage.getItem('nickName');
-  const myEmail  = localStorage.getItem('email');
+  const myEmail = localStorage.getItem('email');
   const navigate = useNavigate();
   const location = useLocation();
 
   // ⏯️ 실행: 처음 렌더링, 게시물 검색 후
   useEffect(() => {
-    // 🔥 좋아요 누른 게시물들 가져오는 함수
+    // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
     const fetchLikedPosts = async () => {
       const URL = `${IP_ADDRESS}/board/islike?id=${myEmail}`;
       try {
@@ -46,7 +46,7 @@ const BoardDetail = () => {
           // setLiked(posts.includes(parseInt(postId)));
           // for (const item of posts) {
           //   if (item ===Number(postId) ){
-              
+
           //     setLiked(Number(postId));
           //     break;
           //   }
@@ -60,7 +60,6 @@ const BoardDetail = () => {
             `현재 게시물(${postId})의 좋아요 상태:`,
             posts.includes(Number(postId))
           );
-          
         }
       } catch (error) {
         console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
@@ -69,7 +68,7 @@ const BoardDetail = () => {
 
     fetchPostData(postId);
     fetchLikedPosts();
-  }, [postId, accessToken, email,location]);
+  }, [postId, accessToken, email, location]);
 
   // 📝 게시물 정보
   const fetchPostData = async (postId) => {
@@ -126,9 +125,11 @@ const BoardDetail = () => {
         );
         if (response.status === 200) {
           setLiked(false);
-          
-          setLikeCount(prevCount => Number(prevCount) - 1);
-          setLikedPosts(prevLikedPosts => prevLikedPosts.filter(id => id !== postId));
+
+          setLikeCount((prevCount) => Number(prevCount) - 1);
+          setLikedPosts((prevLikedPosts) =>
+            prevLikedPosts.filter((id) => id !== postId)
+          );
         }
 
         console.log(response);
@@ -139,7 +140,7 @@ const BoardDetail = () => {
           `${IP_ADDRESS}/board/like`,
 
           {
-            email:  myEmail,
+            email: myEmail,
             postId: postId,
           },
           {
@@ -152,8 +153,8 @@ const BoardDetail = () => {
         );
         if (response.status === 200) {
           setLiked(true);
-          setLikeCount(prevCount => Number(prevCount) + 1);
-          setLikedPosts(prevLikedPosts => [...prevLikedPosts, postId]);
+          setLikeCount((prevCount) => Number(prevCount) + 1);
+          setLikedPosts((prevLikedPosts) => [...prevLikedPosts, postId]);
         }
         console.log(response);
         console.log('***변경된 likedPosts:', likedPosts);
