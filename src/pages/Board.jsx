@@ -235,28 +235,12 @@ function Board() {
   const location = useLocation();
   const recipesPerPage = 6;
 
-  // useEffect(() => {
-  //   checkTokenAndFetchData();
-  // }, [location.pathname]);
-
-
-  // const checkTokenAndFetchData = async () => {
-  //   const accessToken = localStorage.getItem('accessToken');
-  //   const email = localStorage.getItem('email');
-    
-  //   if (accessToken && email) {
-  //     await fetchLikedPosts(email, accessToken);
-  //     fetchTotalRecipes();
-  //   } else {
-  //     Navigation('/login');
-  //   }
-  // };
 
   // ⏯️ 실행: 처음 렌더링 1번
   useEffect(() => {
     fetchLikedPosts();
     fetchTotalRecipes();
-  }, [location.pathname]);
+  }, [location.pathname, accessToken]);
 
   // ⏯️ 실행: 처음 렌더링, 페이지별 정보가 업데이트 될 때마다
   useEffect(() => {
@@ -270,20 +254,20 @@ function Board() {
     try {
       const response = await axios.get(URL, {
         headers: {
-          'Authorization-Access': accessToken,
+          "Authorization-Access": accessToken,
         },
       });
 
       if (response.data) {
         const posts = response.data.map(Number);
         setLikedPosts(posts);
-        console.log('좋아요 누른 게시물의 postId 목록:', posts);
+        console.log("좋아요 누른 게시물의 postId 목록:", posts);
       }
     } catch (error) {
-      console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
+      console.error("좋아요 누른 기록 받아오는 중 에러 발생", error);
     }
   };
-  
+
   // 1️⃣ 전체 레시피 수를 가져오는 함수
   const fetchTotalRecipes = async () => {
     try {
@@ -295,9 +279,9 @@ function Board() {
       const totalPages = Math.ceil(totalRecipes / recipesPerPage);
       setTotalPages(totalPages);
 
-      console.log('총 페이지 수:', totalPages);
+      console.log("총 페이지 수:", totalPages);
     } catch (error) {
-      console.error('전체 레시피 수 가져오기 에러:', error);
+      console.error("전체 레시피 수 가져오기 에러:", error);
     }
   };
 
@@ -319,10 +303,10 @@ function Board() {
 
         setRecipes(formattedData);
       } else {
-        console.error('에러 내용1:', response.data);
+        console.error("에러 내용1:", response.data);
       }
     } catch (error) {
-      console.error('에러 내용2:', error);
+      console.error("에러 내용2:", error);
     }
   };
 
@@ -333,7 +317,7 @@ function Board() {
     } else {
       fetchTotalRecipes();
     }
-  }, [searchResultCount, isSearching,recipesPerPage]);
+  }, [searchResultCount, isSearching, recipesPerPage]);
 
   // // 3️⃣ 게시물 검색
   const handleSearch = (results) => {
@@ -344,35 +328,40 @@ function Board() {
 
     if (results.length <= recipesPerPage) {
       setTotalPages(1);
-  }
+    }
   };
 
   // 4️⃣ 페이지 번호를 받아와 해당 번호에서 1을 뺀 값을 서버로 보내는 함수
-  // const handlePageClick = (pageNumber) => {
-  //   const newPage = pageNumber - 1;
-  //   if (newPage !== currentPage-1 && newPage >= 0) {
-  //     // 현재 페이지와 선택된 페이지가 다르고 0 이상인 경우에만 페이지 변경
-  //     fetchRecipesByPage(newPage);
-  //     setCurrentPage(pageNumber);
-  //   }
-  // };
   const handlePageClick = (pageNumber) => {
-    const newPage = pageNumber - 1; 
-    if (newPage !== currentPage - 1 && newPage >= 0) { 
+    const newPage = pageNumber - 1;
+    if (newPage !== currentPage - 1 && newPage >= 0) {
       fetchRecipesByPage(newPage).then(() => {
-        setCurrentPage(pageNumber); 
+        setCurrentPage(pageNumber);
       });
     }
   };
-  
 
   // 5️⃣ 클릭할 페이지번호 순서대로
   // const pageNumbers = [];
   // for (let i = 0; i < totalPages; i++) {
   //   pageNumbers.push(i + 1);
   // }
+  
+  // 5️⃣ 클릭할 페이지번호 순서대로 조정
   const pageNumbers = [];
-  for (let i = 1; i <= Math.min(totalPages, 5); i++) {
+  const maxPageNumbersToShow = 5;
+  let startPage = Math.max(
+    currentPage - Math.floor(maxPageNumbersToShow / 2),
+    1
+  );
+  let endPage = Math.min(startPage + maxPageNumbersToShow - 1, totalPages);
+
+  // 시작 페이지 조정 (끝 페이지가 총 페이지를 넘지 않도록)
+  if (endPage - startPage + 1 < maxPageNumbersToShow) {
+    startPage = Math.max(endPage - maxPageNumbersToShow + 1, 1);
+  }
+
+  for (let i = startPage; i <= endPage; i++) {
     pageNumbers.push(i);
   }
 
@@ -449,7 +438,7 @@ function Board() {
               </button>
             ))}
         </div> */}
-         <div className="pagination flex justify-center my-4">
+        <div className="pagination flex justify-center my-4">
           {currentPage > 1 && (
             <button
               onClick={() => handlePageClick(currentPage - 1)}
@@ -463,7 +452,9 @@ function Board() {
               key={number}
               onClick={() => handlePageClick(number)}
               className={`px-4 py-2 border rounded-full m-1 ${
-                currentPage === number ? 'bg-main text-white' : 'bg-white text-main'
+                currentPage === number
+                  ? "bg-main text-white"
+                  : "bg-white text-main"
               }`}
             >
               {number}
