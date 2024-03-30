@@ -19,6 +19,7 @@ export default function App() {
            newestOnTop={false} // 새 알림이 위에 표시될지 여부
            draggable  // 드래그 해서 닫기 
            theme="light" 
+           limit={1}
             />
         </NavigationProvider>
       </UserProvider>

@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IP_ADDRESS } from '../context/UserContext';
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 // 📋 각 게시물
@@ -22,17 +23,20 @@ function RankingItem({
       }}
     >
       <figure className="flex items-center justify-between drop-shadow-xl">
-        <div className="flex items-center justify-center space-x-10">
+        <div className="flex items-center justify-center space-x-6">
           <div style={{ width: '30px' }}>
-            <span className="font-undong">{rank}</span>
+            <span className="font-undong ml-4">{rank}</span>
           </div>
+          <div className="flex-none w-20 h-20 rounded-xl border-2 border-gray-300 overflow-hidden">
           <img
             src={imageUrl}
             alt="썸네일"
             width="60px"
             height="40px"
-            className="ml-1"
+            className=" w-full h-full object-cover"
           />
+        </div>
+         
           <div className="flex flex-col">
             <span className="font-score font-semibold">{title}</span>
             <span className="font-score text-sm">{ingredients.join(', ')}</span>
@@ -40,9 +44,9 @@ function RankingItem({
         </div>
 
         <div>
-          <span className="font-score text-md font-bold ml-5">
+          <span className="font-score flex gap-2 text-md font-bold ml-5 mr-5">
             {likeCount}
-            <span className="ml-2">❤️</span>
+            <FaHeart className="text-red-500 text-2xl" />
           </span>
         </div>
       </figure>
