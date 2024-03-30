@@ -20,9 +20,9 @@ const BoardDetail = () => {
   const [Liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState('');
   const [likedPosts, setLikedPosts] = useState([]);
+  const [nickName, setNickName] = useState('');
 
   const accessToken = localStorage.getItem('accessToken');
-  const nickName = localStorage.getItem('nickName');
   const myEmail = localStorage.getItem('email');
   const navigate = useNavigate();
   const location = useLocation();
@@ -85,6 +85,7 @@ const BoardDetail = () => {
           description: item.description,
           ingredients: item.ingredients.map((ingredient) => ingredient),
           likeCount: item.likeCount,
+          nickName: item.nickName,
         }));
         setImageUrl(items[0].imageUrl);
         setTitle(items[0].title);
@@ -92,6 +93,7 @@ const BoardDetail = () => {
         setDescription(items[0].description);
         setIngredients(items[0].ingredients);
         setLikeCount(items[0].likeCount);
+        setNickName(items[0].nickName);
       } else {
         console.error('데이터 타입 오류:', response.data);
       }

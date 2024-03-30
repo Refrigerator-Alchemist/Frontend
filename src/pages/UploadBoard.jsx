@@ -5,15 +5,15 @@ import axios from 'axios';
 import { IP_ADDRESS } from '../context/UserContext';
 import { toast } from 'react-toastify';
 
-const nickName = localStorage.getItem('nickName');
-const email = localStorage.getItem('email');
-const accessToken = localStorage.getItem('accessToken');
-
 // ✍️ 게시물 작성
 export default function UploadBoard() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [ingredients, setIngredients] = useState(['']);
+
+  const nickName = localStorage.getItem('nickName');
+  const email = localStorage.getItem('email');
+  const accessToken = localStorage.getItem('accessToken');
 
   const fileInput = useRef(null);
 
@@ -29,7 +29,7 @@ export default function UploadBoard() {
         navigate(-1);
       }, 2000);
     }
-  }, [navigate, location]);
+  }, [accessToken, navigate, location]);
 
   // 1️⃣ 재료 입력
   const handleIngredientChange = (index, event) => {

@@ -6,7 +6,7 @@ import {
   GoEyeClosed,
 } from 'react-icons/go';
 import { FaArrowLeft } from 'react-icons/fa';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useUserDispatch } from '../context/UserContext';
 import { toast } from 'react-toastify';
 
@@ -22,7 +22,6 @@ export default function ResetPassword() {
   const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
-  const location = useLocation();
 
   const {
     resetPassword, // 재설정하기
@@ -33,20 +32,9 @@ export default function ResetPassword() {
   } = useUserDispatch();
 
   const emailType = 'reset-password';
-  const socialType = 'Refrigerator-Cleaner';
-
-  const accessToken = localStorage.getItem('accessToken');
+  const socialType = 'Refrigerator-Alchemist';
 
   /**-----------------------------------------상태, 상수---------------------------------------------*/
-  // 🚷 비로그인 유저 접속 차단
-  useEffect(() => {
-    if (!accessToken) {
-      toast.error('로그인을 먼저 해야합니다');
-      setTimeout(() => {
-        navigate(-1);
-      }, 2000);
-    }
-  }, [navigate, location, accessToken]);
 
   // 1️⃣ 이메일 저장
   const handleEmailChange = (e) => setEmail(e.target.value);
