@@ -140,6 +140,11 @@ const SearchBar = ({ onSearch }) => {
   const handleInputChange = (e) => {
     setQuery(e.target.value);
   };
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearchClick();
+    }
+  };
 
   const handleSearchClick = async () => {
     if (query.trim() !== '') {
@@ -170,15 +175,11 @@ const SearchBar = ({ onSearch }) => {
         setQuery('');
       } catch (error) {
         console.error('검색결과 에러 :', error);
+        toast.error('로그인을 먼저 해야합니다.')
       }
     }
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      handleSearchClick();
-    }
-  };
 
   return (
     <div className="font-score flex-grow flex items-center rounded-full bg-gray-50 p-2 shadow">

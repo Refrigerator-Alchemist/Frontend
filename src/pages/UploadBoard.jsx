@@ -10,6 +10,7 @@ export default function UploadBoard() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [ingredients, setIngredients] = useState(['']);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState('');
 
   const nickName = localStorage.getItem('nickName');
   const email = localStorage.getItem('email');
@@ -87,11 +88,34 @@ export default function UploadBoard() {
     navigate(-1);
   };
 
+  // 🚷 비로그인 유저 접근 금지
+  useEffect(() => {
+    if (!accessToken) {
+      toast.error('로그인을 먼저 해야합니다');
+      setTimeout(() => {
+        navigate('/board');
+      }, 2000);
+    }
+  }, [navigate, location]);
+  
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.match('image.*')) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreviewUrl(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setImagePreviewUrl(''); 
+    }
+  };
+
   return (
     <section className="pt-16">
       <div
         className="absolute top-5 left-42 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate('/board')}
+        onClick={() => navigate("/board")}
       >
         <FaArrowLeft />
       </div>
@@ -108,14 +132,45 @@ export default function UploadBoard() {
           >
             사진 추가하기
           </label>
+
           <input
             type="file"
             id="cover-photo"
+            onChange={handleImageChange}
             className="font-score w-full  border-2 border-dashed  border-gray-300 rounded-md p-4 text-sm text-gray-700"
             ref={fileInput}
           />
         </div>
-
+        {imagePreviewUrl && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "160px",
+            }}
+          >
+            <div
+              style={{
+                width: "90%",
+                maxWidth: "500px",
+                height: "auto",
+                border: "2px solid #ddd",
+                borderRadius: "15px",
+                overflow: "hidden",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <img
+                src={imagePreviewUrl}
+                alt="Preview"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+            </div>
+          </div>
+        )}
         <div className="form-group">
           <label
             htmlFor="food-name"
@@ -145,7 +200,7 @@ export default function UploadBoard() {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="음식에 대한 설명을 적어주세요"
-            className="font-score w-full border border-gray-300 rounded-md p-2 text-sm h-40"
+            className="font-score w-full border border-gray-300 rounded-md p-2 text-sm h-28"
           />
         </div>
 
