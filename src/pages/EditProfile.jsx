@@ -4,27 +4,32 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
 import IMAGE_PROFILE from '../assets/img/img_profile.png';
-import { IP_ADDRESS } from '../context/UserContext';
+import { IP_ADDRESS, useUserState } from '../context/UserContext';
 import { toast } from 'react-toastify';
+import errorCode from '../utils/ErrorCode';
 
 export default function EditProfile() {
   const [changeNickName, setChangeNickName] = useState(''); // 새로 바꿀 닉네임
   const [nameError, setNameError] = useState(false);
 
-  const nickName = localStorage.getItem('nickName'); // 원래 닉네임
-  const email = localStorage.getItem('email'); // 이메일
+  const [nickName, setNickName] = useState(
+    localStorage.getItem('nickName') || ''
+  );
+  const [email, setEmail] = useState(localStorage.getItem('email') || ''); // 이메일
   const accessToken = localStorage.getItem('accessToken'); // 액세스 토큰
 
   const [image, setImage] = useState(
     localStorage.getItem('imageUrl') || IMAGE_PROFILE // 프로필 이미지
   );
 
+  const user = useUserState(); // 유저 데이터 : 로그인 상태면 존재
+
   const fileInput = useRef(null);
 
   const navigate = useNavigate();
   const location = useLocation();
 
-  // 🚷 비로그인 유저 접근 금지
+  // 🚷 비로그인 유저 접속 차단
   useEffect(() => {
     if (!accessToken) {
       toast.error('로그인을 먼저 해야합니다');
@@ -34,12 +39,46 @@ export default function EditProfile() {
     }
   }, [navigate, location, accessToken]);
 
-  // 닉네임 이메일 받아오는 get 요청 구현하기
-
   // ⭕️ 바꿀 닉네임 초기값은 원래 닉네임으로 처리해서 입력 가능하게 수정
   useEffect(() => {
+    // 닉네임 이메일 받아오는 get 요청 구현하기
+    const fetchUserInfo = async () => {
+      const URL = `${IP_ADDRESS}/reset/info`;
+
+      try {
+        if (accessToken) {
+          const response = await axios.get(URL, {
+            headers: {
+              'Authorization-Access': accessToken,
+            },
+          });
+          localStorage.setItem('nickName', response.headers.get('nickName'));
+          localStorage.setItem('email', response.headers.get('email'));
+          setNickName(response.headers['nickName']);
+          setEmail(response.headers['email']);
+        } else {
+          return;
+        }
+      } catch (error) {
+        const errorHeaders = error.response?.headers;
+        // 🚫 에러 처리
+        if (errorHeaders.code) {
+          const errorName = Object.values(errorCode).find(
+            (obj) => obj.code === errorHeaders.code
+          );
+          const userNotice = errorName.notice;
+
+          console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
+          toast.error(`${userNotice}`); // 유저 팝업용
+        } else {
+          console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
+        }
+      }
+    };
+
+    fetchUserInfo();
     setChangeNickName(nickName);
-  }, [nickName]);
+  }, [accessToken, nickName]);
 
   // 1️⃣ 이미지 파일 업로드
   const handleImageChange = (e) => {
@@ -75,7 +114,19 @@ export default function EditProfile() {
         },
       });
     } catch (error) {
-      console.error('에러 내용:', error);
+      const errorHeaders = error.response?.headers;
+      // 🚫 에러 처리
+      if (errorHeaders.code) {
+        const errorName = Object.values(errorCode).find(
+          (obj) => obj.code === errorHeaders.code
+        );
+        const userNotice = errorName.notice;
+
+        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
+        toast.error(`${userNotice}`); // 유저 팝업용
+      } else {
+        console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
+      }
     }
   };
 
@@ -116,6 +167,7 @@ export default function EditProfile() {
           )
           .then((result) => {
             localStorage.setItem('nickName', changeNickName); // 로컬스토리지에도 바꾼 닉네임 저장
+            user.nickName = changeNickName; // user 객체에도 변경한 닉네임 저장
             console.log(`닉네임 재설정 성공 : ${result}`);
             toast.success('닉네임을 재설정 했습니다');
           });
@@ -123,7 +175,19 @@ export default function EditProfile() {
         navigate('/mypage');
       }
     } catch (error) {
-      console.error('닉네임 저장 중 에러 발생:', error);
+      const errorHeaders = error.response?.headers;
+      // 🚫 에러 처리
+      if (errorHeaders.code) {
+        const errorName = Object.values(errorCode).find(
+          (obj) => obj.code === errorHeaders.code
+        );
+        const userNotice = errorName.notice;
+
+        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
+        toast.error(`${userNotice}`); // 유저 팝업용
+      } else {
+        console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
+      }
     }
   };
 

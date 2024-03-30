@@ -14,7 +14,7 @@ export default function DeleteUser() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // 🚷 비로그인 유저 접근 금지
+  // 🚷 비로그인 유저 접속 차단
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
 

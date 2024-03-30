@@ -22,19 +22,29 @@ export default function UploadBoard() {
 
   const location = useLocation();
 
-  // 재료 입력
+  // 🚷 비로그인 유저 접속 차단
+  useEffect(() => {
+    if (!accessToken) {
+      toast.error('로그인을 먼저 해야합니다');
+      setTimeout(() => {
+        navigate(-1);
+      }, 2000);
+    }
+  }, [navigate, location]);
+
+  // 1️⃣ 재료 입력
   const handleIngredientChange = (index, event) => {
     const newIngredients = [...ingredients];
     newIngredients[index] = event.target.value;
     setIngredients(newIngredients);
   };
 
-  // 재료들에 재료 추가
+  // 2️⃣ 재료들에 재료 추가
   const addIngredientField = () => {
     setIngredients([...ingredients, '']);
   };
 
-  // 게시물 작성 버튼
+  // 3️⃣ 게시물 작성 버튼
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -52,12 +62,16 @@ export default function UploadBoard() {
     });
 
     try {
-      const response = await axios.post(`${IP_ADDRESS}/board/upload/post`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization-Access': accessToken,
-        },
-      });
+      const response = await axios.post(
+        `${IP_ADDRESS}/board/upload/post`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization-Access': accessToken,
+          },
+        }
+      );
       console.log('response.data : ', response.data);
       if (response.status === 200) {
         const postId = response.data;

@@ -33,7 +33,7 @@ const GptSavedList = () => {
         const statusCode = error.response?.status;
 
         if (statusCode === 401) {
-          // 🚷 비로그인 유저 접근 금지
+          // 🚷 비로그인 유저 접속 차단
           toast.error('로그인을 먼저 해야합니다');
         } else if (statusCode === 500) {
           toast.error('레시피 목록 조회에 실패했습니다.');
