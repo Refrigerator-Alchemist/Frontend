@@ -1,7 +1,7 @@
 import React, { useState, useReducer, createContext, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import ErrorCode from '../utils/ErrorCode';
+import errorCode from '../utils/ErrorCode';
 import { toast } from 'react-toastify';
 
 // 🧷 현재 IP 주소
@@ -49,7 +49,7 @@ const reducer = (state, action) => {
         user: action.user, // ▶ 유저의 액션
       };
     default:
-      throw new Error(`통제되지 않는 타입: ${action.type}`);
+      throw new Error(`Uncontrolled Action Type: ${action.type}`);
   }
 };
 
@@ -61,9 +61,6 @@ export const UserProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState); // 유저 상태 공유
 
   const [emailExists, setEmailExists] = useState(true); // 회원가입 시 이메일 중복 여부
-
-  const [takenTime, setTakenTime] = useState(null); // 인증번호 발급시간
-  const [expireTime, setExpireTime] = useState(null);
 
   const [verified, setVerified] = useState(false); // 이메일 인증 여부
 
@@ -87,19 +84,30 @@ export const UserProvider = ({ children }) => {
         socialType,
       });
 
-      console.log('리스폰스', response);
+      console.log(`이메일: ${email} 회원가입 유형: ${socialType}`);
 
-      // ▶ 204 === 중복 아니고, 인증발급
       if (response.status === 204) {
         setEmailExists(false);
-        setTakenTime(new Date());
+
         toast.success('인증번호가 발송되었습니다');
       } else {
-        setEmailExists(true);
-        toast.warning('이미 서버에 존재하는 이메일입니다');
+        return;
       }
     } catch (error) {
-      console.error('💥 이메일 인증번호 요청 중 에러 발생: ', error);
+      setEmailExists(true);
+      const errorHeaders = error.response?.headers;
+      // 🚫 에러 처리
+      if (errorHeaders.code) {
+        const errorName = Object.values(errorCode).find(
+          (obj) => obj.code === errorHeaders.code
+        );
+        const userNotice = errorName.notice;
+
+        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
+        toast.error(`${userNotice}`); // 유저 팝업용
+      } else {
+        console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
+      }
     }
   };
 
@@ -119,17 +127,26 @@ export const UserProvider = ({ children }) => {
       // ▶ 204 === 중복이고, 인증 발급
       if (response.status === 204) {
         setEmailExists(true);
-        setTakenTime(new Date());
-        setExpireTime(
-          new Date(new Date().setMinutes(new Date().getMinutes() + 10))
-        );
+
         toast.success('인증번호가 발송되었습니다');
       } else {
-        setEmailExists(false);
-        toast.error('존재하지 않는 이메일입니다');
+        return;
       }
     } catch (error) {
-      console.error('💥 이메일 인증번호 요청 중 에러 발생: ', error);
+      setEmailExists(false);
+      const errorHeaders = error.response?.headers;
+      // 🚫 에러 처리
+      if (errorHeaders.code) {
+        const errorName = Object.values(errorCode).find(
+          (obj) => obj.code === errorHeaders.code
+        );
+        const userNotice = errorName.notice;
+
+        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
+        toast.error(`${userNotice}`); // 유저 팝업용
+      } else {
+        console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
+      }
     }
   };
 
@@ -141,19 +158,10 @@ export const UserProvider = ({ children }) => {
     socialType
   ) => {
     const NO_CODE_ERROR = '인증번호를 입력해주세요';
-    const EXPIRED_CODE_ERROR = '인증번호가 만료되었습니다';
 
     // ▶ 인증번호 입력 여부 확인
     if (!inputNum) {
       toast.error(NO_CODE_ERROR);
-      return;
-    }
-
-    // ▶ 인증 유효 시간 10분
-    const timeDifference = (expireTime - takenTime) / 1000 / 60;
-
-    if (timeDifference > 10) {
-      toast.error(EXPIRED_CODE_ERROR);
       return;
     }
 
@@ -172,10 +180,23 @@ export const UserProvider = ({ children }) => {
         setVerified(true);
         toast.success('인증 완료!');
       } else {
-        toast.error('인증 실패;');
+        return;
       }
     } catch (error) {
-      console.error('💥 인증 확인 중 에러 발생: ', error);
+      setVerified(false);
+      const errorHeaders = error.response?.headers;
+      // 🚫 에러 처리
+      if (errorHeaders.code) {
+        const errorName = Object.values(errorCode).find(
+          (obj) => obj.code === errorHeaders.code
+        );
+        const userNotice = errorName.notice;
+
+        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
+        toast.error(`${userNotice}`); // 유저 팝업용
+      } else {
+        console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
+      }
     }
   };
 
@@ -189,24 +210,35 @@ export const UserProvider = ({ children }) => {
         }
       );
 
-      if (response.data.isDuplicated) {
-        setNameDuplicated(true);
-        toast.warning('이미 존재하는 닉네임입니다');
-      } else {
+      if (response.status === 204) {
         setNameDuplicated(false);
-        toast.success('사용가능한 닉네임입니다:)');
+        toast.success('사용 가능한 닉네임입니다:)');
+      } else {
+        return;
       }
     } catch (error) {
-      console.error('💥 닉네임 중복 확인 중 에러 발생: ', error);
+      setNameDuplicated(true);
+      const errorHeaders = error.response?.headers;
+      // 🚫 에러 처리
+      if (errorHeaders.code) {
+        const errorName = Object.values(errorCode).find(
+          (obj) => obj.code === errorHeaders.code
+        );
+        const userNotice = errorName.notice;
+
+        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
+        toast.error(`${userNotice}`); // 유저 팝업용
+      } else {
+        console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
+      }
     }
   };
 
   // 📝 회원가입 ---------------------------------------------------------------
-  const signup = (email, password, nickName, socialType) => {
+  const signup = async (email, password, nickName, socialType) => {
     const URL = `${IP_ADDRESS}/auth/register`;
-
-    instance
-      .post(
+    try {
+      const response = await instance.post(
         URL,
         {
           email: email,
@@ -220,19 +252,34 @@ export const UserProvider = ({ children }) => {
             Accept: 'application/json',
           },
         }
-      )
-      .then((result) => {
-        console.log(`회원가입 요청 성공 : ${result}`);
-        toast.sucess('회원가입이 완료되었습니다!');
-        navigate('/login');
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error('💥 회원가입 중 에러 발생');
-      });
+      );
+
+      if (response.status === 204) {
+        toast.success('회원가입이 완료되었습니다');
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000);
+      } else {
+        return;
+      }
+    } catch (error) {
+      const errorHeaders = error.response?.headers;
+      // 🚫 에러 처리
+      if (errorHeaders.code) {
+        const errorName = Object.values(errorCode).find(
+          (obj) => obj.code === errorHeaders.code
+        );
+        const userNotice = errorName.notice;
+
+        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
+        toast.error(`${userNotice}`); // 유저 팝업용
+      } else {
+        console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
+      }
+    }
   };
 
-  // 🚫 회원탈퇴 ---------------------------------------------------------------
+  // ❌ 회원탈퇴 ---------------------------------------------------------------
   const deleteUser = async () => {
     const URL = `${IP_ADDRESS}/auth/delete-user`;
     const socialId = localStorage.getItem('socialId');
@@ -244,19 +291,30 @@ export const UserProvider = ({ children }) => {
 
       // ▶ 로그아웃 처리
       logout();
-
-      toast.success('회원탈퇴가 완료되었습니다.');
+      toast.success('회원탈퇴가 완료되었습니다');
     } catch (error) {
-      console.error('💥 회원탈퇴 요청 중 에러 발생: ', error);
+      const errorHeaders = error.response?.headers;
+      // 🚫 에러 처리
+      if (errorHeaders.code) {
+        const errorName = Object.values(errorCode).find(
+          (obj) => obj.code === errorHeaders.code
+        );
+        const userNotice = errorName.notice;
+
+        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
+        toast.error(`${userNotice}`); // 유저 팝업용
+      } else {
+        console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
+      }
     }
   };
 
   // 🔐 로그인 ---------------------------------------------------------------
-  const login = (email, password, socialType) => {
+  const login = async (email, password, socialType) => {
     const URL = `${IP_ADDRESS}/token/login`;
 
-    instance
-      .post(
+    try {
+      const response = await instance.post(
         URL,
         {
           email: email,
@@ -270,10 +328,9 @@ export const UserProvider = ({ children }) => {
             'Access-Control-Allow-Origin': '*',
           },
         }
-      )
-      .then((response) => {
-        console.log('로그인 되었습니다!');
+      );
 
+      if (response) {
         localStorage.setItem(
           'accessToken',
           response.headers['authorization-access']
@@ -299,24 +356,22 @@ export const UserProvider = ({ children }) => {
         dispatch({ type: SET_USER, user });
         toast.success('로그인 되었습니다!');
         navigate('/main');
-      })
-      .catch((error) => {
-        // 에러 상태 코드에 따른 메시지 표시
-        if (error.response && error.response.status) {
-          switch (error.response.status) {
-            case ErrorCode.NOT_EXIST_USER_EMAIL_SOCIALTYPE.status:
-              toast.error(ErrorCode.NOT_EXIST_USER_EMAIL_SOCIALTYPE.message);
-              break;
-            case ErrorCode.NOT_VALID_ACCESSTOKEN.status:
-              toast.error(ErrorCode.NOT_VALID_ACCESSTOKEN.message);
-              break;
-            default:
-              toast.error('💥 로그인 실패!');
-          }
-        } else {
-          toast.error('💥 로그인 실패!');
-        }
-      });
+      }
+    } catch (error) {
+      const errorHeaders = error.response?.headers;
+      // 🚫 에러 처리
+      if (errorHeaders.code) {
+        const errorName = Object.values(errorCode).find(
+          (obj) => obj.code === errorHeaders.code
+        );
+        const userNotice = errorName.notice;
+
+        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
+        toast.error(`${userNotice}`); // 유저 팝업용
+      } else {
+        console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
+      }
+    }
   };
 
   //🔓 로그아웃 ---------------------------------------------------------------
@@ -352,8 +407,19 @@ export const UserProvider = ({ children }) => {
         navigate('/main');
       }
     } catch (error) {
-      console.log(error);
-      toast.error('💥 로그아웃에 문제가 생겼습니다!');
+      const errorHeaders = error.response?.headers;
+      // 🚫 에러 처리
+      if (errorHeaders.code) {
+        const errorName = Object.values(errorCode).find(
+          (obj) => obj.code === errorHeaders.code
+        );
+        const userNotice = errorName.notice;
+
+        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
+        toast.error(`${userNotice}`); // 유저 팝업용
+      } else {
+        console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
+      }
     }
   };
 
@@ -373,10 +439,22 @@ export const UserProvider = ({ children }) => {
       if (response.status === 204) {
         toast.success('비밀번호가 성공적으로 재설정되었습니다');
       } else {
-        toast.error('💥 비밀번호 재설정에 실패하였습니다');
+        return;
       }
     } catch (error) {
-      console.error('💥 비밀번호 재설정 중 에러 발생: ', error);
+      const errorHeaders = error.response?.headers;
+      // 🚫 에러 처리
+      if (errorHeaders.code) {
+        const errorName = Object.values(errorCode).find(
+          (obj) => obj.code === errorHeaders.code
+        );
+        const userNotice = errorName.notice;
+
+        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
+        toast.error(`${userNotice}`); // 유저 팝업용
+      } else {
+        console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
+      }
     }
 
     navigate('/login');
@@ -403,9 +481,10 @@ export const UserProvider = ({ children }) => {
           `새로운 액세스 토큰을 발급받았습니다 : ${response.data.accessToken}`
         );
         navigate(window.location.pathname);
-      }
-
-      if (response.status === 204 && socialType !== 'Refrigerator-Alchemist') {
+      } else if (
+        response.status === 204 &&
+        socialType !== 'Refrigerator-Alchemist'
+      ) {
         localStorage.setItem(
           'accessToken',
           'Bearer ' + response.data.accessToken
@@ -414,10 +493,23 @@ export const UserProvider = ({ children }) => {
           `새로운 액세스 토큰을 발급받았습니다 : ${response.data.accessToken}`
         );
         navigate(window.location.pathname);
+      } else {
+        return;
       }
     } catch (error) {
-      console.error('💥 새로운 액세스 토큰 발급 실패', error);
-      toast.error('💥 새로운 액세스 토큰 발급 실패');
+      const errorHeaders = error.response?.headers;
+      // 🚫 에러 처리
+      if (errorHeaders.code) {
+        const errorName = Object.values(errorCode).find(
+          (obj) => obj.code === errorHeaders.code
+        );
+        const userNotice = errorName.notice;
+
+        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
+        toast.error(`${userNotice}`); // 유저 팝업용
+      } else {
+        console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
+      }
     }
   };
 

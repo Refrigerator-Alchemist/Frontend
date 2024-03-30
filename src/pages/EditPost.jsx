@@ -17,7 +17,7 @@ export default function UploadBoard() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // 🚷 비로그인 유저 접근 금지
+  // 🚷 비로그인 유저 접속 차단
   useEffect(() => {
     if (!accessToken) {
       toast.error('로그인을 먼저 해야합니다');
