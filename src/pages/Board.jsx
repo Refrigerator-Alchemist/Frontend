@@ -241,7 +241,7 @@ function Board() {
   useEffect(() => {
     fetchLikedPosts();
     fetchTotalRecipes();
-  }, [location.pathname, accessToken]);
+  }, [location.pathname]);
 
   // ⏯️ 실행: 처음 렌더링, 페이지별 정보가 업데이트 될 때마다
   useEffect(() => {
