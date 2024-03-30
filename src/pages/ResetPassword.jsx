@@ -38,7 +38,7 @@ export default function ResetPassword() {
   const accessToken = localStorage.getItem('accessToken');
 
   /**-----------------------------------------상태, 상수---------------------------------------------*/
-  // 🚷 비로그인 유저 접근 금지
+  // 🚷 비로그인 유저 접속 차단
   useEffect(() => {
     if (!accessToken) {
       toast.error('로그인을 먼저 해야합니다');
