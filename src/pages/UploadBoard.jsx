@@ -27,7 +27,7 @@ export default function UploadBoard() {
     if (!accessToken) {
       toast.error('로그인을 먼저 해야합니다');
       setTimeout(() => {
-        navigate(-1);
+        navigate('/board');
       }, 2000);
     }
   }, [accessToken, navigate, location]);
@@ -89,14 +89,14 @@ export default function UploadBoard() {
   };
 
   // 🚷 비로그인 유저 접근 금지
-  useEffect(() => {
-    if (!accessToken) {
-      toast.error('로그인을 먼저 해야합니다');
-      setTimeout(() => {
-        navigate('/board');
-      }, 2000);
-    }
-  }, [navigate, location]);
+  // useEffect(() => {
+  //   if (!accessToken) {
+  //     toast.error('로그인을 먼저 해야합니다');
+  //     setTimeout(() => {
+  //       navigate('/board');
+  //     }, 2000);
+  //   }
+  // }, [navigate, location]);
   
   const handleImageChange = (e) => {
     const file = e.target.files[0];

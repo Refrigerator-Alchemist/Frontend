@@ -97,7 +97,7 @@ const RecipeCard = ({
   };
 
   return (
-    <div className="flex items-center bg-white mx-5 my-2 p-4 rounded-xl shadow">
+    <div className="flex items-center bg-white mx-6 my-2 p-4 rounded-xl shadow">
       <Link to={`/board/${postId}`} className="flex-grow flex">
         <div className="flex-none w-20 h-20 rounded-xl border-2 border-gray-300 overflow-hidden">
           <img className="w-full h-full object-cover" src={img} alt={title} />
@@ -250,8 +250,11 @@ function Board() {
 
   // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
   const fetchLikedPosts = async () => {
+    if (!accessToken) {
+      console.log(" fetchLikedPosts : accessToken 없음");
+      return;
+    }
     const URL = `${IP_ADDRESS}/board/islike?id=${email}`;
-
     try {
       const response = await axios.get(URL, {
         headers: {
