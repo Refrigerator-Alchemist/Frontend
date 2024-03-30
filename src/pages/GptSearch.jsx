@@ -68,13 +68,9 @@ const GptSearch = () => {
       );
       
       console.log('서버 응답:', response.data);
-
       const recommendId = response.data;
-
       if (recommendId) {
-       
         navigate(`/recipe/recommend/${recommendId}`);
-        
       } else {
         console.error('recommendId를 찾을 수 없습니다.');
         toast.error('추천 레시피 생성에 실패했습니다..');

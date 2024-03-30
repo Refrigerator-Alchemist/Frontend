@@ -208,8 +208,6 @@ export default function EditProfile() {
               <span className="ml-3">닉네임 사용 가능</span>
             </li>
           </p>
-
-          {/* 버튼 */}
           <div className="flex mt-2 mr-3">
             <button
               type="submit"

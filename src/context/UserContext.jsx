@@ -5,7 +5,7 @@ import ErrorCode from '../utils/ErrorCode';
 import { toast } from 'react-toastify';
 
 // 🧷 현재 IP 주소
-export const IP_ADDRESS = 'http://localhost:8080';
+export const IP_ADDRESS = 'http://172.30.1.1:8080';
 
 // 📀 axios 인스턴스 : 베이스 URL 조절 가능
 const instance = axios.create({
