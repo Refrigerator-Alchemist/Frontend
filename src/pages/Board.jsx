@@ -340,12 +340,6 @@ function Board() {
       });
     }
   };
-
-  // 5️⃣ 클릭할 페이지번호 순서대로
-  // const pageNumbers = [];
-  // for (let i = 0; i < totalPages; i++) {
-  //   pageNumbers.push(i + 1);
-  // }
   
   // 5️⃣ 클릭할 페이지번호 순서대로 조정
   const pageNumbers = [];
@@ -422,22 +416,6 @@ function Board() {
           </>
         )}
 
-        {/* <div className="pagination flex justify-center my-4">
-          {totalPages > 0 &&
-            pageNumbers.map((number) => (
-              <button
-                key={number}
-                onClick={() => handlePageClick(number)}
-                className={`px-4 py-2 border rounded-full m-1 ${
-                  currentPage === number
-                    ? "bg-main text-white"
-                    : "bg-white text-main"
-                }`}
-              >
-                {number}
-              </button>
-            ))}
-        </div> */}
         <div className="pagination flex justify-center my-4">
           {currentPage > 1 && (
             <button

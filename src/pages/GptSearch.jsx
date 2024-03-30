@@ -49,9 +49,9 @@ const GptSearch = () => {
 
   // Gpt로 레시피 검색 요청하는 함수
   const handleNextButtonClick = async () => {
-    toast('연금술을 시작합니다!', {
-      autoClose: 6000 
-    });
+    // toast('연금술을 시작합니다!', {
+    //   autoClose: 6000 
+    // });
     setIsLoading(true);
 
     try {

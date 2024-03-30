@@ -49,7 +49,7 @@ const RecipePage = () => {
       fetchData();
     }
     
-  }, [recommendId,accessToken]);
+  }, [recommendId]);
 
   // gpt레시피 저장하기
   const handleSaveButtonClick = async () => {
