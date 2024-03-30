@@ -32,6 +32,10 @@ const BoardDetail = () => {
   useEffect(() => {
     // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
     const fetchLikedPosts = async () => {
+      if (!accessToken) {
+        console.log(" fetchLikedPosts : accessToken 없음");
+        return;
+      }
       const URL = `${IP_ADDRESS}/board/islike?id=${myEmail}`;
       try {
         const response = await axios.get(URL, {

@@ -33,12 +33,13 @@ const RecipePage = () => {
           setIngredients(response.data.ingredients);
           setSteps(response.data.recipe);
         }
+        
       } catch (error) {
         console.error('에러내용:', error);
         console.log("에러 상태 코드:", error.response?.status);
         const statusCode = error.response?.status;
+        
         if (statusCode=== 404) {
-        } else {
           toast.error('레시피가 존재하지 않습니다.');
         }
       } finally {
@@ -49,14 +50,14 @@ const RecipePage = () => {
       fetchData();
     }
     
-  }, [recommendId]);
+  }, [recommendId, accessToken]);
 
   // gpt레시피 저장하기
   const handleSaveButtonClick = async () => {
     try {
       if (!accessToken) {
         toast.error('로그인이 필요합니다.');
-        console.log(' 로그인 필요');
+        console.log(' acessToken 없음');
         return;
       }
 
@@ -120,9 +121,9 @@ const RecipePage = () => {
       </div>
       <main className="max-w-md mx-auto bg-white rounded-lg overflow-hidden md:max-w-lg">
         <div className="md:flex">
-          <div className="w-full p-4 pt-8">
+          <div className="w-full p-4 pt-12">
             <div className="border-b-2 border-gray-100 py-2">
-              <h1 className="m-4 tfont-score text-xl font-bold text-gray-800 text-center">
+              <h1 className="m-4 tfont-score text-3xl font-bold text-gray-800 text-center">
                 {title}
               </h1>
             </div>
@@ -140,15 +141,15 @@ const RecipePage = () => {
                   </ul>
                 ))}
               </ul>
-              <h2 className="font-score text-lg font-bold text-gray-800 mt-4">
-                만드는 방법
+              <h2 className="font-score text-lg font-bold text-gray-800 mt-4 ">
+                레시피
               </h2>
               <ol
                 className="list-decimal list-inside"
                 style={{ listStyleType: 'none' }}
               >
                 {steps.map((step, index) => (
-                  <li key={index} className="font-score text-gray-600">
+                  <li key={index} className="font-score text-gray-600 pt-3">
                     {step}
                   </li>
                 ))}
@@ -159,17 +160,17 @@ const RecipePage = () => {
       </main>
       <footer className="fixed bottom-5 left-0 right-0 px-6">
         <div
-          className="mx-auto flex justify-between"
+          className="mx-auto flex justify-between mb-4"
           style={{ maxWidth: '400px' }}
         >
           <button
-            className="font-score bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-8 rounded-full"
+            className="font-score bg-gray-400 hover:bg-gray-600 text-white font-bold py-3 px-9 rounded-full"
             onClick={() => navigate('/recipe/recommend')}
           >
             다시 할래요
           </button>
           <button
-            className="font-score font-bold py-2 px-8 rounded-full bg-yellow-500 hover:bg-yellow-600 cursor-pointer text-white"
+            className="font-score font-bold py-3 px-9 rounded-full bg-yellow-500 hover:bg-yellow-600 cursor-pointer text-white"
             onClick={handleSaveButtonClick}
           >
             저장할래요

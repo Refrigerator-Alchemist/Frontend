@@ -49,9 +49,6 @@ const GptSearch = () => {
 
   // Gpt로 레시피 검색 요청하는 함수
   const handleNextButtonClick = async () => {
-    // toast('연금술을 시작합니다!', {
-    //   autoClose: 6000 
-    // });
     setIsLoading(true);
 
     try {
@@ -66,6 +63,7 @@ const GptSearch = () => {
           },
         }
       );
+      
       
       console.log('서버 응답:', response.data);
       const recommendId = response.data;
@@ -98,8 +96,10 @@ const GptSearch = () => {
   };
 
   if (isLoading) {
+    
     return (
       <section className="flex flex-col items-center justify-center h-screen">
+        
         <img
           src="https://media.discordapp.net/attachments/1197868473666248844/1213305395305652264/img_profile.png?ex=660772b4&is=65f4fdb4&hm=fa07101b219d5e41c1501989503c4255d4e8aaaae60a02a1f626e326ca970493&=&format=webp&quality=lossless&width=614&height=614"
           alt="로딩중"
@@ -107,6 +107,7 @@ const GptSearch = () => {
         />
         <h1 className=" font-score text-2xl font-bold text-gray-900 mb-4">
           로딩 중
+          
         </h1>
         <button
           onClick={() => navigate('/main')}
@@ -127,7 +128,7 @@ const GptSearch = () => {
         <FaArrowLeft />
       </div>
       <main className="max-w-lg mx-auto flex-1">
-        <h2 className=" font-score text-3xl font-bold mb-12 mt-24 text-center">
+        <h2 className=" font-score text-3xl font-bold mb-12 mt-32 text-center">
           냉장고 재료를 넣어주세요
         </h2>
         <div className="mr-10 ml-10 flex items-center border-b border-gray-300 mb-4">
@@ -178,10 +179,10 @@ const GptSearch = () => {
           }}
         >
           <CiSaveDown2 className="mr-1 w-6 h-6" />
-          {accessToken ? `${nickname}의 연금술 레시피` : '연금술 레시피'}
+          {accessToken ? `${nickname}의 연금술 레시피` : '저장된 연금술 레시피'}
         </button>
         <button
-          className="font-score transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer text-white font-bold py-2 px-4 rounded w-full"
+          className="font-score text-xl transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer text-white font-bold py-3 px-4 rounded w-full"
           type="button"
           onClick={handleNextButtonClick}
         >
