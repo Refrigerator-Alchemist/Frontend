@@ -288,26 +288,24 @@ export default function MyPage() {
   };
 
   // Active 상태에 따라 현재 페이지 번호와 레시피 목록 계산
-  let currentRecipes;
-  let totalItems;
-  if (showMyRecipes) {
-    const indexOfLastRecipe = currentPageMyRecipes * recipesPerPage;
-    const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-    currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
-    totalItems = totalMyRecipes;
-  } else {
-    const indexOfLastRecipe = currentPageLikedRecipes * recipesPerPage;
-    const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-    currentRecipes = likedItems.slice(indexOfFirstRecipe, indexOfLastRecipe);
-    totalItems = totalLikedRecipes;
-  }
-  // 보여줄 레시피 목록에 따라 총 레시피 수를 결정
-  const handlePageChangeMyRecipes = (pageNumber) => {
-    setCurrentPageMyRecipes(pageNumber);
-  };
-  const handlePageChangeLikedRecipes = (pageNumber) => {
-    setCurrentPageLikedRecipes(pageNumber);
-  };
+      let currentRecipes;
+      if (showMyRecipes) {
+        const indexOfLastRecipe = currentPageMyRecipes * recipesPerPage;
+        const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
+        currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
+      } else {
+        const indexOfLastRecipe = currentPageLikedRecipes * recipesPerPage;
+        const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
+        currentRecipes = likedItems.slice(indexOfFirstRecipe, indexOfLastRecipe);
+      }
+        // 보여줄 레시피 목록에 따라 총 레시피 수를 결정
+        const handlePageChangeMyRecipes = (pageNumber) => {
+          setCurrentPageMyRecipes(pageNumber);
+        };
+        const handlePageChangeLikedRecipes = (pageNumber) => {
+          setCurrentPageLikedRecipes(pageNumber);
+        };
+
 
   return (
     <section className="Board flex flex-col items-center justify-center w-full">

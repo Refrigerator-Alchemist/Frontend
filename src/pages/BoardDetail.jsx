@@ -43,15 +43,6 @@ const BoardDetail = () => {
           console.log(response);
           const posts = response.data.map(Number);
           setLikedPosts(posts);
-          // setLiked(posts.includes(parseInt(postId)));
-          // for (const item of posts) {
-          //   if (item ===Number(postId) ){
-
-          //     setLiked(Number(postId));
-          //     break;
-          //   }
-          //   console.log(item)
-          // }
           setLiked(posts.includes(Number(postId)));
 
           console.log('좋아요 누른 게시물의 postId 목록:', posts);

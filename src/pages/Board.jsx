@@ -303,10 +303,10 @@ function Board() {
 
         setRecipes(formattedData);
       } else {
-        console.error("에러 내용1:", response.data);
+        console.error(" 데이터 형식이 다름 에러내용:", response.data);
       }
     } catch (error) {
-      console.error("에러 내용2:", error);
+      console.error("네트워크 문제, 서버 오류", error);
     }
   };
 
