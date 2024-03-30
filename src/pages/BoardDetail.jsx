@@ -5,6 +5,7 @@ import Navigation from '../components/Navigation';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { IP_ADDRESS } from '../context/UserContext';
+import { PiSirenFill } from 'react-icons/pi';
 
 import { useLocation } from 'react-router-dom';
 
@@ -59,7 +60,7 @@ const BoardDetail = () => {
 
     fetchPostData(postId);
     fetchLikedPosts();
-  }, [postId, accessToken, email, location]);
+  }, [postId, accessToken, email, location, myEmail]);
 
   // 📝 게시물 정보
   const fetchPostData = async (postId) => {
@@ -158,14 +159,48 @@ const BoardDetail = () => {
     }
   };
 
+  // 🚨 게시물 신고
+  const reportPost = async (e) => {
+    e.preventDefault();
+
+    const URL = `${IP_ADDRESS}/board/report`;
+
+    try {
+      const response = await axios.post(
+        URL,
+        { email: myEmail, postId: postId },
+        {
+          headers: {
+            'Authorization-Access': accessToken,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        console.log(`해당 게시물 ${postId}를 신고했습니다.`);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <section>
-      <div
-        className="absolute top-5 left-42 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate('/board')}
-      >
-        <FaArrowLeft />
-      </div>
+      <header className="flex flex-row justify-between mt-5">
+        <div
+          className="ml-5 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
+          onClick={() => navigate('/board')}
+        >
+          <FaArrowLeft />
+        </div>
+
+        <div
+          className="mr-5 border-2 w-10 h-10 transition ease-in-out delay-150 text-red-500 hover:bg-red-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
+          onClick={reportPost}
+        >
+          <PiSirenFill />
+        </div>
+      </header>
 
       <main className="pt-16">
         <img
