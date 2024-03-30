@@ -65,8 +65,11 @@ const LikedRecipe = ({ postId, title, description, imageUrl }) => {
   return (
     <div className="text-black ml-6 mr-6 mt-2 w-full max-w-md">
       <div className="bg-white mx-2 my-2 p-4 rounded-xl shadow overflow-hidden relative flex flex-col md:flex-row">
-        <Link to={`/board/${postId}`} className="flex flex-grow items-center justify-between">
-          <div className="flex items-center"> 
+        <Link
+          to={`/board/${postId}`}
+          className="flex flex-grow items-center justify-between"
+        >
+          <div className="flex items-center">
             <div className="flex-none w-20 h-20 md:w-20 md:h-20 max-w-xs rounded-xl border-2 border-gray-300 overflow-hidden mr-4">
               <img
                 className="w-full h-full object-cover"
@@ -81,7 +84,7 @@ const LikedRecipe = ({ postId, title, description, imageUrl }) => {
               </p>
             </div>
           </div>
-          <FaHeart className="text-red-500 text-2xl" /> 
+          <FaHeart className="text-red-500 text-2xl" />
         </Link>
       </div>
     </div>
@@ -95,14 +98,14 @@ export default function MyPage() {
   const [recipesPerPage] = useState(5);
   const [totalMyRecipes, setTotalMyRecipes] = useState(0);
   const [totalLikedRecipes, setTotalLikedRecipes] = useState(0);
-  const [showMyRecipes, setShowMyRecipes] = useState(true); 
+  const [showMyRecipes, setShowMyRecipes] = useState(true);
   // 토글 기능 - true :작성한 레시피 / false : 좋아요 누른 레시피
-  
+
   const [recipes, setRecipes] = useState([]); // 내가 저장한 레시피들
   const [likedItems, setLikedItems] = useState([]); // 좋아요 누른 레시피들
   const [currentPageMyRecipes, setCurrentPageMyRecipes] = useState(1);
   const [currentPageLikedRecipes, setCurrentPageLikedRecipes] = useState(1);
-  
+
   const user = useUserState(); // 유저 데이터 : 로그인 상태면 존재
   const { logout } = useUserDispatch();
   const accessToken = localStorage.getItem('accessToken');
@@ -110,7 +113,8 @@ export default function MyPage() {
   const email = localStorage.getItem('email');
   const navigate = useNavigate();
   const location = useLocation();
-  // 🚷 비로그인 유저 접근 금지
+
+  // 🚷 비로그인 유저 접속 차단
   useEffect(() => {
     if (!accessToken) {
       toast.error('로그인을 먼저 해야합니다');
@@ -121,9 +125,7 @@ export default function MyPage() {
   }, [navigate, location, accessToken]);
 
   // --------------------------------------------------------------------------------------------------------
-  
-  
-  
+
   useEffect(() => {
     // 🧑🏽‍🌾 현재 로그인 중인 유저 정보 : 프로필 이미지, 닉네임
     const fetchUserInfo = async () => {
@@ -168,7 +170,7 @@ export default function MyPage() {
           setRecipes(items);
           // totalMyRecipes = Math.ceil(response.data.total / recipesPerPage);
           setTotalMyRecipes(response.data.total);
-          console.log("내가작성한 레시피 총 갯수:",response.data.total);
+          console.log('내가작성한 레시피 총 갯수:', response.data.total);
         } else {
           toast.error('데이터가 배열이 아닙니다');
         }
@@ -197,7 +199,7 @@ export default function MyPage() {
           setLikedItems(items);
           // totalLikedRecipes= Math.ceil(response.data.total / recipesPerPage);
           setTotalLikedRecipes(response.data.total);
-          console.log("좋아요누른 총 레시피 갯수:", response.data.total)
+          console.log('좋아요누른 총 레시피 갯수:', response.data.total);
         } else {
           toast.error('데이터가 배열이 아닙니다!');
         }
@@ -236,7 +238,6 @@ export default function MyPage() {
     //   }
     // };
 
-
     fetchUserInfo();
     if (showMyRecipes) {
       fetchMyPage();
@@ -246,7 +247,6 @@ export default function MyPage() {
     // fetchMyRecipesCount();
     // fetchLikedRecipesCount();
   }, [showMyRecipes, accessToken, email, user]);
-
 
   // 1️⃣ 레시피 수정
   const handleEdit = (postId) => {
@@ -286,31 +286,29 @@ export default function MyPage() {
     setShowMyRecipes(view);
     setCurrentPage(1); // 목록을 전환할 때마다 첫 페이지로 설정
   };
-  
 
   // Active 상태에 따라 현재 페이지 번호와 레시피 목록 계산
-let currentRecipes;
-let totalItems;
-if (showMyRecipes) {
-  const indexOfLastRecipe = currentPageMyRecipes * recipesPerPage;
-  const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-  currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
-  totalItems = totalMyRecipes;
-} else {
-  const indexOfLastRecipe = currentPageLikedRecipes * recipesPerPage;
-  const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-  currentRecipes = likedItems.slice(indexOfFirstRecipe, indexOfLastRecipe);
-  totalItems = totalLikedRecipes;
-}
-        // 보여줄 레시피 목록에 따라 총 레시피 수를 결정
-        const handlePageChangeMyRecipes = (pageNumber) => {
-          setCurrentPageMyRecipes(pageNumber);
-        };
-        const handlePageChangeLikedRecipes = (pageNumber) => {
-          setCurrentPageLikedRecipes(pageNumber);
-        };
+  let currentRecipes;
+  let totalItems;
+  if (showMyRecipes) {
+    const indexOfLastRecipe = currentPageMyRecipes * recipesPerPage;
+    const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
+    currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
+    totalItems = totalMyRecipes;
+  } else {
+    const indexOfLastRecipe = currentPageLikedRecipes * recipesPerPage;
+    const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
+    currentRecipes = likedItems.slice(indexOfFirstRecipe, indexOfLastRecipe);
+    totalItems = totalLikedRecipes;
+  }
+  // 보여줄 레시피 목록에 따라 총 레시피 수를 결정
+  const handlePageChangeMyRecipes = (pageNumber) => {
+    setCurrentPageMyRecipes(pageNumber);
+  };
+  const handlePageChangeLikedRecipes = (pageNumber) => {
+    setCurrentPageLikedRecipes(pageNumber);
+  };
 
-        
   return (
     <section className="Board flex flex-col items-center justify-center w-full">
       <header className="flex justify-end w-full mt-2 space-x-2 mr-12">
@@ -352,7 +350,7 @@ if (showMyRecipes) {
 
         <div className="flex">
           <button
-            onClick={() => toggleRecipeView(true)}  // 내가 작성한 레시피 on
+            onClick={() => toggleRecipeView(true)} // 내가 작성한 레시피 on
             className={`font-score mx-1 py-2 px-4 rounded ${
               showMyRecipes === true
                 ? 'bg-main text-white'
@@ -362,7 +360,7 @@ if (showMyRecipes) {
             내가 작성한 레시피
           </button>
           <button
-            onClick={() => toggleRecipeView(false)}  // 좋아요 누른 레시피 on
+            onClick={() => toggleRecipeView(false)} // 좋아요 누른 레시피 on
             className={`font-score mx-1 py-2 px-4 rounded ${
               showMyRecipes === false
                 ? 'bg-main text-white'
@@ -404,20 +402,20 @@ if (showMyRecipes) {
           </div>
         )}
         {showMyRecipes ? (
-        <Pagination
-          currentPage={currentPageMyRecipes}
-          recipesPerPage={recipesPerPage}
-          totalItems={totalMyRecipes}
-          paginate={handlePageChangeMyRecipes}
-        />
-      ) : (
-        <Pagination
-          currentPage={currentPageLikedRecipes}
-          recipesPerPage={recipesPerPage}
-          totalItems={totalLikedRecipes}
-          paginate={handlePageChangeLikedRecipes}
-        />
-      )}
+          <Pagination
+            currentPage={currentPageMyRecipes}
+            recipesPerPage={recipesPerPage}
+            totalItems={totalMyRecipes}
+            paginate={handlePageChangeMyRecipes}
+          />
+        ) : (
+          <Pagination
+            currentPage={currentPageLikedRecipes}
+            recipesPerPage={recipesPerPage}
+            totalItems={totalLikedRecipes}
+            paginate={handlePageChangeLikedRecipes}
+          />
+        )}
       </main>
       <footer
         style={{

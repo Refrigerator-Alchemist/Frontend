@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Logo from '../components/Logo';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import { GoEye, GoEyeClosed } from 'react-icons/go';
 import { useUserDispatch } from '../context/UserContext';
 import LOGO_GOOGLE from '../assets/img/logo_google.png';
 import LOGO_KAKAO from '../assets/img/logo_kakao.png';
 import LOGO_NAVER from '../assets/img/logo_naver.png';
+import { toast } from 'react-toastify';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -22,7 +23,29 @@ export default function Login() {
 
   const navigate = useNavigate();
 
+  const location = useLocation();
+
   const socialType = 'Refrigerator-Alchemist';
+
+  // 🚷 로그인 유저 접속 차단
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken) {
+      toast.error('이미 로그인 상태입니다');
+      setTimeout(() => {
+        navigate(-1);
+      }, 2000);
+    }
+  }, [navigate, location]);
+
+  // 🔓 로그인 버튼 활성화
+  useEffect(() => {
+    if (emailValid && password.length > 8) {
+      setNotAllow(false);
+      return;
+    }
+    setNotAllow(true);
+  }, [emailValid, password]);
 
   // 1️⃣ 이메일 입력값 저장
   const handleEmailChange = (e) => {
@@ -55,15 +78,6 @@ export default function Login() {
     e.preventDefault();
     login(email, password, socialType);
   };
-
-  // 로그인 버튼 활성화
-  useEffect(() => {
-    if (emailValid && password.length > 8) {
-      setNotAllow(false);
-      return;
-    }
-    setNotAllow(true);
-  }, [emailValid, password]);
 
   return (
     <section className="relative flex flex-col items-center justify-center min-h-screen">
