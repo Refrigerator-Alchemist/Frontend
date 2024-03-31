@@ -1,0 +1,184 @@
+{
+    "items": [
+      {
+        "nickName": "사용자닉네임1",
+        "imageUrl": "imageURL-1",
+        "description": "본문1",
+        "ingredients": [
+          "아이템1의 재료1",
+          "아이템1의 재료2",
+          "아이템1의 재료3",
+          "아이템1의 재료4"
+        ],
+        "likeCount": "1",
+        "ID": "null",
+        "title": "제목1",
+        "email": "test1@naver.com"
+      },
+      {
+        "nickName": "사용자닉네임2",
+        "imageUrl": "imageURL-2",
+        "description": "본문2",
+        "ingredients": [
+          "아이템2의 재료1",
+          "아이템2의 재료2",
+          "아이템2의 재료3",
+          "아이템2의 재료4"
+        ],
+        "likeCount": "2",
+        "ID": "null",
+        "title": "제목2",
+        "email": "test2@naver.com"
+      },
+      {
+        "nickName": "사용자닉네임3",
+        "imageUrl": "imageURL-3",
+        "description": "본문3",
+        "ingredients": [
+          "아이템3의 재료1",
+          "아이템3의 재료2",
+          "아이템3의 재료3",
+          "아이템3의 재료4"
+        ],
+        "likeCount": "3",
+        "ID": "null",
+        "title": "제목3",
+        "email": "test3@naver.com"
+      },
+      {
+        "nickName": "사용자닉네임4",
+        "imageUrl": "imageURL-4",
+        "description": "본문4",
+        "ingredients": [
+          "아이템4의 재료1",
+          "아이템4의 재료2",
+          "아이템4의 재료3",
+          "아이템4의 재료4"
+        ],
+        "likeCount": "4",
+        "ID": "null",
+        "title": "제목4",
+        "email": "test4@naver.com"
+      },
+      {
+        "nickName": "사용자닉네임5",
+        "imageUrl": "imageURL-5",
+        "description": "본문5",
+        "ingredients": [
+          "아이템5의 재료1",
+          "아이템5의 재료2",
+          "아이템5의 재료3",
+          "아이템5의 재료4"
+        ],
+        "likeCount": "5",
+        "ID": "null",
+        "title": "제목5",
+        "email": "test5@naver.com"
+      },
+      {
+        "nickName": "사용자닉네임6",
+        "imageUrl": "imageURL-6",
+        "description": "본문6",
+        "ingredients": [
+          "아이템6의 재료1",
+          "아이템6의 재료2",
+          "아이템6의 재료3",
+          "아이템6의 재료4"
+        ],
+        "likeCount": "6",
+        "ID": "null",
+        "title": "제목6",
+        "email": "test6@naver.com"
+      },
+      {
+        "nickName": "사용자닉네임7",
+        "imageUrl": "imageURL-7",
+        "description": "본문7",
+        "ingredients": [
+          "아이템7의 재료1",
+          "아이템7의 재료2",
+          "아이템7의 재료3",
+          "아이템7의 재료4"
+        ],
+        "likeCount": "7",
+        "ID": "null",
+        "title": "제목7",
+        "email": "test7@naver.com"
+      },
+      {
+        "nickName": "사용자닉네임8",
+        "imageUrl": "imageURL-8",
+        "description": "본문8",
+        "ingredients": [
+          "아이템8의 재료1",
+          "아이템8의 재료2",
+          "아이템8의 재료3",
+          "아이템8의 재료4"
+        ],
+        "likeCount": "8",
+        "ID": "null",
+        "title": "제목8",
+        "email": "test8@naver.com"
+      },
+      {
+        "nickName": "사용자닉네임9",
+        "imageUrl": "imageURL-9",
+        "description": "본문9",
+        "ingredients": [
+          "아이템9의 재료1",
+          "아이템9의 재료2",
+          "아이템9의 재료3",
+          "아이템9의 재료4"
+        ],
+        "likeCount": "9",
+        "ID": "null",
+        "title": "제목9",
+        "email": "test9@naver.com"
+      },
+      {
+        "nickName": "사용자닉네임10",
+        "imageUrl": "imageURL-10",
+        "description": "본문10",
+        "ingredients": [
+          "아이템10의 재료1",
+          "아이템10의 재료2",
+          "아이템10의 재료3",
+          "아이템10의 재료4"
+        ],
+        "likeCount": "10",
+        "ID": "null",
+        "title": "제목10",
+        "email": "test10@naver.com"
+      },
+      {
+        "nickName": "사용자닉네임11",
+        "imageUrl": "imageURL-11",
+        "description": "본문11",
+        "ingredients": [
+          "아이템11의 재료1",
+          "아이템11의 재료2",
+          "아이템11의 재료3",
+          "아이템11의 재료4"
+        ],
+        "likeCount": "11",
+        "ID": "null",
+        "title": "제목11",
+        "email": "test11@naver.com"
+      },
+      {
+        "nickName": "사용자닉네임12",
+        "imageUrl": "imageURL-12",
+        "description": "본문12",
+        "ingredients": [
+          "아이템12의 재료1",
+          "아이템12의 재료2",
+          "아이템12의 재료3",
+          "아이템12의 재료4"
+        ],
+        "likeCount": "12",
+        "ID": "null",
+        "title": "제목12",
+        "email": "test12@naver.com"
+      }
+    ]
+  }
