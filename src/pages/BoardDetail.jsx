@@ -102,8 +102,6 @@ const BoardDetail = () => {
   // 📝 게시물 정보 (Mock Data)
   const fetchMockData = async () => {
     try {
-      // post.json 파일에서 데이터를 가져옵니다.
-
       if (mockData.items && Array.isArray(mockData.items)) {
         const item = mockData.items[0];
         setImageUrl(item.imageUrl);
