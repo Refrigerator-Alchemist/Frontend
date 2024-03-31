@@ -10,6 +10,8 @@ import {
   useUserState,
   IP_ADDRESS,
 } from '../context/UserContext';
+import mockData from '../assets/data/post.json';
+import IMG_PROFILE from '../assets/img/img_profile.png';
 
 // 🃏 내가 저장한 게시물
 const SavedRecipe = ({
@@ -93,7 +95,7 @@ const LikedRecipe = ({ postId, title, description, imageUrl }) => {
 
 // 📂 마이페이지
 export default function MyPage() {
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState('' || IMG_PROFILE);
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage] = useState(5);
   const [totalMyRecipes, setTotalMyRecipes] = useState(0);
@@ -112,7 +114,7 @@ export default function MyPage() {
   const nickName = localStorage.getItem('nickName');
   const email = localStorage.getItem('email');
   const navigate = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
 
   // 🚷 비로그인 유저 접근 금지
   // useEffect(() => {
@@ -148,65 +150,87 @@ export default function MyPage() {
       }
     };
 
-    // 🧑🏽 내가 작성한 레시피 가져오는 함수
-    const fetchMyPage = async () => {
-      const URL = `${IP_ADDRESS}/mypost`;
+    // 📝 내가 작성한 레시피 가져오는 함수
+    // const fetchMyPage = async () => {
+    //   const URL = `${IP_ADDRESS}/mypost`;
+    //   try {
+    //     const response = await axios.get(URL, {
+    //       headers: {
+    //         'Authorization-Access': accessToken,
+    //         email: email,
+    //       },
+    //     });
+    //     if (response.data && Array.isArray(response.data.items)) {
+    //       const items = response.data.items.map((item) => {
+    //         return {
+    //           postId: item.ID,
+    //           title: item.title,
+    //           description: item.description,
+    //           imageUrl: item.imageUrl,
+    //         };
+    //       });
+    //       setRecipes(items);
+    //       // totalMyRecipes = Math.ceil(response.data.total / recipesPerPage);
+    //       setTotalMyRecipes(response.data.total);
+    //       console.log('내가작성한 레시피 총 갯수:', response.data.total);
+    //     } else {
+    //       toast.error('데이터가 배열이 아닙니다');
+    //     }
+    //   } catch (error) {
+    //     console.error('내가 작성한 레시피 로드 중 에러 발생', error);
+    //   }
+    // };
+
+    // 📝 작성한 게시물, 좋아요 누른 게시물 mock data 사용
+    const fetchMockData = async () => {
       try {
-        const response = await axios.get(URL, {
-          headers: {
-            'Authorization-Access': accessToken,
-            email: email,
-          },
-        });
-        if (response.data && Array.isArray(response.data.items)) {
-          const items = response.data.items.map((item) => {
-            return {
-              postId: item.ID,
-              title: item.title,
-              description: item.description,
-              imageUrl: item.imageUrl,
-            };
-          });
-          setRecipes(items);
-          // totalMyRecipes = Math.ceil(response.data.total / recipesPerPage);
-          setTotalMyRecipes(response.data.total);
-          console.log('내가작성한 레시피 총 갯수:', response.data.total);
-        } else {
-          toast.error('데이터가 배열이 아닙니다');
-        }
-      } catch (error) {
-        console.error('내가 작성한 레시피 로드 중 에러 발생', error);
-      }
-    };
-    // 🔥 좋아요 누른 게시물들 가져오는 함수
-    const fetchLikeData = async () => {
-      const URL = `${IP_ADDRESS}/likedpost`;
-      try {
-        const response = await axios.get(URL, {
-          headers: {
-            'Authorization-Access': accessToken,
-            email: email,
-          },
-        });
-        if (response.data && Array.isArray(response.data.items)) {
-          const items = response.data.items.map((item) => ({
-            id: item.ID,
+        if (mockData.items && Array.isArray(mockData.items)) {
+          const items = mockData.items.map((item) => ({
+            postId: item.ID,
             title: item.title,
             description: item.description,
             imageUrl: item.imageUrl,
             likeCount: item.likeCount,
           }));
+          setRecipes(items);
           setLikedItems(items);
-          // totalLikedRecipes= Math.ceil(response.data.total / recipesPerPage);
-          setTotalLikedRecipes(response.data.total);
-          console.log('좋아요누른 총 레시피 갯수:', response.data.total);
         } else {
-          toast.error('데이터가 배열이 아닙니다!');
+          console.error('데이터 타입 오류:', mockData.items);
         }
       } catch (error) {
-        console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
+        console.error('에러 내용:', error);
       }
     };
+
+    // 🔥 좋아요 누른 게시물들 가져오는 함수
+    // const fetchLikeData = async () => {
+    //   const URL = `${IP_ADDRESS}/likedpost`;
+    //   try {
+    //     const response = await axios.get(URL, {
+    //       headers: {
+    //         'Authorization-Access': accessToken,
+    //         email: email,
+    //       },
+    //     });
+    //     if (response.data && Array.isArray(response.data.items)) {
+    //       const items = response.data.items.map((item) => ({
+    //         id: item.ID,
+    //         title: item.title,
+    //         description: item.description,
+    //         imageUrl: item.imageUrl,
+    //         likeCount: item.likeCount,
+    //       }));
+    //       setLikedItems(items);
+    //       // totalLikedRecipes= Math.ceil(response.data.total / recipesPerPage);
+    //       setTotalLikedRecipes(response.data.total);
+    //       console.log('좋아요누른 총 레시피 갯수:', response.data.total);
+    //     } else {
+    //       toast.error('데이터가 배열이 아닙니다!');
+    //     }
+    //   } catch (error) {
+    //     console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
+    //   }
+    // };
 
     // const fetchMyRecipesCount = async () => {
     //   try {
@@ -240,9 +264,11 @@ export default function MyPage() {
 
     fetchUserInfo();
     if (showMyRecipes) {
-      fetchMyPage();
+      // fetchMyPage();
+      fetchMockData();
     } else {
-      fetchLikeData();
+      fetchMockData();
+      // fetchLikeData();
     }
     // fetchMyRecipesCount();
     // fetchLikedRecipesCount();
@@ -288,24 +314,23 @@ export default function MyPage() {
   };
 
   // Active 상태에 따라 현재 페이지 번호와 레시피 목록 계산
-      let currentRecipes;
-      if (showMyRecipes) {
-        const indexOfLastRecipe = currentPageMyRecipes * recipesPerPage;
-        const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-        currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
-      } else {
-        const indexOfLastRecipe = currentPageLikedRecipes * recipesPerPage;
-        const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-        currentRecipes = likedItems.slice(indexOfFirstRecipe, indexOfLastRecipe);
-      }
-        // 보여줄 레시피 목록에 따라 총 레시피 수를 결정
-        const handlePageChangeMyRecipes = (pageNumber) => {
-          setCurrentPageMyRecipes(pageNumber);
-        };
-        const handlePageChangeLikedRecipes = (pageNumber) => {
-          setCurrentPageLikedRecipes(pageNumber);
-        };
-
+  let currentRecipes;
+  if (showMyRecipes) {
+    const indexOfLastRecipe = currentPageMyRecipes * recipesPerPage;
+    const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
+    currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
+  } else {
+    const indexOfLastRecipe = currentPageLikedRecipes * recipesPerPage;
+    const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
+    currentRecipes = likedItems.slice(indexOfFirstRecipe, indexOfLastRecipe);
+  }
+  // 보여줄 레시피 목록에 따라 총 레시피 수를 결정
+  const handlePageChangeMyRecipes = (pageNumber) => {
+    setCurrentPageMyRecipes(pageNumber);
+  };
+  const handlePageChangeLikedRecipes = (pageNumber) => {
+    setCurrentPageLikedRecipes(pageNumber);
+  };
 
   return (
     <section className="Board flex flex-col items-center justify-center w-full">
