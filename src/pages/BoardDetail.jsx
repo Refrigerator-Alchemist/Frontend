@@ -213,7 +213,7 @@ const BoardDetail = () => {
   };
 
   return (
-    <section>
+    <section style={{ marginBottom: '90px' }}> 
       <header className="flex flex-row justify-between mt-5">
         <div
           className="ml-5 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
@@ -275,7 +275,7 @@ const BoardDetail = () => {
               작성자: {nickName}
             </h2>
           </div>
-          <div className="font-score text-sm text-gray-500 my-2">
+          <div className="font-score text-sm text-gray-500 my-4 pl-12 pr-12">
             {ingredients ? ingredients.join(' · ') : ''}
           </div>
           <p className="text-gray-700 font-score pl-12 pr-12">{description}</p>
