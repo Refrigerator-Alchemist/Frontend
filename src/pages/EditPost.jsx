@@ -200,9 +200,9 @@ export default function UploadBoard() {
           <button
             type="submit"
             onClick={handleSubmit}
-            className="font-score flex-grow bg-main text-white rounded-full p-2 hover:bg-yellow-500"
+            className="font-score flex-grow text-white rounded-full p-2 transition ease-in-out bg-main hover:bg-emerald hover:text-black"
           >
-            수정완료
+            수정하기
           </button>
         </footer>
       </form>

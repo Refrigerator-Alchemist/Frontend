@@ -257,7 +257,7 @@ export default function EditProfile() {
           <p className="mt-6">
             <li className="mb-2 flex items-center">
               <span role="img" aria-label="check" className="flex">
-                {!nameError ? (
+                {!nameError && changeNickName ? (
                   <GoCheckCircleFill className="text-emerald" />
                 ) : (
                   <GoCheckCircle className="text-emerald" />
@@ -269,7 +269,7 @@ export default function EditProfile() {
           <div className="flex mt-2 mr-3">
             <button
               type="submit"
-              className="font-score flex-grow bg-main text-white rounded-2xl p-2 hover:bg-yellow-500"
+              className="font-score flex-grow text-white rounded-2xl p-2 bg-main transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-emerald hover:text-black"
             >
               닉네임 저장하기
             </button>
