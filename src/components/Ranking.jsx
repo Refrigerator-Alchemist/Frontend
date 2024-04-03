@@ -28,15 +28,15 @@ function RankingItem({
             <span className="font-undong ml-4">{rank}</span>
           </div>
           <div className="flex-none w-20 h-20 rounded-xl border-2 border-gray-300 overflow-hidden">
-          <img
-            src={imageUrl}
-            alt="썸네일"
-            width="60px"
-            height="40px"
-            className=" w-full h-full object-cover"
-          />
-        </div>
-         
+            <img
+              src={imageUrl}
+              alt="썸네일"
+              width="60px"
+              height="40px"
+              className=" w-full h-full object-cover"
+            />
+          </div>
+
           <div className="flex flex-col">
             <span className="font-score font-semibold">{title}</span>
             <span className="font-score text-sm">{ingredients.join(', ')}</span>
@@ -95,7 +95,7 @@ export default function Ranking() {
       }}
     >
       <div className="flex justify-end">
-        <span className="flex flex-col justify-end font-score text-sm">
+        <span className="flex flex-col justify-end font-score text-sm hover:text-indigo">
           가장 많은 좋아요를 받은 레시피는?
         </span>
       </div>

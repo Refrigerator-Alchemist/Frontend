@@ -20,7 +20,7 @@ import GptResult from './pages/GptResult';
 import BoardRanking from './pages/BoardRanking';
 import LoginSuccess from './pages/LoginSuccess';
 import ReIssue from './pages/ReIssue';
-import GptSaved from './pages/GptSavedList';
+import GptSavedList from './pages/GptSavedList';
 import GptDetail from './pages/GptSavedDetail';
 import EditPost from './pages/EditPost';
 
@@ -55,7 +55,7 @@ const router = createBrowserRouter([
       // 냉장고 연금술 -----------------
       { path: '/recipe/recommend', element: <GptSearch /> }, // 냉장고 연금술사 : 재료 입력
       { path: '/recipe/recommend/:recommendId', element: <GptResult /> }, // 냉장고 연금술사 : 검색 결과 출력
-      { path: '/recipe/myRecipe', element: <GptSaved /> }, // 냉장고 연금술사 : 결과 저장 리스트
+      { path: '/recipe/myRecipe', element: <GptSavedList /> }, // 냉장고 연금술사 : 결과 저장 리스트
       { path: '/recipe/myRecipe/:recipeId', element: <GptDetail /> }, // 냉장고 연금술사 : 결과-상세페이지
     ],
   },
@@ -63,6 +63,6 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
-    <RouterProvider router={router} />
+  <RouterProvider router={router} />
   // </React.StrictMode>
 );

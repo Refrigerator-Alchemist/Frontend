@@ -4,8 +4,8 @@ export default function Name() {
   const letters = ['냉', '장', '고', '　', '연', '금', '술', '사'];
 
   return (
-    <div className=" bg-main flex items-center justify-center">
-      <h1 className="text-6xl text-white font-bold">
+    <div className="flex items-center justify-center">
+      <h1 className="text-5xl md:text-6xl text-white font-bold">
         {letters.map((letter, index) => (
           <span
             key={index}

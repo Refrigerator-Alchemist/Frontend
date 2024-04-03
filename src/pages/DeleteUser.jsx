@@ -60,7 +60,7 @@ export default function DeleteUser() {
     <section className="relative flex flex-col justify-center items-center h-screen p-8 font-score">
       {/* 뒤로 가기 */}
       <div
-        className="absolute top-5 left-5 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
+        className="absolute top-5 left-5 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
         onClick={() => navigate('/mypage')}
       >
         <FaArrowLeft />
@@ -85,9 +85,9 @@ export default function DeleteUser() {
           <button
             type="submit"
             disabled={!password}
-            className={`px-6 ml-5  rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110  duration-300 ${
+            className={`px-6 ml-5  rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:scale-110 duration-300 ${
               password
-                ? 'text-white bg-main hover:bg-[#15ed79] hover:text-black'
+                ? 'text-white bg-main hover:bg-emerald hover:text-black'
                 : 'bg-gray-500 text-black'
             }`}
           >

@@ -97,7 +97,7 @@ export default function UploadBoard() {
   //     }, 2000);
   //   }
   // }, [navigate, location]);
-  
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file && file.type.match('image.*')) {
@@ -107,15 +107,15 @@ export default function UploadBoard() {
       };
       reader.readAsDataURL(file);
     } else {
-      setImagePreviewUrl(''); 
+      setImagePreviewUrl('');
     }
   };
 
   return (
     <section className="pt-16">
       <div
-        className="absolute top-5 left-42 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate("/board")}
+        className="absolute top-5 left-42 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
+        onClick={() => navigate('/board')}
       >
         <FaArrowLeft />
       </div>
@@ -144,29 +144,29 @@ export default function UploadBoard() {
         {imagePreviewUrl && (
           <div
             style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "160px",
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '160px',
             }}
           >
             <div
               style={{
-                width: "90%",
-                maxWidth: "500px",
-                height: "auto",
-                border: "2px solid #ddd",
-                borderRadius: "15px",
-                overflow: "hidden",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                width: '90%',
+                maxWidth: '500px',
+                height: 'auto',
+                border: '2px solid #ddd',
+                borderRadius: '15px',
+                overflow: 'hidden',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
               <img
                 src={imagePreviewUrl}
                 alt="Preview"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
             </div>
           </div>
@@ -252,7 +252,7 @@ export default function UploadBoard() {
           </button>
           <button
             type="submit"
-            className="font-score flex-grow bg-main  text-white rounded-full p-2 hover:bg-yellow-500"
+            className="font-score flex-grow transition ease-in-out bg-main hover:bg-emerald hover:text-black text-white rounded-full p-2"
           >
             올리기
           </button>

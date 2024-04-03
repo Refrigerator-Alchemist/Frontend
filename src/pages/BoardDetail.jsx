@@ -216,7 +216,7 @@ const BoardDetail = () => {
     <section>
       <header className="flex flex-row justify-between mt-5">
         <div
-          className="ml-5 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
+          className="ml-5 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
           onClick={() => navigate('/board')}
         >
           <FaArrowLeft />

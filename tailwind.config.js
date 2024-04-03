@@ -6,6 +6,7 @@ module.exports = {
       colors: {
         main: '#F8BB01',
         emerald: '#15ed79',
+        indigo: '#6366f1',
       },
 
       fontFamily: {

@@ -102,7 +102,7 @@ export default function ResetPassword() {
     <section className="flex flex-col justify-center items-center min-h-screen px-8 relative">
       {/* 뒤로가기 버튼 */}
       <div
-        className="absolute top-5 left-5 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
+        className="absolute top-5 left-5 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
         onClick={() => navigate('/login')}
       >
         <FaArrowLeft />
@@ -117,9 +117,8 @@ export default function ResetPassword() {
       </header>
 
       <form onSubmit={onReset}>
-        {/* 이메일 인증하기 */}
         <main className="mt-10 w-full px-2">
-          {/* 이메일 확인 후 인증 요청*/}
+          {/* 이메일 확인 & 인증 요청*/}
           <div>
             <label className="mb-4 text-lg font-bold font-undong text-center ">
               이메일
@@ -129,12 +128,12 @@ export default function ResetPassword() {
                 type="email"
                 value={email}
                 onChange={handleEmailChange}
-                className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo"
                 placeholder="이메일"
               />
               <button
                 onClick={onRequest}
-                className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtrabold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
+                className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtrabold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:scale-110 hover:bg-indigo duration-300"
               >
                 인증 요청
               </button>
@@ -169,12 +168,12 @@ export default function ResetPassword() {
                       setInputNum(e.target.value);
                     }
                   }}
-                  className="w-40 h-12 mx-1 text-center border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-40 h-12 mx-1 text-center border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo"
                 />
               </div>
               <button
                 onClick={onCheck}
-                className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtrabold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
+                className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtrabold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:scale-110 hover:bg-indigo duration-300"
               >
                 인증 확인
               </button>
@@ -182,7 +181,7 @@ export default function ResetPassword() {
           </div>
         </main>
 
-        {/* 비밀번호 재설정 */}
+        {/* 비밀번호 입력 */}
         <div className="flex flex-col mt-10 w-full p-3">
           <div>
             <label className="mb-4 text-lg font-bold font-undong text-center">
@@ -195,7 +194,7 @@ export default function ResetPassword() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="비밀번호"
-                  className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo"
                 />
                 <button
                   onClick={toggleShowPassword}
@@ -207,6 +206,7 @@ export default function ResetPassword() {
             </div>
           </div>
 
+          {/* 비밀번호 확인 */}
           <div>
             <label className="mb-4 text-lg font-bold font-undong text-center">
               비밀번호 확인
@@ -220,7 +220,7 @@ export default function ResetPassword() {
                   isSamePassword();
                 }}
                 placeholder="한 번 더 입력하세요"
-                className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo"
               />
             </div>
             <p
@@ -260,7 +260,7 @@ export default function ResetPassword() {
                 )}
               </span>{' '}
               <span className="ml-3">
-                8자 이상 ~ 15자 이하의 비밀번호를 입력해주세요
+                8자 이상 15자 이하의 비밀번호를 입력해주세요
               </span>
             </li>
             <li className="mb-2 flex items-center">
@@ -276,6 +276,7 @@ export default function ResetPassword() {
               </span>
             </li>
           </ul>
+          {/* 재설정 버튼 */}
           <button
             type="submit"
             disabled={

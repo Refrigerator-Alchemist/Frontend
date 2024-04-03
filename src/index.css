@@ -76,3 +76,19 @@ body > div {
   background-color: white;
   box-shadow: 0 1px 3px 0 rgb(181, 181, 181);
 }
+
+@keyframes change-background-color {
+  0% {
+    background-color: #f8bb01;
+  }
+  50% {
+    background-color: #6366f1;
+  }
+  100% {
+    background-color: #f8bb01;
+  }
+}
+
+.bg-change-color {
+  animation: change-background-color 5s linear infinite;
+}
