@@ -2,15 +2,14 @@ import React, { useEffect } from 'react';
 import { useUserState, useUserDispatch } from '../context/UserContext.jsx';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import errorCode from '../utils/ErrorCode';
 
 export default function LoginSuccess() {
+  const { dispatch } = useUserDispatch();
   const user = useUserState();
-
-  const navigate = useNavigate();
-
   const SET_USER = 'SET_USER';
 
-  const { dispatch } = useUserDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // 1️⃣ 서버에서 SNS 로그인 데이터를 받아오는 함수
@@ -20,38 +19,49 @@ export default function LoginSuccess() {
       const refreshToken = urlParams.get('refreshToken');
       const socialId = urlParams.get('socialId');
       const socialType = urlParams.get('socialType');
-      const email = urlParams.get('email');
       const nickName = urlParams.get('nickName');
+      const email = urlParams.get('email');
 
-      // ▶ 4개 데이터 받아왔는지 판단 : 토큰 앞에 Bearer 추가
-      if (accessToken && socialId && refreshToken && email) {
-        localStorage.setItem('accessToken', 'Bearer ' + accessToken);
-        localStorage.setItem('refreshToken', 'Bearer ' + refreshToken);
-        localStorage.setItem('nickName', nickName);
-        localStorage.setItem('socialId', socialId);
-        localStorage.setItem('socialType', socialType);
-        localStorage.setItem('email', email);
+      try {
+        // ▶ 로컬 스토리지 : 액세스, 리프레시, 닉네임, 소셜ID, 소셜타입, 이메일
+        if (accessToken && refreshToken && socialId) {
+          localStorage.setItem('accessToken', 'Bearer ' + accessToken);
+          localStorage.setItem('refreshToken', 'Bearer ' + refreshToken);
+          localStorage.setItem('nickName', nickName);
+          localStorage.setItem('email', email);
+          localStorage.setItem('socialId', socialId);
+          localStorage.setItem('socialType', socialType);
 
-        console.log(`⭕ 로컬스토리지 저장 완료 : ${localStorage}`);
+          console.log(`⭕ 로컬스토리지 저장 완료`);
 
-        // ▶ 유저 데이터 저장
-        let user = {
-          socialId: localStorage.getItem('socialId'),
-          socialType: localStorage.getItem('socialType'),
-          nickName: localStorage.getItem('nickName'),
-          email: localStorage.getItem('email'),
-        };
+          let user = {
+            socialId: localStorage.getItem('socialId'),
+            socialType: localStorage.getItem('socialType'),
+          };
 
-        console.log(`⭕ 유저 데이터 저장 완료`);
+          console.log(`⭕ 유저 데이터 저장 완료`);
 
-        // ▶ dispatch로 리듀서에 저장
-        dispatch({ type: SET_USER, user });
+          // ▶ dispatch로 리듀서에 저장
+          dispatch({ type: SET_USER, user });
 
-        return user;
-      } else {
-        // ▶ 데이터가 하나라도 모자라면 발생
-        console.log('❌ 서버에서 데이터 받는 중 문제 발생');
-        toast.error('❌ 서버에서 데이터 받는 중 문제 발생');
+          return user;
+        } else {
+          return;
+        }
+      } catch (error) {
+        // 🚫 에러 처리
+        const errorHeaders = error.response?.headers;
+        if (errorHeaders.code) {
+          const errorName = Object.values(errorCode).find(
+            (obj) => obj.code === errorHeaders.code
+          );
+          const userNotice = errorName.notice;
+
+          console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
+          toast.error(`${userNotice}`); // 유저 팝업용
+        } else {
+          console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
+        }
       }
     };
 

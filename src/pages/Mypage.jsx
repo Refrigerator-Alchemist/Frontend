@@ -140,8 +140,8 @@ export default function MyPage() {
               email: email,
             },
           });
-          // ▶️ 이미지 url 저장 : data인지 headers인지 확인해봐야 함
           setImageUrl(response.data.imageUrl);
+          localStorage.setItem(response.data.imageUrl); // 로컬스토리지에 저장
         } else {
           toast.error('로그인 하지 않았습니다!');
         }

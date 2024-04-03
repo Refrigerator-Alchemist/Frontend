@@ -22,7 +22,6 @@ export default function Login() {
   const { login, kakaoLogin, googleLogin, naverLogin } = useUserDispatch(); // 로그인 dispatch
 
   const navigate = useNavigate();
-
   const location = useLocation();
 
   const socialType = 'Refrigerator-Alchemist';

@@ -9,12 +9,13 @@ import { IP_ADDRESS } from '../context/UserContext';
 const GptSearch = () => {
   const [tags, setTags] = useState([]);
   const [inputValue, setInputValue] = useState('');
-  const navigate = useNavigate();
-  const inputRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
-  const accessToken = localStorage.getItem('accessToken');
+  const inputRef = useRef(null);
 
+  const accessToken = localStorage.getItem('accessToken');
   const nickname = localStorage.getItem('nickName') || '';
+
+  const navigate = useNavigate();
 
   // 입력 값 변경 시 상태 업데이트
   const handleInputChange = (e) => {
@@ -63,8 +64,7 @@ const GptSearch = () => {
           },
         }
       );
-      
-      
+
       console.log('서버 응답:', response.data);
       const recommendId = response.data;
       if (recommendId) {
@@ -75,17 +75,15 @@ const GptSearch = () => {
       }
     } catch (error) {
       console.error('에러내용:', error);
-      console.log("에러 상태 코드:", error.response?.status);
+      console.log('에러 상태 코드:', error.response?.status);
       const statusCode = error.response?.status;
       if (statusCode === 400) {
         toast.error('입력된 재료가 없습니다. 재료를 입력해 주세요.');
       } else if (statusCode === 406) {
         toast.error('적절하지 못한 재료가 있습니다.');
-        
-      }else if (statusCode === 404) {
+      } else if (statusCode === 404) {
         toast.error('레시피가 존재하지 않습니다.');
-      } 
-      else if (statusCode === 500) {
+      } else if (statusCode === 500) {
         toast.error('추천 레시피 생성에 실패했습니다.');
       } else {
         toast.error('서버와의 연결에 실패했습니다.');
@@ -96,10 +94,8 @@ const GptSearch = () => {
   };
 
   if (isLoading) {
-    
     return (
       <section className="flex flex-col items-center justify-center h-screen">
-        
         <img
           src="https://media.discordapp.net/attachments/1197868473666248844/1213305395305652264/img_profile.png?ex=660772b4&is=65f4fdb4&hm=fa07101b219d5e41c1501989503c4255d4e8aaaae60a02a1f626e326ca970493&=&format=webp&quality=lossless&width=614&height=614"
           alt="로딩중"
@@ -107,7 +103,6 @@ const GptSearch = () => {
         />
         <h1 className=" font-score text-2xl font-bold text-gray-900 mb-4">
           로딩 중
-          
         </h1>
         <button
           onClick={() => navigate('/main')}
