@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
-import { useUserDispatch, useUserState } from '../context/UserContext';
+import { useUserDispatch } from '../context/UserContext';
 import { toast } from 'react-toastify';
+import errorCode from '../utils/ErrorCode';
 
 export default function DeleteUser() {
   const [password, setPassword] = useState('');
-
-  const user = useUserState();
 
   const { deleteUser } = useUserDispatch();
 
@@ -30,19 +29,30 @@ export default function DeleteUser() {
   const handlePasswordChange = (e) => setPassword(e.target.value);
 
   // 2️⃣ 회원 탈퇴
-  const handleDeleteUser = async (e) => {
+  const handleDeleteUser = (e) => {
     e.preventDefault();
-
-    if (password !== user.password) {
-      toast.error('비밀번호가 일치하지 않습니다');
-      return;
-    }
 
     // ▶️ 사용자에게 확인 질문
     const confirmDelete = window.confirm('정말 회원탈퇴를 진행할까요?');
 
-    if (confirmDelete) {
-      await deleteUser();
+    try {
+      if (confirmDelete) {
+        deleteUser();
+      }
+    } catch (error) {
+      // 🚫 에러 처리
+      const errorHeaders = error.response?.headers;
+      if (errorHeaders.code) {
+        const errorName = Object.values(errorCode).find(
+          (obj) => obj.code === errorHeaders.code
+        );
+        const userNotice = errorName.notice;
+
+        console.log(`에러 내용: ${errorName}`);
+        toast.error(`${userNotice}`);
+      } else {
+        console.log(`확인되지 않은 에러, ${error}`);
+      }
     }
   };
 

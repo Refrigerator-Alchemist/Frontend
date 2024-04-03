@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
-import { IP_ADDRESS, useUserState } from '../context/UserContext';
+import { IP_ADDRESS } from '../context/UserContext';
 import { toast } from 'react-toastify';
 import IMAGE_PROFILE from '../assets/img/img_profile.png';
 import errorCode from '../utils/ErrorCode';
@@ -19,8 +19,6 @@ export default function EditProfile() {
   );
   const [email, setEmail] = useState(localStorage.getItem('email') || ''); // 이메일
   const accessToken = localStorage.getItem('accessToken'); // 액세스 토큰
-
-  const user = useUserState(); // 유저 데이터 : 로그인 상태면 존재
 
   const fileInput = useRef(null);
 
@@ -163,8 +161,7 @@ export default function EditProfile() {
             }
           )
           .then((result) => {
-            localStorage.setItem('nickName', changeNickName); // 로컬스토리지에도 바꾼 닉네임 저장
-            user.nickName = changeNickName; // user 객체에도 변경한 닉네임 저장
+            localStorage.setItem('nickName', changeNickName);
             console.log(`닉네임 재설정 성공 : ${result}`);
             toast.success('닉네임을 재설정 했습니다');
           });

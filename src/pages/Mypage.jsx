@@ -5,11 +5,7 @@ import Pagination from '../components/Pagination';
 import Navigation from '../components/Navigation';
 import { FaTrash, FaHeart } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import {
-  useUserDispatch,
-  useUserState,
-  IP_ADDRESS,
-} from '../context/UserContext';
+import { useUserDispatch, IP_ADDRESS } from '../context/UserContext';
 import mockData from '../assets/data/post.json';
 import IMG_PROFILE from '../assets/img/img_profile.png';
 
@@ -108,7 +104,6 @@ export default function MyPage() {
   const [currentPageMyRecipes, setCurrentPageMyRecipes] = useState(1);
   const [currentPageLikedRecipes, setCurrentPageLikedRecipes] = useState(1);
 
-  const user = useUserState(); // 유저 데이터 : 로그인 상태면 존재
   const { logout } = useUserDispatch();
   const accessToken = localStorage.getItem('accessToken');
   const nickName = localStorage.getItem('nickName');
@@ -133,7 +128,7 @@ export default function MyPage() {
     const fetchUserInfo = async () => {
       const URL = `${IP_ADDRESS}/userinfo`;
       try {
-        if (user) {
+        if (accessToken) {
           const response = await axios.get(URL, {
             headers: {
               'Authorization-Access': accessToken,
@@ -272,7 +267,7 @@ export default function MyPage() {
     }
     // fetchMyRecipesCount();
     // fetchLikedRecipesCount();
-  }, [showMyRecipes, accessToken, email, user]);
+  }, [showMyRecipes, accessToken, email]);
 
   // 1️⃣ 레시피 수정
   const handleEdit = (postId) => {
