@@ -138,7 +138,7 @@ export default function SignUp() {
     <section className="flex flex-col justify-center items-center min-h-screen px-10 relative">
       {/* 뒤로가기 버튼 */}
       <div
-        className="absolute top-5 left-5 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
+        className="absolute top-5 left-5 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
         onClick={() => navigate('/login')}
       >
         <FaArrowLeft />
@@ -152,27 +152,25 @@ export default function SignUp() {
         </p>
       </header>
 
-      {/* 회원가입 정보 입력 */}
       <form onSubmit={onSignUp}>
         <main className="mt-10 w-full px-2">
           {/* 이메일 중복 확인 & 인증 요청 */}
           <div>
             <label className="mb-4 text-md font-bold font-undong text-center ">
-              이메일 입력
+              이메일
             </label>
             <div className="flex items-center">
               <input
                 type="email"
                 value={email}
                 onChange={handleEmailChange}
-                className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo"
                 placeholder="이메일"
               />
               <div>
-                {/* 인증 요청 */}
                 <button
                   onClick={onRequest}
-                  className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtrabold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
+                  className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtrabold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:scale-110 hover:bg-indigo duration-300"
                 >
                   인증 요청
                 </button>
@@ -190,7 +188,7 @@ export default function SignUp() {
           {/* 인증 확인 */}
           <div className="mt-6">
             <label className="mb-4 font-bold font-undong text-center text-md">
-              인증번호 입력
+              인증번호
             </label>
             <div className="flex items-center justify-between">
               <div className="flex max-w-xs mt-2">
@@ -208,12 +206,12 @@ export default function SignUp() {
                       setInputNum(e.target.value);
                     }
                   }}
-                  className="w-40 h-12 mx-1 text-center border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-40 h-12 mx-1 text-center border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo"
                 />
               </div>
               <button
                 onClick={onCheckCode}
-                className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtrabold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
+                className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtrabold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:scale-110 hover:bg-indigo duration-300"
               >
                 인증 확인
               </button>
@@ -234,12 +232,12 @@ export default function SignUp() {
                   value={nickName}
                   onChange={(e) => setNickName(e.target.value)}
                   placeholder="닉네임"
-                  className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo"
                 />
                 {/* 중복확인 */}
                 <button
                   onClick={onCheckName}
-                  className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtrabold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
+                  className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtrabold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:scale-110 hover:bg-indigo duration-300"
                 >
                   중복 확인
                 </button>
@@ -255,7 +253,7 @@ export default function SignUp() {
 
             {/* 비밀번호 입력 */}
             <label className="mb-4 text-md font-bold font-undong text-center">
-              비밀번호 입력
+              비밀번호
             </label>
             <div className="flex flex-col">
               <div className="flex mb-4">
@@ -264,7 +262,7 @@ export default function SignUp() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="비밀번호"
-                  className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo"
                 />
                 <button
                   onClick={toggleShowPassword}
@@ -287,7 +285,7 @@ export default function SignUp() {
                     isSamePassword();
                   }}
                   placeholder="한 번 더 입력하세요"
-                  className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo"
                 />
               </div>
               <p
@@ -295,7 +293,7 @@ export default function SignUp() {
                   passwordMessage === null
                     ? ''
                     : passwordMessage
-                    ? 'text-green-500'
+                    ? 'text-emerald'
                     : 'text-red-500'
                 }`}
               >
@@ -361,7 +359,7 @@ export default function SignUp() {
                   </span>
                 </li>
               </ul>
-              {/* 가입하기 */}
+              {/* 가입 버튼*/}
               <button
                 type="submit"
                 disabled={
@@ -375,7 +373,7 @@ export default function SignUp() {
                 className={`p-3 mx-20 mt-3 rounded-3xl font-scoreExtrabold font-extrabold text-xl transition ease-in-out duration-300
               ${
                 passwordMessage
-                  ? 'text-white bg-main hover:bg-[#15ed79] hover:text-black hover:cursor-pointer hover:-translate-y-1 hover:scale-110'
+                  ? 'text-white bg-main hover:bg-emerald hover:text-black hover:cursor-pointer hover:-translate-y-1 hover:scale-110'
                   : 'bg-gray-500 text-black'
               }
               `}

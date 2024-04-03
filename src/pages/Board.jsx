@@ -1,6 +1,6 @@
 import React from 'react';
-import searchicon from '../assets/img/search.png';
-import writingicon from '../assets/img/writing.png';
+import ICON_SEARCHING from '../assets/img/search.png';
+import ICON_WRITTING from '../assets/img/writing.png';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
@@ -192,12 +192,12 @@ const SearchBar = ({ onSearch }) => {
         onKeyPress={handleKeyPress}
       />
       <button
-        className="flex items-center justify-center  hover:bg-gray-200 px-3 py-2 rounded-full"
+        className="flex items-center justify-center hover:bg-gray-200 px-3 py-2 rounded-full"
         onClick={handleSearchClick}
         style={{ minWidth: '40px', height: '40px', borderRadius: '30px' }}
       >
         <img
-          src={searchicon}
+          src={ICON_SEARCHING}
           alt="검색아이콘"
           className="w-7 h-6"
           style={{ opacity: 0.5 }}
@@ -212,10 +212,10 @@ const WriteButton = () => {
   return (
     <Link
       to="/board/upload"
-      className="bg-gray-50 ml-4 flex items-center justify-center rounded-full  p-4 shadow write-button transition-transform duration-200 hover:scale-110"
+      className="bg-gray-50 ml-4 flex items-center justify-center rounded-full p-4 shadow write-button transition-transform duration-200 hover:scale-110 hover:bg-gray-200"
     >
       <img
-        src={writingicon}
+        src={ICON_WRITTING}
         alt="쓰기아이콘"
         className="w-6 h-6 text-bold text-center"
         style={{ opacity: 0.7 }}
@@ -365,7 +365,7 @@ function Board() {
   return (
     <section className="Board pb-24">
       <header className="bg-white px-6 py-7">
-        <span className="font-scoreExtraBold font-extrabold text-3xl">
+        <span className="font-scoreExtrabold font-extrabold text-3xl">
           레시피 게시판
         </span>
       </header>

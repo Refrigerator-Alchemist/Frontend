@@ -110,9 +110,9 @@ const RecipePage = () => {
   }
 
   return (
-    <section className="bg-white min-h-screen p-6">
+    <section className="bg-white min-h-screen px-4 py-6">
       <div
-        className="absolute top-5 left-30 ml-0 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
+        className="absolute top-5 left-30 ml-0 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white hover:bg-indigo rounded-full flex items-center justify-center"
         onClick={() => navigate('/board')}
       >
         <FaArrowLeft />
@@ -162,16 +162,16 @@ const RecipePage = () => {
           style={{ maxWidth: '400px' }}
         >
           <button
-            className="font-score bg-gray-400 hover:bg-gray-600 text-white font-bold py-3 px-9 rounded-full"
+            className="font-score transition ease-in-out bg-gray-400 hover:bg-gray-600 text-white font-bold py-3 px-9 rounded-full"
             onClick={() => navigate('/recipe/recommend')}
           >
-            다시 할래요
+            다시 할래요 👎🏿
           </button>
           <button
-            className="font-score font-bold py-3 px-9 rounded-full bg-yellow-500 hover:bg-yellow-600 cursor-pointer text-white"
+            className="font-score font-bold py-3 px-9 rounded-full transition ease-in-out bg-main hover:bg-emerald hover:cursor-pointer text-white hover:text-black"
             onClick={handleSaveButtonClick}
           >
-            저장할래요
+            저장할래요 💛
           </button>
         </div>
       </footer>

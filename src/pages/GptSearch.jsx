@@ -117,13 +117,13 @@ const GptSearch = () => {
   return (
     <section className="bg-white min-h-screen px-4 py-8 flex flex-col">
       <div
-        className="absolute top-5 left-45 ml-0 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
+        className="absolute top-5 left-45 ml-0 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
         onClick={() => navigate('/main')}
       >
         <FaArrowLeft />
       </div>
       <main className="max-w-lg mx-auto flex-1">
-        <h2 className=" font-score text-3xl font-bold mb-12 mt-32 text-center">
+        <h2 className="font-score text-2xl font-bold mb-12 mt-32 text-center">
           냉장고 재료를 넣어주세요
         </h2>
         <div className="mr-10 ml-10 flex items-center border-b border-gray-300 mb-4">
@@ -177,11 +177,11 @@ const GptSearch = () => {
           {accessToken ? `${nickname}의 연금술 레시피` : '저장된 연금술 레시피'}
         </button>
         <button
-          className="font-score text-xl transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer text-white font-bold py-3 px-4 rounded w-full"
+          className="font-jua text-xl transition ease-in-out bg-main hover:bg-emerald hover:scale-110 hover:cursor-pointer hover:text-black text-white font-bold py-3 px-4 rounded-md w-full"
           type="button"
           onClick={handleNextButtonClick}
         >
-          연금술 시작하기
+          레시피 나와라 얍!
         </button>
       </footer>
     </section>

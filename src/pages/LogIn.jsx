@@ -82,7 +82,7 @@ export default function Login() {
     <section className="relative flex flex-col items-center justify-center min-h-screen">
       {/* 뒤로가기 버튼 */}
       <div
-        className="absolute top-5 left-5 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
+        className="absolute top-5 left-5 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
         onClick={() => navigate('/main')}
       >
         <FaArrowLeft />
@@ -109,7 +109,7 @@ export default function Login() {
               type="email"
               value={email}
               onChange={handleEmailChange}
-              className="w-full px-4 py-3 mt-1 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-score"
+              className="w-full px-4 py-3 mt-1 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo font-score"
               placeholder="이메일"
               required
             />
@@ -130,7 +130,7 @@ export default function Login() {
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={handlePasswordChange}
-                className="w-full px-4 py-3 mt-1 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-score"
+                className="w-full px-4 py-3 mt-1 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo font-score"
                 placeholder="비밀번호"
                 required
               />
@@ -155,7 +155,7 @@ export default function Login() {
             className={`w-full py-2 text-2xl font-scoreExtraBold font-extrabold transition ease-in-out duration-300 rounded-3xl ${
               notAllow
                 ? 'bg-gray-500 text-black'
-                : 'bg-main text-white hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black'
+                : 'bg-main text-white hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-emerald hover:text-black'
             }`}
           >
             로그인

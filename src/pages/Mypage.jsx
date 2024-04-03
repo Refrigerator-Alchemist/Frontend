@@ -105,6 +105,7 @@ export default function MyPage() {
   const [currentPageLikedRecipes, setCurrentPageLikedRecipes] = useState(1);
 
   const { logout } = useUserDispatch();
+
   const accessToken = localStorage.getItem('accessToken');
   const nickName = localStorage.getItem('nickName');
   const email = localStorage.getItem('email');
@@ -138,7 +139,7 @@ export default function MyPage() {
           setImageUrl(response.data.imageUrl);
           localStorage.setItem(response.data.imageUrl); // 로컬스토리지에 저장
         } else {
-          toast.error('로그인 하지 않았습니다!');
+          return;
         }
       } catch (error) {
         console.error('데이터 통신 중 문제 발생: ', error);
