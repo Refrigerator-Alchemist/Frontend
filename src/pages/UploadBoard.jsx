@@ -23,14 +23,14 @@ export default function UploadBoard() {
   const location = useLocation();
 
   // 🚷 비로그인 유저 접속 차단
-  useEffect(() => {
-    if (!accessToken) {
-      toast.error('로그인을 먼저 해야합니다');
-      setTimeout(() => {
-        navigate('/board');
-      }, 2000);
-    }
-  }, [accessToken, navigate, location]);
+  // useEffect(() => {
+  //   if (!accessToken) {
+  //     toast.error('로그인을 먼저 해야합니다');
+  //     setTimeout(() => {
+  //       navigate('/board');
+  //     }, 2000);
+  //   }
+  // }, [accessToken, navigate, location]);
 
   // 1️⃣ 재료 입력
   const handleIngredientChange = (index, event) => {
@@ -115,12 +115,11 @@ export default function UploadBoard() {
     <section className="pt-16">
       <div
         className="absolute top-5 left-42 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate('/board')}
+        onClick={() => navigate("/board")}
       >
         <FaArrowLeft />
       </div>
 
-      {/* main */}
       <form
         onSubmit={handleSubmit}
         className="flex flex-col space-y-6 mx-auto p-8"
@@ -142,35 +141,16 @@ export default function UploadBoard() {
           />
         </div>
         {imagePreviewUrl && (
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '160px',
-            }}
-          >
-            <div
-              style={{
-                width: '90%',
-                maxWidth: '500px',
-                height: 'auto',
-                border: '2px solid #ddd',
-                borderRadius: '15px',
-                overflow: 'hidden',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
+          <div className="flex justify-center items-center">
+            <div className="w-64 h-64 border-2 border-gray-300 rounded-lg overflow-hidden">
               <img
                 src={imagePreviewUrl}
                 alt="Preview"
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                className="w-full h-full object-cover"
               />
             </div>
           </div>
-        )}
+        )}  
         <div className="form-group">
           <label
             htmlFor="food-name"

@@ -1,7 +1,8 @@
 import React from 'react';
 import ICON_SEARCHING from '../assets/img/search.png';
-import ICON_WRITTING from '../assets/img/writing.png';
+// import ICON_WRITTING from '../assets/img/writing.png';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import { PiPencilSimpleLine } from "react-icons/pi";
 import { toast } from 'react-toastify';
 
 import { Link } from 'react-router-dom';
@@ -10,7 +11,6 @@ import Ranking from '../components/Ranking';
 import Navigation from '../components/Navigation';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
-
 import { IP_ADDRESS } from '../context/UserContext';
 
 const accessToken = localStorage.getItem('accessToken');
@@ -182,7 +182,7 @@ const SearchBar = ({ onSearch }) => {
   };
 
   return (
-    <div className="font-score flex-grow flex items-center rounded-full bg-gray-50 p-2 shadow">
+    <div className="font-score flex-grow flex items-center rounded-full bg-gray-50 p-1 shadow">
       <input
         className="w-full pl-2 py-2 text-sm focus:outline-none bg-gray-50"
         type="text"
@@ -212,14 +212,9 @@ const WriteButton = () => {
   return (
     <Link
       to="/board/upload"
-      className="bg-gray-50 ml-4 flex items-center justify-center rounded-full p-4 shadow write-button transition-transform duration-200 hover:scale-110 hover:bg-gray-200"
+      className="bg-gray-50 ml-3 flex items-center justify-center rounded-full p-3 shadow write-button transition-transform duration-200 hover:scale-110 hover:bg-gray-200"
     >
-      <img
-        src={ICON_WRITTING}
-        alt="쓰기아이콘"
-        className="w-6 h-6 text-bold text-center"
-        style={{ opacity: 0.7 }}
-      />
+      <PiPencilSimpleLine  style={{ fontSize: '26px' }}  />
     </Link>
   );
 };
@@ -369,7 +364,7 @@ function Board() {
           레시피 게시판
         </span>
       </header>
-      <div className="flex items-center mx-8 my-0">
+      <div className=" flex items-center mx-6">
         <SearchBar onSearch={handleSearch} />
         <WriteButton />
       </div>

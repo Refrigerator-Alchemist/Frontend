@@ -4,6 +4,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Pagination from '../components/Pagination';
 import Navigation from '../components/Navigation';
 import { FaTrash, FaHeart } from 'react-icons/fa';
+import { VscChromeClose } from "react-icons/vsc";
 import { toast } from 'react-toastify';
 import { useUserDispatch, IP_ADDRESS } from '../context/UserContext';
 import mockData from '../assets/data/post.json';
@@ -19,8 +20,11 @@ const SavedRecipe = ({
   onDelete,
   showEditDeleteButtons = true,
 }) => {
+  const maxLength = 30; // 본문의 최대 길이 설정
+  const shortDescription = description.length > maxLength ? description.slice(0, maxLength) + "..." : description; 
+  
   return (
-    <div className="text-black ml-6 mr-6 mt-2 w-full max-w-md">
+    <div className="text-black ml-6 mr-6 mt-2 w-full max-w-md relative"> 
       <div className="bg-white mx-2 my-2 p-4 rounded-xl shadow overflow-hidden relative flex flex-col md:flex-row">
         <Link to={`/board/${postId}`} className="flex-grow flex items-center">
           <div className="flex-none w-20 h-20 md:w-20 md:h-20 max-w-xs rounded-xl border-2 border-gray-300 overflow-hidden mr-4">
@@ -33,23 +37,23 @@ const SavedRecipe = ({
           <div className="md:pl-4 mt-4 md:mt-0">
             <h3 className="text-lg font-score font-semibold">{title}</h3>
             <p className="text-gray-500 pt-1 text-sm font-score md:max-w-xs">
-              {description}
+              {shortDescription}
             </p>
           </div>
         </Link>
         {showEditDeleteButtons && (
-          <div className="absolute top-4 right-0 flex flex-col space-y-10">
-            <button
-              onClick={() => onDelete(postId)}
-              className="p-1 text-gray-400"
-            >
-              <FaTrash />
-            </button>
+          <div className="absolute top-4 right-2 flex flex-row space-x-1"> 
             <button
               onClick={() => onEdit(postId)}
               className="pr-3 text-sm text-gray-300"
             >
               수정
+            </button>
+            <button
+              onClick={() => onDelete(postId)}
+              className=" text-gray-400 pr-2"
+            >
+              <VscChromeClose />
             </button>
           </div>
         )}
@@ -60,29 +64,34 @@ const SavedRecipe = ({
 
 // 🃏 좋아요 누른 레시피
 const LikedRecipe = ({ postId, title, description, imageUrl }) => {
+  const maxLength = 25; // 본문의 최대 길이 설정
+  const shortDescription = description.length > maxLength ? description.slice(0, maxLength) + "..." : description; 
+
   return (
     <div className="text-black ml-6 mr-6 mt-2 w-full max-w-md">
-      <div className="bg-white mx-2 my-2 p-4 rounded-xl shadow overflow-hidden relative flex flex-col md:flex-row">
+      <div className="bg-white mx-2 my-2 p-4 rounded-xl shadow overflow-hidden relative flex flex-col">
         <Link
           to={`/board/${postId}`}
           className="flex flex-grow items-center justify-between"
         >
           <div className="flex items-center">
-            <div className="flex-none w-20 h-20 md:w-20 md:h-20 max-w-xs rounded-xl border-2 border-gray-300 overflow-hidden mr-4">
+            <div className="flex-none w-20 h-20 max-w-xs rounded-xl border-2 border-gray-300 overflow-hidden mr-4">
               <img
                 className="w-full h-full object-cover"
                 src={imageUrl}
                 alt={title}
               />
             </div>
-            <div className="md:pl-4 mt-4 md:mt-0">
+            <div className=" mt-3"> 
               <h3 className="text-lg font-score font-semibold">{title}</h3>
               <p className="text-gray-500 pt-1 text-sm font-score md:max-w-xs">
-                {description}
+                {shortDescription}
               </p>
             </div>
           </div>
-          <FaHeart className="text-red-500 text-2xl" />
+          <div className="heart-icon-container"> 
+            <FaHeart className="text-red-500 text-2xl heart-icon" /> 
+          </div>
         </Link>
       </div>
     </div>
@@ -329,7 +338,7 @@ export default function MyPage() {
   };
 
   return (
-    <section className="Board flex flex-col items-center justify-center w-full">
+    <section className="Board flex flex-col items-center justify-center w-full" style={{ marginBottom: '100px' }}>
       <header className="flex justify-end w-full mt-2 space-x-2 mr-12">
         <button
           className="font-score text-gray-300"
