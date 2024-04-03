@@ -13,9 +13,9 @@ const GptSavedList = () => {
   const [recipesPerPage] = useState(7);
 
   const nickname = localStorage.getItem('nickName') || '';
-  const navigate = useNavigate();
-
   const accessToken = localStorage.getItem('accessToken');
+
+  const navigate = useNavigate();
 
   //저장한 목록 보기
   useEffect(() => {
@@ -66,6 +66,7 @@ const GptSavedList = () => {
       </div>
     );
   };
+
   return (
     <section className="history">
       <div

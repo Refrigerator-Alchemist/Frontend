@@ -196,6 +196,8 @@ const BoardDetail = () => {
         { email: myEmail, postId: postId },
         {
           headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+            Accept: 'application/json',
             'Authorization-Access': accessToken,
           },
         }
@@ -203,9 +205,10 @@ const BoardDetail = () => {
 
       if (response.status === 200) {
         console.log(`해당 게시물 ${postId}를 신고했습니다.`);
+        toast.success('해당 게시물을 신고했습니다');
       }
     } catch (error) {
-      console.log(error);
+      console.log('게시물 신고 중 에러가 발생했습니다.');
     }
   };
 

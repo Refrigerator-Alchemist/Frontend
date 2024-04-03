@@ -3,7 +3,6 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-
 import { IP_ADDRESS } from '../context/UserContext';
 
 export default function UploadBoard() {
@@ -27,7 +26,7 @@ export default function UploadBoard() {
     }
   }, [navigate, location, accessToken]);
 
-  // 1️⃣ 서버에서 기존 정보들을 불러오는 함수
+  // 1️⃣ 해당 게시물의 제목, 설명, 재료를 불러오는 함수
   useEffect(() => {
     const fetchData = async (postId) => {
       const URL = `${IP_ADDRESS}/board/updateBoard?postId=${postId}`;
@@ -50,10 +49,10 @@ export default function UploadBoard() {
             setIngredients(items[0].ingredients);
           }
         } else {
-          console.error('데이터 타입 오류:', response.data);
+          console.error('데이터가 오지 않았음 : 서버 확인', response.data);
         }
       } catch (error) {
-        console.error('데이터 전송 오류:', error);
+        console.error('데이터 전송 중 오류 발생 : 클라이언트 확인', error);
       }
     };
     fetchData(postId);
@@ -93,7 +92,7 @@ export default function UploadBoard() {
 
       if (response.status === 200) {
         console.log('게시물 수정 완료');
-        toast.success('게시물 수정 완료');
+        toast.success('게시물이 수정되었습니다');
         navigate(`/board/${postId}`);
       }
     } catch (error) {

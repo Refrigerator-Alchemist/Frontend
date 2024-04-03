@@ -10,9 +10,10 @@ const RecipePage = () => {
   const [steps, setSteps] = useState([]);
   const [title, setTitle] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
   const { recommendId } = useParams();
   const accessToken = localStorage.getItem('accessToken');
+
+  const navigate = useNavigate();
 
   // 🤖 GPT 레시피 결과 불러오는 함수
   useEffect(() => {
@@ -33,13 +34,12 @@ const RecipePage = () => {
           setIngredients(response.data.ingredients);
           setSteps(response.data.recipe);
         }
-        
       } catch (error) {
         console.error('에러내용:', error);
-        console.log("에러 상태 코드:", error.response?.status);
+        console.log('에러 상태 코드:', error.response?.status);
         const statusCode = error.response?.status;
-        
-        if (statusCode=== 404) {
+
+        if (statusCode === 404) {
           toast.error('레시피가 존재하지 않습니다.');
         }
       } finally {
@@ -49,7 +49,6 @@ const RecipePage = () => {
     if (recommendId) {
       fetchData();
     }
-    
   }, [recommendId, accessToken]);
 
   // gpt레시피 저장하기
@@ -81,8 +80,7 @@ const RecipePage = () => {
       const statusCode = error.response?.status;
       if (statusCode === 401) {
         toast.error('socialId가 존재하지 않습니다.');
-      } 
-      else if (statusCode === 500) {
+      } else if (statusCode === 500) {
         toast.error('레시피 저장을 실패했습니다.');
       } else {
         toast.error('서버와의 연결에 실패했습니다.');

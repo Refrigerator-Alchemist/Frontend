@@ -12,6 +12,7 @@ import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 
 import { IP_ADDRESS } from '../context/UserContext';
+
 const accessToken = localStorage.getItem('accessToken');
 const email = localStorage.getItem('email');
 
@@ -175,11 +176,10 @@ const SearchBar = ({ onSearch }) => {
         setQuery('');
       } catch (error) {
         console.error('검색결과 에러 :', error);
-        toast.error('로그인을 먼저 해야합니다.')
+        toast.error('로그인을 먼저 해야합니다.');
       }
     }
   };
-
 
   return (
     <div className="font-score flex-grow flex items-center rounded-full bg-gray-50 p-2 shadow">
@@ -236,7 +236,6 @@ function Board() {
   const location = useLocation();
   const recipesPerPage = 6;
 
-
   // ⏯️ 실행: 처음 렌더링 1번
   useEffect(() => {
     fetchLikedPosts();
@@ -251,24 +250,24 @@ function Board() {
   // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
   const fetchLikedPosts = async () => {
     if (!accessToken) {
-      console.log(" fetchLikedPosts : accessToken 없음");
+      console.log(' fetchLikedPosts : accessToken 없음');
       return;
     }
     const URL = `${IP_ADDRESS}/board/islike?id=${email}`;
     try {
       const response = await axios.get(URL, {
         headers: {
-          "Authorization-Access": accessToken,
+          'Authorization-Access': accessToken,
         },
       });
 
       if (response.data) {
         const posts = response.data.map(Number);
         setLikedPosts(posts);
-        console.log("좋아요 누른 게시물의 postId 목록:", posts);
+        console.log('좋아요 누른 게시물의 postId 목록:', posts);
       }
     } catch (error) {
-      console.error("좋아요 누른 기록 받아오는 중 에러 발생", error);
+      console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
     }
   };
 
@@ -283,9 +282,9 @@ function Board() {
       const totalPages = Math.ceil(totalRecipes / recipesPerPage);
       setTotalPages(totalPages);
 
-      console.log("총 페이지 수:", totalPages);
+      console.log('총 페이지 수:', totalPages);
     } catch (error) {
-      console.error("전체 레시피 수 가져오기 에러:", error);
+      console.error('전체 레시피 수 가져오기 에러:', error);
     }
   };
 
@@ -307,10 +306,10 @@ function Board() {
 
         setRecipes(formattedData);
       } else {
-        console.error(" 데이터 형식이 다름 에러내용:", response.data);
+        console.error(' 데이터 형식이 다름 에러내용:', response.data);
       }
     } catch (error) {
-      console.error("네트워크 문제, 서버 오류", error);
+      console.error('네트워크 문제, 서버 오류', error);
     }
   };
 
@@ -323,7 +322,7 @@ function Board() {
     }
   }, [searchResultCount, isSearching, recipesPerPage]);
 
-  // // 3️⃣ 게시물 검색
+  // 3️⃣ 게시물 검색
   const handleSearch = (results) => {
     setSearchResults(results); // 검색 결과 상태 업데이트
     setIsSearching(true); // 검색 모드 활성화
@@ -344,7 +343,7 @@ function Board() {
       });
     }
   };
-  
+
   // 5️⃣ 클릭할 페이지번호 순서대로 조정
   const pageNumbers = [];
   const maxPageNumbersToShow = 5;
@@ -435,8 +434,8 @@ function Board() {
               onClick={() => handlePageClick(number)}
               className={`px-4 py-2 border rounded-full m-1 ${
                 currentPage === number
-                  ? "bg-main text-white"
-                  : "bg-white text-main"
+                  ? 'bg-main text-white'
+                  : 'bg-white text-main'
               }`}
             >
               {number}
@@ -455,10 +454,10 @@ function Board() {
 
       <footer
         style={{
-          position: "fixed",
-          bottom: "0",
-          width: "100%",
-          maxWidth: "31rem",
+          position: 'fixed',
+          bottom: '0',
+          width: '100%',
+          maxWidth: '31rem',
         }}
       >
         <Navigation />

@@ -95,18 +95,16 @@ export const UserProvider = ({ children }) => {
       }
     } catch (error) {
       setEmailExists(true);
-      if (error.response) {
-        const errorHeaders = error.response.headers;
-        // 🚫 에러 처리
-        if (errorHeaders.code) {
-          const errorName = Object.values(errorCode).find(
-            (obj) => obj.code === errorHeaders.code
-          );
-          const userNotice = errorName.notice;
+      // 🚫 에러 처리
+      const errorHeaders = error.response?.headers;
+      if (errorHeaders.code) {
+        const errorName = Object.values(errorCode).find(
+          (obj) => obj.code === errorHeaders.code
+        );
+        const userNotice = errorName.notice;
 
-          console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
-          toast.error(`${userNotice}`); // 유저 팝업용
-        }
+        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
+        toast.error(`${userNotice}`); // 유저 팝업용
       } else {
         console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
       }
@@ -136,18 +134,16 @@ export const UserProvider = ({ children }) => {
       }
     } catch (error) {
       setEmailExists(false);
-      if (error.response) {
-        const errorHeaders = error.response.headers;
-        // 🚫 에러 처리
-        if (errorHeaders.code) {
-          const errorName = Object.values(errorCode).find(
-            (obj) => obj.code === errorHeaders.code
-          );
-          const userNotice = errorName.notice;
+      // 🚫 에러 처리
+      const errorHeaders = error.response?.headers;
+      if (errorHeaders.code) {
+        const errorName = Object.values(errorCode).find(
+          (obj) => obj.code === errorHeaders.code
+        );
+        const userNotice = errorName.notice;
 
-          console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
-          toast.error(`${userNotice}`); // 유저 팝업용
-        }
+        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
+        toast.error(`${userNotice}`); // 유저 팝업용
       } else {
         console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
       }
@@ -188,18 +184,16 @@ export const UserProvider = ({ children }) => {
       }
     } catch (error) {
       setVerified(false);
-      if (error.response) {
-        const errorHeaders = error.response.headers;
-        // 🚫 에러 처리
-        if (errorHeaders.code) {
-          const errorName = Object.values(errorCode).find(
-            (obj) => obj.code === errorHeaders.code
-          );
-          const userNotice = errorName.notice;
+      // 🚫 에러 처리
+      const errorHeaders = error.response?.headers;
+      if (errorHeaders.code) {
+        const errorName = Object.values(errorCode).find(
+          (obj) => obj.code === errorHeaders.code
+        );
+        const userNotice = errorName.notice;
 
-          console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
-          toast.error(`${userNotice}`); // 유저 팝업용
-        }
+        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
+        toast.error(`${userNotice}`); // 유저 팝업용
       } else {
         console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
       }
@@ -224,18 +218,16 @@ export const UserProvider = ({ children }) => {
       }
     } catch (error) {
       setNameDuplicated(true);
-      if (error.response) {
-        const errorHeaders = error.response.headers;
-        // 🚫 에러 처리
-        if (errorHeaders.code) {
-          const errorName = Object.values(errorCode).find(
-            (obj) => obj.code === errorHeaders.code
-          );
-          const userNotice = errorName.notice;
+      // 🚫 에러 처리
+      const errorHeaders = error.response?.headers;
+      if (errorHeaders.code) {
+        const errorName = Object.values(errorCode).find(
+          (obj) => obj.code === errorHeaders.code
+        );
+        const userNotice = errorName.notice;
 
-          console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
-          toast.error(`${userNotice}`); // 유저 팝업용
-        }
+        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
+        toast.error(`${userNotice}`); // 유저 팝업용
       } else {
         console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
       }
@@ -271,25 +263,23 @@ export const UserProvider = ({ children }) => {
         return;
       }
     } catch (error) {
-      if (error.response) {
-        const errorHeaders = error.response.headers;
-        // 🚫 에러 처리
-        if (errorHeaders.code) {
-          const errorName = Object.values(errorCode).find(
-            (obj) => obj.code === errorHeaders.code
-          );
-          const userNotice = errorName.notice;
+      // 🚫 에러 처리
+      const errorHeaders = error.response?.headers;
+      if (errorHeaders.code) {
+        const errorName = Object.values(errorCode).find(
+          (obj) => obj.code === errorHeaders.code
+        );
+        const userNotice = errorName.notice;
 
-          console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
-          toast.error(`${userNotice}`); // 유저 팝업용
-        }
+        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
+        toast.error(`${userNotice}`); // 유저 팝업용
       } else {
         console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
       }
     }
   };
 
-  // ❌ 회원탈퇴 ---------------------------------------------------------------
+  // 👋🏻 회원탈퇴 ---------------------------------------------------------------
   const deleteUser = async () => {
     const URL = `${IP_ADDRESS}/auth/delete-user`;
     const socialId = localStorage.getItem('socialId');
@@ -303,18 +293,16 @@ export const UserProvider = ({ children }) => {
       logout();
       toast.success('회원탈퇴가 완료되었습니다');
     } catch (error) {
-      if (error.response) {
-        const errorHeaders = error.response.headers;
-        // 🚫 에러 처리
-        if (errorHeaders.code) {
-          const errorName = Object.values(errorCode).find(
-            (obj) => obj.code === errorHeaders.code
-          );
-          const userNotice = errorName.notice;
+      // 🚫 에러 처리
+      const errorHeaders = error.response?.headers;
+      if (errorHeaders.code) {
+        const errorName = Object.values(errorCode).find(
+          (obj) => obj.code === errorHeaders.code
+        );
+        const userNotice = errorName.notice;
 
-          console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
-          toast.error(`${userNotice}`); // 유저 팝업용
-        }
+        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
+        toast.error(`${userNotice}`); // 유저 팝업용
       } else {
         console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
       }
@@ -342,7 +330,8 @@ export const UserProvider = ({ children }) => {
         }
       );
 
-      if (response) {
+      if (response.headers) {
+        // ▶ 로컬 스토리지 : 액세스, 리프레시, 닉네임, 소셜ID, 소셜타입, 이메일
         localStorage.setItem(
           'accessToken',
           response.headers['authorization-access']
@@ -352,36 +341,34 @@ export const UserProvider = ({ children }) => {
           response.headers['authorization-refresh']
         );
         localStorage.setItem('nickName', response.headers.get('nickName'));
+        localStorage.setItem('email', email);
         localStorage.setItem('socialId', response.headers.get('socialId'));
         localStorage.setItem('socialType', socialType);
-        localStorage.setItem('email', email);
 
-        // ▶ 유저 데이터 저장
+        console.log(`⭕ 로컬스토리지 저장 완료`);
+
         let user = {
-          nickName: response.headers['nickName'],
           socialId: response.headers['socialId'],
           socialType: socialType,
-          email,
-          password,
         };
+
+        console.log(`⭕ 유저 데이터 저장 완료`);
 
         dispatch({ type: SET_USER, user });
         toast.success('로그인 되었습니다!');
         navigate('/main');
       }
     } catch (error) {
-      if (error.response) {
-        const errorHeaders = error.response.headers;
-        // 🚫 에러 처리
-        if (errorHeaders.code) {
-          const errorName = Object.values(errorCode).find(
-            (obj) => obj.code === errorHeaders.code
-          );
-          const userNotice = errorName.notice;
+      // 🚫 에러 처리
+      const errorHeaders = error.response?.headers;
+      if (errorHeaders.code) {
+        const errorName = Object.values(errorCode).find(
+          (obj) => obj.code === errorHeaders.code
+        );
+        const userNotice = errorName.notice;
 
-          console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
-          toast.error(`${userNotice}`); // 유저 팝업용
-        }
+        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
+        toast.error(`${userNotice}`); // 유저 팝업용
       } else {
         console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
       }
@@ -421,18 +408,16 @@ export const UserProvider = ({ children }) => {
         navigate('/main');
       }
     } catch (error) {
-      if (error.response) {
-        const errorHeaders = error.response.headers;
-        // 🚫 에러 처리
-        if (errorHeaders.code) {
-          const errorName = Object.values(errorCode).find(
-            (obj) => obj.code === errorHeaders.code
-          );
-          const userNotice = errorName.notice;
+      // 🚫 에러 처리
+      const errorHeaders = error.response?.headers;
+      if (errorHeaders.code) {
+        const errorName = Object.values(errorCode).find(
+          (obj) => obj.code === errorHeaders.code
+        );
+        const userNotice = errorName.notice;
 
-          console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
-          toast.error(`${userNotice}`); // 유저 팝업용
-        }
+        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
+        toast.error(`${userNotice}`); // 유저 팝업용
       } else {
         console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
       }
@@ -458,18 +443,16 @@ export const UserProvider = ({ children }) => {
         return;
       }
     } catch (error) {
-      if (error.response) {
-        const errorHeaders = error.response.headers;
-        // 🚫 에러 처리
-        if (errorHeaders.code) {
-          const errorName = Object.values(errorCode).find(
-            (obj) => obj.code === errorHeaders.code
-          );
-          const userNotice = errorName.notice;
+      // 🚫 에러 처리
+      const errorHeaders = error.response?.headers;
+      if (errorHeaders.code) {
+        const errorName = Object.values(errorCode).find(
+          (obj) => obj.code === errorHeaders.code
+        );
+        const userNotice = errorName.notice;
 
-          console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
-          toast.error(`${userNotice}`); // 유저 팝업용
-        }
+        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
+        toast.error(`${userNotice}`); // 유저 팝업용
       } else {
         console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
       }
@@ -515,18 +498,16 @@ export const UserProvider = ({ children }) => {
         return;
       }
     } catch (error) {
-      if (error.response) {
-        const errorHeaders = error.response.headers;
-        // 🚫 에러 처리
-        if (errorHeaders.code) {
-          const errorName = Object.values(errorCode).find(
-            (obj) => obj.code === errorHeaders.code
-          );
-          const userNotice = errorName.notice;
+      // 🚫 에러 처리
+      const errorHeaders = error.response?.headers;
+      if (errorHeaders.code) {
+        const errorName = Object.values(errorCode).find(
+          (obj) => obj.code === errorHeaders.code
+        );
+        const userNotice = errorName.notice;
 
-          console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
-          toast.error(`${userNotice}`); // 유저 팝업용
-        }
+        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
+        toast.error(`${userNotice}`); // 유저 팝업용
       } else {
         console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
       }

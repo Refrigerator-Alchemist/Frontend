@@ -3,26 +3,22 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
-import IMAGE_PROFILE from '../assets/img/img_profile.png';
-import { IP_ADDRESS, useUserState } from '../context/UserContext';
+import { IP_ADDRESS } from '../context/UserContext';
 import { toast } from 'react-toastify';
+import IMAGE_PROFILE from '../assets/img/img_profile.png';
 import errorCode from '../utils/ErrorCode';
 
 export default function EditProfile() {
-  const [changeNickName, setChangeNickName] = useState(''); // 새로 바꿀 닉네임
   const [nameError, setNameError] = useState(false);
-
+  const [changeNickName, setChangeNickName] = useState(''); // 새로 바꿀 닉네임
   const [nickName, setNickName] = useState(
-    localStorage.getItem('nickName') || ''
+    localStorage.getItem('nickName') || '' // 닉네임
+  );
+  const [imageUrl, setImageUrl] = useState(
+    localStorage.getItem('imageUrl') || IMAGE_PROFILE // 프로필 이미지
   );
   const [email, setEmail] = useState(localStorage.getItem('email') || ''); // 이메일
   const accessToken = localStorage.getItem('accessToken'); // 액세스 토큰
-
-  const [image, setImage] = useState(
-    localStorage.getItem('imageUrl') || IMAGE_PROFILE // 프로필 이미지
-  );
-
-  const user = useUserState(); // 유저 데이터 : 로그인 상태면 존재
 
   const fileInput = useRef(null);
 
@@ -41,7 +37,6 @@ export default function EditProfile() {
 
   // ⭕️ 바꿀 닉네임 초기값은 원래 닉네임으로 처리해서 입력 가능하게 수정
   useEffect(() => {
-    // 닉네임 이메일 받아오는 get 요청 구현하기
     const fetchUserInfo = async () => {
       const URL = `${IP_ADDRESS}/reset/info`;
 
@@ -60,8 +55,8 @@ export default function EditProfile() {
           return;
         }
       } catch (error) {
-        const errorHeaders = error.response?.headers;
         // 🚫 에러 처리
+        const errorHeaders = error.response?.headers;
         if (errorHeaders.code) {
           const errorName = Object.values(errorCode).find(
             (obj) => obj.code === errorHeaders.code
@@ -87,7 +82,7 @@ export default function EditProfile() {
 
       reader.onload = async () => {
         if (reader.readyState === 2) {
-          setImage(reader.result);
+          setImageUrl(reader.result);
           await uploadImage(e.target.files[0]);
         }
       };
@@ -114,8 +109,8 @@ export default function EditProfile() {
         },
       });
     } catch (error) {
-      const errorHeaders = error.response?.headers;
       // 🚫 에러 처리
+      const errorHeaders = error.response?.headers;
       if (errorHeaders.code) {
         const errorName = Object.values(errorCode).find(
           (obj) => obj.code === errorHeaders.code
@@ -166,8 +161,7 @@ export default function EditProfile() {
             }
           )
           .then((result) => {
-            localStorage.setItem('nickName', changeNickName); // 로컬스토리지에도 바꾼 닉네임 저장
-            user.nickName = changeNickName; // user 객체에도 변경한 닉네임 저장
+            localStorage.setItem('nickName', changeNickName);
             console.log(`닉네임 재설정 성공 : ${result}`);
             toast.success('닉네임을 재설정 했습니다');
           });
@@ -175,8 +169,8 @@ export default function EditProfile() {
         navigate('/mypage');
       }
     } catch (error) {
-      const errorHeaders = error.response?.headers;
       // 🚫 에러 처리
+      const errorHeaders = error.response?.headers;
       if (errorHeaders.code) {
         const errorName = Object.values(errorCode).find(
           (obj) => obj.code === errorHeaders.code
@@ -207,7 +201,7 @@ export default function EditProfile() {
       <main className="mt-6 text-center">
         <div className="relative inline-block rounded-full bg-gray-200 h-32 w-32">
           <img
-            src={image}
+            src={imageUrl}
             alt="프로필 사진"
             className="rounded-full h-32 w-32 object-cover border-2"
           />
