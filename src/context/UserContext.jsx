@@ -463,18 +463,22 @@ export const UserProvider = ({ children }) => {
 
   // 🚀 새로운 액세스 토큰 발급 -----------------------------------------------------------
   const reIssue = async () => {
-    const URL = `${IP_ADDRESS}/auth/token/reissue`;
+    const URL = `${IP_ADDRESS}/token/reissue`;
     const socialType = localStorage.getItem('socialType');
     const accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
 
     try {
-      const response = await instance.post(URL, {
-        headers: {
-          'Authorization-Access': accessToken,
-          'Authorization-Refresh': refreshToken,
-        },
-      });
+      const response = await instance.post(
+        URL,
+        {},
+        {
+          headers: {
+            'Authorization-Access': accessToken,
+            'Authorization-Refresh': refreshToken,
+          },
+        }
+      );
 
       if (response.status === 204 && socialType === 'Refrigerator-Alchemist') {
         localStorage.setItem('accessToken', response.data.accessToken);
