@@ -38,7 +38,7 @@ const router = createBrowserRouter([
       { path: '/login', element: <Login /> }, // 로그인 관련 페이지
       { path: '/login-success', element: <LoginSuccess /> }, // SNS 로그인 성공 -> 데이터 저장
       { path: '/reset-password', element: <ResetPassword /> }, // 비밀번호 재설정
-      { path: '/auth/token/reissue', element: <ReIssue /> }, // 액세스 토큰 재발급
+      { path: '/reissue', element: <ReIssue /> }, // 액세스 토큰 재발급
       { path: '/delete-user', element: <DeleteUser /> }, // 회원 탈퇴
 
       // 프로필 관리 ------------------
