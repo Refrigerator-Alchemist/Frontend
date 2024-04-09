@@ -463,7 +463,7 @@ export const UserProvider = ({ children }) => {
 
   // 🚀 새로운 액세스 토큰 발급 -----------------------------------------------------------
   const reIssue = async () => {
-    const URL = `${IP_ADDRESS}/reissue`;
+    const URL = `${IP_ADDRESS}/auth/token/reissue`;
     const socialType = localStorage.getItem('socialType');
     const accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
