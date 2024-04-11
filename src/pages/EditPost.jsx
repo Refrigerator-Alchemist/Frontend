@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { FaArrowLeft } from 'react-icons/fa';
+import { IoAccessibility } from 'react-icons/io5';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { IP_ADDRESS } from '../context/UserContext';
@@ -107,12 +107,12 @@ export default function UploadBoard() {
   };
 
   return (
-    <section className="pt-16">
+    <section className="pt-16 relative">
       <div
-        className="absolute top-5 left-42 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
+        className="absolute top-5 left-1 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
         onClick={() => navigate('/mypage')}
       >
-        <FaArrowLeft />
+        <IoAccessibility />
       </div>
 
       <form

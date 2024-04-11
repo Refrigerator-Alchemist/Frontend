@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
+import { GoHome } from 'react-icons/go';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -112,10 +113,10 @@ const RecipePage = () => {
   return (
     <section className="bg-white min-h-screen px-4 py-6">
       <div
-        className="absolute top-5 left-30 ml-0 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white hover:bg-indigo rounded-full flex items-center justify-center"
-        onClick={() => navigate('/board')}
+        className="absolute top-5 left-30 ml-0 border-2 w-10 h-10 transition ease-in-out delay-150 rounded-full flex items-center justify-center text-center bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white hover:bg-indigo"
+        onClick={() => navigate('/main')}
       >
-        <FaArrowLeft />
+        <GoHome className="text-center text-lg md:text-xl" />
       </div>
       <main className="max-w-md mx-auto bg-white rounded-lg overflow-hidden md:max-w-lg">
         <div className="md:flex">
@@ -156,7 +157,7 @@ const RecipePage = () => {
           </div>
         </div>
       </main>
-      <footer className="fixed bottom-5 left-0 right-0 px-6">
+      <footer className="fixed bottom-5 left-0 right-0 px-6 text-sm md:text-lg">
         <div
           className="mx-auto flex justify-between mb-4"
           style={{ maxWidth: '400px' }}
@@ -171,7 +172,7 @@ const RecipePage = () => {
             className="font-score font-bold py-3 px-9 rounded-full transition ease-in-out bg-main hover:bg-emerald hover:cursor-pointer text-white hover:text-black"
             onClick={handleSaveButtonClick}
           >
-            저장할래요 💛
+            저장할꼬얌 💛
           </button>
         </div>
       </footer>

@@ -16,6 +16,8 @@ module.exports = {
         score: ['S-CoreDream-3Light'],
         scoreExtrabold: ['S-CoreDream-7ExtraBold'],
         ansung: ['Ansungtangmyun-Bold'],
+        bagle: ['BagelFatOne-Regular'],
+        sam: ['establishRoomNo703OTF'],
       },
 
       dropShadow: {
