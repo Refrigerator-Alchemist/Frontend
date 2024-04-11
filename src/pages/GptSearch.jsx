@@ -123,8 +123,8 @@ const GptSearch = () => {
         <FaArrowLeft />
       </div>
       <main className="max-w-lg mx-auto flex-1">
-        <h2 className="font-score text-2xl font-bold mb-12 mt-32 text-center">
-          냉장고 재료를 넣어주세요
+        <h2 className="font-score text-xl md:text-2xl font-bold mb-12 mt-32 text-center">
+          냉장고에서 꺼내 넣어주세요!
         </h2>
         <div className="mr-10 ml-10 flex items-center border-b border-gray-300 mb-4">
           <input
@@ -137,7 +137,7 @@ const GptSearch = () => {
             className="font-score  appearance-none bg-transparent border-none w-full text-gray-700 py-4 px-2 leading-tight focus:outline-none"
           />
           <button
-            className="bg-white hover:cursor-pointer text-lg text-black font-bold py-2 px-4 rounded-full flex items-center"
+            className="bg-white hover:cursor-pointer hover:text-red-500 text-lg text-black font-bold py-2 px-4 rounded-full flex items-center"
             onClick={addTag}
           >
             +
@@ -163,7 +163,7 @@ const GptSearch = () => {
       </main>
       <footer className="w-full max-w-xs mx-auto pb-8">
         <button
-          className="flex justify-center font-score transition ease-in-out delay-150 text-black bg-white hover:bg-white hover:scale-125 hover:cursor-pointer font-bold py-2 px-4 rounded w-full mb-4"
+          className="flex justify-center items-center font-score transition ease-in-out delay-150 text-black text-md md:text-2xl bg-white hover:bg-white hover:scale-125 hover:cursor-pointer font-bold py-2 px-4 rounded w-full mb-4"
           type="button"
           onClick={() => {
             if (!accessToken) {
@@ -174,7 +174,7 @@ const GptSearch = () => {
           }}
         >
           <CiSaveDown2 className="mr-1 w-6 h-6" />
-          {accessToken ? `${nickname}의 연금술 레시피` : '저장된 연금술 레시피'}
+          {accessToken ? `${nickname}의 레시피 기록 열기` : '레시피 기록 열기'}
         </button>
         <button
           className="font-jua text-xl transition ease-in-out bg-main hover:bg-emerald hover:scale-110 hover:cursor-pointer hover:text-black text-white font-bold py-3 px-4 rounded-md w-full"

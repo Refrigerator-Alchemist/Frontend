@@ -109,7 +109,7 @@ export default function ResetPassword() {
       </div>
 
       {/* 타이틀 */}
-      <header className="flex flex-col items-center">
+      <header className="flex flex-col items-center mt-12">
         <h1 className="font-score text-3xl">비밀번호 재설정</h1>
         <p className="font-score text-md text-gray-400 mt-2">
           인증을 완료하고, 새로운 비밀번호를 설정하세요

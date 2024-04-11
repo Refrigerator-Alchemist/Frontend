@@ -78,7 +78,7 @@ const GptSavedList = () => {
       <div className="my-2 mt-20 mb-4">
         <div className="titlebox mb-6 mt-2">
           <span className="font-score font-extrabold ml-8 text-2xl">
-            {accessToken ? `${nickname}의 연금술 레시피` : '연금술 레시피'}
+            {accessToken ? `${nickname}의 연금술 기록` : '연금술 기록'}
           </span>
         </div>
         {currentRecipes.map((recipe) => (

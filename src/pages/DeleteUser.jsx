@@ -67,25 +67,28 @@ export default function DeleteUser() {
       </div>
 
       {/* 타이틀 */}
-      <h1 className="text-3xl font-extrabold mb-5">회원 탈퇴</h1>
+      <h1 className="text-3xl font-scoreExtrabold mb-2">회원 탈퇴</h1>
 
       {/* 비밀번호 입력 폼 */}
-      <form className="flex flex-col items-center" onSubmit={handleDeleteUser}>
+      <form
+        className="flex flex-col items-center w-full"
+        onSubmit={handleDeleteUser}
+      >
         <label className="font-score text-lg text-gray-400">
           계정의 비밀번호를 입력해주세요
         </label>
-        <div className="flex mt-2 space-x-3">
+        <div className="flex mt-2 space-x-3 w-full">
           <input
             type="password"
             value={password}
             onChange={handlePasswordChange}
             placeholder="비밀번호"
-            className="px-4 py-3 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="px-4 py-3 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo w-full"
           />
           <button
             type="submit"
             disabled={!password}
-            className={`px-6 ml-5  rounded-3xl font-jua text-xl transition ease-in-out hover:cursor-pointer hover:scale-110 duration-300 ${
+            className={`px-3 rounded-3xl font-scoreExtrabold text-md transition ease-in-out hover:cursor-pointer hover:scale-110 duration-300 w-full ${
               password
                 ? 'text-white bg-main hover:bg-emerald hover:text-black'
                 : 'bg-gray-500 text-black'
