@@ -1,70 +1,55 @@
-# Getting Started with Create React App
+# 🧙 냉장고 연금술사
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![alt text](냉장고-포스터-001-1.png)
 
-## Available Scripts
+## 📋 목차
 
-In the project directory, you can run:
+- [프로젝트 개요](#냉장고-연금술사)
+- [프로젝트 팀원](#프로젝트-팀원)
+- [팀원 프로필](#🧑‍🤝‍🧑-팀원-프로필)
 
-### `npm start`
+> 프로젝트 개요
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+마땅히 먹고 싶은 건 없는데 배달비는 비싸고, 냉장고에 남은 재료들은 있는데
+뭘 만들면 좋을지 아이디어는 안 떠오르고...
+다들 자주 겪는 고민이 아닐까요? 그런 고민을 해결하기 위해서 레시피를 만들어 줄 수 있는
+해결사가 있으면 좋겠다고 생각했어요! 그래서 저희는 <span style='color: gold; font-weight:bold'>냉장고 연금술사</span>라는 해결사를 만들었어요!
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+연금술을 사용해서 레시피를 만들어 내고, 커뮤니티에서 사람들과 레시피를 서로 공유도 해주세요!
+인기만점 레시피는 Top3 명예의 전당에도 오른답니다😀
 
-### `npm test`
+> 서비스 접속 URL
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+http://배포후도메인을입력해주세요
 
-### `npm run build`
+> 제작 기간
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2024.01.31 ~ 2024.04.30
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## ✅ 사용한 도구들
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+<span style='color:pink; font-weight: bold'>Front-end</span>
 
-### `npm run eject`
+<span style='color:skyblue; font-weight: bold'>Back-end</span>
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🧑‍🤝‍🧑 팀원 프로필
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+<table>
+  <tbody>
+    <tr>
+      <td align="center"><a href="https://github.com/devkoow"><img src="https://avatars.githubusercontent.com/u/112608822?v=4" width="100px;" alt=""/><br /><sub><b>이창욱</b></sub></a><br /><sub><b>FE & 팀장</b></sub></a><br /></td>
+      <td align="center"><a href="https://github.com/anhyeryeon2"><img src="https://image.fmkorea.com/files/attach/new3/20230621/486616/825924136/5891200629/ee5eb9d0301f6f736f791dce9dc20963.png" width="100px;" alt=""/><br /><sub><b>안혜련</b></sub></a><br /><sub><b>FE</b></sub></a><br /></td><td align="center"><a href="https://github.com/ehddbs4521"><img src="https://avatars.githubusercontent.com/u/112162446?v=4" width="100px;" alt=""/><br /><sub><b>김동윤</b></sub></a><br /><sub><b>BE</b></sub></a><br /></td><td align="center"><a href="https://github.com/dnwndls411"><img src="https://avatars.githubusercontent.com/u/130645006?v=4" width="100px;" alt=""/><br /><sub><b>서효진</b></sub></a><br /><sub><b>BE</b></sub></a><br /></td><td align="center"><a href="https://github.com/changeme4585"><img src="https://image.fmkorea.com/files/attach/new3/20230621/486616/825924136/5891200629/ee5eb9d0301f6f736f791dce9dc20963.png" width="100px;" alt=""/><br /><sub><b>조승빈</b></sub></a><br /><sub><b>BE</b></sub></a><br /></td>
+    </tr>
+  </tbody>
+</table>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### 🧑‍💻 역할
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+<span style='font-weight: bold'>이창욱</span>
 
-## Learn More
+<span style='color: gold'>프로젝트 전체</span>
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- 냉장고 로고 이미지 디자인 및 제작
+- 프로젝트 컨셉 컬러 결정
+- 폰트 디자인 결정
+- CSS 컨셉 결정
