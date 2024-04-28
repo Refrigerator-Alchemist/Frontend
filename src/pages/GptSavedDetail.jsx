@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
-import Navigation from '../components/Navigation';
+import Navigation from '../components/ui/Navigation';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -36,9 +36,6 @@ const GptSavedDetail = () => {
         let message = '상세 레시피 조회에 실패했습니다.';
         if (error.response) {
           switch (error.response.status) {
-            case 401:
-              message = '로그인을 먼저 해야합니다';
-              break;
             case 406:
               message = '해당 recipeId가 존재하지 않습니다.';
               break;
@@ -48,13 +45,16 @@ const GptSavedDetail = () => {
             case 500:
               message = '상세 레시피 조회에 실패했습니다.';
               break;
+            default:
+              message = '알 수 없는 에러가 발생했습니다.';
+              break;
           }
         }
         toast.error(message);
       }
     };
 
-    fetchRecipeData();
+    if (accessToken) fetchRecipeData();
   }, [recipeId, accessToken]);
 
   return (

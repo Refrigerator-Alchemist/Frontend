@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft, FaHeart, FaRegHeart } from 'react-icons/fa';
-import Navigation from '../components/Navigation';
+import Navigation from '../components/ui/Navigation';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { IP_ADDRESS } from '../context/UserContext';

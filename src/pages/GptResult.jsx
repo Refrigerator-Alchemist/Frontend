@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { FaArrowLeft } from 'react-icons/fa';
 import { GoHome } from 'react-icons/go';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';

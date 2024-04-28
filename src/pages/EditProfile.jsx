@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useState, useEffect, useRef } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
 import { IP_ADDRESS } from '../context/UserContext';
 import { toast } from 'react-toastify';
@@ -23,26 +23,15 @@ export default function EditProfile() {
   const fileInput = useRef(null);
 
   const navigate = useNavigate();
-  const location = useLocation();
-
-  // 🚷 비로그인 유저 접속 차단
-  useEffect(() => {
-    if (!accessToken) {
-      toast.error('로그인을 먼저 해야합니다');
-      setTimeout(() => {
-        navigate(-1);
-      }, 2000);
-    }
-  }, [navigate, location, accessToken]);
 
   // ⭕️ 바꿀 닉네임 초기값은 원래 닉네임으로 처리해서 입력 가능하게 수정
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const URL = `${IP_ADDRESS}/reset/info`;
+      const URI = `${IP_ADDRESS}/reset/info`;
 
       try {
         if (accessToken) {
-          const response = await axios.get(URL, {
+          const response = await axios.get(URI, {
             headers: {
               'Authorization-Access': accessToken,
             },
@@ -93,7 +82,7 @@ export default function EditProfile() {
 
   // 2️⃣ 프로필 이미지 저장하기
   const uploadImage = async (file) => {
-    const URL = `${IP_ADDRESS}/reset/profile`;
+    const URI = `${IP_ADDRESS}/reset/profile`;
 
     const formData = new FormData();
     const nickNameBlob = new Blob([JSON.stringify({ nickName })], {
@@ -103,7 +92,7 @@ export default function EditProfile() {
     formData.append('file', file);
 
     try {
-      await axios.post(URL, formData, {
+      await axios.post(URI, formData, {
         headers: {
           'Authorization-Access': accessToken,
         },
@@ -140,13 +129,13 @@ export default function EditProfile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const URL = `${IP_ADDRESS}/reset/nickname`;
+    const URI = `${IP_ADDRESS}/reset/nickname`;
 
     try {
       if (nameError === false) {
         await axios
           .post(
-            URL,
+            URI,
             {
               presentNickName: nickName,
               changeNickName: changeNickName,

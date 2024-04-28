@@ -4,10 +4,10 @@ import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Pagination from '../components/Pagination';
-import Navigation from '../components/Navigation';
+import Navigation from '../components/ui/Navigation';
 import { IP_ADDRESS } from '../context/UserContext';
 
-const GptSavedList = () => {
+export default function GptSavedList() {
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage] = useState(7);
@@ -17,7 +17,7 @@ const GptSavedList = () => {
 
   const navigate = useNavigate();
 
-  //저장한 목록 보기
+  // 저장한 목록 보기
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
@@ -32,10 +32,7 @@ const GptSavedList = () => {
         console.log('에러 상태 코드:', error.response?.status);
         const statusCode = error.response?.status;
 
-        if (statusCode === 401) {
-          // 🚷 비로그인 유저 접속 차단
-          toast.error('로그인을 먼저 해야합니다');
-        } else if (statusCode === 500) {
+        if (statusCode === 500) {
           toast.error('레시피 목록 조회에 실패했습니다.');
         } else {
           toast.error('서버와의 연결에 실패했습니다.');
@@ -108,5 +105,4 @@ const GptSavedList = () => {
       </footer>
     </section>
   );
-};
-export default GptSavedList;
+}

@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
 import { IP_ADDRESS } from '../context/UserContext';
@@ -19,18 +19,6 @@ export default function UploadBoard() {
   const fileInput = useRef(null);
 
   const navigate = useNavigate();
-
-  const location = useLocation();
-
-  // 🚷 비로그인 유저 접속 차단
-  // useEffect(() => {
-  //   if (!accessToken) {
-  //     toast.error('로그인을 먼저 해야합니다');
-  //     setTimeout(() => {
-  //       navigate('/board');
-  //     }, 2000);
-  //   }
-  // }, [accessToken, navigate, location]);
 
   // 1️⃣ 재료 입력
   const handleIngredientChange = (index, event) => {
@@ -115,7 +103,7 @@ export default function UploadBoard() {
     <section className="pt-16">
       <div
         className="absolute top-5 left-42 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate("/board")}
+        onClick={() => navigate('/board')}
       >
         <FaArrowLeft />
       </div>
@@ -150,7 +138,7 @@ export default function UploadBoard() {
               />
             </div>
           </div>
-        )}  
+        )}
         <div className="form-group">
           <label
             htmlFor="food-name"
