@@ -1,13 +1,12 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Pagination from '../components/Pagination';
-import Navigation from '../components/Navigation';
+import Navigation from '../components/ui/Navigation';
 import { FaHeart } from 'react-icons/fa';
 import { VscChromeClose } from 'react-icons/vsc';
 import { toast } from 'react-toastify';
 import { useUserDispatch, IP_ADDRESS } from '../context/UserContext';
-import mockData from '../assets/data/post.json';
 import IMG_PROFILE from '../assets/img/img_profile.png';
 
 // 🃏 내가 저장한 게시물
@@ -125,17 +124,6 @@ export default function MyPage() {
   const nickName = localStorage.getItem('nickName');
   const email = localStorage.getItem('email');
   const navigate = useNavigate();
-  const location = useLocation();
-
-  // 🚷 비로그인 유저 접근 금지
-  useEffect(() => {
-    if (!accessToken) {
-      toast.error('로그인을 먼저 해야합니다');
-      setTimeout(() => {
-        navigate(-1);
-      }, 2000);
-    }
-  }, [navigate, location, accessToken]);
 
   // --------------------------------------------------------------------------------------------------------
 
@@ -192,7 +180,7 @@ export default function MyPage() {
       }
     };
 
-    // 📝 작성한 게시물, 좋아요 누른 게시물 mock data 사용
+    // 📝 작성한 게시물, 좋아요 누른 게시물 mock data
     // const fetchMockData = async () => {
     //   try {
     //     if (mockData.items && Array.isArray(mockData.items)) {
@@ -281,8 +269,10 @@ export default function MyPage() {
       // fetchMockData();
       fetchLikeData();
     }
-    fetchMyRecipesCount();
-    fetchLikedRecipesCount();
+    if (accessToken) {
+      fetchMyRecipesCount();
+      fetchLikedRecipesCount();
+    }
   }, [showMyRecipes, accessToken, email]);
 
   // 1️⃣ 레시피 수정

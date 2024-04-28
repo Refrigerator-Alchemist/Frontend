@@ -39,6 +39,9 @@ export default function GetStarted() {
           시작하기
         </Link>
       </main>
+      <header className="absolute bottom-0 text-center pl-6 py-4 text-xs">
+        <p>ⓒ Refrigerator-Alchemist All Copyrights Reserved.</p>
+      </header>
     </section>
   );
 }

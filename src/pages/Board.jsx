@@ -2,13 +2,13 @@ import React from 'react';
 import ICON_SEARCHING from '../assets/img/search.png';
 // import ICON_WRITTING from '../assets/img/writing.png';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
-import { PiPencilSimpleLine } from "react-icons/pi";
+import { PiPencilSimpleLine } from 'react-icons/pi';
 import { toast } from 'react-toastify';
 
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Ranking from '../components/Ranking';
-import Navigation from '../components/Navigation';
+import Navigation from '../components/ui/Navigation';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import { IP_ADDRESS } from '../context/UserContext';
@@ -214,7 +214,7 @@ const WriteButton = () => {
       to="/board/upload"
       className="bg-gray-50 ml-3 flex items-center justify-center rounded-full p-3 shadow write-button transition-transform duration-200 hover:scale-110 hover:bg-gray-200"
     >
-      <PiPencilSimpleLine  style={{ fontSize: '26px' }}  />
+      <PiPencilSimpleLine style={{ fontSize: '26px' }} />
     </Link>
   );
 };

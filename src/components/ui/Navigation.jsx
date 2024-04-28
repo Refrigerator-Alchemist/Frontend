@@ -4,8 +4,8 @@ import { GoHome, GoHomeFill } from 'react-icons/go';
 import { IoAccessibilityOutline, IoAccessibility } from 'react-icons/io5';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-import { NavigationContext } from '../context/NavigationContext';
-import { useUserState } from '../context/UserContext';
+import { NavigationContext } from '../../context/NavigationContext';
+import { useUserState } from '../../context/UserContext';
 
 export default function Navigation() {
   const { selected, setSelected } = useContext(NavigationContext);

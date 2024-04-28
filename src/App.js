@@ -14,13 +14,14 @@ export default function App() {
       <UserProvider>
         <NavigationProvider>
           <Outlet />
-          <ToastContainer position="top-center"
-           autoClose={3000}
-           newestOnTop={false} // 새 알림이 위에 표시될지 여부
-           draggable  // 드래그 해서 닫기 
-           theme="light" 
-           limit={1}
-            />
+          <ToastContainer
+            position="top-center"
+            autoClose={3000}
+            newestOnTop={false} // 새 알림이 위에 표시될지 여부
+            draggable // 드래그 해서 닫기
+            theme="light"
+            limit={1}
+          />
         </NavigationProvider>
       </UserProvider>
     </section>

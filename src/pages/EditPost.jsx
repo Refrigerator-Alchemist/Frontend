@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { IoAccessibility } from 'react-icons/io5';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -14,17 +14,6 @@ export default function UploadBoard() {
   const accessToken = localStorage.getItem('accessToken');
 
   const navigate = useNavigate();
-  const location = useLocation();
-
-  // 🚷 비로그인 유저 접속 차단
-  useEffect(() => {
-    if (!accessToken) {
-      toast.error('로그인을 먼저 해야합니다');
-      setTimeout(() => {
-        navigate(-1);
-      }, 2000);
-    }
-  }, [navigate, location, accessToken]);
 
   // 1️⃣ 해당 게시물의 제목, 설명, 재료를 불러오는 함수
   useEffect(() => {
