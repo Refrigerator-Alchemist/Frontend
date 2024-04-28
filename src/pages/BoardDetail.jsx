@@ -31,93 +31,93 @@ const BoardDetail = () => {
   // ⏯️ 실행: 처음 렌더링, 게시물 검색 후
   useEffect(() => {
     // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
-    // const fetchLikedPosts = async () => {
-    //   if (!accessToken) {
-    //     console.log(' fetchLikedPosts : accessToken 없음');
-    //     return;
-    //   }
-    //   const URL = `${IP_ADDRESS}/board/islike?id=${myEmail}`;
-    //   try {
-    //     const response = await axios.get(URL, {
-    //       headers: {
-    //         'Authorization-Access': accessToken,
-    //       },
-    //     });
+    const fetchLikedPosts = async () => {
+      if (!accessToken) {
+        console.log(' fetchLikedPosts : accessToken 없음');
+        return;
+      }
+      const URL = `${IP_ADDRESS}/board/islike?id=${myEmail}`;
+      try {
+        const response = await axios.get(URL, {
+          headers: {
+            'Authorization-Access': accessToken,
+          },
+        });
 
-    //     if (response.data) {
-    //       console.log(response);
-    //       const posts = response.data.map(Number);
-    //       setLikedPosts(posts);
-    //       setLiked(posts.includes(Number(postId)));
+        if (response.data) {
+          console.log(response);
+          const posts = response.data.map(Number);
+          setLikedPosts(posts);
+          setLiked(posts.includes(Number(postId)));
 
-    //       console.log('좋아요 누른 게시물의 postId 목록:', posts);
-    //       console.log('현재 게시물의 postId:', postId);
-    //       console.log(
-    //         `현재 게시물(${postId})의 좋아요 상태:`,
-    //         posts.includes(Number(postId))
-    //       );
-    //     }
-    //   } catch (error) {
-    //     console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
-    //   }
-    // };
+          console.log('좋아요 누른 게시물의 postId 목록:', posts);
+          console.log('현재 게시물의 postId:', postId);
+          console.log(
+            `현재 게시물(${postId})의 좋아요 상태:`,
+            posts.includes(Number(postId))
+          );
+        }
+      } catch (error) {
+        console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
+      }
+    };
 
-    // fetchPostData(postId);
-    fetchMockData(postId);
-    // fetchLikedPosts();
+    fetchPostData(postId);
+    // fetchMockData(postId);
+    fetchLikedPosts();
   }, [postId, accessToken, email, location, myEmail]);
 
   // 📝 게시물 정보
-  // const fetchPostData = async (postId) => {
-  //   try {
-  //     const response = await axios.get(
-  //       `${IP_ADDRESS}/board/specific?postId=${postId}`
-  //     );
-
-  //     if (response.data && Array.isArray(response.data.items)) {
-  //       const items = response.data.items.map((item) => ({
-  //         imageUrl: item.imageUrl,
-  //         title: item.title,
-  //         email: item.email,
-  //         description: item.description,
-  //         ingredients: item.ingredients.map((ingredient) => ingredient),
-  //         likeCount: item.likeCount,
-  //         nickName: item.nickName,
-  //       }));
-  //       setImageUrl(items[0].imageUrl);
-  //       setTitle(items[0].title);
-  //       setEmail(items[0].email);
-  //       setDescription(items[0].description);
-  //       setIngredients(items[0].ingredients);
-  //       setLikeCount(items[0].likeCount);
-  //       setNickName(items[0].nickName);
-  //     } else {
-  //       console.error('데이터 타입 오류:', response.data);
-  //     }
-  //   } catch (error) {
-  //     console.error('에러 내용:', error);
-  //   }
-  // };
-
-  // 📝 게시물 정보 (Mock Data)
-  const fetchMockData = async () => {
+  const fetchPostData = async (postId) => {
     try {
-      if (mockData.items && Array.isArray(mockData.items)) {
-        const item = mockData.items[0];
-        setImageUrl(item.imageUrl);
-        setTitle(item.title);
-        setEmail(item.email);
-        setDescription(item.description);
-        setIngredients(item.ingredients);
-        setLikeCount(item.likeCount);
-        setNickName(item.nickName);
+      const response = await axios.get(
+        `${IP_ADDRESS}/board/specific?postId=${postId}`
+      );
+
+      if (response.data && Array.isArray(response.data.items)) {
+        const items = response.data.items.map((item) => ({
+          imageUrl: item.imageUrl,
+          title: item.title,
+          email: item.email,
+          description: item.description,
+          ingredients: item.ingredients.map((ingredient) => ingredient),
+          likeCount: item.likeCount,
+          nickName: item.nickName,
+        }));
+        setImageUrl(items[0].imageUrl);
+        setTitle(items[0].title);
+        setEmail(items[0].email);
+        setDescription(items[0].description);
+        setIngredients(items[0].ingredients);
+        setLikeCount(items[0].likeCount);
+        setNickName(items[0].nickName);
       } else {
-        console.error('데이터 타입 오류:', mockData.items);
+        console.error('데이터 타입 오류:', response.data);
       }
     } catch (error) {
       console.error('에러 내용:', error);
     }
   };
+
+  // 📝 게시물 정보 (Mock Data)
+  // const fetchMockData = async () => {
+  //   try {
+  //     if (mockData.items && Array.isArray(mockData.items)) {
+  //       const item = mockData.items[0];
+  //       setImageUrl(item.imageUrl);
+  //       setTitle(item.title);
+  //       setEmail(item.email);
+  //       setDescription(item.description);
+  //       setIngredients(item.ingredients);
+  //       setLikeCount(item.likeCount);
+  //       setNickName(item.nickName);
+  //     } else {
+  //       console.error('데이터 타입 오류:', mockData.items);
+  //     }
+  //   } catch (error) {
+  //     console.error('에러 내용:', error);
+  //   }
+  // };
 
   // 💛 좋아요 / 취소  (로그인 유저만 누를 수 있음)
   const toggleLike = async () => {
