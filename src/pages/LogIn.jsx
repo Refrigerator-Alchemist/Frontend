@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Logo from '../components/Logo';
+import Logo from '../components/ui/Logo';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import { GoEye, GoEyeClosed } from 'react-icons/go';

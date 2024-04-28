@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Pagination from '../components/Pagination';
 import Navigation from '../components/Navigation';
-import { FaTrash, FaHeart } from 'react-icons/fa';
-import { VscChromeClose } from "react-icons/vsc";
+import { FaHeart } from 'react-icons/fa';
+import { VscChromeClose } from 'react-icons/vsc';
 import { toast } from 'react-toastify';
 import { useUserDispatch, IP_ADDRESS } from '../context/UserContext';
 import mockData from '../assets/data/post.json';
@@ -21,10 +21,13 @@ const SavedRecipe = ({
   showEditDeleteButtons = true,
 }) => {
   const maxLength = 30; // 본문의 최대 길이 설정
-  const shortDescription = description.length > maxLength ? description.slice(0, maxLength) + "..." : description; 
-  
+  const shortDescription =
+    description.length > maxLength
+      ? description.slice(0, maxLength) + '...'
+      : description;
+
   return (
-    <div className="text-black ml-6 mr-6 mt-2 w-full max-w-md relative"> 
+    <div className="text-black ml-6 mr-6 mt-2 w-full max-w-md relative">
       <div className="bg-white mx-2 my-2 p-4 rounded-xl shadow overflow-hidden relative flex flex-col md:flex-row">
         <Link to={`/board/${postId}`} className="flex-grow flex items-center">
           <div className="flex-none w-20 h-20 md:w-20 md:h-20 max-w-xs rounded-xl border-2 border-gray-300 overflow-hidden mr-4">
@@ -42,7 +45,7 @@ const SavedRecipe = ({
           </div>
         </Link>
         {showEditDeleteButtons && (
-          <div className="absolute top-4 right-2 flex flex-row space-x-1"> 
+          <div className="absolute top-4 right-2 flex flex-row space-x-1">
             <button
               onClick={() => onEdit(postId)}
               className="pr-3 text-sm text-gray-300"
@@ -65,7 +68,10 @@ const SavedRecipe = ({
 // 🃏 좋아요 누른 레시피
 const LikedRecipe = ({ postId, title, description, imageUrl }) => {
   const maxLength = 25; // 본문의 최대 길이 설정
-  const shortDescription = description.length > maxLength ? description.slice(0, maxLength) + "..." : description; 
+  const shortDescription =
+    description.length > maxLength
+      ? description.slice(0, maxLength) + '...'
+      : description;
 
   return (
     <div className="text-black ml-6 mr-6 mt-2 w-full max-w-md">
@@ -82,15 +88,15 @@ const LikedRecipe = ({ postId, title, description, imageUrl }) => {
                 alt={title}
               />
             </div>
-            <div className=" mt-3"> 
+            <div className=" mt-3">
               <h3 className="text-lg font-score font-semibold">{title}</h3>
               <p className="text-gray-500 pt-1 text-sm font-score md:max-w-xs">
                 {shortDescription}
               </p>
             </div>
           </div>
-          <div className="heart-icon-container"> 
-            <FaHeart className="text-red-500 text-2xl heart-icon" /> 
+          <div className="heart-icon-container">
+            <FaHeart className="text-red-500 text-2xl heart-icon" />
           </div>
         </Link>
       </div>
@@ -119,17 +125,17 @@ export default function MyPage() {
   const nickName = localStorage.getItem('nickName');
   const email = localStorage.getItem('email');
   const navigate = useNavigate();
-  // const location = useLocation();
+  const location = useLocation();
 
   // 🚷 비로그인 유저 접근 금지
-  // useEffect(() => {
-  //   if (!accessToken) {
-  //     toast.error('로그인을 먼저 해야합니다');
-  //     setTimeout(() => {
-  //       navigate(-1);
-  //     }, 2000);
-  //   }
-  // }, [navigate, location, accessToken]);
+  useEffect(() => {
+    if (!accessToken) {
+      toast.error('로그인을 먼저 해야합니다');
+      setTimeout(() => {
+        navigate(-1);
+      }, 2000);
+    }
+  }, [navigate, location, accessToken]);
 
   // --------------------------------------------------------------------------------------------------------
 
@@ -156,127 +162,127 @@ export default function MyPage() {
     };
 
     // 📝 내가 작성한 레시피 가져오는 함수
-    // const fetchMyPage = async () => {
-    //   const URL = `${IP_ADDRESS}/mypost`;
-    //   try {
-    //     const response = await axios.get(URL, {
-    //       headers: {
-    //         'Authorization-Access': accessToken,
-    //         email: email,
-    //       },
-    //     });
-    //     if (response.data && Array.isArray(response.data.items)) {
-    //       const items = response.data.items.map((item) => {
-    //         return {
-    //           postId: item.ID,
-    //           title: item.title,
-    //           description: item.description,
-    //           imageUrl: item.imageUrl,
-    //         };
-    //       });
-    //       setRecipes(items);
-    //       // totalMyRecipes = Math.ceil(response.data.total / recipesPerPage);
-    //       setTotalMyRecipes(response.data.total);
-    //       console.log('내가작성한 레시피 총 갯수:', response.data.total);
-    //     } else {
-    //       toast.error('데이터가 배열이 아닙니다');
-    //     }
-    //   } catch (error) {
-    //     console.error('내가 작성한 레시피 로드 중 에러 발생', error);
-    //   }
-    // };
-
-    // 📝 작성한 게시물, 좋아요 누른 게시물 mock data 사용
-    const fetchMockData = async () => {
+    const fetchMyPage = async () => {
+      const URL = `${IP_ADDRESS}/mypost`;
       try {
-        if (mockData.items && Array.isArray(mockData.items)) {
-          const items = mockData.items.map((item) => ({
-            postId: item.ID,
-            title: item.title,
-            description: item.description,
-            imageUrl: item.imageUrl,
-            likeCount: item.likeCount,
-          }));
+        const response = await axios.get(URL, {
+          headers: {
+            'Authorization-Access': accessToken,
+            email: email,
+          },
+        });
+        if (response.data && Array.isArray(response.data.items)) {
+          const items = response.data.items.map((item) => {
+            return {
+              postId: item.ID,
+              title: item.title,
+              description: item.description,
+              imageUrl: item.imageUrl,
+            };
+          });
           setRecipes(items);
-          setLikedItems(items);
+          // totalMyRecipes = Math.ceil(response.data.total / recipesPerPage);
+          setTotalMyRecipes(response.data.total);
+          console.log('내가작성한 레시피 총 갯수:', response.data.total);
         } else {
-          console.error('데이터 타입 오류:', mockData.items);
+          toast.error('데이터가 배열이 아닙니다');
         }
       } catch (error) {
-        console.error('에러 내용:', error);
+        console.error('내가 작성한 레시피 로드 중 에러 발생', error);
       }
     };
 
-    // 🔥 좋아요 누른 게시물들 가져오는 함수
-    // const fetchLikeData = async () => {
-    //   const URL = `${IP_ADDRESS}/likedpost`;
+    // 📝 작성한 게시물, 좋아요 누른 게시물 mock data 사용
+    // const fetchMockData = async () => {
     //   try {
-    //     const response = await axios.get(URL, {
-    //       headers: {
-    //         'Authorization-Access': accessToken,
-    //         email: email,
-    //       },
-    //     });
-    //     if (response.data && Array.isArray(response.data.items)) {
-    //       const items = response.data.items.map((item) => ({
-    //         id: item.ID,
+    //     if (mockData.items && Array.isArray(mockData.items)) {
+    //       const items = mockData.items.map((item) => ({
+    //         postId: item.ID,
     //         title: item.title,
     //         description: item.description,
     //         imageUrl: item.imageUrl,
     //         likeCount: item.likeCount,
     //       }));
+    //       setRecipes(items);
     //       setLikedItems(items);
-    //       // totalLikedRecipes= Math.ceil(response.data.total / recipesPerPage);
-    //       setTotalLikedRecipes(response.data.total);
-    //       console.log('좋아요누른 총 레시피 갯수:', response.data.total);
     //     } else {
-    //       toast.error('데이터가 배열이 아닙니다!');
+    //       console.error('데이터 타입 오류:', mockData.items);
     //     }
     //   } catch (error) {
-    //     console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
+    //     console.error('에러 내용:', error);
     //   }
     // };
 
-    // const fetchMyRecipesCount = async () => {
-    //   try {
-    //     const response = await axios.get(`${IP_ADDRESS}/mypost/size`, {
-    //       headers: {
-    //         'Authorization-Access': accessToken,
-    //         email: email,
-    //       },
-    //     });
-    //     setTotalMyRecipes(response.data.total);
-    //   } catch (error) {
-    //     console.error('내 레시피 총 개수 정보 가져오기 실패:', error);
-    //     toast.error('레시피 정보를 가져오는데 실패했습니다.');
-    //   }
-    // };
+    // 🔥 좋아요 누른 게시물들 가져오는 함수
+    const fetchLikeData = async () => {
+      const URL = `${IP_ADDRESS}/likedpost`;
+      try {
+        const response = await axios.get(URL, {
+          headers: {
+            'Authorization-Access': accessToken,
+            email: email,
+          },
+        });
+        if (response.data && Array.isArray(response.data.items)) {
+          const items = response.data.items.map((item) => ({
+            id: item.ID,
+            title: item.title,
+            description: item.description,
+            imageUrl: item.imageUrl,
+            likeCount: item.likeCount,
+          }));
+          setLikedItems(items);
+          // totalLikedRecipes= Math.ceil(response.data.total / recipesPerPage);
+          setTotalLikedRecipes(response.data.total);
+          console.log('좋아요누른 총 레시피 갯수:', response.data.total);
+        } else {
+          toast.error('데이터가 배열이 아닙니다!');
+        }
+      } catch (error) {
+        console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
+      }
+    };
 
-    // const fetchLikedRecipesCount = async () => {
-    //   try {
-    //     const response = await axios.get(`${IP_ADDRESS}/likedpost/size`, {
-    //       headers: {
-    //         'Authorization-Access': accessToken,
-    //         email: email,
-    //       },
-    //     });
-    //     setTotalLikedRecipes(response.data.total);
-    //   } catch (error) {
-    //     console.error('좋아요 누른 레시피 총 개수 정보 가져오기 실패:', error);
-    //     toast.error('좋아요 레시피 정보를 가져오는데 실패했습니다.');
-    //   }
-    // };
+    const fetchMyRecipesCount = async () => {
+      try {
+        const response = await axios.get(`${IP_ADDRESS}/mypost/size`, {
+          headers: {
+            'Authorization-Access': accessToken,
+            email: email,
+          },
+        });
+        setTotalMyRecipes(response.data.total);
+      } catch (error) {
+        console.error('내 레시피 총 개수 정보 가져오기 실패:', error);
+        toast.error('레시피 정보를 가져오는데 실패했습니다.');
+      }
+    };
+
+    const fetchLikedRecipesCount = async () => {
+      try {
+        const response = await axios.get(`${IP_ADDRESS}/likedpost/size`, {
+          headers: {
+            'Authorization-Access': accessToken,
+            email: email,
+          },
+        });
+        setTotalLikedRecipes(response.data.total);
+      } catch (error) {
+        console.error('좋아요 누른 레시피 총 개수 정보 가져오기 실패:', error);
+        toast.error('좋아요 레시피 정보를 가져오는데 실패했습니다.');
+      }
+    };
 
     fetchUserInfo();
     if (showMyRecipes) {
-      // fetchMyPage();
-      fetchMockData();
+      fetchMyPage();
+      // fetchMockData();
     } else {
-      fetchMockData();
-      // fetchLikeData();
+      // fetchMockData();
+      fetchLikeData();
     }
-    // fetchMyRecipesCount();
-    // fetchLikedRecipesCount();
+    fetchMyRecipesCount();
+    fetchLikedRecipesCount();
   }, [showMyRecipes, accessToken, email]);
 
   // 1️⃣ 레시피 수정
@@ -338,7 +344,10 @@ export default function MyPage() {
   };
 
   return (
-    <section className="Board flex flex-col items-center justify-center w-full" style={{ marginBottom: '100px' }}>
+    <section
+      className="Board flex flex-col items-center justify-center w-full"
+      style={{ marginBottom: '100px' }}
+    >
       <header className="flex justify-end w-full mt-2 space-x-2 mr-12">
         <button
           className="font-score text-gray-300"
