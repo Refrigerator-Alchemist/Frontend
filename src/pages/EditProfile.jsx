@@ -27,11 +27,11 @@ export default function EditProfile() {
   // ⭕️ 바꿀 닉네임 초기값은 원래 닉네임으로 처리해서 입력 가능하게 수정
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const URI = `${IP_ADDRESS}/reset/info`;
+      const URL = `${IP_ADDRESS}/reset/info`;
 
       try {
         if (accessToken) {
-          const response = await axios.get(URI, {
+          const response = await axios.get(URL, {
             headers: {
               'Authorization-Access': accessToken,
             },
@@ -85,7 +85,7 @@ export default function EditProfile() {
 
   // 2️⃣ 프로필 이미지 저장하기
   const uploadImage = async (file) => {
-    const URI = `${IP_ADDRESS}/reset/profile`;
+    const URL = `${IP_ADDRESS}/reset/profile`;
 
     const formData = new FormData();
     const nickNameBlob = new Blob([JSON.stringify({ nickName })], {
@@ -95,7 +95,7 @@ export default function EditProfile() {
     formData.append('file', file);
 
     try {
-      await axios.post(URI, formData, {
+      await axios.post(URL, formData, {
         headers: {
           'Authorization-Access': accessToken,
         },
@@ -132,13 +132,13 @@ export default function EditProfile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const URI = `${IP_ADDRESS}/reset/nickname`;
+    const URL = `${IP_ADDRESS}/reset/nickname`;
 
     try {
       if (nameError === false) {
         await axios
           .post(
-            URI,
+            URL,
             {
               presentNickName: nickName,
               changeNickName: changeNickName,

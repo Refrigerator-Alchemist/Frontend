@@ -4,16 +4,17 @@ import axios from 'axios';
 import errorCode from '../utils/ErrorCode';
 import { toast } from 'react-toastify';
 
-// 🧷 현재 IP 주소
+// 🌱 현재 IP 주소
 export const IP_ADDRESS = 'http://localhost:8080';
 
-// 📀 axios 인스턴스 : 베이스 URL 조절 가능
+// 🌱 axios 인스턴스 : 베이스 URL 조절 가능
 const instance = axios.create({
   baseURL: `${IP_ADDRESS}`,
 });
 
-// ❕ 요청 인터셉터 : 토큰에 Bearer 처리시 일괄적으로 제어
+// 🌱 인터셉터
 instance.interceptors.request.use(
+  // 토큰 일괄 처리
   function (config) {
     const accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
@@ -27,20 +28,25 @@ instance.interceptors.request.use(
     return config;
   },
 
-  function (error) {
+  // 액세스 토큰 만료시 reIssue 호출
+  async function (error) {
+    if (error.response.status === 400) {
+      await reIssue();
+    }
+
     return Promise.reject(error);
   }
 );
 
-// ❕ 유저 상태 초기화
+// 🌱 유저 상태 초기화
 const initialState = {
   user: null,
 };
 
-// ❕ 액션 타입
+// 🌱 액션 타입
 const SET_USER = 'SET_USER';
 
-// ❕ Reducer : state에 유저 상태 저장
+// 🌱 state에 유저 상태 저장하는 리듀서
 const reducer = (state, action) => {
   switch (action.type) {
     case SET_USER:
@@ -53,24 +59,76 @@ const reducer = (state, action) => {
   }
 };
 
-// ❕ Context 정의
+// 🪙 새로운 액세스 토큰 발급
+const reIssue = async () => {
+  const URL = `${IP_ADDRESS}/token/reissue`;
+  const socialType = localStorage.getItem('socialType');
+  const accessToken = localStorage.getItem('accessToken');
+  const refreshToken = localStorage.getItem('refreshToken');
+
+  try {
+    const response = await instance.post(
+      URL,
+      {},
+      {
+        headers: {
+          'Authorization-Access': accessToken,
+          'Authorization-Refresh': refreshToken,
+        },
+      }
+    );
+
+    if (response.status === 204 && socialType === 'Refrigerator-Alchemist') {
+      localStorage.setItem(
+        'accessToken',
+        response.headers['authorization-access']
+      );
+      console.log(
+        `새로운 액세스 토큰을 발급받았습니다 : ${response.headers['authorization-access']}`
+      );
+    } else if (
+      response.status === 204 &&
+      socialType !== 'Refrigerator-Alchemist'
+    ) {
+      localStorage.setItem(
+        'accessToken',
+        'Bearer ' + response.headers['authorization-access']
+      );
+      console.log(
+        `새로운 액세스 토큰을 발급받았습니다 : ${response.headers['authorization-access']}`
+      );
+    } else {
+      return;
+    }
+  } catch (error) {
+    const errorHeaders = error.response?.headers;
+    if (errorHeaders.code) {
+      const errorName = Object.values(errorCode).find(
+        (obj) => obj.code === errorHeaders.code
+      );
+      const userNotice = errorName.notice;
+
+      console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
+      toast.error(`${userNotice}`); // 유저 팝업용
+    } else {
+      console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
+    }
+  }
+};
+
 const UserStateContext = createContext();
 const UserDispatchContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState); // 유저 상태 공유
-
   const [emailExists, setEmailExists] = useState(true); // 회원가입 시 이메일 중복 여부
-
   const [verified, setVerified] = useState(false); // 이메일 인증 여부
-
   const [nameDuplicated, setNameDuplicated] = useState(true); // 닉네임 중복 여부
 
-  // 🙍‍♂️🙍‍♀️ SNS 로그인 엔드 포인트
+  // 🙍‍♂️ SNS 로그인 엔드 포인트
   const googleURL = `${IP_ADDRESS}/oauth2/authorization/google`;
   const kakaoURL = `${IP_ADDRESS}/oauth2/authorization/kakao`;
   const naverURL = `${IP_ADDRESS}/oauth2/authorization/naver`;
-
   const navigate = useNavigate();
 
   // 📧 이메일 인증 요청 (회원가입용) -------------------------------------------------
@@ -124,7 +182,6 @@ export const UserProvider = ({ children }) => {
 
       console.log('리스폰스', response);
 
-      // ▶ 204 === 중복이고, 인증 발급
       if (response.status === 204) {
         setEmailExists(true);
 
@@ -464,66 +521,6 @@ export const UserProvider = ({ children }) => {
     navigate('/login');
   };
 
-  // 🚀 새로운 액세스 토큰 발급 -----------------------------------------------------------
-  const reIssue = async () => {
-    const URL = `${IP_ADDRESS}/token/reissue`;
-    const socialType = localStorage.getItem('socialType');
-    const accessToken = localStorage.getItem('accessToken');
-    const refreshToken = localStorage.getItem('refreshToken');
-
-    try {
-      const response = await instance.post(
-        URL,
-        {},
-        {
-          headers: {
-            'Authorization-Access': accessToken,
-            'Authorization-Refresh': refreshToken,
-          },
-        }
-      );
-
-      if (response.status === 204 && socialType === 'Refrigerator-Alchemist') {
-        localStorage.setItem(
-          'accessToken',
-          response.headers['authorization-access']
-        );
-        console.log(
-          `새로운 액세스 토큰을 발급받았습니다 : ${response.headers['authorization-access']}`
-        );
-        navigate(-1);
-      } else if (
-        response.status === 204 &&
-        socialType !== 'Refrigerator-Alchemist'
-      ) {
-        localStorage.setItem(
-          'accessToken',
-          'Bearer ' + response.headers['authorization-access']
-        );
-        console.log(
-          `새로운 액세스 토큰을 발급받았습니다 : ${response.headers['authorization-access']}`
-        );
-        navigate(-1);
-      } else {
-        return;
-      }
-    } catch (error) {
-      // 🚫 에러 처리
-      const errorHeaders = error.response?.headers;
-      if (errorHeaders.code) {
-        const errorName = Object.values(errorCode).find(
-          (obj) => obj.code === errorHeaders.code
-        );
-        const userNotice = errorName.notice;
-
-        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
-        toast.error(`${userNotice}`); // 유저 팝업용
-      } else {
-        console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
-      }
-    }
-  };
-
   // 🟡 카카오 --------------------------------------------------
   const kakaoLogin = () => {
     window.location.href = kakaoURL;
@@ -561,7 +558,6 @@ export const UserProvider = ({ children }) => {
     checkNameDuplication,
     nameDuplicated,
     setNameDuplicated,
-    reIssue,
     kakaoLogin,
     googleLogin,
     naverLogin,
