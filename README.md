@@ -88,6 +88,8 @@ http://배포후도메인을입력해주세요
 - 프로젝트 테마 컬러 결정
 - 폰트 테마 결정
 - 공통 CSS 패턴 결정
+- 프로젝트 디렉토리 구조 세팅
+- 리드미 작성
 </div><br/>
 
 <div style=''>
@@ -120,6 +122,7 @@ http://배포후도메인을입력해주세요
   <span style='color: gold; font-weight:bold;'>프로젝트 전체</span>
 
 - 피그마를 이용한 애플리케이션 목업 제작
+- react-toastify 도입
 </div><br/>
 
 <div style=''>

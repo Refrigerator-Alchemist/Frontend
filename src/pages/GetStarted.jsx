@@ -40,7 +40,7 @@ export default function GetStarted() {
         </Link>
       </main>
       <header className="absolute bottom-0 text-center pl-6 py-4 text-xs">
-        <p>ⓒ Refrigerator-Alchemist All Copyrights Reserved.</p>
+        <p>ⓒ 2024 Refrigerator-Alchemist All Copyrights Reserved.</p>
       </header>
     </section>
   );

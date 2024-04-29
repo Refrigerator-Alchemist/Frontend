@@ -36,7 +36,10 @@ export default function EditProfile() {
               'Authorization-Access': accessToken,
             },
           });
-          localStorage.setItem('nickName', response.headers.get('nickName'));
+          localStorage.setItem(
+            'nickName',
+            decodeURIComponent(response.headers.get('nickName'))
+          );
           localStorage.setItem('email', response.headers.get('email'));
           setNickName(response.headers['nickName']);
           setEmail(response.headers['email']);
@@ -86,7 +89,7 @@ export default function EditProfile() {
 
     const formData = new FormData();
     const nickNameBlob = new Blob([JSON.stringify({ nickName })], {
-      type: 'application/json',
+      type: 'application/json;charset=UTF-8',
     });
     formData.append('nickName', nickNameBlob);
     formData.append('file', file);
