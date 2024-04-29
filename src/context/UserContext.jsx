@@ -491,7 +491,7 @@ export const UserProvider = ({ children }) => {
         console.log(
           `새로운 액세스 토큰을 발급받았습니다 : ${response.headers['authorization-access']}`
         );
-        navigate(window.location.pathname);
+        navigate(-1);
       } else if (
         response.status === 204 &&
         socialType !== 'Refrigerator-Alchemist'
@@ -503,7 +503,7 @@ export const UserProvider = ({ children }) => {
         console.log(
           `새로운 액세스 토큰을 발급받았습니다 : ${response.headers['authorization-access']}`
         );
-        navigate(window.location.pathname);
+        navigate(-1);
       } else {
         return;
       }
