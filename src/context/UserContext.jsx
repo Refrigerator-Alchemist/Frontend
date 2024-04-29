@@ -484,9 +484,12 @@ export const UserProvider = ({ children }) => {
       );
 
       if (response.status === 204 && socialType === 'Refrigerator-Alchemist') {
-        localStorage.setItem('accessToken', response.data.accessToken);
+        localStorage.setItem(
+          'accessToken',
+          response.headers['authorization-access']
+        );
         console.log(
-          `새로운 액세스 토큰을 발급받았습니다 : ${response.data.accessToken}`
+          `새로운 액세스 토큰을 발급받았습니다 : ${response.headers['authorization-access']}`
         );
         navigate(window.location.pathname);
       } else if (
@@ -495,10 +498,10 @@ export const UserProvider = ({ children }) => {
       ) {
         localStorage.setItem(
           'accessToken',
-          'Bearer ' + response.data.accessToken
+          'Bearer ' + response.headers['authorization-access']
         );
         console.log(
-          `새로운 액세스 토큰을 발급받았습니다 : ${response.data.accessToken}`
+          `새로운 액세스 토큰을 발급받았습니다 : ${response.headers['authorization-access']}`
         );
         navigate(window.location.pathname);
       } else {
