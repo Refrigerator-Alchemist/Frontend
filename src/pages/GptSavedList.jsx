@@ -12,7 +12,7 @@ export default function GptSavedList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [recipesPerPage] = useState(7);
 
-  const nickname = localStorage.getItem('nickName') || '';
+  const nickName = localStorage.getItem('nickName') || '';
   const accessToken = localStorage.getItem('accessToken');
 
   const navigate = useNavigate();
@@ -75,7 +75,7 @@ export default function GptSavedList() {
       <div className="my-2 mt-20 mb-4">
         <div className="titlebox mb-6 mt-2">
           <span className="font-score font-extrabold ml-8 text-2xl">
-            {accessToken ? `${nickname}의 연금술 기록` : '연금술 기록'}
+            {accessToken ? `${nickName}의 연금술 기록` : '연금술 기록'}
           </span>
         </div>
         {currentRecipes.map((recipe) => (

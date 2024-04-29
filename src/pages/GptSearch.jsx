@@ -13,7 +13,7 @@ const GptSearch = () => {
   const inputRef = useRef(null);
 
   const accessToken = localStorage.getItem('accessToken');
-  const nickname = localStorage.getItem('nickName') || '';
+  const nickName = localStorage.getItem('nickName') || '';
 
   const navigate = useNavigate();
 
@@ -174,7 +174,7 @@ const GptSearch = () => {
           }}
         >
           <CiSaveDown2 className="mr-1 w-6 h-6" />
-          {accessToken ? `${nickname}의 레시피 기록 열기` : '레시피 기록 열기'}
+          {accessToken ? `${nickName}의 레시피 기록 열기` : '레시피 기록 열기'}
         </button>
         <button
           className="font-jua text-xl transition ease-in-out bg-main hover:bg-emerald hover:scale-110 hover:cursor-pointer hover:text-black text-white font-bold py-3 px-4 rounded-md w-full"
