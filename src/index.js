@@ -13,7 +13,6 @@ import ResetPassword from './pages/ResetPassword';
 import DeleteUser from './pages/DeleteUser';
 import Mypage from './pages/Mypage';
 import EditProfile from './pages/EditProfile';
-import ReIssue from './pages/ReIssue';
 import BoardRanking from './pages/BoardRanking';
 import Board from './pages/Board';
 import BoardDetail from './pages/BoardDetail';
