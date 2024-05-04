@@ -46,7 +46,7 @@ instance.interceptors.response.use(
       await reIssue(); // 토큰 재발급
       return instance(error.config); // 원래 요청 재실행
     }
-    return Promise.reject(error);
+    return Promise.reject(error); // 그 외의 경우 에러를 그대로 반환
   }
 );
 

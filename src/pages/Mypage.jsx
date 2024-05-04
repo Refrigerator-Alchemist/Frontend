@@ -146,7 +146,7 @@ export default function MyPage() {
         }
       } catch (error) {
         if (error.response && error.response.headers.code === 'RAT8') {
-          await reIssue(); // 토큰 만료 시 reIssue 함수 호출
+          reIssue(); // 토큰 만료 시 reIssue 함수 호출
         }
       }
     };
