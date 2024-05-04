@@ -39,15 +39,12 @@ instance.interceptors.response.use(
   },
 
   async function (error) {
-    const originalRequest = error.config;
     if (
-      error.response &&
-      error.response.headers.code === 'RAT8' &&
-      !originalRequest._retry
+      error.response.headers.status === 400 &&
+      error.response.headers.code === 'RAT8'
     ) {
-      originalRequest._retry = true;
-      await reIssue();
-      return instance(originalRequest); // 재발급 후 바로 원래 기능 시도
+      await reIssue(); // 토큰 재발급
+      return instance(error.config); // 원래 요청 재실행
     }
     return Promise.reject(error);
   }
@@ -75,7 +72,7 @@ const reducer = (state, action) => {
 };
 
 // 🪙 새로운 액세스 토큰 발급
-const reIssue = async () => {
+export const reIssue = async () => {
   const URL = `${IP_ADDRESS}/token/reissue`;
   const socialType = localStorage.getItem('socialType');
   const accessToken = localStorage.getItem('accessToken');
