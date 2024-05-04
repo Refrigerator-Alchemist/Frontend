@@ -12,7 +12,7 @@ const instance = axios.create({
   baseURL: `${IP_ADDRESS}`,
 });
 
-// 🌱 인터셉터
+// 🌱 요청 인터셉터
 instance.interceptors.request.use(
   // 토큰 일괄 처리
   function (config) {
@@ -28,9 +28,17 @@ instance.interceptors.request.use(
     return config;
   },
 
+  function (error) {
+    return Promise.reject(error);
+  }
+);
+
+// 🌱 응답 인터셉터
+instance.interceptors.response.use(
   function (response) {
     return response;
   },
+
   async function (error) {
     if (error.response.code === 'RAT8') {
       await reIssue();
@@ -38,6 +46,7 @@ instance.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
 // 🌱 유저 상태 초기화
 const initialState = {
   user: null,
