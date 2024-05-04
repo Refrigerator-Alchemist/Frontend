@@ -4,7 +4,7 @@ import axios from 'axios';
 import errorCode from '../utils/ErrorCode';
 import { toast } from 'react-toastify';
 
-// 🌱 현재 IP 주소
+// 🌱 IP 주소
 export const IP_ADDRESS = 'http://localhost:8080';
 
 // 🌱 axios 인스턴스 : 베이스 URL 조절 가능
@@ -28,16 +28,16 @@ instance.interceptors.request.use(
     return config;
   },
 
-  // 액세스 토큰 만료시 reIssue 호출
+  function (response) {
+    return response;
+  },
   async function (error) {
     if (error.response.status === 400) {
       await reIssue();
     }
-
     return Promise.reject(error);
   }
 );
-
 // 🌱 유저 상태 초기화
 const initialState = {
   user: null,
