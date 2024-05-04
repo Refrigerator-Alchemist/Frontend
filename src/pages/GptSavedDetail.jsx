@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import Navigation from '../components/ui/Navigation';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { IP_ADDRESS } from '../context/UserContext';
+import { IP_ADDRESS, instance } from '../context/UserContext';
 
 const GptSavedDetail = () => {
   const [recipeData, setRecipeData] = useState({});
@@ -23,7 +22,7 @@ const GptSavedDetail = () => {
           throw new Error('Recipe ID가 존재하지 않습니다.');
         }
 
-        const response = await axios.get(
+        const response = await instance.get(
           `${IP_ADDRESS}/recipe/myRecipe/${recipeId}`,
           {
             headers: {

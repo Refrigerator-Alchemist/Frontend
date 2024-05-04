@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Pagination from '../components/Pagination';
@@ -6,7 +5,7 @@ import Navigation from '../components/ui/Navigation';
 import { FaHeart } from 'react-icons/fa';
 import { VscChromeClose } from 'react-icons/vsc';
 import { toast } from 'react-toastify';
-import { useUserDispatch, IP_ADDRESS } from '../context/UserContext';
+import { useUserDispatch, IP_ADDRESS, instance } from '../context/UserContext';
 import IMG_PROFILE from '../assets/img/img_profile.png';
 
 // 🃏 내가 저장한 게시물
@@ -133,7 +132,7 @@ export default function MyPage() {
       const URL = `${IP_ADDRESS}/userinfo`;
       try {
         if (accessToken) {
-          const response = await axios.get(URL, {
+          const response = await instance.get(URL, {
             headers: {
               'Authorization-Access': accessToken,
               email: email,
@@ -145,7 +144,9 @@ export default function MyPage() {
           return;
         }
       } catch (error) {
-        console.error('데이터 통신 중 문제 발생: ', error);
+        if (error.response.headers.code === 'RAT8') {
+          console.log('유저 정보 갱신 중 문제가 발생했습니다', 'RAT8');
+        }
       }
     };
 
@@ -153,7 +154,7 @@ export default function MyPage() {
     const fetchMyPage = async () => {
       const URL = `${IP_ADDRESS}/mypost`;
       try {
-        const response = await axios.get(URL, {
+        const response = await instance.get(URL, {
           headers: {
             'Authorization-Access': accessToken,
             email: email,
@@ -205,7 +206,7 @@ export default function MyPage() {
     const fetchLikeData = async () => {
       const URL = `${IP_ADDRESS}/likedpost`;
       try {
-        const response = await axios.get(URL, {
+        const response = await instance.get(URL, {
           headers: {
             'Authorization-Access': accessToken,
             email: email,
@@ -233,7 +234,7 @@ export default function MyPage() {
 
     const fetchMyRecipesCount = async () => {
       try {
-        const response = await axios.get(`${IP_ADDRESS}/mypost/size`, {
+        const response = await instance.get(`${IP_ADDRESS}/mypost/size`, {
           headers: {
             'Authorization-Access': accessToken,
             email: email,
@@ -248,7 +249,7 @@ export default function MyPage() {
 
     const fetchLikedRecipesCount = async () => {
       try {
-        const response = await axios.get(`${IP_ADDRESS}/likedpost/size`, {
+        const response = await instance.get(`${IP_ADDRESS}/likedpost/size`, {
           headers: {
             'Authorization-Access': accessToken,
             email: email,
@@ -283,7 +284,7 @@ export default function MyPage() {
   // 2️⃣ 레시피 삭제
   const deleteRecipe = async (postId) => {
     try {
-      await axios.post(`${IP_ADDRESS}/mypost/delete`, postId, {
+      await instance.post(`${IP_ADDRESS}/mypost/delete`, postId, {
         headers: {
           'Authorization-Access': accessToken,
         },
