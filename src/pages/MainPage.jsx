@@ -11,10 +11,10 @@ export default function MainPage() {
     <section className="flex flex-col items-center mt-6 justify-center min-h-screen">
       <header className="relative flex flex-col items-center justify-center text-4xl font-bold mb-12">
         <div className="absolute -top-10 -left-10 w-24 h-24 bg-main rounded-full opacity-50 drop-shadow-xl"></div>
-        <div className="relative z-10 mb-3 font-undong text-4xl md:text-5xl text-shadow-xl">
+        <div className="relative z-10 mb-3 font-jua text-4xl md:text-5xl text-shadow-xl">
           What's in your
         </div>
-        <div className="relative z-10 font-undong text-4xl md:text-5xl text-shadow-xl">
+        <div className="relative z-10 font-jua text-4xl md:text-5xl text-shadow-xl">
           refrigerator?
         </div>
       </header>

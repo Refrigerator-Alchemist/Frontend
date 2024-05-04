@@ -12,7 +12,6 @@ module.exports = {
       fontFamily: {
         jua: ['Jua', 'sans-serif'],
         dongle: ['Dongle', 'sans-serif'],
-        undong: ['TTHakgyoansimUndongjangL'],
         score: ['S-CoreDream-3Light'],
         scoreExtrabold: ['S-CoreDream-7ExtraBold'],
         ansung: ['Ansungtangmyun-Bold'],

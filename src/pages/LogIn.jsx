@@ -91,7 +91,7 @@ export default function Login() {
       {/* 로고, 타이틀 */}
       <header className="flex flex-col items-center justify-center">
         <Logo page="login" width="250px" height="250px" />
-        <h1 className="text-3xl font-score">로그인</h1>
+        <h1 className="text-3xl font-jua">로그인</h1>
       </header>
 
       {/* 이메일, 비밀번호 입력 + 로그인 */}

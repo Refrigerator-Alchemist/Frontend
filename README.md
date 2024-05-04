@@ -5,11 +5,13 @@
 ## 📋 목차
 
 - [머릿말](#📋-목차)
+- [도메인](#🔗-도메인)
+- [제작 기간](#📝-제작-기간)
 - [사용한 도구들](#✅-사용한-도구들)
 - [프로젝트 팀원](#프로젝트-팀원)
 - [팀원 프로필](#🧑‍🤝‍🧑-팀원-프로필)
 
-> 프로젝트 개요
+### <span style=''>🌱 서비스 소개</span>
 
 마땅히 먹고 싶은 건 없는데 배달비는 비싸고, 냉장고에 남은 재료들은 있는데
 뭘 만들면 좋을지 아이디어는 안 떠오르고...
@@ -19,13 +21,22 @@
 연금술을 사용해서 레시피를 만들어 내고, 커뮤니티에서 사람들과 레시피를 서로 공유도 해주세요!
 인기만점 레시피는 Top3 명예의 전당에도 오른답니다😀
 
-> 서비스 접속 URL
+## 🔗 도메인
 
 http://배포후도메인을입력해주세요
 
-> 제작 기간
+## 📝 제작 기간
 
-2024.01.31 ~ 2024 (undefined)
+- 기능 구현 및 테스트 : 2024.01.31 ~ 2024.03.31
+- 배포 : 2024.05.??
+
+## 🎙️ 커뮤니케이션 방식
+
+- 매주 토요일 오프라인 회의 및 개발 (3시간)
+- 디스코드에 서버를 만들어 자료나 전체 전달 사항 공유
+- 전체 회의로 의견 전달이나 문제점 설명
+- 같은 파트를 구현하는 백-프론트 간 상시 통화와 화면 공유를 통한 기능 구현
+- Github 브랜치의 코드 pull과 push를 통한 지속적인 동기화
 
 ## ✅ 사용한 도구들
 
@@ -49,6 +60,7 @@ http://배포후도메인을입력해주세요
   <img src="https://img.shields.io/badge/React Router-CA4245?style=flat-square&logo=reactrouter&logoColor=black">
   <img src="https://img.shields.io/badge/tailwindcss-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white">
   <img src="https://img.shields.io/badge/axios-5A29E4?style=flat-square&logo=axios&logoColor=white">
+  <img src="https://img.shields.io/badge/Prettier-F7B93E?style=flat-square&logo=prettier&logoColor=black">
 </div><br/>
 
 <div>
@@ -56,6 +68,12 @@ http://배포후도메인을입력해주세요
   <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat-square&logo=springboot&logoColor=white">
   <img src="https://img.shields.io/badge/Spring-6DB33F?style=flat-square&logo=Spring&logoColor=white">
   <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white">
+  <img src="https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=redis&logoColor=white">
+</div><br/>
+
+<div>
+  <p style='font-weight: bold'>APIs</p>
+  <img src="https://img.shields.io/badge/GPT 3.5-412991?style=flat-square&logo=openai&logoColor=white">
 </div><br/>
 
 <div>
@@ -65,69 +83,224 @@ http://배포후도메인을입력해주세요
   <img src="https://img.shields.io/badge/Amazon EC2-FF9900?style=flat-square&logo=amazonec2&logoColor=black">
 </div>
 
-## 🧑‍🤝‍🧑 팀원 프로필
+## 💡 도구 및 기술 사용 근거
+
+### 🌱 React.js + Tailwindcss
+
+- React.js
+
+  - 빠른 개발과 기능 구현이 가능하고 컴포넌트별로 개발하기 때문에 후에 리팩토링 및 유지 보수가 용이하여 리액트를 사용했습니다.
+  - 냉장고 연금술사는 CSR 방식의 렌더링을 하는 것이 적합하다고 생각했습니다. CSR은 초기 로딩시간이 길 수 있지만 서비스 접속시 초기화면을 보는 데에는 오래 걸리지 않을 것입니다. 또한 서비스의 메인 활동은 레시피 연금술이며 이는 유저가 직접 재료를 입력하고 생성하는 상호작용이 주된 동작이기 때문에 SSR보다는 CSR이 더 적합하다고 생각했습니다.
+
+- Tailwindcss
+  - 프론트 팀이 공통적으로 사용해 본 CSS 라이브러리가 tailwindcss였기에 학습비용 및 개발기간 단축을 위해 사용했습니다.
+  - 해당 컴포넌트의 HTML element의 className으로 즉시 수정할 수 있다는 편의성이 팀원 파트의 코드를 수정할 때도 이점으로 작용했습니다.
+
+### 🌱 Context API(useContext)
+
+- 리액트 애플리케이션에서 전역 상태 관리를 위한 도구로 Context API를 사용한 이유는 3가지가 있습니다.
+  - 우선 Redux를 사용하기 위한 개발 경험이 충분하지 않았습니다. 그래서 좀 더 익숙하고 개발에 바로 적용할 수 있는 도구를 선택하고자 했기에 Context API를 사용했습니다.
+  - Redux는 대규모 애플리케이션의 리소스와 전역 상태 관리에 효율적인 것으로 알고 있습니다. 냉장고 연금술사의 경우 유저 데이터가 담긴 상태 공유와 네비게이션바 상태 공유를 제외하면 전역 상태로 컴포넌트 트리 전체에서 공유될 상태가 없어 Context API만으로도 충분하다고 생각했습니다.
+
+### 🌱 Prettier
+
+- VSC의 강력한 코드 포맷팅 확장프로그램인 Prettier를 사용하여 코드 스타일과 가독성을 효율적으로 관리했습니다.
+
+### 🌱 REDIS
+
+- 회원가입 시 이메일 인증을 하는데 서버에서 인증번호를 발급하면 저장소에 해당 인증번호를 저장하고 사용자가 입력한 인증번호와 발급한 인증번호를 비교합니다. 이때 인증에 성공하면 해당 인증번호는 이제 사용하지 않기에 용량만 차지해서 삭제하는게 좋습니다. 따라서 일정시간 뒤에는 데이터를 삭제하는 Redis를 사용하게되었습니다.
+
+- 로그인 후 사용자 인증을 확인하기 위해 JWT 토큰을 발급합니다. 엑세스 토큰이 만료되면 리프레시 토큰으로 엑세스 토큰을 재발급을 하는데 RDB(관계형 데이터베이스)는 상대적으로 I/O(입출력)연산이 느립니다. 사용자가 로그아웃할 때 JWT 자체는 클라이언트에서 삭제되지만, 서버 측에서는 해당 사용자의 JWT를 더 이상 유효하지 않도록 따로 처리할 필요가 있습니다. 그래서 Redis를 사용하여 토큰 목록을 관리하였고, 서버는 인증을 위해 들어오는 모든 토큰을 이 목록과 대조하여 검증할 수 있었습니다. Redis의 빠른 데이터 액세스는 JWT 검증 과정을 빠르게 만들어 주었습니다.
+
+### 🌱 JDBC?
+
+## 🧑‍🤝‍🧑 함께한 팀원
 
 <table>
   <tbody>
     <tr>
-      <td align="center"><a href="https://github.com/devkoow"><img src="https://avatars.githubusercontent.com/u/112608822?v=4" width="100px;" alt="" style='border-radius:50%'/><br /><sub><b>이창욱</b></sub></a><br /><sub><b style='color:pink'>FE & 팀장</b></sub></a><br /></td>
-      <td align="center"><a href="https://github.com/anhyeryeon2"><img src="https://image.fmkorea.com/files/attach/new3/20230621/486616/825924136/5891200629/ee5eb9d0301f6f736f791dce9dc20963.png" width="100px;" alt="" style='border-radius:50%'/><br /><sub><b>안혜련</b></sub></a><br /><sub><b style='color:pink'>FE</b></sub></a><br /></td><td align="center"><a href="https://github.com/ehddbs4521"><img src="https://avatars.githubusercontent.com/u/112162446?v=4" width="100px;" alt="" style='border-radius:50%'/><br /><sub><b >김동윤</b></sub></a><br /><sub><b style='color:skyblue'>BE</b></sub></a><br /></td><td align="center"><a href="https://github.com/dnwndls411"><img src="https://avatars.githubusercontent.com/u/130645006?v=4" width="100px;" alt="" style='border-radius:50%'/><br /><sub><b >서효진</b></sub></a><br /><sub><b style='color:skyblue'>BE</b></sub></a><br /></td><td align="center"><a href="https://github.com/changeme4585"><img src="https://image.fmkorea.com/files/attach/new3/20230621/486616/825924136/5891200629/ee5eb9d0301f6f736f791dce9dc20963.png" width="100px;" alt="" style='border-radius:50%'/><br /><sub><b >조승빈</b></sub></a><br /><sub><b style='color:skyblue'>BE</b></sub></a><br /></td>
+      <td align="center">
+        <a href="https://github.com/devkoow">
+          <img src="https://avatars.githubusercontent.com/u/112608822?v=4" width="100px;" alt="" style='border-radius:50%'/><br />
+          <sub>
+            <b>이창욱</b>
+          </sub>
+        </a><br />
+        <sub><b>영남대 경영 17</b></sub><br />
+        <sub><b style='color:pink'>FE / 팀장</b></sub>
+      </td>
+      <td align="center">
+        <a href="https://github.com/anhyeryeon2">
+          <img src="https://image.fmkorea.com/files/attach/new3/20230621/486616/825924136/5891200629/ee5eb9d0301f6f736f791dce9dc20963.png" width="100px;" alt="" style='border-radius:50%'/><br />
+          <sub>
+            <b>안혜련</b>
+          </sub>
+        </a><br />
+        <sub><b>한국외대 컴공 21</b></sub><br />
+        <sub><b style='color:pink'>FE</b></sub>
+      </td>
+      <td align="center">
+        <a href="https://github.com/anhyeryeon2">
+          <img src="https://image.fmkorea.com/files/attach/new3/20230621/486616/825924136/5891200629/ee5eb9d0301f6f736f791dce9dc20963.png" width="100px;" alt="" style='border-radius:50%'/><br />
+          <sub>
+            <b>김동윤</b>
+          </sub>
+        </a><br />
+        <sub><b>영남대 컴공 19</b></sub><br />
+        <sub><b style='color:skyblue'>BE</b></sub>
+      </td><td align="center">
+        <a href="https://github.com/anhyeryeon2">
+          <img src="https://image.fmkorea.com/files/attach/new3/20230621/486616/825924136/5891200629/ee5eb9d0301f6f736f791dce9dc20963.png" width="100px;" alt="" style='border-radius:50%'/><br />
+          <sub>
+            <b>서효진</b>
+          </sub>
+        </a><br />
+        <sub><b>영남대 컴공 21</b></sub><br />
+        <sub><b style='color:skyblue'>BE</b></sub>
+      </td><td align="center">
+        <a href="https://github.com/anhyeryeon2">
+          <img src="https://image.fmkorea.com/files/attach/new3/20230621/486616/825924136/5891200629/ee5eb9d0301f6f736f791dce9dc20963.png" width="100px;" alt="" style='border-radius:50%'/><br />
+          <sub>
+            <b>조승빈</b>
+          </sub>
+        </a><br />
+        <sub><b>영남대 컴공 23</b></sub><br />
+        <sub><b style='color:skyblue'>BE</b></sub>
+      </td>
     </tr>
   </tbody>
 </table>
 
-### 🧑‍💻 맡은 역할
+### 🧑‍💻 팀원별 역할
 
-<h4 style='font-weight: bold'>👉 이창욱</h4>
+<h3 style='font-weight: bold'>✅ 이창욱</h3>
 
 <div>
   <span style='color: gold; font-weight:bold;'>프로젝트 공통 적용</span>
 
-- 피그마를 이용한 애플리케이션 목업 제작
-- 냉장고 로고 이미지 디자인 및 제작
-- 프로젝트 테마 컬러 결정
-- 폰트 테마 결정
-- 공통 CSS 패턴 결정
+- 피그마를 이용한 목업 디자인, UI 설계
+- 프로젝트 로고 이미지 디자인
+- 프로젝트 메인 테마 컬러 결정
 - 프로젝트 디렉토리 구조 세팅
-- 리드미 작성
+- 사용할 폰트 결정
+- UI(버튼, 인풋박스 등)의 CSS 컨벤션 결정
+- 커스텀 에러코드 작성
+- README.md 작성
 </div><br/>
 
 <div style=''>
-  <span style='color: gold; font-weight:bold;'>UI</span><br/>
+  <span style='color: gold; font-weight:bold;'>맡은 파트</span><br/>
   <ul>
     <li>
-      페이지: 
-      초기 접속 화면, 메인, 로그인, SNS 로그인 정보 받는 페이지, 액세스 토큰 재발급, 회원가입, 비밀번호 재설정, 프로필 수정, 회원탈퇴, 마이페이지, 탑3 랭킹보드 페이지, NotFound
-    </li><br/>
-    <li>
-      컴포넌트: 로고, 네비게이션바, 탑3 랭킹보드
-    </li><br/>
-    <li>
-      컨텍스트: 네비게이션 컨텍스트, 유저 컨텍스트
+      페이지 : 
+      GetStarted, MainPage, SignUp, Login, LoginSuccess, ResetPassword, EditProfile, EditPost, Mypage, DeleteUser, NotFound, ProtectedRoute
     </li>
+    <li>
+      컴포넌트 : Logo, Navigation, Ranking
+    </li>
+    <li>
+      컨텍스트 : NavigationContext, UserContext
+    </li><br/>
   </ul>
 
 <span style='color: gold; font-weight:bold;'>기능</span><br/>
 
   <ul>
     <li>
-      이메일 회원가입, 이메일 로그인, SNS 계정 연동 회원가입, SNS 계정 로그인, 로컬 스토리지와 컨텍스트에서 유저 데이터 관리, 비밀번호 재설정, 프로필 사진 변경, 닉네임 변경, 액세스 토큰 만료시 재발급, 로그인 유저만 접속할 수 있는 페이지에 비로그인 유저의 접근 차단
+      이메일 회원가입, 이메일 로그인, SNS 계정 연동 회원가입, SNS 계정 로그인, 로컬 스토리지와 UserContext에서 유저 데이터 관리, 비밀번호 재설정, 프로필 사진 변경, 닉네임 변경, 액세스 토큰 만료시 재발급, 로그인 유저만 접속할 수 있는 페이지에 비로그인 유저의 접근 차단, 네비게이션바를 통한 페이지 이동, 올린 게시물 수정
     </li>
   </ul>
 </div>
 
-<h3 style='font-weight: bold'>👉 안혜련</h3>
+<h3 style='font-weight: bold'>✅ 안혜련</h3>
 
 <div>
-  <span style='color: gold; font-weight:bold;'>프로젝트 전체</span>
+  <span style='color: gold; font-weight:bold;'>프로젝트 공통 적용</span>
 
-- 피그마를 이용한 애플리케이션 목업 제작
-- react-toastify 도입
+- 피그마를 이용한 목업 디자인, UI 설계
+- 팝업 react-toastify 적용
 </div><br/>
 
 <div style=''>
-  <span style='color: gold'>참여 파트</span>
+  <span style='color: gold; font-weight:bold;'>맡은 파트</span><br/>
+  <ul>
+      <li>
+        페이지 : 
+        Board, BoardDetail, UploadBoard, EditPost, GptSearch, GptResult, GptSavedList, GptSavedDetail
+      </li>
+      <li>
+        컴포넌트 : Pagination
+      </li><br/>
+  </ul>
+
+<span style='color: gold; font-weight:bold;'>기능</span><br/>
+
+  <ul>
+    <li>
+      게시판 내 게시물 검색, 게시물 좋아요/취소(로그인 유저만 가능), 게시물 작성, 게시물 수정, 게시판과 마이페이지의 게시물들을 페이지네이션으로 구분, 마이페이지에서 '내가 작성한 레시피', '좋아요 누른 레시피'를 버튼 토글로 조회, 레시피 연금술 재료 추가, 레시피 결과 저장, 저장된 레시피 리스트 조회
+    </li>
+  </ul>
+</div>
+
+<h3 style='font-weight: bold'>✅ 김동윤</h3>
+
+<div>
+  <span style='color: gold; font-weight:bold;'>프로젝트 공통 적용</span>
+
+- REDIS를 사용한 API 통신
+- 커스텀 에러코드 작성
+</div><br/>
+
+<span style='color: gold; font-weight:bold;'>기능</span><br/>
+
+- 이메일 회원가입, 이메일 로그인, SNS 계정 연동 회원가입, SNS 계정 로그인, 유저 데이터 관리, 비밀번호 재설정, 프로필 사진 변경, 닉네임 변경, 액세스 토큰 만료시 재발급
 
 </div>
 
+<h3 style='font-weight: bold'>✅ 서효진</h3>
+
+<div style=''>
+  <span style='color: gold; font-weight:bold;'>맡은 파트</span><br/>
+
+- 레시피 추천(연금술 실행) 및 저장, 조회
+
+<span style='color: gold; font-weight:bold;'>기능</span><br/>
+
+- 추천 레시피 생성, 레시피 저장, 레시피 목록 조회, 상세 레시피 조회
+</div>
+
+<h3 style='font-weight: bold'>✅ 조승빈</h3>
+
+<div>
+  <span style='color: gold; font-weight:bold;'>맡은 파트</span>
+</div><br/>
+
+<div>
+
+<span style='color: gold; font-weight:bold;'>기능</span><br/>
+
+  <ul>
+  </ul>
+</div>
+
 ## 🪺 냉장고 연금술사 사용법
+
+## 🚸 개선 예정
+
+## 🥞 개발 회고록
+
+### 🌱 조승빈
+
+제대로 된 협업을 처음 경험해 보았는데, 그동안 저의 코딩 스타일은 기능구현에만
+초점을 맞춘 방식이었습니다. 그러나 이번 스터디를 통해 완전히 잘못된 방식으로 코딩하고 있었다는 것을 느꼈습니다...
+예를 들어 기존에는 http 요청/응답 시 엔티티를 주고받는 로직으로 코딩했는데,
+이렇게 되면 엔티티 정보가 그대로 ui층에 노출되어버렸습니다.
+또한 제가 구현한 로직에서 발생할 수 있는 잠재적 에러에 대한
+예외처리와 프론트와의 API 통신에 대해서도 배울 수 있었습니다.
+저는 이번 협업을 통해 잘못된 코딩 습관과 부족한 나의 코딩 실력을
+느꼈고(현타가 여러번 왔었습니다😅), 협업을 통해 배우고 느낀 경험으로
+조금 더 나은 개발자로 성장하고 싶습니다.
+
+### 🌱 서효진
+
+첫 협업 프로젝트였던 만큼 저의 부족한 부분을 적나라하게 알 수 있었고, 그만큼 얻게 되는 것도 많았던 활동이었습니다. 협업에서의 commit의 중요성과 협업할 때의 깃허브 사용법, API 활용법, 에러 처리는 어떻게 해야 하는지, 또 배포는 어떤 과정을 통해 이뤄지는 지 등 단순히 공부만으로는 알 수 없는 귀한 경험을 얻을 수 있었습니다. 제가 생각한 아쉬운 점은 추천 레시피를 생성할 때 ChatGPT API를 사용하여 적절하지 못한 재료가 입력되었을 때 이를 식별하고 바르게 처리하도록 구현했었는데, GPT API를 사용한 응답이 예상한 것처럼 나오지 않아(ex 버섯을 먹을 수 없다고 판단하는 경우) 동작이 이상해졌고 결국 해당 처리를 하지 못했던 점입니다. 언젠가 유사한 상황을 마주하게 된다면 더 좋은 솔루션을 낼 수 있도록 더욱 더 정진하도록 하겠습니다.

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useUserDispatch } from '../context/UserContext';
 import { toast } from 'react-toastify';
@@ -11,19 +11,6 @@ export default function DeleteUser() {
   const { deleteUser } = useUserDispatch();
 
   const navigate = useNavigate();
-  const location = useLocation();
-
-  // 🚷 비로그인 유저 접속 차단
-  useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
-
-    if (!accessToken) {
-      toast.error('로그인을 먼저 해야합니다');
-      setTimeout(() => {
-        navigate(-1);
-      }, 2000);
-    }
-  }, [navigate, location]);
 
   // 1️⃣ 비밀번호 입력
   const handlePasswordChange = (e) => setPassword(e.target.value);
