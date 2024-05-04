@@ -6,7 +6,7 @@ import Navigation from '../components/ui/Navigation';
 import { FaHeart } from 'react-icons/fa';
 import { VscChromeClose } from 'react-icons/vsc';
 import { toast } from 'react-toastify';
-import { useUserDispatch, IP_ADDRESS } from '../context/UserContext';
+import { useUserDispatch, IP_ADDRESS, reIssue } from '../context/UserContext';
 import IMG_PROFILE from '../assets/img/img_profile.png';
 
 // 🃏 내가 저장한 게시물
@@ -145,7 +145,9 @@ export default function MyPage() {
           return;
         }
       } catch (error) {
-        console.error('데이터 통신 중 문제 발생: ', error);
+        if (error.response && error.response.headers.code === 'RAT8') {
+          reIssue(); // 토큰 만료 시 reIssue 함수 호출
+        }
       }
     };
 
