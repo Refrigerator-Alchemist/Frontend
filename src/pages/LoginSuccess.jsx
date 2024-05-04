@@ -7,8 +7,6 @@ import errorCode from '../utils/ErrorCode';
 export default function LoginSuccess() {
   const { dispatch } = useUserDispatch();
   const user = useUserState();
-  const SET_USER = 'SET_USER';
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,7 +40,7 @@ export default function LoginSuccess() {
           console.log(`⭕ 유저 데이터 저장 완료`);
 
           // ▶ dispatch로 리듀서에 저장
-          dispatch({ type: SET_USER, user });
+          dispatch({ type: 'SET_USER', user });
 
           return user;
         } else {

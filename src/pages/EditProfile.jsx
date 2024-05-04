@@ -1,9 +1,8 @@
-import axios from 'axios';
 import React, { useState, useEffect, useRef } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
-import { IP_ADDRESS } from '../context/UserContext';
+import { IP_ADDRESS, instance } from '../context/UserContext';
 import { toast } from 'react-toastify';
 import IMAGE_PROFILE from '../assets/img/img_profile.png';
 import errorCode from '../utils/ErrorCode';
@@ -31,7 +30,7 @@ export default function EditProfile() {
 
       try {
         if (accessToken) {
-          const response = await axios.get(URL, {
+          const response = await instance.get(URL, {
             headers: {
               'Authorization-Access': accessToken,
             },
@@ -95,7 +94,7 @@ export default function EditProfile() {
     formData.append('file', file);
 
     try {
-      await axios.post(URL, formData, {
+      await instance.post(URL, formData, {
         headers: {
           'Authorization-Access': accessToken,
         },
@@ -136,7 +135,7 @@ export default function EditProfile() {
 
     try {
       if (nameError === false) {
-        await axios
+        await instance
           .post(
             URL,
             {
