@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft, FaHeart, FaRegHeart } from 'react-icons/fa';
 import Navigation from '../components/ui/Navigation';
-import axios from 'axios';
 import { toast } from 'react-toastify';
-import { IP_ADDRESS } from '../context/UserContext';
+import { IP_ADDRESS, instance } from '../context/UserContext';
 import { PiSirenFill } from 'react-icons/pi';
 import { useLocation } from 'react-router-dom';
-import mockData from '../assets/data/post.json';
 
 const BoardDetail = () => {
   const { postId } = useParams();
@@ -38,7 +36,7 @@ const BoardDetail = () => {
       }
       const URL = `${IP_ADDRESS}/board/islike?id=${myEmail}`;
       try {
-        const response = await axios.get(URL, {
+        const response = await instance.get(URL, {
           headers: {
             'Authorization-Access': accessToken,
           },
@@ -70,7 +68,7 @@ const BoardDetail = () => {
   // 📝 게시물 정보
   const fetchPostData = async (postId) => {
     try {
-      const response = await axios.get(
+      const response = await instance.get(
         `${IP_ADDRESS}/board/specific?postId=${postId}`
       );
 
@@ -128,7 +126,7 @@ const BoardDetail = () => {
     try {
       if (Liked) {
         // ▶️ 좋아요 되어있는 상태면 취소
-        const response = await axios.post(
+        const response = await instance.post(
           `${IP_ADDRESS}/board/dislike`,
           {
             email: myEmail,
@@ -155,7 +153,7 @@ const BoardDetail = () => {
         setLiked(!Liked);
       } else {
         // ▶️ 안 눌려져 있는 상태면 좋아요
-        const response = await axios.post(
+        const response = await instance.post(
           `${IP_ADDRESS}/board/like`,
 
           {
@@ -191,7 +189,7 @@ const BoardDetail = () => {
     const URL = `${IP_ADDRESS}/board/report`;
 
     try {
-      const response = await axios.post(
+      const response = await instance.post(
         URL,
         { email: myEmail, postId: postId },
         {

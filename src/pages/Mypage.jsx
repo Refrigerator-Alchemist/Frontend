@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Pagination from '../components/Pagination';
@@ -6,6 +5,7 @@ import Navigation from '../components/ui/Navigation';
 import { FaHeart } from 'react-icons/fa';
 import { VscChromeClose } from 'react-icons/vsc';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 import { useUserDispatch, IP_ADDRESS, reIssue } from '../context/UserContext';
 import IMG_PROFILE from '../assets/img/img_profile.png';
 

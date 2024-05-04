@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { IoAccessibility } from 'react-icons/io5';
-import axios from 'axios';
 import { toast } from 'react-toastify';
-import { IP_ADDRESS } from '../context/UserContext';
+import { IP_ADDRESS, instance } from '../context/UserContext';
 
 export default function UploadBoard() {
   const { postId } = useParams(); // 라우터 엔드포인트
@@ -20,7 +19,7 @@ export default function UploadBoard() {
     const fetchData = async (postId) => {
       const URL = `${IP_ADDRESS}/board/updateBoard?postId=${postId}`;
       try {
-        const response = await axios.get(URL, {
+        const response = await instance.get(URL, {
           headers: {
             'Authorization-Access': accessToken,
           },
@@ -72,7 +71,7 @@ export default function UploadBoard() {
     };
 
     try {
-      const response = await axios.post(URL, formData, {
+      const response = await instance.post(URL, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization-Access': accessToken,

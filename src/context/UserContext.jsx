@@ -8,13 +8,12 @@ import { toast } from 'react-toastify';
 export const IP_ADDRESS = 'http://localhost:8080';
 
 // 🌱 axios 인스턴스 : 베이스 URL 조절 가능
-const instance = axios.create({
+export const instance = axios.create({
   baseURL: `${IP_ADDRESS}`,
 });
 
 // 🌱 요청 인터셉터
 instance.interceptors.request.use(
-  // 토큰 일괄 처리
   function (config) {
     const accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
@@ -40,9 +39,12 @@ instance.interceptors.response.use(
   },
 
   async function (error) {
-    if (error.response && error.response.headers.code === 'RAT8') {
+    if (
+      error.response.headers.status === 400 &&
+      error.response.headers.code === 'RAT8'
+    ) {
       await reIssue(); // 토큰 재발급
-      return instance(error.config); // 원래의 요청 재실행
+      return instance(error.config); // 원래 요청 재실행
     }
     return Promise.reject(error); // 그 외의 경우 에러를 그대로 반환
   }
@@ -93,9 +95,7 @@ export const reIssue = async () => {
         'accessToken',
         response.headers['authorization-access']
       );
-      console.log(
-        `새로운 액세스 토큰을 발급받았습니다 : ${response.headers['authorization-access']}`
-      );
+      console.log(`새로운 액세스 토큰을 발급받았습니다`);
     } else if (
       response.status === 204 &&
       socialType !== 'Refrigerator-Alchemist'
@@ -104,9 +104,7 @@ export const reIssue = async () => {
         'accessToken',
         'Bearer ' + response.headers['authorization-access']
       );
-      console.log(
-        `새로운 액세스 토큰을 발급받았습니다 : ${response.headers['authorization-access']}`
-      );
+      console.log(`새로운 액세스 토큰을 발급받았습니다`);
     } else {
       return;
     }
