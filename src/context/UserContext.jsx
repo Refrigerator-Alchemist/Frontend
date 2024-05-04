@@ -32,7 +32,7 @@ instance.interceptors.request.use(
     return response;
   },
   async function (error) {
-    if (error.response.status === 400) {
+    if (error.response.code === 'RAT8') {
       await reIssue();
     }
     return Promise.reject(error);
