@@ -251,66 +251,60 @@ const errorCode = {
     message: '좋아요 누를때 에러가 발생했습니다. ',
     notice: '좋아요 전송하는 중 문제가 발생했습니다. '
   },
-  FAILED_TO_SEND_DISLIKE:{
-    status: 500,
-    code: 'RAR12',
-    message: '좋아요를 취소 할 때 에러가 발생했습니다.',
-    notice: '좋아요를 취소하는 중 문제가 발생했습니다.'
-  },
   FAILED_TO_CHECK_LIKE:{
-    status: 401,
+    status: 404,
     code: 'RAR13',
     message: '해당 id가 좋아요를 눌렀는지 확인하는 중 에러가 발생했습니다.',
     notice: '좋아요 누른 게시물을 확인하는 중 문제가 발생했습니다.',
   },
   FAILED_TO_LOAD_POSTPAGE:{
-    status: 401,
+    status: 404,
     code: 'RAR14',
     message: '게시판 페이지를 불러올 수 없습니다.',
     notice: '게시판 페이지를 불러오는 중 문제가 발생했습니다.',
   },
   FAILED_TO_LOAD_DETAIL:{
-    status: 401,
+    status: 404,
     code: 'RAR15',
     message: '상세 페이지를 불러올 수 없습니다. ',
     notice: '상세페이지를 불러오는 중 문제가 발생했습니다.',
   },
   FAILED_TO_LOAD_TOP:{
-    status: 401,
+    status: 404,
     code: 'RAR16',
     message: '인기 게시물들을 불러올 수 없습니다. ',
     notice: '인기 게시물들을 불러오는 중 문제가 발생했습니다.',
   },
   FAILED_TO_LOAD_MYPOSTS_COUNT:{
-    status: 401,
+    status: 404,
     code: 'RAR17',
     message: '내가 작성한 게시물의 수를 불러올 수 없습니다.',
     notice: '내가 작성한 게시물을 불러오는 중 문제가 발생했습니다.',
   },
 
   NO_SEARCH_RESULTS:{
-    status: 401,
+    status: 404,
     code: 'RAR18',
     message: '검색한 제목의 게시물을 찾을 수 없습니다.',
     notice: '검색 결과를 찾을 수 없습니다.',
   },
 
   FAILED_TO_LOAD_LIKEDPOSTS:{
-    status: 401,
+    status: 404,
     code: 'RAR19',
     message: '내가 좋아요 누른 게시물들을 불러올 수 없습니다.',
     notice: '내가 좋아요 누른 게시물들을 불러오는 중 문제가 발생했습니다.',
   },
 
   FAILED_TO_LOAD_MYPOSTS:{
-    status: 401,
+    status: 404,
     code: 'RAR20',
     message: '내가 작성한 게시물들을 불러올 수 없습니다.',
     notice: '내가 작성한 게시물들을 불러오는 중 문제가 발생했습니다.',
   },
 
   FAILED_TO_LOAD_MYIMG:{
-    status: 401,
+    status: 404,
     code: 'RAR21',
     message: '내 프로필 이미지를 불러올 수 없습니다.',
     notice: '내 프로필 이미지를 불러오는 중 문제가 발생했습니다.',
@@ -324,17 +318,23 @@ const errorCode = {
   },
 
   FAILED_TO_LOAD_LIKEDPOSTS_COUNT:{
-    status: 401,
+    status: 404,
     code: 'RAR23',
     message: '내가 좋아요 누른 게시글의 수를 조회하는 중 에러가 발생했습니다.',
     notice: '내가 좋아요 누른 게시글을 불러오는 중 문제가 발생했습니다.',
   },
 
   FAILED_TO_LOAD_ALLPOSTS_COUNT:{
-    status: 401,
+    status: 404,
     code: 'RAR24',
     message: '전체 게시글의 수를 조회하는 중 에러가 발생했습니다.',
     notice: '전체 게시글을 불러오는 중 문제가 발생했습니다.',
+  },
+  FAILED_TO_SEND_DISLIKE:{
+    status: 500,
+    code: 'RAR25',
+    message: '좋아요를 취소 할 때 에러가 발생했습니다.',
+    notice: '좋아요를 취소하는 중 문제가 발생했습니다.'
   },
 };
 
