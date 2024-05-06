@@ -227,12 +227,7 @@ const errorCode = {
 
 
   // board ---------------------------------------------------
-  FAILED_TO_SAVE_POSTS:{
-    status: 500,
-    code: 'RAR9',
-    message: '게시글을 저장하는 중 에러가 발생했습니다.',
-    notice: '게시글을 저장하는 중 에러가 발생했습니다.'
-  },
+  
   FAILED_TO_MODIFY_POSTS:{
     status: 500,
     code: 'RAR10',
