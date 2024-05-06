@@ -7,7 +7,7 @@ import NotFound from './pages/NotFound';
 import GetStarted from './pages/GetStarted';
 import MainPage from './pages/MainPage';
 import SignUp from './pages/SignUp';
-import Login from './pages/Login';
+import Login from './pages/LogIn';
 import LoginSuccess from './pages/LoginSuccess';
 import ResetPassword from './pages/ResetPassword';
 import DeleteUser from './pages/DeleteUser';

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FaArrowLeft } from 'react-icons/fa';
 import Navigation from '../components/ui/Navigation';
 import axios from 'axios';
-import 'react-toastify/dist/ReactToastify.css';
+import BackButton from '../components/BackButton';
 import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
 
 
@@ -44,13 +43,7 @@ const GptSavedDetail = () => {
   return (
     <>
       <div className="pt-16">
-        <div
-          className="absolute top-5 left-42 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-          onClick={() => navigate('/recipe/myRecipe')}
-        >
-          <FaArrowLeft />
-        </div>
-
+        <BackButton destination="/main"/>
         <div className="flex flex-col items-center mt-10">
           <div className="flex items-center gap-4">
             <h2 className="font-score text-3xl font-bold">

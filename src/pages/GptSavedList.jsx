@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
 import Pagination from '../components/Pagination';
 import Navigation from '../components/ui/Navigation';
+import SavedListCard from '../components/gpt/SavedListCard';
+import BackButton from '../components/BackButton';
 import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
 
 
@@ -32,7 +33,6 @@ export default function GptSavedList() {
         handleError(error);
       }
     };
-
     if (accessToken) {
       fetchRecipes();
     }
@@ -42,29 +42,10 @@ export default function GptSavedList() {
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
   const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  const RecipeCard = ({ recipeId, foodName, ingredientList }) => {
-    return (
-      <div className="flex items-center bg-white mx-5 my-2 p-2 rounded-xl shadow">
-        <Link to={`/recipe/myRecipe/${recipeId}`} className="flex-grow flex">
-          <div className="px-4 py-4">
-            <h3 className="text-lg font-score font-semibold">{foodName}</h3>
-            <p className="text-gray-500 text-sm font-score">
-              {ingredientList.join(', ')}
-            </p>
-          </div>
-        </Link>
-      </div>
-    );
-  };
 
   return (
     <section className="history">
-      <div
-        className="absolute top-5 left-45 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate('/main')}
-      >
-        <FaArrowLeft />
-      </div>
+      <BackButton destination="/main"/>
       <div className="my-2 mt-20 mb-4">
         <div className="titlebox mb-6 mt-2">
           <span className="font-score font-extrabold ml-8 text-2xl">
@@ -72,7 +53,7 @@ export default function GptSavedList() {
           </span>
         </div>
         {currentRecipes.map((recipe) => (
-          <RecipeCard
+          <SavedListCard
             key={recipe.recipeId}
             recipeId={recipe.recipeId}
             foodName={recipe.foodName}
