@@ -13,20 +13,14 @@ import { toast } from 'react-toastify';
 export default function SignUp() {
   const [email, setEmail] = useState(''); // 이메일
   const [emailError, setEmailError] = useState(''); // 로그인 오류 메세지
-
   const [inputNum, setInputNum] = useState(''); // 입력한 인증번호
-
   const [nickName, setNickName] = useState(''); // 닉네임
   const [nameError, setNameError] = useState(''); // 닉네임 오류 메세지
-
   const [password, setPassword] = useState(''); // 비밀번호
   const [checkPassword, setCheckPassword] = useState(''); // 비밀번호 확인
   const [passwordMessage, setPasswordMessage] = useState(null); // 비밀번호 일치여부 안내 문구
-
   const [showPassword, setShowPassword] = useState(false);
-
   const navigate = useNavigate();
-
   const {
     signup, // 가입하기
     requestEmailForSignUp, // 인증요청
@@ -36,11 +30,8 @@ export default function SignUp() {
     checkNameDuplication, // 닉네임 중복 확인
     nameDuplicated, // 중복 여부
   } = useUserDispatch();
-
   const emailType = 'sign-up';
   const socialType = 'Refrigerator-Alchemist';
-
-  //-----------------------------------------상태, 상수---------------------------------------------
 
   // 1️⃣ 이메일 저장
   const handleEmailChange = (e) => setEmail(e.target.value);

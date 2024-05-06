@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react';
 import { useUserState, useUserDispatch } from '../context/UserContext.jsx';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import errorCode from '../utils/ErrorCode';
 
 export default function LoginSuccess() {
-  const { dispatch } = useUserDispatch();
+  const { dispatch, handleError } = useUserDispatch();
   const user = useUserState();
   const navigate = useNavigate();
 
@@ -47,19 +45,7 @@ export default function LoginSuccess() {
           return;
         }
       } catch (error) {
-        // 🚫 에러 처리
-        const errorHeaders = error.response?.headers;
-        if (errorHeaders.code) {
-          const errorName = Object.values(errorCode).find(
-            (obj) => obj.code === errorHeaders.code
-          );
-          const userNotice = errorName.notice;
-
-          console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
-          toast.error(`${userNotice}`); // 유저 팝업용
-        } else {
-          console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
-        }
+        handleError(error);
       }
     };
 
@@ -73,7 +59,7 @@ export default function LoginSuccess() {
       .catch((error) => {
         console.error(error);
       });
-  }, [navigate, dispatch]);
+  }, [navigate, dispatch, handleError]);
 
   return (
     <section>

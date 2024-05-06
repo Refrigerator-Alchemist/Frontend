@@ -10,7 +10,7 @@ import { useState, useEffect } from 'react';
 import Ranking from '../components/Ranking';
 import Navigation from '../components/ui/Navigation';
 import { useLocation } from 'react-router-dom';
-import { IP_ADDRESS, instance } from '../context/UserContext';
+import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
 
 const accessToken = localStorage.getItem('accessToken');
 const email = localStorage.getItem('email');
@@ -27,6 +27,7 @@ const RecipeCard = ({
   const [Liked, setLiked] = useState(isLiked);
   const [likeCount, setLikeCount] = useState(parseInt(initialLikeCount));
   const [likedPosts, setLikedPosts] = useState([]);
+  const { handleError } = useUserDispatch();
 
   // ⏯️ 실행: 처음 렌더링, 좋아요 업데이트
   useEffect(() => {
@@ -92,7 +93,7 @@ const RecipeCard = ({
         setLiked(!Liked);
       }
     } catch (error) {
-      console.error('좋아요 에러: ', error);
+      handleError(error);
     }
   };
 
@@ -145,6 +146,7 @@ const SearchBar = ({ onSearch }) => {
       handleSearchClick();
     }
   };
+  const { handleError } = useUserDispatch();
 
   const handleSearchClick = async () => {
     if (query.trim() !== '') {
@@ -174,8 +176,7 @@ const SearchBar = ({ onSearch }) => {
         }
         setQuery('');
       } catch (error) {
-        console.error('검색결과 에러 :', error);
-        toast.error('로그인을 먼저 해야합니다.');
+        handleError(error);
       }
     }
   };
@@ -229,6 +230,7 @@ function Board() {
   const [searchResultCount, setSearchResultCount] = useState(0);
   const location = useLocation();
   const recipesPerPage = 6;
+  const { handleError } = useUserDispatch();
 
   // ⏯️ 실행: 처음 렌더링 1번
   useEffect(() => {
@@ -261,7 +263,7 @@ function Board() {
         console.log('좋아요 누른 게시물의 postId 목록:', posts);
       }
     } catch (error) {
-      console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
+      handleError(error);
     }
   };
 
@@ -278,7 +280,7 @@ function Board() {
 
       console.log('총 페이지 수:', totalPages);
     } catch (error) {
-      console.error('전체 레시피 수 가져오기 에러:', error);
+      handleError(error);
     }
   };
 
@@ -303,7 +305,7 @@ function Board() {
         console.error(' 데이터 형식이 다름 에러내용:', response.data);
       }
     } catch (error) {
-      console.error('네트워크 문제, 서버 오류', error);
+      handleError(error);
     }
   };
 

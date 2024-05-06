@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { GoHome } from 'react-icons/go';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { IP_ADDRESS, instance } from '../context/UserContext';
+import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
+
 
 const RecipePage = () => {
   const [ingredients, setIngredients] = useState([]);
@@ -13,6 +14,7 @@ const RecipePage = () => {
   const accessToken = localStorage.getItem('accessToken');
 
   const navigate = useNavigate();
+  const { handleError } = useUserDispatch();
 
   // 🤖 GPT 레시피 결과 불러오는 함수
   useEffect(() => {
@@ -34,13 +36,14 @@ const RecipePage = () => {
           setSteps(response.data.recipe);
         }
       } catch (error) {
-        console.error('에러내용:', error);
-        console.log('에러 상태 코드:', error.response?.status);
-        const statusCode = error.response?.status;
+        handleError(error);
+        // console.error('에러내용:', error);
+        // console.log('에러 상태 코드:', error.response?.status);
+        // const statusCode = error.response?.status;
 
-        if (statusCode === 404) {
-          toast.error('레시피가 존재하지 않습니다.');
-        }
+        // if (statusCode === 404) {
+        //   toast.error('레시피가 존재하지 않습니다.');
+        // }
       } finally {
         setIsLoading(false);
       }
@@ -48,18 +51,12 @@ const RecipePage = () => {
     if (recommendId) {
       fetchData();
     }
-  }, [recommendId, accessToken]);
+  }, [recommendId, accessToken, handleError]);
 
   // gpt레시피 저장하기
   const handleSaveButtonClick = async () => {
     try {
-      if (!accessToken) {
-        toast.error('로그인이 필요합니다.');
-        console.log(' acessToken 없음');
-        return;
-      }
-
-      await instance.post(
+      await axios.post(
         `${IP_ADDRESS}/recipe/save`,
         {
           foodName: title,
@@ -75,15 +72,16 @@ const RecipePage = () => {
       toast.success('레시피가 성공적으로 저장되었습니다.');
       navigate('/recipe/myRecipe');
     } catch (error) {
-      console.error('에러내용:', error);
-      const statusCode = error.response?.status;
-      if (statusCode === 401) {
-        toast.error('socialId가 존재하지 않습니다.');
-      } else if (statusCode === 500) {
-        toast.error('레시피 저장을 실패했습니다.');
-      } else {
-        toast.error('서버와의 연결에 실패했습니다.');
-      }
+      handleError(error);
+      // console.error('에러내용:', error);
+      // const statusCode = error.response?.status;
+      // if (statusCode === 401) {
+      //   toast.error('socialId가 존재하지 않습니다.');
+      // } else if (statusCode === 500) {
+      //   toast.error('레시피 저장을 실패했습니다.');
+      // } else {
+      //   toast.error('서버와의 연결에 실패했습니다.');
+      // }
     }
   };
 

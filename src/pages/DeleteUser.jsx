@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useUserDispatch } from '../context/UserContext';
-import { toast } from 'react-toastify';
-import errorCode from '../utils/ErrorCode';
 
 export default function DeleteUser() {
   const [password, setPassword] = useState('');
 
-  const { deleteUser } = useUserDispatch();
+  const { handleError, deleteUser } = useUserDispatch();
 
   const navigate = useNavigate();
 
@@ -27,19 +25,7 @@ export default function DeleteUser() {
         deleteUser();
       }
     } catch (error) {
-      // 🚫 에러 처리
-      const errorHeaders = error.response?.headers;
-      if (errorHeaders.code) {
-        const errorName = Object.values(errorCode).find(
-          (obj) => obj.code === errorHeaders.code
-        );
-        const userNotice = errorName.notice;
-
-        console.log(`에러 내용: ${errorName}`);
-        toast.error(`${userNotice}`);
-      } else {
-        console.log(`확인되지 않은 에러, ${error}`);
-      }
+      handleError(error);
     }
   };
 
