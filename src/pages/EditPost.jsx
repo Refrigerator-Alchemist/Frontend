@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { IoAccessibility } from 'react-icons/io5';
 import { toast } from 'react-toastify';
+
 import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
 
 
@@ -84,8 +85,7 @@ export default function UploadBoard() {
         navigate(`/board/${postId}`);
       }
     } catch (error) {
-      console.error('수정 중 에러가 발생했습니다', error);
-      toast.error('수정 중 에러가 발생했습니다');
+      handleError(error);
     }
   };
 

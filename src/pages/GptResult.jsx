@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
 
 
-const RecipePage = () => {
+const GptResult = () => {
   const [ingredients, setIngredients] = useState([]);
   const [steps, setSteps] = useState([]);
   const [title, setTitle] = useState('');
@@ -37,13 +37,7 @@ const RecipePage = () => {
         }
       } catch (error) {
         handleError(error);
-        // console.error('에러내용:', error);
-        // console.log('에러 상태 코드:', error.response?.status);
-        // const statusCode = error.response?.status;
 
-        // if (statusCode === 404) {
-        //   toast.error('레시피가 존재하지 않습니다.');
-        // }
       } finally {
         setIsLoading(false);
       }
@@ -73,19 +67,10 @@ const RecipePage = () => {
       navigate('/recipe/myRecipe');
     } catch (error) {
       handleError(error);
-      // console.error('에러내용:', error);
-      // const statusCode = error.response?.status;
-      // if (statusCode === 401) {
-      //   toast.error('socialId가 존재하지 않습니다.');
-      // } else if (statusCode === 500) {
-      //   toast.error('레시피 저장을 실패했습니다.');
-      // } else {
-      //   toast.error('서버와의 연결에 실패했습니다.');
-      // }
     }
   };
 
-  if (isLoading) {
+  if (isLoading) { //컴포넌트 분리예정 
     return (
       <section className="flex flex-col items-center justify-center h-screen">
         <img
@@ -176,4 +161,4 @@ const RecipePage = () => {
   );
 };
 
-export default RecipePage;
+export default GptResult;

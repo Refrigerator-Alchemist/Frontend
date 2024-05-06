@@ -168,6 +168,174 @@ const errorCode = {
     message: 'JWT 토큰이 잘못되었습니다.',
     notice: '유저 정보가 올바르지 않습니다.',
   },
+
+
+  //gpt ------------------------------------------------------
+
+
+  NO_INGREDIENT:{
+    status: 400,
+    code: 'RAR1',
+    message: '입력된 재료가 없습니다',
+    notice: '입력된 재료가 없습니다. 재료를 입력해주세요'
+  },
+  NO_PERMISSION_FOR_RECIPE:{
+    status: 403,
+    code: 'RAR2',
+    message: '해당 레시피에 대한 조회 권한이 없습니다.',
+    notice: '해당 레시피의 권한이 없습니다.'
+  },
+
+  SAVE_RECIPE_FAIL:{
+    status: 500,
+    code: 'RAR3',
+    message: '레시피 저장을 실패했습니다.',
+    notice: '레시피 저장을 실패했습니다.'
+  },
+  FAILED_TO_GET_RECIPE_LIST:{
+    status: 500,
+    code: 'RAR4',
+    message: '레시피 목록 조회에 실패했습니다.',
+    notice: '레시피 목록을 불러오는 중 문제가 발생했습니다. '
+  },
+
+  FAILED_TO_GET_DETAIL_RECIPE:{
+    status: 500,
+    code: 'RAR5',
+    message: '상세 레시피 조회에 실패했습니다. ',
+    notice: '레시피 내용을 불러오는 중 문제가 발생했습니다. '
+  },
+  FAILED_TO_MAKE_RECIPE:{
+    status: 500,
+    code: 'RAR6',
+    message: '추천 레시피 생성에 실패했습니다 ',
+    notice: '추천 레시피를 생성에 실패했습니다'
+  },
+  NO_EXIST_RECIPEID:{
+    status: 404,
+    code: 'RAR7',
+    message: '해당 recipeId가 존재하지 않습니다.',
+    notice: '해당 레시피를 찾을 수 없습니다.'
+  },
+
+  NO_EXIST_RECOMMENDID:{
+    status: 404,
+    code: 'RAR8',
+    message: '해당 recommendId가 존재하지 않습니다',
+    notice: '해당 레시피가 존재하지 않습니다.'
+  },
+
+
+  // board ---------------------------------------------------
+  FAILED_TO_SAVE_POSTS:{
+    status: 500,
+    code: 'RAR9',
+    message: '게시글을 저장하는 중 에러가 발생했습니다.',
+    notice: '게시글을 저장하는 중 에러가 발생했습니다.'
+  },
+  FAILED_TO_MODIFY_POSTS:{
+    status: 500,
+    code: 'RAR10',
+    message: '게시글을 수정하는 중 에러가 발생했습니다.',
+    notice: '게시글을 수정하는 중 에러가 발생했습니다.'
+  },
+  FAILED_TO_UPLOAD_POSTS:{
+    status: 500,
+    code: 'RAR11',
+    message: '레시피를 업로드하는 중 에러가 발생했습니다.',
+    notice: '레시피를 업로드하는 중 에러가 발생했습니다.'
+  },
+  FAILED_TO_SEND_LIKE:{
+    status: 500,
+    code: 'RAR12',
+    message: '좋아요 누를때 에러가 발생했습니다. ',
+    notice: '좋아요 전송하는 중 문제가 발생했습니다. '
+  },
+  FAILED_TO_SEND_DISLIKE:{
+    status: 500,
+    code: 'RAR12',
+    message: '좋아요를 취소 할 때 에러가 발생했습니다.',
+    notice: '좋아요를 취소하는 중 문제가 발생했습니다.'
+  },
+  FAILED_TO_CHECK_LIKE:{
+    status: 401,
+    code: 'RAR13',
+    message: '해당 id가 좋아요를 눌렀는지 확인하는 중 에러가 발생했습니다.',
+    notice: '좋아요 누른 게시물을 확인하는 중 문제가 발생했습니다.',
+  },
+  FAILED_TO_LOAD_POSTPAGE:{
+    status: 401,
+    code: 'RAR14',
+    message: '게시판 페이지를 불러올 수 없습니다.',
+    notice: '게시판 페이지를 불러오는 중 문제가 발생했습니다.',
+  },
+  FAILED_TO_LOAD_DETAIL:{
+    status: 401,
+    code: 'RAR15',
+    message: '상세 페이지를 불러올 수 없습니다. ',
+    notice: '상세페이지를 불러오는 중 문제가 발생했습니다.',
+  },
+  FAILED_TO_LOAD_TOP:{
+    status: 401,
+    code: 'RAR16',
+    message: '인기 게시물들을 불러올 수 없습니다. ',
+    notice: '인기 게시물들을 불러오는 중 문제가 발생했습니다.',
+  },
+  FAILED_TO_LOAD_MYPOSTS_COUNT:{
+    status: 401,
+    code: 'RAR17',
+    message: '내가 작성한 게시물의 수를 불러올 수 없습니다.',
+    notice: '내가 작성한 게시물을 불러오는 중 문제가 발생했습니다.',
+  },
+
+  NO_SEARCH_RESULTS:{
+    status: 401,
+    code: 'RAR18',
+    message: '검색한 제목의 게시물을 찾을 수 없습니다.',
+    notice: '검색 결과를 찾을 수 없습니다.',
+  },
+
+  FAILED_TO_LOAD_LIKEDPOSTS:{
+    status: 401,
+    code: 'RAR19',
+    message: '내가 좋아요 누른 게시물들을 불러올 수 없습니다.',
+    notice: '내가 좋아요 누른 게시물들을 불러오는 중 문제가 발생했습니다.',
+  },
+
+  FAILED_TO_LOAD_MYPOSTS:{
+    status: 401,
+    code: 'RAR20',
+    message: '내가 작성한 게시물들을 불러올 수 없습니다.',
+    notice: '내가 작성한 게시물들을 불러오는 중 문제가 발생했습니다.',
+  },
+
+  FAILED_TO_LOAD_MYIMG:{
+    status: 401,
+    code: 'RAR21',
+    message: '내 프로필 이미지를 불러올 수 없습니다.',
+    notice: '내 프로필 이미지를 불러오는 중 문제가 발생했습니다.',
+  },
+
+  FAILED_TO_LOAD_DELETE_POST:{
+    status: 500,
+    code: 'RAR22',
+    message: '게시글을 삭제하던 중 에러가 발생했습니다.',
+    notice: '게시글을 삭제하던 중 문제가 발생했습니다.',
+  },
+
+  FAILED_TO_LOAD_LIKEDPOSTS_COUNT:{
+    status: 401,
+    code: 'RAR23',
+    message: '내가 좋아요 누른 게시글의 수를 조회하는 중 에러가 발생했습니다.',
+    notice: '내가 좋아요 누른 게시글을 불러오는 중 문제가 발생했습니다.',
+  },
+
+  FAILED_TO_LOAD_ALLPOSTS_COUNT:{
+    status: 401,
+    code: 'RAR24',
+    message: '전체 게시글의 수를 조회하는 중 에러가 발생했습니다.',
+    notice: '전체 게시글을 불러오는 중 문제가 발생했습니다.',
+  },
 };
 
 export default errorCode;

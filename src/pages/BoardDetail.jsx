@@ -8,6 +8,7 @@ import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
 import { PiSirenFill } from 'react-icons/pi';
 import { useLocation } from 'react-router-dom';
 
+
 const BoardDetail = () => {
   const { postId } = useParams();
   const [imageUrl, setImageUrl] = useState('');
@@ -177,7 +178,6 @@ const BoardDetail = () => {
           setLikedPosts((prevLikedPosts) => [...prevLikedPosts, postId]);
         }
         console.log(response);
-        console.log('***변경된 likedPosts:', likedPosts);
         setLiked(!Liked);
       }
     } catch (error) {

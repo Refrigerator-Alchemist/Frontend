@@ -10,6 +10,7 @@ import { useState, useEffect } from 'react';
 import Ranking from '../components/Ranking';
 import Navigation from '../components/ui/Navigation';
 import { useLocation } from 'react-router-dom';
+
 import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
 
 const accessToken = localStorage.getItem('accessToken');
@@ -89,7 +90,7 @@ const RecipeCard = ({
           setLikedPosts((prevLikedPosts) => [...prevLikedPosts, postId]);
         }
         console.log(response);
-        console.log('***변경된 likedPosts:', likedPosts);
+        console.log('변경된 likedPosts:', likedPosts);
         setLiked(!Liked);
       }
     } catch (error) {

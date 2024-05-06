@@ -30,15 +30,6 @@ export default function GptSavedList() {
         setRecipes(response.data);
       } catch (error) {
         handleError(error);
-        // console.error('에러내용:', error);
-        // console.log('에러 상태 코드:', error.response?.status);
-        // const statusCode = error.response?.status;
-
-        // if (statusCode === 500) {
-        //   toast.error('레시피 목록 조회에 실패했습니다.');
-        // } else {
-        //   toast.error('서버와의 연결에 실패했습니다.');
-        // }
       }
     };
 

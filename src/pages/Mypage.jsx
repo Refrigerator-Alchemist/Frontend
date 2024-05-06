@@ -8,6 +8,8 @@ import { toast } from 'react-toastify';
 import { useUserDispatch, IP_ADDRESS } from '../context/UserContext';
 
 import IMG_PROFILE from '../assets/img/img_profile.png';
+import handleError from '../utils/handleError';
+
 
 // 🃏 내가 저장한 게시물
 const SavedRecipe = ({
@@ -141,9 +143,7 @@ export default function MyPage() {
           });
           setImageUrl(response.data.imageUrl);
           localStorage.setItem(response.data.imageUrl); // 로컬스토리지에 저장
-        } else {
-          return;
-        }
+        } 
       } catch (error) {
         handleError(error);
       }
@@ -291,6 +291,7 @@ export default function MyPage() {
       );
     } catch (error) {
       handleError(error);
+
       throw error;
     }
   };

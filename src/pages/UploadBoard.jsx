@@ -5,6 +5,7 @@ import axios from 'axios';
 import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
 
 import { toast } from 'react-toastify';
+import handleError from '../utils/handleError';
 
 // ✍️ 게시물 작성
 export default function UploadBoard() {
@@ -69,8 +70,7 @@ export default function UploadBoard() {
         navigate(`/board/${postId}`);
       }
     } catch (error) {
-      console.error('게시물 업로드 중 에러 내용:', error);
-      toast.error('게시물 업로드에 실패했습니다.');
+      handleError(error);
     }
   };
 
