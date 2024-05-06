@@ -6,6 +6,7 @@ import Pagination from '../components/Pagination';
 import Navigation from '../components/ui/Navigation';
 import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
 
+
 export default function GptSavedList() {
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -21,7 +22,7 @@ export default function GptSavedList() {
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const response = await axios.get(`${IP_ADDRESS}/recipe/myRecipe`, {
+        const response = await instance.get(`${IP_ADDRESS}/recipe/myRecipe`, {
           headers: {
             'Authorization-Access': accessToken,
           },

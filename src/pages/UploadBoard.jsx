@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
 import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
+
 import { toast } from 'react-toastify';
 
 // ✍️ 게시물 작성
@@ -51,7 +52,7 @@ export default function UploadBoard() {
     });
 
     try {
-      const response = await axios.post(
+      const response = await instance.post(
         `${IP_ADDRESS}/board/upload/post`,
         formData,
         {

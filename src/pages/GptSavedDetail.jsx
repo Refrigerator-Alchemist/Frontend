@@ -6,6 +6,7 @@ import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
 import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
 
+
 const GptSavedDetail = () => {
   const [recipeData, setRecipeData] = useState({});
   const { recipeId } = useParams();
@@ -23,7 +24,7 @@ const GptSavedDetail = () => {
           throw new Error('Recipe ID가 존재하지 않습니다.');
         }
 
-        const response = await axios.get(
+        const response = await instance.get(
           `${IP_ADDRESS}/recipe/myRecipe/${recipeId}`,
           {
             headers: {

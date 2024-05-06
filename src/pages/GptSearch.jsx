@@ -2,9 +2,9 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import { CiSaveDown2 } from 'react-icons/ci';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
+
 
 const GptSearch = () => {
   const [tags, setTags] = useState([]);
@@ -54,7 +54,7 @@ const GptSearch = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post(
+      const response = await instance.post(
         `${IP_ADDRESS}/recipe/recommend`,
         {
           ingredients: tags,

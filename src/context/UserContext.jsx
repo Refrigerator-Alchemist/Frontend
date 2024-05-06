@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 export const IP_ADDRESS = 'http://localhost:8080';
 
 // 🌱 axios 인스턴스 : 베이스 URL 조절 가능
-const instance = axios.create({
+export const instance = axios.create({
   baseURL: `${IP_ADDRESS}`,
 });
 
@@ -46,6 +46,7 @@ instance.interceptors.request.use(
 //     return Promise.reject(error); // 그 외의 경우 에러를 그대로 반환
 //   }
 // );
+
 
 // 🌱 유저 상태 초기화
 const initialState = {

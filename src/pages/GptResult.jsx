@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { GoHome } from 'react-icons/go';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
+
 
 const RecipePage = () => {
   const [ingredients, setIngredients] = useState([]);
@@ -21,7 +21,7 @@ const RecipePage = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(
+        const response = await instance.get(
           `${IP_ADDRESS}/recipe/recommend/${recommendId}`,
           {
             headers: {
