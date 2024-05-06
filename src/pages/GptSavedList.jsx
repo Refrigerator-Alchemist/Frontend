@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
-import { toast } from 'react-toastify';
 import Pagination from '../components/Pagination';
 import Navigation from '../components/ui/Navigation';
 import { IP_ADDRESS } from '../context/UserContext';
+import handleError from '../utils/handleError';
 
 export default function GptSavedList() {
   const [recipes, setRecipes] = useState([]);
@@ -28,15 +28,7 @@ export default function GptSavedList() {
         });
         setRecipes(response.data);
       } catch (error) {
-        console.error('에러내용:', error);
-        console.log('에러 상태 코드:', error.response?.status);
-        const statusCode = error.response?.status;
-
-        if (statusCode === 500) {
-          toast.error('레시피 목록 조회에 실패했습니다.');
-        } else {
-          toast.error('서버와의 연결에 실패했습니다.');
-        }
+        handleError(error);
       }
     };
 

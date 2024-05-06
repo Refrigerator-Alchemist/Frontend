@@ -8,6 +8,7 @@ import { IP_ADDRESS } from '../context/UserContext';
 import { PiSirenFill } from 'react-icons/pi';
 import { useLocation } from 'react-router-dom';
 import mockData from '../assets/data/post.json';
+import handleError from '../utils/handleError';
 
 const BoardDetail = () => {
   const { postId } = useParams();
@@ -58,7 +59,7 @@ const BoardDetail = () => {
           );
         }
       } catch (error) {
-        console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
+        handleError(error);
       }
     };
 
@@ -95,7 +96,7 @@ const BoardDetail = () => {
         console.error('데이터 타입 오류:', response.data);
       }
     } catch (error) {
-      console.error('에러 내용:', error);
+      handleError(error);
     }
   };
 
@@ -176,11 +177,10 @@ const BoardDetail = () => {
           setLikedPosts((prevLikedPosts) => [...prevLikedPosts, postId]);
         }
         console.log(response);
-        console.log('***변경된 likedPosts:', likedPosts);
         setLiked(!Liked);
       }
     } catch (error) {
-      console.error('좋아요 에러: ', error);
+      handleError(error);
     }
   };
 

@@ -5,6 +5,7 @@ import { CiSaveDown2 } from 'react-icons/ci';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { IP_ADDRESS } from '../context/UserContext';
+import handleError from '../utils/handleError';
 
 const GptSearch = () => {
   const [tags, setTags] = useState([]);
@@ -69,27 +70,9 @@ const GptSearch = () => {
       const recommendId = response.data;
       if (recommendId) {
         navigate(`/recipe/recommend/${recommendId}`);
-      } else {
-        console.error('recommendId를 찾을 수 없습니다.');
-        toast.error('추천 레시피 생성에 실패했습니다..');
-      }
+      } 
     } catch (error) {
-      console.error('에러내용:', error);
-      console.log('에러 상태 코드:', error.response?.status);
-      const statusCode = error.response?.status;
-      if (statusCode === 400) {
-        toast.error('입력된 재료가 없습니다. 재료를 입력해 주세요.');
-      } else if (statusCode === 406) {
-        toast.error('적절하지 못한 재료가 있습니다.');
-      } else if (statusCode === 404) {
-        toast.error('레시피가 존재하지 않습니다.');
-      } else if (statusCode === 500) {
-        toast.error('추천 레시피 생성에 실패했습니다.');
-      } else {
-        toast.error('서버와의 연결에 실패했습니다.');
-      }
-    } finally {
-      setIsLoading(false);
+      handleError(error);
     }
   };
 

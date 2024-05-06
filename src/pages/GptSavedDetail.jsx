@@ -3,9 +3,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import Navigation from '../components/ui/Navigation';
 import axios from 'axios';
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { IP_ADDRESS } from '../context/UserContext';
+import handleError from '../utils/handleError';
 
 const GptSavedDetail = () => {
   const [recipeData, setRecipeData] = useState({});
@@ -33,24 +33,7 @@ const GptSavedDetail = () => {
         );
         setRecipeData(response.data);
       } catch (error) {
-        let message = '상세 레시피 조회에 실패했습니다.';
-        if (error.response) {
-          switch (error.response.status) {
-            case 406:
-              message = '해당 recipeId가 존재하지 않습니다.';
-              break;
-            case 403:
-              message = '해당 레시피에 대한 조회 권한이 없습니다.';
-              break;
-            case 500:
-              message = '상세 레시피 조회에 실패했습니다.';
-              break;
-            default:
-              message = '알 수 없는 에러가 발생했습니다.';
-              break;
-          }
-        }
-        toast.error(message);
+        handleError(error);
       }
     };
 

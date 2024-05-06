@@ -4,6 +4,8 @@ import { IoAccessibility } from 'react-icons/io5';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { IP_ADDRESS } from '../context/UserContext';
+import handleError from '../utils/handleError';
+
 
 export default function UploadBoard() {
   const { postId } = useParams(); // 라우터 엔드포인트
@@ -41,7 +43,7 @@ export default function UploadBoard() {
           console.error('데이터가 오지 않았음 : 서버 확인', response.data);
         }
       } catch (error) {
-        console.error('데이터 전송 중 오류 발생 : 클라이언트 확인', error);
+        handleError(error);
       }
     };
     fetchData(postId);
@@ -85,8 +87,7 @@ export default function UploadBoard() {
         navigate(`/board/${postId}`);
       }
     } catch (error) {
-      console.error('수정 중 에러가 발생했습니다', error);
-      toast.error('수정 중 에러가 발생했습니다');
+      handleError(error);
     }
   };
 

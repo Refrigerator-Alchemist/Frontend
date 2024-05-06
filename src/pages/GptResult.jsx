@@ -4,8 +4,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { IP_ADDRESS } from '../context/UserContext';
+import handleError from '../utils/handleError';
 
-const RecipePage = () => {
+const GptResult = () => {
   const [ingredients, setIngredients] = useState([]);
   const [steps, setSteps] = useState([]);
   const [title, setTitle] = useState('');
@@ -35,13 +36,7 @@ const RecipePage = () => {
           setSteps(response.data.recipe);
         }
       } catch (error) {
-        console.error('에러내용:', error);
-        console.log('에러 상태 코드:', error.response?.status);
-        const statusCode = error.response?.status;
-
-        if (statusCode === 404) {
-          toast.error('레시피가 존재하지 않습니다.');
-        }
+        handleError(error);
       } finally {
         setIsLoading(false);
       }
@@ -76,19 +71,11 @@ const RecipePage = () => {
       toast.success('레시피가 성공적으로 저장되었습니다.');
       navigate('/recipe/myRecipe');
     } catch (error) {
-      console.error('에러내용:', error);
-      const statusCode = error.response?.status;
-      if (statusCode === 401) {
-        toast.error('socialId가 존재하지 않습니다.');
-      } else if (statusCode === 500) {
-        toast.error('레시피 저장을 실패했습니다.');
-      } else {
-        toast.error('서버와의 연결에 실패했습니다.');
-      }
+      handleError(error);
     }
   };
 
-  if (isLoading) {
+  if (isLoading) { //컴포넌트 분리예정 
     return (
       <section className="flex flex-col items-center justify-center h-screen">
         <img
@@ -179,4 +166,4 @@ const RecipePage = () => {
   );
 };
 
-export default RecipePage;
+export default GptResult;

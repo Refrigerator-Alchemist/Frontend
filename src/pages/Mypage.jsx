@@ -8,6 +8,8 @@ import { VscChromeClose } from 'react-icons/vsc';
 import { toast } from 'react-toastify';
 import { useUserDispatch, IP_ADDRESS } from '../context/UserContext';
 import IMG_PROFILE from '../assets/img/img_profile.png';
+import handleError from '../utils/handleError';
+
 
 // 🃏 내가 저장한 게시물
 const SavedRecipe = ({
@@ -141,11 +143,9 @@ export default function MyPage() {
           });
           setImageUrl(response.data.imageUrl);
           localStorage.setItem(response.data.imageUrl); // 로컬스토리지에 저장
-        } else {
-          return;
-        }
+        } 
       } catch (error) {
-        console.error('데이터 통신 중 문제 발생: ', error);
+        handleError(error);
       }
     };
 
@@ -176,7 +176,7 @@ export default function MyPage() {
           toast.error('데이터가 배열이 아닙니다');
         }
       } catch (error) {
-        console.error('내가 작성한 레시피 로드 중 에러 발생', error);
+        handleError(error);
       }
     };
 
@@ -227,7 +227,7 @@ export default function MyPage() {
           toast.error('데이터가 배열이 아닙니다!');
         }
       } catch (error) {
-        console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
+        handleError(error);
       }
     };
 
@@ -241,8 +241,7 @@ export default function MyPage() {
         });
         setTotalMyRecipes(response.data.total);
       } catch (error) {
-        console.error('내 레시피 총 개수 정보 가져오기 실패:', error);
-        toast.error('레시피 정보를 가져오는데 실패했습니다.');
+        handleError(error);
       }
     };
 
@@ -256,8 +255,7 @@ export default function MyPage() {
         });
         setTotalLikedRecipes(response.data.total);
       } catch (error) {
-        console.error('좋아요 누른 레시피 총 개수 정보 가져오기 실패:', error);
-        toast.error('좋아요 레시피 정보를 가져오는데 실패했습니다.');
+        handleError(error);
       }
     };
 
@@ -292,8 +290,7 @@ export default function MyPage() {
         prevRecipes.filter((recipe) => recipe.postId !== postId)
       );
     } catch (error) {
-      console.error('레시피 삭제 에러 내용:', error);
-      throw error;
+      handleError(error);
     }
   };
   // 3️⃣ 레시피 삭제 확인
@@ -304,7 +301,7 @@ export default function MyPage() {
         await deleteRecipe(postId);
         toast.success('레시피 삭제 성공');
       } catch (error) {
-        console.error('레시피 삭제 실패:', error);
+        handleError(error);
       }
     }
   };
