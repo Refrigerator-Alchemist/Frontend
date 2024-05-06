@@ -3,6 +3,7 @@ import { GoHome } from 'react-icons/go';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
+import axios from 'axios';
 
 
 const GptResult = () => {
@@ -21,7 +22,7 @@ const GptResult = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await instance.get(
+        const response = await axios.get(
           `${IP_ADDRESS}/recipe/recommend/${recommendId}`,
           {
             headers: {

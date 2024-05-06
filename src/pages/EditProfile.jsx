@@ -6,6 +6,7 @@ import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
 
 import { toast } from 'react-toastify';
 import IMAGE_PROFILE from '../assets/img/img_profile.png';
+import axios from 'axios';
 
 export default function EditProfile() {
   const [nameError, setNameError] = useState(false);
@@ -30,7 +31,7 @@ export default function EditProfile() {
 
       try {
         if (accessToken) {
-          const response = await instance.get(URL, {
+          const response = await axios.get(URL, {
             headers: {
               'Authorization-Access': accessToken,
             },
@@ -82,7 +83,7 @@ export default function EditProfile() {
     formData.append('file', file);
 
     try {
-      await instance.post(URL, formData, {
+      await axios.post(URL, formData, {
         headers: {
           'Authorization-Access': accessToken,
         },
@@ -111,7 +112,7 @@ export default function EditProfile() {
 
     try {
       if (nameError === false) {
-        await instance
+        await axios
           .post(
             URL,
             {

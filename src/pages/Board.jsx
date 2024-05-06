@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import ICON_SEARCHING from '../assets/img/search.png';
 // import ICON_WRITTING from '../assets/img/writing.png';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
@@ -44,7 +45,7 @@ const RecipeCard = ({
     try {
       if (Liked) {
         // ▶️ 좋아요 되어있는 상태면 취소
-        const response = await instance.post(
+        const response = await axios.post(
           `${IP_ADDRESS}/board/dislike`,
           {
             email: email,
@@ -70,7 +71,7 @@ const RecipeCard = ({
         setLiked(!Liked);
       } else {
         // ▶️ 안 눌려져 있는 상태면 좋아요
-        const response = await instance.post(
+        const response = await axios.post(
           `${IP_ADDRESS}/board/like`,
           {
             email: email,
@@ -152,7 +153,7 @@ const SearchBar = ({ onSearch }) => {
   const handleSearchClick = async () => {
     if (query.trim() !== '') {
       try {
-        const response = await instance.get(
+        const response = await axios.get(
           `${IP_ADDRESS}/board/searchTitle?title=${query.trim()}`,
           {
             headers: {
@@ -252,7 +253,7 @@ function Board() {
     }
     const URL = `${IP_ADDRESS}/board/islike?id=${email}`;
     try {
-      const response = await instance.get(URL, {
+      const response = await axios.get(URL, {
         headers: {
           'Authorization-Access': accessToken,
         },
@@ -271,7 +272,7 @@ function Board() {
   // 1️⃣ 전체 레시피 수를 가져오는 함수
   const fetchTotalRecipes = async () => {
     try {
-      const response = await instance.get(`${IP_ADDRESS}/board/total`);
+      const response = await axios.get(`${IP_ADDRESS}/board/total`);
 
       console.log(response.data);
       const totalRecipes = response.data;
@@ -288,7 +289,7 @@ function Board() {
   // 2️⃣ 각 페이지에 해당하는 레시피들을 불러오는 함수
   const fetchRecipesByPage = async (pageNumber) => {
     try {
-      const response = await instance.get(`${IP_ADDRESS}/board/page`, {
+      const response = await axios.get(`${IP_ADDRESS}/board/page`, {
         params: { data: pageNumber.toString() },
       });
 

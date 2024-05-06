@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Pagination from '../components/Pagination';
 import Navigation from '../components/ui/Navigation';
@@ -8,7 +9,6 @@ import { toast } from 'react-toastify';
 import { useUserDispatch, IP_ADDRESS } from '../context/UserContext';
 
 import IMG_PROFILE from '../assets/img/img_profile.png';
-import handleError from '../utils/handleError';
 
 
 // 🃏 내가 저장한 게시물

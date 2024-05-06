@@ -5,6 +5,7 @@ import { CiSaveDown2 } from 'react-icons/ci';
 import { toast } from 'react-toastify';
 
 import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
+import axios from 'axios';
 
 
 const GptSearch = () => {
@@ -55,7 +56,7 @@ const GptSearch = () => {
     setIsLoading(true);
 
     try {
-      const response = await instance.post(
+      const response = await axios.post(
         `${IP_ADDRESS}/recipe/recommend`,
         {
           ingredients: tags,

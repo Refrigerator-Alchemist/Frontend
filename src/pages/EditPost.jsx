@@ -4,6 +4,7 @@ import { IoAccessibility } from 'react-icons/io5';
 import { toast } from 'react-toastify';
 
 import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
+import axios from 'axios';
 
 
 export default function UploadBoard() {
@@ -22,7 +23,7 @@ export default function UploadBoard() {
     const fetchData = async (postId) => {
       const URL = `${IP_ADDRESS}/board/updateBoard?postId=${postId}`;
       try {
-        const response = await instance.get(URL, {
+        const response = await axios.get(URL, {
           headers: {
             'Authorization-Access': accessToken,
           },
@@ -72,7 +73,7 @@ export default function UploadBoard() {
     };
 
     try {
-      const response = await instance.post(URL, formData, {
+      const response = await axios.post(URL, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization-Access': accessToken,

@@ -5,7 +5,6 @@ import axios from 'axios';
 import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
 
 import { toast } from 'react-toastify';
-import handleError from '../utils/handleError';
 
 // ✍️ 게시물 작성
 export default function UploadBoard() {
@@ -53,7 +52,7 @@ export default function UploadBoard() {
     });
 
     try {
-      const response = await instance.post(
+      const response = await axios.post(
         `${IP_ADDRESS}/board/upload/post`,
         formData,
         {

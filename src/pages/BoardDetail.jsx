@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft, FaHeart, FaRegHeart } from 'react-icons/fa';
@@ -39,7 +40,7 @@ const BoardDetail = () => {
       }
       const URL = `${IP_ADDRESS}/board/islike?id=${myEmail}`;
       try {
-        const response = await instance.get(URL, {
+        const response = await axios.get(URL, {
           headers: {
             'Authorization-Access': accessToken,
           },
@@ -130,7 +131,7 @@ const BoardDetail = () => {
     try {
       if (Liked) {
         // ▶️ 좋아요 되어있는 상태면 취소
-        const response = await instance.post(
+        const response = await axios.post(
           `${IP_ADDRESS}/board/dislike`,
           {
             email: myEmail,
@@ -157,7 +158,7 @@ const BoardDetail = () => {
         setLiked(!Liked);
       } else {
         // ▶️ 안 눌려져 있는 상태면 좋아요
-        const response = await instance.post(
+        const response = await axios.post(
           `${IP_ADDRESS}/board/like`,
 
           {
@@ -192,7 +193,7 @@ const BoardDetail = () => {
     const URL = `${IP_ADDRESS}/board/report`;
 
     try {
-      const response = await instance.post(
+      const response = await axios.post(
         URL,
         { email: myEmail, postId: postId },
         {

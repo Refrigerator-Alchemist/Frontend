@@ -22,7 +22,7 @@ export default function GptSavedList() {
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const response = await instance.get(`${IP_ADDRESS}/recipe/myRecipe`, {
+        const response = await axios.get(`${IP_ADDRESS}/recipe/myRecipe`, {
           headers: {
             'Authorization-Access': accessToken,
           },

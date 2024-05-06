@@ -24,7 +24,7 @@ const GptSavedDetail = () => {
           throw new Error('Recipe ID가 존재하지 않습니다.');
         }
 
-        const response = await instance.get(
+        const response = await axios.get(
           `${IP_ADDRESS}/recipe/myRecipe/${recipeId}`,
           {
             headers: {
