@@ -1,9 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IP_ADDRESS } from '../context/UserContext';
+import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
 import { FaHeart } from 'react-icons/fa';
-import { toast } from 'react-toastify';
 
 // 📋 각 게시물
 function RankingItem({
@@ -58,6 +57,7 @@ function RankingItem({
 export default function Ranking() {
   const [topItems, setTopItems] = useState([]);
   const navigate = useNavigate();
+  const { handleError } = useUserDispatch();
 
   // ⏯️ 실행: 처음 렌더링, topItems 업데이트
   useEffect(() => {
@@ -76,16 +76,14 @@ export default function Ranking() {
             likeCount: item.likeCount,
           }));
           setTopItems(items);
-        } else {
-          toast.error('Top3 게시물 정보 받는 중 오류');
         }
       } catch (error) {
-        console.error(error);
+        handleError(error);
       }
     };
 
     fetchRanking();
-  }, []);
+  });
 
   return (
     <article

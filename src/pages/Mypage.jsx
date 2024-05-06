@@ -6,7 +6,7 @@ import Navigation from '../components/ui/Navigation';
 import { FaHeart } from 'react-icons/fa';
 import { VscChromeClose } from 'react-icons/vsc';
 import { toast } from 'react-toastify';
-import { useUserDispatch, IP_ADDRESS, reIssue } from '../context/UserContext';
+import { useUserDispatch, IP_ADDRESS } from '../context/UserContext';
 import IMG_PROFILE from '../assets/img/img_profile.png';
 
 // 🃏 내가 저장한 게시물
@@ -118,7 +118,7 @@ export default function MyPage() {
   const [currentPageMyRecipes, setCurrentPageMyRecipes] = useState(1);
   const [currentPageLikedRecipes, setCurrentPageLikedRecipes] = useState(1);
 
-  const { logout } = useUserDispatch();
+  const { logout, handleError } = useUserDispatch();
 
   const accessToken = localStorage.getItem('accessToken');
   const nickName = localStorage.getItem('nickName');
@@ -145,9 +145,7 @@ export default function MyPage() {
           return;
         }
       } catch (error) {
-        if (error.response && error.response.headers.code === 'RAT8') {
-          reIssue(); // 토큰 만료 시 reIssue 함수 호출
-        }
+        handleError(error);
       }
     };
 
@@ -173,12 +171,12 @@ export default function MyPage() {
           setRecipes(items);
           // totalMyRecipes = Math.ceil(response.data.total / recipesPerPage);
           setTotalMyRecipes(response.data.total);
-          console.log('내가작성한 레시피 총 갯수:', response.data.total);
+          console.log('내가 작성한 레시피 총 갯수:', response.data.total);
         } else {
           toast.error('데이터가 배열이 아닙니다');
         }
       } catch (error) {
-        console.error('내가 작성한 레시피 로드 중 에러 발생', error);
+        handleError(error);
       }
     };
 
@@ -229,7 +227,7 @@ export default function MyPage() {
           toast.error('데이터가 배열이 아닙니다!');
         }
       } catch (error) {
-        console.error('좋아요 누른 기록 받아오는 중 에러 발생', error);
+        handleError(error);
       }
     };
 
@@ -243,8 +241,7 @@ export default function MyPage() {
         });
         setTotalMyRecipes(response.data.total);
       } catch (error) {
-        console.error('내 레시피 총 개수 정보 가져오기 실패:', error);
-        toast.error('레시피 정보를 가져오는데 실패했습니다.');
+        handleError(error);
       }
     };
 
@@ -258,8 +255,7 @@ export default function MyPage() {
         });
         setTotalLikedRecipes(response.data.total);
       } catch (error) {
-        console.error('좋아요 누른 레시피 총 개수 정보 가져오기 실패:', error);
-        toast.error('좋아요 레시피 정보를 가져오는데 실패했습니다.');
+        handleError(error);
       }
     };
 
@@ -275,7 +271,7 @@ export default function MyPage() {
       fetchMyRecipesCount();
       fetchLikedRecipesCount();
     }
-  }, [showMyRecipes, accessToken, email]);
+  }, [showMyRecipes, accessToken, email, handleError]);
 
   // 1️⃣ 레시피 수정
   const handleEdit = (postId) => {
@@ -294,7 +290,7 @@ export default function MyPage() {
         prevRecipes.filter((recipe) => recipe.postId !== postId)
       );
     } catch (error) {
-      console.error('레시피 삭제 에러 내용:', error);
+      handleError(error);
       throw error;
     }
   };
@@ -306,7 +302,7 @@ export default function MyPage() {
         await deleteRecipe(postId);
         toast.success('레시피 삭제 성공');
       } catch (error) {
-        console.error('레시피 삭제 실패:', error);
+        handleError(error);
       }
     }
   };

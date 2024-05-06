@@ -12,17 +12,12 @@ import { toast } from 'react-toastify';
 
 export default function ResetPassword() {
   const [email, setEmail] = useState(''); // 이메일
-
   const [inputNum, setInputNum] = useState(''); // 입력한 인증번호
-
   const [password, setPassword] = useState(''); // 새로운 비밀번호
   const [rePassword, setRePassword] = useState(''); // 비밀번호 확인
   const [passwordMessage, setPasswordMessage] = useState(null); // 비밀번호 일치여부 안내 문구
-
   const [showPassword, setShowPassword] = useState(false);
-
   const navigate = useNavigate();
-
   const {
     resetPassword, // 재설정하기
     requestEmailForReset, // 인증 요청
@@ -30,11 +25,8 @@ export default function ResetPassword() {
     checkCodeVerification, // 인증 확인
     verified, // 인증 여부
   } = useUserDispatch();
-
   const emailType = 'reset-password';
   const socialType = 'Refrigerator-Alchemist';
-
-  /**-----------------------------------------상태, 상수---------------------------------------------*/
 
   // 1️⃣ 이메일 저장
   const handleEmailChange = (e) => setEmail(e.target.value);

@@ -4,7 +4,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { CiSaveDown2 } from 'react-icons/ci';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { IP_ADDRESS } from '../context/UserContext';
+import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
 
 const GptSearch = () => {
   const [tags, setTags] = useState([]);
@@ -16,6 +16,7 @@ const GptSearch = () => {
   const nickName = localStorage.getItem('nickName') || '';
 
   const navigate = useNavigate();
+  const { handleError } = useUserDispatch();
 
   // 입력 값 변경 시 상태 업데이트
   const handleInputChange = (e) => {
@@ -74,20 +75,21 @@ const GptSearch = () => {
         toast.error('추천 레시피 생성에 실패했습니다..');
       }
     } catch (error) {
-      console.error('에러내용:', error);
-      console.log('에러 상태 코드:', error.response?.status);
-      const statusCode = error.response?.status;
-      if (statusCode === 400) {
-        toast.error('입력된 재료가 없습니다. 재료를 입력해 주세요.');
-      } else if (statusCode === 406) {
-        toast.error('적절하지 못한 재료가 있습니다.');
-      } else if (statusCode === 404) {
-        toast.error('레시피가 존재하지 않습니다.');
-      } else if (statusCode === 500) {
-        toast.error('추천 레시피 생성에 실패했습니다.');
-      } else {
-        toast.error('서버와의 연결에 실패했습니다.');
-      }
+      handleError(error);
+      // console.error('에러내용:', error);
+      // console.log('에러 상태 코드:', error.response?.status);
+      // const statusCode = error.response?.status;
+      // if (statusCode === 400) {
+      //   toast.error('입력된 재료가 없습니다. 재료를 입력해 주세요.');
+      // } else if (statusCode === 406) {
+      //   toast.error('적절하지 못한 재료가 있습니다.');
+      // } else if (statusCode === 404) {
+      //   toast.error('레시피가 존재하지 않습니다.');
+      // } else if (statusCode === 500) {
+      //   toast.error('추천 레시피 생성에 실패했습니다.');
+      // } else {
+      //   toast.error('서버와의 연결에 실패했습니다.');
+      // }
     } finally {
       setIsLoading(false);
     }

@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
-import { IP_ADDRESS } from '../context/UserContext';
+import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
 import { toast } from 'react-toastify';
 
 // ✍️ 게시물 작성
@@ -19,6 +19,7 @@ export default function UploadBoard() {
   const fileInput = useRef(null);
 
   const navigate = useNavigate();
+  const { handleError } = useUserDispatch();
 
   // 1️⃣ 재료 입력
   const handleIngredientChange = (index, event) => {
@@ -76,26 +77,20 @@ export default function UploadBoard() {
     navigate(-1);
   };
 
-  // 🚷 비로그인 유저 접근 금지
-  // useEffect(() => {
-  //   if (!accessToken) {
-  //     toast.error('로그인을 먼저 해야합니다');
-  //     setTimeout(() => {
-  //       navigate('/board');
-  //     }, 2000);
-  //   }
-  // }, [navigate, location]);
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (file && file.type.match('image.*')) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setImagePreviewUrl(e.target.result);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setImagePreviewUrl('');
+    try {
+      if (file && file.type.match('image.*')) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          setImagePreviewUrl(e.target.result);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        setImagePreviewUrl('');
+      }
+    } catch (error) {
+      handleError(error);
     }
   };
 
