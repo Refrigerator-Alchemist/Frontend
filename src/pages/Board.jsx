@@ -38,10 +38,6 @@ const RecipeCard = ({
 
   // 💛 좋아요 / 취소 (로그인해야 가능)
   const toggleLike = async () => {
-    if (!accessToken) {
-      toast.error('로그인이 필요한 기능입니다.');
-      return;
-    }
     try {
       if (Liked) {
         // ▶️ 좋아요 되어있는 상태면 취소
@@ -247,10 +243,6 @@ function Board() {
 
   // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
   const fetchLikedPosts = async () => {
-    if (!accessToken) {
-      console.log(' fetchLikedPosts : accessToken 없음');
-      return;
-    }
     const URL = `${IP_ADDRESS}/board/islike?id=${email}`;
     try {
       const response = await axios.get(URL, {

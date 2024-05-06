@@ -4,6 +4,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
 import axios from 'axios';
+import Loading from '../components/gpt/Loading';
+import BackButton from '../components/BackButton';
 
 
 const GptResult = () => {
@@ -71,35 +73,13 @@ const GptResult = () => {
     }
   };
 
-  if (isLoading) { //컴포넌트 분리예정 
-    return (
-      <section className="flex flex-col items-center justify-center h-screen">
-        <img
-          src="https://media.discordapp.net/attachments/1197868473666248844/1213305395305652264/img_profile.png?ex=660772b4&is=65f4fdb4&hm=fa07101b219d5e41c1501989503c4255d4e8aaaae60a02a1f626e326ca970493&=&format=webp&quality=lossless&width=614&height=614"
-          alt="로딩중"
-          className="animate-bounce w-24 h-24 mb-4"
-        />
-        <h1 className=" font-score text-2xl font-bold text-gray-900 mb-4">
-          로딩 중
-        </h1>
-        <button
-          onClick={() => navigate('/main')}
-          className=" font-score text-sm text-gray-400"
-        >
-          취소
-        </button>
-      </section>
-    );
+  if (isLoading) {
+    return <Loading />;
   }
 
   return (
     <section className="bg-white min-h-screen px-4 py-6">
-      <div
-        className="absolute top-5 left-30 ml-0 border-2 w-10 h-10 transition ease-in-out delay-150 rounded-full flex items-center justify-center text-center bg-main hover:bg-indigo-500 hover:scale-125 hover:cursor-pointer hover:text-white hover:bg-indigo"
-        onClick={() => navigate('/main')}
-      >
-        <GoHome className="text-center text-lg md:text-xl" />
-      </div>
+      <BackButton destination="/main"/>
       <main className="max-w-md mx-auto bg-white rounded-lg overflow-hidden md:max-w-lg">
         <div className="md:flex">
           <div className="w-full p-4 pt-12">
