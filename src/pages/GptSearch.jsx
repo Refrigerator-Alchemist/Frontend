@@ -2,10 +2,10 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import { CiSaveDown2 } from 'react-icons/ci';
-import axios from 'axios';
 import { toast } from 'react-toastify';
-import { IP_ADDRESS } from '../context/UserContext';
-import handleError from '../utils/handleError';
+
+import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
+
 
 const GptSearch = () => {
   const [tags, setTags] = useState([]);
@@ -17,6 +17,7 @@ const GptSearch = () => {
   const nickName = localStorage.getItem('nickName') || '';
 
   const navigate = useNavigate();
+  const { handleError } = useUserDispatch();
 
   // 입력 값 변경 시 상태 업데이트
   const handleInputChange = (e) => {
@@ -54,7 +55,7 @@ const GptSearch = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post(
+      const response = await instance.post(
         `${IP_ADDRESS}/recipe/recommend`,
         {
           ingredients: tags,
@@ -73,6 +74,9 @@ const GptSearch = () => {
       } 
     } catch (error) {
       handleError(error);
+    } finally {
+      setIsLoading(false);
+
     }
   };
 
@@ -106,7 +110,7 @@ const GptSearch = () => {
         <FaArrowLeft />
       </div>
       <main className="max-w-lg mx-auto flex-1">
-        <h2 className="font-score text-xl md:text-2xl font-bold mb-12 mt-32 text-center">
+        <h2 className="font-jua text-xl md:text-2xl font-bold mb-12 mt-32 text-center">
           냉장고에서 꺼내 넣어주세요!
         </h2>
         <div className="mr-10 ml-10 flex items-center border-b border-gray-300 mb-4">
@@ -146,7 +150,7 @@ const GptSearch = () => {
       </main>
       <footer className="w-full max-w-xs mx-auto pb-8">
         <button
-          className="flex justify-center items-center font-score transition ease-in-out delay-150 text-black text-md md:text-2xl bg-white hover:bg-white hover:scale-125 hover:cursor-pointer font-bold py-2 px-4 rounded w-full mb-4"
+          className="flex justify-center items-center font-jua transition ease-in-out delay-150 text-black text-md md:text-2xl bg-white hover:bg-white hover:scale-125 hover:cursor-pointer font-bold py-2 px-4 rounded w-full mb-4"
           type="button"
           onClick={() => {
             if (!accessToken) {

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Pagination from '../components/Pagination';
@@ -7,6 +6,7 @@ import { FaHeart } from 'react-icons/fa';
 import { VscChromeClose } from 'react-icons/vsc';
 import { toast } from 'react-toastify';
 import { useUserDispatch, IP_ADDRESS } from '../context/UserContext';
+
 import IMG_PROFILE from '../assets/img/img_profile.png';
 import handleError from '../utils/handleError';
 
@@ -120,7 +120,7 @@ export default function MyPage() {
   const [currentPageMyRecipes, setCurrentPageMyRecipes] = useState(1);
   const [currentPageLikedRecipes, setCurrentPageLikedRecipes] = useState(1);
 
-  const { logout } = useUserDispatch();
+  const { logout, handleError } = useUserDispatch();
 
   const accessToken = localStorage.getItem('accessToken');
   const nickName = localStorage.getItem('nickName');
@@ -171,7 +171,7 @@ export default function MyPage() {
           setRecipes(items);
           // totalMyRecipes = Math.ceil(response.data.total / recipesPerPage);
           setTotalMyRecipes(response.data.total);
-          console.log('내가작성한 레시피 총 갯수:', response.data.total);
+          console.log('내가 작성한 레시피 총 갯수:', response.data.total);
         } else {
           toast.error('데이터가 배열이 아닙니다');
         }
@@ -271,7 +271,7 @@ export default function MyPage() {
       fetchMyRecipesCount();
       fetchLikedRecipesCount();
     }
-  }, [showMyRecipes, accessToken, email]);
+  }, [showMyRecipes, accessToken, email, handleError]);
 
   // 1️⃣ 레시피 수정
   const handleEdit = (postId) => {
@@ -291,6 +291,8 @@ export default function MyPage() {
       );
     } catch (error) {
       handleError(error);
+
+      throw error;
     }
   };
   // 3️⃣ 레시피 삭제 확인

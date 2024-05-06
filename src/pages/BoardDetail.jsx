@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft, FaHeart, FaRegHeart } from 'react-icons/fa';
 import Navigation from '../components/ui/Navigation';
-import axios from 'axios';
 import { toast } from 'react-toastify';
-import { IP_ADDRESS } from '../context/UserContext';
+import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
+
 import { PiSirenFill } from 'react-icons/pi';
 import { useLocation } from 'react-router-dom';
-import mockData from '../assets/data/post.json';
-import handleError from '../utils/handleError';
+
 
 const BoardDetail = () => {
   const { postId } = useParams();
@@ -28,6 +27,7 @@ const BoardDetail = () => {
   const myEmail = localStorage.getItem('email');
   const navigate = useNavigate();
   const location = useLocation();
+  const { handleError } = useUserDispatch();
 
   // ⏯️ 실행: 처음 렌더링, 게시물 검색 후
   useEffect(() => {
@@ -39,7 +39,7 @@ const BoardDetail = () => {
       }
       const URL = `${IP_ADDRESS}/board/islike?id=${myEmail}`;
       try {
-        const response = await axios.get(URL, {
+        const response = await instance.get(URL, {
           headers: {
             'Authorization-Access': accessToken,
           },
@@ -63,62 +63,63 @@ const BoardDetail = () => {
       }
     };
 
-    fetchPostData(postId);
-    // fetchMockData(postId);
-    fetchLikedPosts();
-  }, [postId, accessToken, email, location, myEmail]);
+    // 📝 게시물 정보
+    const fetchPostData = async (postId) => {
+      try {
+        const response = await axios.get(
+          `${IP_ADDRESS}/board/specific?postId=${postId}`
+        );
 
-  // 📝 게시물 정보
-  const fetchPostData = async (postId) => {
-    try {
-      const response = await axios.get(
-        `${IP_ADDRESS}/board/specific?postId=${postId}`
-      );
 
-      if (response.data && Array.isArray(response.data.items)) {
-        const items = response.data.items.map((item) => ({
-          imageUrl: item.imageUrl,
-          title: item.title,
-          email: item.email,
-          description: item.description,
-          ingredients: item.ingredients.map((ingredient) => ingredient),
-          likeCount: item.likeCount,
-          nickName: item.nickName,
-        }));
-        setImageUrl(items[0].imageUrl);
-        setTitle(items[0].title);
-        setEmail(items[0].email);
-        setDescription(items[0].description);
-        setIngredients(items[0].ingredients);
-        setLikeCount(items[0].likeCount);
-        setNickName(items[0].nickName);
-      } else {
-        console.error('데이터 타입 오류:', response.data);
+        if (response.data && Array.isArray(response.data.items)) {
+          const items = response.data.items.map((item) => ({
+            imageUrl: item.imageUrl,
+            title: item.title,
+            email: item.email,
+            description: item.description,
+            ingredients: item.ingredients.map((ingredient) => ingredient),
+            likeCount: item.likeCount,
+            nickName: item.nickName,
+          }));
+          setImageUrl(items[0].imageUrl);
+          setTitle(items[0].title);
+          setEmail(items[0].email);
+          setDescription(items[0].description);
+          setIngredients(items[0].ingredients);
+          setLikeCount(items[0].likeCount);
+          setNickName(items[0].nickName);
+        } else {
+          console.error('데이터 타입 오류:', response.data);
+        }
+      } catch (error) {
+        handleError(error);
       }
-    } catch (error) {
-      handleError(error);
-    }
-  };
+    };
 
-  // 📝 게시물 정보 (Mock Data)
-  // const fetchMockData = async () => {
-  //   try {
-  //     if (mockData.items && Array.isArray(mockData.items)) {
-  //       const item = mockData.items[0];
-  //       setImageUrl(item.imageUrl);
-  //       setTitle(item.title);
-  //       setEmail(item.email);
-  //       setDescription(item.description);
-  //       setIngredients(item.ingredients);
-  //       setLikeCount(item.likeCount);
-  //       setNickName(item.nickName);
-  //     } else {
-  //       console.error('데이터 타입 오류:', mockData.items);
-  //     }
-  //   } catch (error) {
-  //     console.error('에러 내용:', error);
-  //   }
-  // };
+    // 📝 게시물 정보 (Mock Data)
+    // const fetchMockData = async () => {
+    //   try {
+    //     if (mockData.items && Array.isArray(mockData.items)) {
+    //       const item = mockData.items[0];
+    //       setImageUrl(item.imageUrl);
+    //       setTitle(item.title);
+    //       setEmail(item.email);
+    //       setDescription(item.description);
+    //       setIngredients(item.ingredients);
+    //       setLikeCount(item.likeCount);
+    //       setNickName(item.nickName);
+    //     } else {
+    //       console.error('데이터 타입 오류:', mockData.items);
+    //     }
+    //   } catch (error) {
+    //     console.error('에러 내용:', error);
+    //   }
+    // };
+
+    // fetchMockData(postId);
+    fetchPostData(postId);
+    fetchLikedPosts();
+  }, [postId, accessToken, email, location, myEmail, handleError]);
 
   // 💛 좋아요 / 취소  (로그인 유저만 누를 수 있음)
   const toggleLike = async () => {
@@ -129,7 +130,7 @@ const BoardDetail = () => {
     try {
       if (Liked) {
         // ▶️ 좋아요 되어있는 상태면 취소
-        const response = await axios.post(
+        const response = await instance.post(
           `${IP_ADDRESS}/board/dislike`,
           {
             email: myEmail,
@@ -156,7 +157,7 @@ const BoardDetail = () => {
         setLiked(!Liked);
       } else {
         // ▶️ 안 눌려져 있는 상태면 좋아요
-        const response = await axios.post(
+        const response = await instance.post(
           `${IP_ADDRESS}/board/like`,
 
           {
@@ -191,7 +192,7 @@ const BoardDetail = () => {
     const URL = `${IP_ADDRESS}/board/report`;
 
     try {
-      const response = await axios.post(
+      const response = await instance.post(
         URL,
         { email: myEmail, postId: postId },
         {
@@ -208,7 +209,7 @@ const BoardDetail = () => {
         toast.success('해당 게시물을 신고했습니다');
       }
     } catch (error) {
-      console.log('게시물 신고 중 에러가 발생했습니다.');
+      handleError(error);
     }
   };
 

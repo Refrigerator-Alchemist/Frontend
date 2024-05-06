@@ -4,8 +4,8 @@ import { FaArrowLeft } from 'react-icons/fa';
 import Navigation from '../components/ui/Navigation';
 import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
-import { IP_ADDRESS } from '../context/UserContext';
-import handleError from '../utils/handleError';
+import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
+
 
 const GptSavedDetail = () => {
   const [recipeData, setRecipeData] = useState({});
@@ -14,6 +14,7 @@ const GptSavedDetail = () => {
   const accessToken = localStorage.getItem('accessToken');
 
   const navigate = useNavigate();
+  const { handleError } = useUserDispatch();
 
   // id로 세부내용 불러오기
   useEffect(() => {
@@ -23,7 +24,7 @@ const GptSavedDetail = () => {
           throw new Error('Recipe ID가 존재하지 않습니다.');
         }
 
-        const response = await axios.get(
+        const response = await instance.get(
           `${IP_ADDRESS}/recipe/myRecipe/${recipeId}`,
           {
             headers: {
@@ -38,7 +39,7 @@ const GptSavedDetail = () => {
     };
 
     if (accessToken) fetchRecipeData();
-  }, [recipeId, accessToken]);
+  }, [recipeId, accessToken, handleError]);
 
   return (
     <>

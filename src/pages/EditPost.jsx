@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { IoAccessibility } from 'react-icons/io5';
-import axios from 'axios';
 import { toast } from 'react-toastify';
-import { IP_ADDRESS } from '../context/UserContext';
-import handleError from '../utils/handleError';
+
+import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
 
 
 export default function UploadBoard() {
@@ -16,13 +15,14 @@ export default function UploadBoard() {
   const accessToken = localStorage.getItem('accessToken');
 
   const navigate = useNavigate();
+  const { handleError } = useUserDispatch();
 
   // 1️⃣ 해당 게시물의 제목, 설명, 재료를 불러오는 함수
   useEffect(() => {
     const fetchData = async (postId) => {
       const URL = `${IP_ADDRESS}/board/updateBoard?postId=${postId}`;
       try {
-        const response = await axios.get(URL, {
+        const response = await instance.get(URL, {
           headers: {
             'Authorization-Access': accessToken,
           },
@@ -39,15 +39,13 @@ export default function UploadBoard() {
             setDescription(items[0].description);
             setIngredients(items[0].ingredients);
           }
-        } else {
-          console.error('데이터가 오지 않았음 : 서버 확인', response.data);
         }
       } catch (error) {
         handleError(error);
       }
     };
     fetchData(postId);
-  }, [postId, accessToken]);
+  }, [handleError, postId, accessToken]);
 
   // 2️⃣ 재료 입력
   const handleIngredientChange = (index, e) => {
@@ -74,7 +72,7 @@ export default function UploadBoard() {
     };
 
     try {
-      const response = await axios.post(URL, formData, {
+      const response = await instance.post(URL, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization-Access': accessToken,

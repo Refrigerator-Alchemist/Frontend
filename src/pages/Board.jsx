@@ -9,10 +9,9 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Ranking from '../components/Ranking';
 import Navigation from '../components/ui/Navigation';
-import axios from 'axios';
 import { useLocation } from 'react-router-dom';
-import { IP_ADDRESS } from '../context/UserContext';
-import handleError from '../utils/handleError';
+
+import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
 
 const accessToken = localStorage.getItem('accessToken');
 const email = localStorage.getItem('email');
@@ -29,6 +28,7 @@ const RecipeCard = ({
   const [Liked, setLiked] = useState(isLiked);
   const [likeCount, setLikeCount] = useState(parseInt(initialLikeCount));
   const [likedPosts, setLikedPosts] = useState([]);
+  const { handleError } = useUserDispatch();
 
   // ⏯️ 실행: 처음 렌더링, 좋아요 업데이트
   useEffect(() => {
@@ -44,7 +44,7 @@ const RecipeCard = ({
     try {
       if (Liked) {
         // ▶️ 좋아요 되어있는 상태면 취소
-        const response = await axios.post(
+        const response = await instance.post(
           `${IP_ADDRESS}/board/dislike`,
           {
             email: email,
@@ -70,7 +70,7 @@ const RecipeCard = ({
         setLiked(!Liked);
       } else {
         // ▶️ 안 눌려져 있는 상태면 좋아요
-        const response = await axios.post(
+        const response = await instance.post(
           `${IP_ADDRESS}/board/like`,
           {
             email: email,
@@ -147,11 +147,12 @@ const SearchBar = ({ onSearch }) => {
       handleSearchClick();
     }
   };
+  const { handleError } = useUserDispatch();
 
   const handleSearchClick = async () => {
     if (query.trim() !== '') {
       try {
-        const response = await axios.get(
+        const response = await instance.get(
           `${IP_ADDRESS}/board/searchTitle?title=${query.trim()}`,
           {
             headers: {
@@ -230,6 +231,7 @@ function Board() {
   const [searchResultCount, setSearchResultCount] = useState(0);
   const location = useLocation();
   const recipesPerPage = 6;
+  const { handleError } = useUserDispatch();
 
   // ⏯️ 실행: 처음 렌더링 1번
   useEffect(() => {
@@ -250,7 +252,7 @@ function Board() {
     }
     const URL = `${IP_ADDRESS}/board/islike?id=${email}`;
     try {
-      const response = await axios.get(URL, {
+      const response = await instance.get(URL, {
         headers: {
           'Authorization-Access': accessToken,
         },
@@ -269,7 +271,7 @@ function Board() {
   // 1️⃣ 전체 레시피 수를 가져오는 함수
   const fetchTotalRecipes = async () => {
     try {
-      const response = await axios.get(`${IP_ADDRESS}/board/total`);
+      const response = await instance.get(`${IP_ADDRESS}/board/total`);
 
       console.log(response.data);
       const totalRecipes = response.data;
@@ -286,7 +288,7 @@ function Board() {
   // 2️⃣ 각 페이지에 해당하는 레시피들을 불러오는 함수
   const fetchRecipesByPage = async (pageNumber) => {
     try {
-      const response = await axios.get(`${IP_ADDRESS}/board/page`, {
+      const response = await instance.get(`${IP_ADDRESS}/board/page`, {
         params: { data: pageNumber.toString() },
       });
 

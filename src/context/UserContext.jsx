@@ -4,17 +4,16 @@ import axios from 'axios';
 import errorCode from '../utils/ErrorCode';
 import { toast } from 'react-toastify';
 
-// 🌱 현재 IP 주소
+// 🌱 IP 주소
 export const IP_ADDRESS = 'http://localhost:8080';
 
 // 🌱 axios 인스턴스 : 베이스 URL 조절 가능
-const instance = axios.create({
+export const instance = axios.create({
   baseURL: `${IP_ADDRESS}`,
 });
 
-// 🌱 인터셉터
+// 🌱 요청 인터셉터
 instance.interceptors.request.use(
-  // 토큰 일괄 처리
   function (config) {
     const accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
@@ -28,15 +27,26 @@ instance.interceptors.request.use(
     return config;
   },
 
-  // 액세스 토큰 만료시 reIssue 호출
-  async function (error) {
-    if (error.response.status === 400) {
-      await reIssue();
-    }
-
+  function (error) {
     return Promise.reject(error);
   }
 );
+
+// 🌱 응답 인터셉터
+// instance.interceptors.response.use(
+//   function (response) {
+//     return response;
+//   },
+
+//   async function (error) {
+//     if (error.response && error.response.headers.code === 'RAT8') {
+//       await reIssue(); // 토큰 재발급
+//       return instance(error.config); // 원래의 요청 재실행
+//     }
+//     return Promise.reject(error); // 그 외의 경우 에러를 그대로 반환
+//   }
+// );
+
 
 // 🌱 유저 상태 초기화
 const initialState = {
@@ -59,63 +69,6 @@ const reducer = (state, action) => {
   }
 };
 
-// 🪙 새로운 액세스 토큰 발급
-const reIssue = async () => {
-  const URL = `${IP_ADDRESS}/token/reissue`;
-  const socialType = localStorage.getItem('socialType');
-  const accessToken = localStorage.getItem('accessToken');
-  const refreshToken = localStorage.getItem('refreshToken');
-
-  try {
-    const response = await instance.post(
-      URL,
-      {},
-      {
-        headers: {
-          'Authorization-Access': accessToken,
-          'Authorization-Refresh': refreshToken,
-        },
-      }
-    );
-
-    if (response.status === 204 && socialType === 'Refrigerator-Alchemist') {
-      localStorage.setItem(
-        'accessToken',
-        response.headers['authorization-access']
-      );
-      console.log(
-        `새로운 액세스 토큰을 발급받았습니다 : ${response.headers['authorization-access']}`
-      );
-    } else if (
-      response.status === 204 &&
-      socialType !== 'Refrigerator-Alchemist'
-    ) {
-      localStorage.setItem(
-        'accessToken',
-        'Bearer ' + response.headers['authorization-access']
-      );
-      console.log(
-        `새로운 액세스 토큰을 발급받았습니다 : ${response.headers['authorization-access']}`
-      );
-    } else {
-      return;
-    }
-  } catch (error) {
-    const errorHeaders = error.response?.headers;
-    if (errorHeaders.code) {
-      const errorName = Object.values(errorCode).find(
-        (obj) => obj.code === errorHeaders.code
-      );
-      const userNotice = errorName.notice;
-
-      console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
-      toast.error(`${userNotice}`); // 유저 팝업용
-    } else {
-      console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
-    }
-  }
-};
-
 const UserStateContext = createContext();
 const UserDispatchContext = createContext();
 
@@ -130,6 +83,30 @@ export const UserProvider = ({ children }) => {
   const kakaoURL = `${IP_ADDRESS}/oauth2/authorization/kakao`;
   const naverURL = `${IP_ADDRESS}/oauth2/authorization/naver`;
   const navigate = useNavigate();
+
+  // 👩🏻‍🔧 커스텀 에러 처리
+  const handleError = async (error) => {
+    if (
+      error.response &&
+      error.response.headers &&
+      error.response.headers.code
+    ) {
+      // 백엔드 콘솔 확인용
+      const errorName = Object.values(errorCode).find(
+        (obj) => obj.code === error.response.headers.code
+      );
+      const userNotice = errorName.notice; // 유저 토스트 확인용
+      console.log(`에러 내용: ${errorName}`);
+      toast.error(`${userNotice}`);
+      // 서버 미연결(에러 응답 존재 X)
+    } else if (!error.response) {
+      console.log('서버와 연결되어있지 않습니다');
+      toast.error(`서버와 연결되어있지 않습니다`);
+    } else {
+      console.log(`확인되지 않은 에러, ${error}`);
+      toast.error(`알 수 없는 에러가 발생했습니다`);
+    }
+  };
 
   // 📧 이메일 인증 요청 (회원가입용) -------------------------------------------------
   const requestEmailForSignUp = async (email, emailType, socialType) => {
@@ -153,19 +130,7 @@ export const UserProvider = ({ children }) => {
       }
     } catch (error) {
       setEmailExists(true);
-      // 🚫 에러 처리
-      const errorHeaders = error.response?.headers;
-      if (errorHeaders.code) {
-        const errorName = Object.values(errorCode).find(
-          (obj) => obj.code === errorHeaders.code
-        );
-        const userNotice = errorName.notice;
-
-        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
-        toast.error(`${userNotice}`); // 유저 팝업용
-      } else {
-        console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
-      }
+      handleError(error);
     }
   };
 
@@ -191,19 +156,7 @@ export const UserProvider = ({ children }) => {
       }
     } catch (error) {
       setEmailExists(false);
-      // 🚫 에러 처리
-      const errorHeaders = error.response?.headers;
-      if (errorHeaders.code) {
-        const errorName = Object.values(errorCode).find(
-          (obj) => obj.code === errorHeaders.code
-        );
-        const userNotice = errorName.notice;
-
-        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
-        toast.error(`${userNotice}`); // 유저 팝업용
-      } else {
-        console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
-      }
+      handleError(error);
     }
   };
 
@@ -241,19 +194,7 @@ export const UserProvider = ({ children }) => {
       }
     } catch (error) {
       setVerified(false);
-      // 🚫 에러 처리
-      const errorHeaders = error.response?.headers;
-      if (errorHeaders.code) {
-        const errorName = Object.values(errorCode).find(
-          (obj) => obj.code === errorHeaders.code
-        );
-        const userNotice = errorName.notice;
-
-        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
-        toast.error(`${userNotice}`); // 유저 팝업용
-      } else {
-        console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
-      }
+      handleError(error);
     }
   };
 
@@ -275,19 +216,7 @@ export const UserProvider = ({ children }) => {
       }
     } catch (error) {
       setNameDuplicated(true);
-      // 🚫 에러 처리
-      const errorHeaders = error.response?.headers;
-      if (errorHeaders.code) {
-        const errorName = Object.values(errorCode).find(
-          (obj) => obj.code === errorHeaders.code
-        );
-        const userNotice = errorName.notice;
-
-        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
-        toast.error(`${userNotice}`); // 유저 팝업용
-      } else {
-        console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
-      }
+      handleError(error);
     }
   };
 
@@ -320,19 +249,7 @@ export const UserProvider = ({ children }) => {
         return;
       }
     } catch (error) {
-      // 🚫 에러 처리
-      const errorHeaders = error.response?.headers;
-      if (errorHeaders.code) {
-        const errorName = Object.values(errorCode).find(
-          (obj) => obj.code === errorHeaders.code
-        );
-        const userNotice = errorName.notice;
-
-        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
-        toast.error(`${userNotice}`); // 유저 팝업용
-      } else {
-        console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
-      }
+      handleError(error);
     }
   };
 
@@ -350,19 +267,7 @@ export const UserProvider = ({ children }) => {
       logout();
       toast.success('회원탈퇴가 완료되었습니다');
     } catch (error) {
-      // 🚫 에러 처리
-      const errorHeaders = error.response?.headers;
-      if (errorHeaders.code) {
-        const errorName = Object.values(errorCode).find(
-          (obj) => obj.code === errorHeaders.code
-        );
-        const userNotice = errorName.notice;
-
-        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
-        toast.error(`${userNotice}`); // 유저 팝업용
-      } else {
-        console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
-      }
+      handleError(error);
     }
   };
 
@@ -419,19 +324,7 @@ export const UserProvider = ({ children }) => {
         navigate('/main');
       }
     } catch (error) {
-      // 🚫 에러 처리
-      const errorHeaders = error.response?.headers;
-      if (errorHeaders.code) {
-        const errorName = Object.values(errorCode).find(
-          (obj) => obj.code === errorHeaders.code
-        );
-        const userNotice = errorName.notice;
-
-        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
-        toast.error(`${userNotice}`); // 유저 팝업용
-      } else {
-        console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
-      }
+      handleError(error);
     }
   };
 
@@ -468,19 +361,7 @@ export const UserProvider = ({ children }) => {
         navigate('/main');
       }
     } catch (error) {
-      // 🚫 에러 처리
-      const errorHeaders = error.response?.headers;
-      if (errorHeaders.code) {
-        const errorName = Object.values(errorCode).find(
-          (obj) => obj.code === errorHeaders.code
-        );
-        const userNotice = errorName.notice;
-
-        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
-        toast.error(`${userNotice}`); // 유저 팝업용
-      } else {
-        console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
-      }
+      handleError(error);
     }
   };
 
@@ -503,22 +384,56 @@ export const UserProvider = ({ children }) => {
         return;
       }
     } catch (error) {
-      // 🚫 에러 처리
-      const errorHeaders = error.response?.headers;
-      if (errorHeaders.code) {
-        const errorName = Object.values(errorCode).find(
-          (obj) => obj.code === errorHeaders.code
-        );
-        const userNotice = errorName.notice;
-
-        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
-        toast.error(`${userNotice}`); // 유저 팝업용
-      } else {
-        console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
-      }
+      handleError(error);
     }
 
     navigate('/login');
+  };
+
+  // 🪙 새로운 액세스 토큰 발급
+  const reIssue = async () => {
+    const URL = `${IP_ADDRESS}/token/reissue`;
+    const socialType = localStorage.getItem('socialType');
+    const accessToken = localStorage.getItem('accessToken');
+    const refreshToken = localStorage.getItem('refreshToken');
+
+    try {
+      const response = await instance.post(
+        URL,
+        {},
+        {
+          headers: {
+            'Authorization-Access': accessToken,
+            'Authorization-Refresh': refreshToken,
+          },
+        }
+      );
+
+      if (response.status === 204 && socialType === 'Refrigerator-Alchemist') {
+        localStorage.setItem(
+          'accessToken',
+          response.headers['authorization-access']
+        );
+        console.log(
+          `새로운 액세스 토큰을 발급받았습니다 : ${response.headers['authorization-access']}`
+        );
+      } else if (
+        response.status === 204 &&
+        socialType !== 'Refrigerator-Alchemist'
+      ) {
+        localStorage.setItem(
+          'accessToken',
+          'Bearer ' + response.headers['authorization-access']
+        );
+        console.log(
+          `새로운 액세스 토큰을 발급받았습니다 : ${response.headers['authorization-access']}`
+        );
+      } else {
+        return;
+      }
+    } catch (error) {
+      handleError(error);
+    }
   };
 
   // 🟡 카카오 --------------------------------------------------
@@ -543,6 +458,7 @@ export const UserProvider = ({ children }) => {
   const value = {
     state,
     dispatch,
+    handleError,
     login,
     logout,
     signup,
@@ -558,6 +474,7 @@ export const UserProvider = ({ children }) => {
     checkNameDuplication,
     nameDuplicated,
     setNameDuplicated,
+    reIssue,
     kakaoLogin,
     googleLogin,
     naverLogin,

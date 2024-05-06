@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { GoHome } from 'react-icons/go';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
 import { toast } from 'react-toastify';
-import { IP_ADDRESS } from '../context/UserContext';
-import handleError from '../utils/handleError';
+import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
+
 
 const GptResult = () => {
   const [ingredients, setIngredients] = useState([]);
@@ -15,13 +14,14 @@ const GptResult = () => {
   const accessToken = localStorage.getItem('accessToken');
 
   const navigate = useNavigate();
+  const { handleError } = useUserDispatch();
 
   // 🤖 GPT 레시피 결과 불러오는 함수
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(
+        const response = await instance.get(
           `${IP_ADDRESS}/recipe/recommend/${recommendId}`,
           {
             headers: {
@@ -37,6 +37,7 @@ const GptResult = () => {
         }
       } catch (error) {
         handleError(error);
+
       } finally {
         setIsLoading(false);
       }
@@ -44,17 +45,11 @@ const GptResult = () => {
     if (recommendId) {
       fetchData();
     }
-  }, [recommendId, accessToken]);
+  }, [recommendId, accessToken, handleError]);
 
   // gpt레시피 저장하기
   const handleSaveButtonClick = async () => {
     try {
-      if (!accessToken) {
-        toast.error('로그인이 필요합니다.');
-        console.log(' acessToken 없음');
-        return;
-      }
-
       await axios.post(
         `${IP_ADDRESS}/recipe/save`,
         {

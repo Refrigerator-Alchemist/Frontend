@@ -1,12 +1,11 @@
-import axios from 'axios';
 import React, { useState, useEffect, useRef } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
-import { IP_ADDRESS } from '../context/UserContext';
+import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
+
 import { toast } from 'react-toastify';
 import IMAGE_PROFILE from '../assets/img/img_profile.png';
-import errorCode from '../utils/ErrorCode';
 
 export default function EditProfile() {
   const [nameError, setNameError] = useState(false);
@@ -23,15 +22,15 @@ export default function EditProfile() {
   const fileInput = useRef(null);
 
   const navigate = useNavigate();
+  const { handleError } = useUserDispatch();
 
-  // ⭕️ 바꿀 닉네임 초기값은 원래 닉네임으로 처리해서 입력 가능하게 수정
   useEffect(() => {
     const fetchUserInfo = async () => {
       const URL = `${IP_ADDRESS}/reset/info`;
 
       try {
         if (accessToken) {
-          const response = await axios.get(URL, {
+          const response = await instance.get(URL, {
             headers: {
               'Authorization-Access': accessToken,
             },
@@ -47,25 +46,13 @@ export default function EditProfile() {
           return;
         }
       } catch (error) {
-        // 🚫 에러 처리
-        const errorHeaders = error.response?.headers;
-        if (errorHeaders.code) {
-          const errorName = Object.values(errorCode).find(
-            (obj) => obj.code === errorHeaders.code
-          );
-          const userNotice = errorName.notice;
-
-          console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
-          toast.error(`${userNotice}`); // 유저 팝업용
-        } else {
-          console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
-        }
+        handleError(error);
       }
     };
 
     fetchUserInfo();
     setChangeNickName(nickName);
-  }, [accessToken, nickName]);
+  }, [handleError, accessToken, nickName]);
 
   // 1️⃣ 이미지 파일 업로드
   const handleImageChange = (e) => {
@@ -95,25 +82,13 @@ export default function EditProfile() {
     formData.append('file', file);
 
     try {
-      await axios.post(URL, formData, {
+      await instance.post(URL, formData, {
         headers: {
           'Authorization-Access': accessToken,
         },
       });
     } catch (error) {
-      // 🚫 에러 처리
-      const errorHeaders = error.response?.headers;
-      if (errorHeaders.code) {
-        const errorName = Object.values(errorCode).find(
-          (obj) => obj.code === errorHeaders.code
-        );
-        const userNotice = errorName.notice;
-
-        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
-        toast.error(`${userNotice}`); // 유저 팝업용
-      } else {
-        console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
-      }
+      handleError(error);
     }
   };
 
@@ -136,7 +111,7 @@ export default function EditProfile() {
 
     try {
       if (nameError === false) {
-        await axios
+        await instance
           .post(
             URL,
             {
@@ -161,19 +136,7 @@ export default function EditProfile() {
         navigate('/mypage');
       }
     } catch (error) {
-      // 🚫 에러 처리
-      const errorHeaders = error.response?.headers;
-      if (errorHeaders.code) {
-        const errorName = Object.values(errorCode).find(
-          (obj) => obj.code === errorHeaders.code
-        );
-        const userNotice = errorName.notice;
-
-        console.log(`에러 내용: ${errorName}`); // 백엔드 확인용
-        toast.error(`${userNotice}`); // 유저 팝업용
-      } else {
-        console.log(`확인되지 않은 에러, ${error}`); // 에러 예외
-      }
+      handleError(error);
     }
   };
 

@@ -4,8 +4,8 @@ import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
 import Pagination from '../components/Pagination';
 import Navigation from '../components/ui/Navigation';
-import { IP_ADDRESS } from '../context/UserContext';
-import handleError from '../utils/handleError';
+import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
+
 
 export default function GptSavedList() {
   const [recipes, setRecipes] = useState([]);
@@ -16,12 +16,13 @@ export default function GptSavedList() {
   const accessToken = localStorage.getItem('accessToken');
 
   const navigate = useNavigate();
+  const { handleError } = useUserDispatch();
 
   // 저장한 목록 보기
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const response = await axios.get(`${IP_ADDRESS}/recipe/myRecipe`, {
+        const response = await instance.get(`${IP_ADDRESS}/recipe/myRecipe`, {
           headers: {
             'Authorization-Access': accessToken,
           },
@@ -35,7 +36,7 @@ export default function GptSavedList() {
     if (accessToken) {
       fetchRecipes();
     }
-  }, [accessToken]);
+  }, [accessToken, handleError]);
 
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
