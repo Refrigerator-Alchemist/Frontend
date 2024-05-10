@@ -59,7 +59,6 @@ export default function Ranking() {
   const navigate = useNavigate();
   const { handleError } = useUserDispatch();
 
-  // ⏯️ 실행: 처음 렌더링, topItems 업데이트
   useEffect(() => {
     const fetchRanking = async () => {
       const URL = `${IP_ADDRESS}/ranking/top3`;

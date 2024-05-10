@@ -10,20 +10,18 @@ import axios from 'axios';
 import errorCode from '../utils/ErrorCode';
 import { toast } from 'react-toastify';
 
-// 🌱 IP 주소
+// 🌱 IP : 현재 사용 환경의 IP
 export const IP_ADDRESS = 'http://localhost:8080';
 
-// 🌱 axios 인스턴스 : 베이스 URL 조절 가능
+// 🌱 axios 인스턴스 : URL 관리 및 인터셉터 설정
 export const instance = axios.create({
   baseURL: `${IP_ADDRESS}`,
 });
 
-// 🌱 요청 인터셉터
 instance.interceptors.request.use(
   function (config) {
     const accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
-
     if (accessToken) {
       config.headers['Authorization-Access'] = accessToken;
     }
@@ -38,24 +36,25 @@ instance.interceptors.request.use(
   }
 );
 
-// 🌱 유저 상태 초기화
+// 🌱 state에 유저 상태 저장하는 리듀서
+// 유저 상태 초기화
 const initialState = {
   user: null,
 };
 
-// 🌱 액션 타입
+// 액션 타입
 const SET_USER = 'SET_USER';
 
-// 🌱 state에 유저 상태 저장하는 리듀서
+// 리듀서
 const reducer = (state, action) => {
   switch (action.type) {
     case SET_USER:
       return {
         ...state,
-        user: action.user, // ▶ 유저의 액션
+        user: action.user, // 유저의 액션
       };
     default:
-      throw new Error(`Uncontrolled Action Type: ${action.type}`);
+      throw new Error(`확인되지 않은 액션 타입: ${action.type}`);
   }
 };
 
@@ -81,10 +80,10 @@ export const TokenProvider = ({ children }) => {
 };
 
 export const UserProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState); // 유저 상태 공유
-  const [emailExists, setEmailExists] = useState(true); // 회원가입 시 이메일 중복 여부
-  const [verified, setVerified] = useState(false); // 이메일 인증 여부
-  const [nameDuplicated, setNameDuplicated] = useState(true); // 닉네임 중복 여부
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const [emailExists, setEmailExists] = useState(true);
+  const [verified, setVerified] = useState(false);
+  const [nameDuplicated, setNameDuplicated] = useState(true);
 
   // 🙍‍♂️ SNS 로그인 엔드 포인트
   const googleURL = `${IP_ADDRESS}/oauth2/authorization/google`;
@@ -132,7 +131,6 @@ export const UserProvider = ({ children }) => {
 
       if (response.status === 204) {
         setEmailExists(false);
-
         toast.success('인증번호가 발송되었습니다');
       } else {
         return;
@@ -154,11 +152,10 @@ export const UserProvider = ({ children }) => {
         socialType,
       });
 
-      console.log('리스폰스', response);
+      console.log(`이메일: ${email} 회원가입 유형: ${socialType}`);
 
       if (response.status === 204) {
         setEmailExists(true);
-
         toast.success('인증번호가 발송되었습니다');
       } else {
         return;
@@ -178,7 +175,7 @@ export const UserProvider = ({ children }) => {
   ) => {
     const NO_CODE_ERROR = '인증번호를 입력해주세요';
 
-    // ▶ 인증번호 입력 여부 확인
+    // 인증번호 입력 여부 확인
     if (!inputNum) {
       toast.error(NO_CODE_ERROR);
       return;
@@ -207,7 +204,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // ❓ 닉네임 중복 확인
+  // ✅ 닉네임 중복 확인 ------------------------------------------------
   const checkNameDuplication = async (nickName) => {
     try {
       const response = await instance.post(
@@ -265,14 +262,11 @@ export const UserProvider = ({ children }) => {
   // 👋🏻 회원탈퇴 ---------------------------------------------------------------
   const deleteUser = async () => {
     const URL = `${IP_ADDRESS}/auth/delete-user`;
-    const socialId = localStorage.getItem('socialId');
 
     try {
       await instance.delete(URL, {
-        data: { socialId },
+        data: localStorage.getItem('socialId'),
       });
-
-      // ▶ 로그아웃 처리
       logout();
       toast.success('회원탈퇴가 완료되었습니다');
     } catch (error) {
@@ -302,7 +296,6 @@ export const UserProvider = ({ children }) => {
       );
 
       if (response.headers) {
-        // ▶ 로컬 스토리지 : 액세스, 리프레시, 닉네임, 소셜ID, 소셜타입, 이메일
         localStorage.setItem(
           'accessToken',
           response.headers['authorization-access']
@@ -318,16 +311,12 @@ export const UserProvider = ({ children }) => {
         localStorage.setItem('email', email);
         localStorage.setItem('socialId', response.headers.get('socialId'));
         localStorage.setItem('socialType', socialType);
-
         console.log(`⭕ 로컬스토리지 저장 완료`);
-
         let user = {
-          socialId: response.headers['socialId'],
+          socialId: localStorage.getItem('socialId'),
           socialType: socialType,
         };
-
-        console.log(`⭕ 유저 데이터 저장 완료`);
-
+        console.log(`⭕ 유저 정보 저장 완료`);
         dispatch({ type: SET_USER, user });
         toast.success('로그인 되었습니다!');
         navigate('/main');
@@ -337,7 +326,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  //🔓 로그아웃 ---------------------------------------------------------------
+  // 🔓 로그아웃 ---------------------------------------------------------------
   const logout = async () => {
     const URL = `${IP_ADDRESS}/token/logout`;
     const accessToken = localStorage.getItem('accessToken');
@@ -350,9 +339,6 @@ export const UserProvider = ({ children }) => {
       });
 
       if (response.status === 204) {
-        console.log(response.status);
-
-        // ▶ 유저 데이터 삭제
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('socialid');
@@ -360,13 +346,8 @@ export const UserProvider = ({ children }) => {
         localStorage.removeItem('email');
         localStorage.removeItem('socialType');
 
-        // ▶ 유저 상태 초기화
         dispatch({ type: SET_USER, user: null });
-
-        // ▶ 유저 상태 초기화
         toast.success('로그아웃 되었습니다!');
-
-        // ▶ Redirect
         navigate('/main');
       }
     } catch (error) {
@@ -389,14 +370,11 @@ export const UserProvider = ({ children }) => {
 
       if (response.status === 204) {
         toast.success('비밀번호가 성공적으로 재설정되었습니다');
-      } else {
-        return;
+        navigate('/login');
       }
     } catch (error) {
       handleError(error);
     }
-
-    navigate('/login');
   };
 
   // 🪙 새로운 액세스 토큰 발급
@@ -423,9 +401,7 @@ export const UserProvider = ({ children }) => {
           'accessToken',
           response.headers['authorization-access']
         );
-        console.log(
-          `새로운 액세스 토큰을 발급받았습니다 : ${response.headers['authorization-access']}`
-        );
+        console.log(`새로운 액세스 토큰을 발급받았습니다`);
       } else if (
         response.status === 204 &&
         socialType !== 'Refrigerator-Alchemist'
@@ -434,9 +410,7 @@ export const UserProvider = ({ children }) => {
           'accessToken',
           'Bearer ' + response.headers['authorization-access']
         );
-        console.log(
-          `새로운 액세스 토큰을 발급받았습니다 : ${response.headers['authorization-access']}`
-        );
+        console.log(`새로운 액세스 토큰을 발급받았습니다`);
       } else {
         return;
       }
@@ -447,23 +421,35 @@ export const UserProvider = ({ children }) => {
 
   // 🟡 카카오 --------------------------------------------------
   const kakaoLogin = () => {
-    window.location.href = kakaoURL;
-    console.log('카카오 로그인 페이지 접속');
+    try {
+      window.location.href = kakaoURL;
+      console.log('카카오 로그인');
+    } catch (error) {
+      handleError(error);
+    }
   };
 
   // 🔴 구글 ----------------------------------------------------
   const googleLogin = () => {
-    window.location.href = googleURL;
-    console.log('구글 로그인 페이지 접속');
+    try {
+      window.location.href = googleURL;
+      console.log('구글 로그인');
+    } catch (error) {
+      handleError(error);
+    }
   };
 
   // 🟢 네이버 --------------------------------------------------
   const naverLogin = () => {
-    window.location.href = naverURL;
-    console.log('네이버 로그인 페이지 접속');
+    try {
+      window.location.href = naverURL;
+      console.log('네이버 로그인');
+    } catch (error) {
+      handleError(error);
+    }
   };
 
-  // ❤ Dispatch에 담길 value
+  // dispatch로 사용가능한 상태 및 함수
   const value = {
     state,
     dispatch,
@@ -492,7 +478,7 @@ export const UserProvider = ({ children }) => {
   return (
     <UserDispatchContext.Provider value={value}>
       <UserStateContext.Provider value={state}>
-        <TokenProvider>{children}</TokenProvider>
+        <TokenContext.Provider>{children}</TokenContext.Provider>
       </UserStateContext.Provider>
     </UserDispatchContext.Provider>
   );
