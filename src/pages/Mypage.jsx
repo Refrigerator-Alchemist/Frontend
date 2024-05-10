@@ -119,7 +119,7 @@ export default function MyPage() {
   const [currentPageMyRecipes, setCurrentPageMyRecipes] = useState(1);
   const [currentPageLikedRecipes, setCurrentPageLikedRecipes] = useState(1);
 
-  const { logout, handleError, reIssue } = useUserDispatch();
+  const { logout, handleError } = useUserDispatch();
 
   const accessToken = localStorage.getItem('accessToken');
   const nickName = localStorage.getItem('nickName');
@@ -141,7 +141,7 @@ export default function MyPage() {
             },
           });
           setImageUrl(response.data.imageUrl);
-          localStorage.setItem(response.data.imageUrl);
+          localStorage.setItem(response.data.imageUrl); // 로컬스토리지에 저장
         }
       } catch (error) {
         handleError(error);
@@ -258,30 +258,19 @@ export default function MyPage() {
       }
     };
 
-    const fetchData = async () => {
-      try {
-        await fetchUserInfo();
-
-        if (showMyRecipes) {
-          await fetchMyPage();
-        } else {
-          await fetchLikeData();
-        }
-
-        if (accessToken) {
-          await fetchMyRecipesCount();
-          await fetchLikedRecipesCount();
-        }
-      } catch (error) {
-        const errorCode = await handleError(error);
-        if (errorCode === 'RAT8') {
-          reIssue();
-        }
-      }
-    };
-
-    fetchData();
-  }, [showMyRecipes, accessToken, email, handleError, reIssue]);
+    fetchUserInfo();
+    if (showMyRecipes) {
+      fetchMyPage();
+      // fetchMockData();
+    } else {
+      // fetchMockData();
+      fetchLikeData();
+    }
+    if (accessToken) {
+      fetchMyRecipesCount();
+      fetchLikedRecipesCount();
+    }
+  }, [showMyRecipes, accessToken, email, handleError]);
 
   // 1️⃣ 레시피 수정
   const handleEdit = (postId) => {
