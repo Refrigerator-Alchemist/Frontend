@@ -47,7 +47,6 @@ instance.interceptors.request.use(
 //   }
 // );
 
-
 // 🌱 유저 상태 초기화
 const initialState = {
   user: null,
@@ -98,6 +97,7 @@ export const UserProvider = ({ children }) => {
       const userNotice = errorName.notice; // 유저 토스트 확인용
       console.log(`에러 내용: ${errorName}`);
       toast.error(`${userNotice}`);
+      return error.response.headers.code;
       // 서버 미연결(에러 응답 존재 X)
     } else if (!error.response) {
       console.log('서버와 연결되어있지 않습니다');
