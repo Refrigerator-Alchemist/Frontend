@@ -6,6 +6,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // UserProvider : 로그인, 회원가입 정보 상태 공유
+// TokenProvider : 전역에서 액세스 토큰 만료시 reIssue 호출
 // NavigationProvider : 네비게이션바 상태 공유
 
 export default function App() {
@@ -17,7 +18,7 @@ export default function App() {
             <Outlet />
             <ToastContainer
               position="top-center"
-              autoClose={3000}
+              autoClose={2000}
               newestOnTop={false} // 새 알림이 위에 표시될지 여부
               draggable // 드래그 해서 닫기
               theme="light"
