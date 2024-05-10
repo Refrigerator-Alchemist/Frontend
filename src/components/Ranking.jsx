@@ -82,7 +82,7 @@ export default function Ranking() {
     };
 
     fetchRanking();
-  });
+  }, []);
 
   return (
     <article
