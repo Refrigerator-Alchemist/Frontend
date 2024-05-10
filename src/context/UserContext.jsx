@@ -65,12 +65,14 @@ const TokenContext = createContext();
 export const TokenProvider = ({ children }) => {
   const { reIssue } = useUserDispatch();
   const [token, setToken] = useState(localStorage.getItem('accessToken'));
+  const socialId = localStorage.getItem('socialId');
 
   useEffect(() => {
-    if (!token) {
+    // 로그인 되어있다가 토큰이 만료됨
+    if (socialId && token === null) {
       reIssue();
     }
-  }, [token, reIssue]);
+  }, [socialId, token, reIssue]);
 
   return (
     <TokenContext.Provider value={{ token, setToken }}>
@@ -478,7 +480,7 @@ export const UserProvider = ({ children }) => {
   return (
     <UserDispatchContext.Provider value={value}>
       <UserStateContext.Provider value={state}>
-        <TokenContext.Provider>{children}</TokenContext.Provider>
+        {children}
       </UserStateContext.Provider>
     </UserDispatchContext.Provider>
   );
