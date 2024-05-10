@@ -1,4 +1,10 @@
-import React, { useState, useReducer, createContext, useContext } from 'react';
+import React, {
+  useState,
+  useReducer,
+  createContext,
+  useContext,
+  useEffect,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import errorCode from '../utils/ErrorCode';
@@ -32,21 +38,6 @@ instance.interceptors.request.use(
   }
 );
 
-// 🌱 응답 인터셉터
-// instance.interceptors.response.use(
-//   function (response) {
-//     return response;
-//   },
-
-//   async function (error) {
-//     if (error.response && error.response.headers.code === 'RAT8') {
-//       await reIssue(); // 토큰 재발급
-//       return instance(error.config); // 원래의 요청 재실행
-//     }
-//     return Promise.reject(error); // 그 외의 경우 에러를 그대로 반환
-//   }
-// );
-
 // 🌱 유저 상태 초기화
 const initialState = {
   user: null,
@@ -70,6 +61,24 @@ const reducer = (state, action) => {
 
 const UserStateContext = createContext();
 const UserDispatchContext = createContext();
+const TokenContext = createContext();
+
+export const TokenProvider = ({ children }) => {
+  const { reIssue } = useUserDispatch();
+  const [token, setToken] = useState(localStorage.getItem('accessToken'));
+
+  useEffect(() => {
+    if (!token) {
+      reIssue();
+    }
+  }, [token, reIssue]);
+
+  return (
+    <TokenContext.Provider value={{ token, setToken }}>
+      {children}
+    </TokenContext.Provider>
+  );
+};
 
 export const UserProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState); // 유저 상태 공유
@@ -483,13 +492,13 @@ export const UserProvider = ({ children }) => {
   return (
     <UserDispatchContext.Provider value={value}>
       <UserStateContext.Provider value={state}>
-        {children}
+        <TokenProvider>{children}</TokenProvider>
       </UserStateContext.Provider>
     </UserDispatchContext.Provider>
   );
 };
 
-// 🔱 UserState을 사용 가능하게 하는 훅
+// user 객체를 이용하게 해준다
 export const useUserState = () => {
   const context = useContext(UserStateContext);
   if (!context) {
@@ -498,11 +507,20 @@ export const useUserState = () => {
   return context;
 };
 
-// 🔱 UserDispatch를 사용 가능하게 하는 훅
+// value를 이용하게 해준다
 export const useUserDispatch = () => {
   const context = useContext(UserDispatchContext);
   if (!context) {
     throw new Error('Cannot find UserProvider');
+  }
+  return context;
+};
+
+// 토큰 재발급을 이용하게 해준다
+export const useToken = () => {
+  const context = useContext(TokenContext);
+  if (!context) {
+    throw new Error('Cannot find TokenProvider');
   }
   return context;
 };
