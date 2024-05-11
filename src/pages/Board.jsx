@@ -5,13 +5,11 @@ import ICON_SEARCHING from '../assets/img/search.png';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { PiPencilSimpleLine } from 'react-icons/pi';
 import { toast } from 'react-toastify';
-
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Ranking from '../components/Ranking';
 import Navigation from '../components/ui/Navigation';
 import { useLocation } from 'react-router-dom';
-
 import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
 
 const accessToken = localStorage.getItem('accessToken');
@@ -243,9 +241,9 @@ function Board() {
 
   // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
   const fetchLikedPosts = async () => {
-    const URL = `${IP_ADDRESS}/board/islike?id=${email}`;
+    const URI = `${IP_ADDRESS}/board/islike?id=${email}`;
     try {
-      const response = await axios.get(URL, {
+      const response = await axios.get(URI, {
         headers: {
           'Authorization-Access': accessToken,
         },

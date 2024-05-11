@@ -9,7 +9,6 @@ import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
 import { PiSirenFill } from 'react-icons/pi';
 import { useLocation } from 'react-router-dom';
 
-
 const BoardDetail = () => {
   const { postId } = useParams();
   const [imageUrl, setImageUrl] = useState('');
@@ -34,9 +33,9 @@ const BoardDetail = () => {
   useEffect(() => {
     // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
     const fetchLikedPosts = async () => {
-      const URL = `${IP_ADDRESS}/board/islike?id=${myEmail}`;
+      const URI = `${IP_ADDRESS}/board/islike?id=${myEmail}`;
       try {
-        const response = await axios.get(URL, {
+        const response = await axios.get(URI, {
           headers: {
             'Authorization-Access': accessToken,
           },
@@ -66,7 +65,6 @@ const BoardDetail = () => {
         const response = await axios.get(
           `${IP_ADDRESS}/board/specific?postId=${postId}`
         );
-
 
         if (response.data && Array.isArray(response.data.items)) {
           const items = response.data.items.map((item) => ({
@@ -182,11 +180,11 @@ const BoardDetail = () => {
   const reportPost = async (e) => {
     e.preventDefault();
 
-    const URL = `${IP_ADDRESS}/board/report`;
+    const URI = `${IP_ADDRESS}/board/report`;
 
     try {
       const response = await axios.post(
-        URL,
+        URI,
         { email: myEmail, postId: postId },
         {
           headers: {

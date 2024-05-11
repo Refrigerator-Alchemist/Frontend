@@ -6,7 +6,6 @@ import { toast } from 'react-toastify';
 import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
 import axios from 'axios';
 
-
 export default function UploadBoard() {
   const { postId } = useParams(); // 라우터 엔드포인트
   const [title, setTitle] = useState(''); // 레시피 글 제목
@@ -21,9 +20,9 @@ export default function UploadBoard() {
   // 1️⃣ 해당 게시물의 제목, 설명, 재료를 불러오는 함수
   useEffect(() => {
     const fetchData = async (postId) => {
-      const URL = `${IP_ADDRESS}/board/updateBoard?postId=${postId}`;
+      const URI = `${IP_ADDRESS}/board/updateBoard?postId=${postId}`;
       try {
-        const response = await axios.get(URL, {
+        const response = await axios.get(URI, {
           headers: {
             'Authorization-Access': accessToken,
           },
@@ -63,7 +62,7 @@ export default function UploadBoard() {
   // 4️⃣ 수정 완료
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const URL = `${IP_ADDRESS}/editpost/update`;
+    const URI = `${IP_ADDRESS}/editpost/update`;
 
     const formData = {
       postId: postId,
@@ -73,7 +72,7 @@ export default function UploadBoard() {
     };
 
     try {
-      const response = await axios.post(URL, formData, {
+      const response = await axios.post(URI, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization-Access': accessToken,

@@ -13,7 +13,7 @@ import { toast } from 'react-toastify';
 // 🌱 IP : 현재 사용 환경의 IP
 export const IP_ADDRESS = 'http://localhost:8080';
 
-// 🌱 axios 인스턴스 : URL 관리 및 인터셉터 설정
+// 🌱 axios 인스턴스 : URI 관리 및 인터셉터 설정
 export const instance = axios.create({
   baseURL: `${IP_ADDRESS}`,
 });
@@ -120,10 +120,10 @@ export const UserProvider = ({ children }) => {
 
   // 📧 이메일 인증 요청 (회원가입용) -------------------------------------------------
   const requestEmailForSignUp = async (email, emailType, socialType) => {
-    const URL = `${IP_ADDRESS}/auth/email`;
+    const URI = `${IP_ADDRESS}/auth/email`;
 
     try {
-      const response = await instance.post(URL, {
+      const response = await instance.post(URI, {
         email,
         emailType,
         socialType,
@@ -145,10 +145,10 @@ export const UserProvider = ({ children }) => {
 
   // 📧 이메일 인증 요청 (비밀번호 재설정용) ---------------------------------------------
   const requestEmailForReset = async (email, emailType, socialType) => {
-    const URL = `${IP_ADDRESS}/auth/email`;
+    const URI = `${IP_ADDRESS}/auth/email`;
 
     try {
-      const response = await instance.post(URL, {
+      const response = await instance.post(URI, {
         email,
         emailType,
         socialType,
@@ -230,10 +230,10 @@ export const UserProvider = ({ children }) => {
 
   // 📝 회원가입 ---------------------------------------------------------------
   const signup = async (email, password, nickName, socialType) => {
-    const URL = `${IP_ADDRESS}/auth/register`;
+    const URI = `${IP_ADDRESS}/auth/register`;
     try {
       const response = await instance.post(
-        URL,
+        URI,
         {
           email: email,
           password: password,
@@ -263,10 +263,11 @@ export const UserProvider = ({ children }) => {
 
   // 👋🏻 회원탈퇴 ---------------------------------------------------------------
   const deleteUser = async () => {
-    const URL = `${IP_ADDRESS}/auth/delete-user`;
+    const URI = `${IP_ADDRESS}/auth/delete`;
 
+    // 다시 합의 후 수정 필요
     try {
-      await instance.delete(URL, {
+      await instance.delete(URI, {
         data: localStorage.getItem('socialId'),
       });
       logout();
@@ -278,11 +279,11 @@ export const UserProvider = ({ children }) => {
 
   // 🔐 로그인 ---------------------------------------------------------------
   const login = async (email, password, socialType) => {
-    const URL = `${IP_ADDRESS}/token/login`;
+    const URI = `${IP_ADDRESS}/token/login`;
 
     try {
       const response = await instance.post(
-        URL,
+        URI,
         {
           email: email,
           password: password,
@@ -330,11 +331,11 @@ export const UserProvider = ({ children }) => {
 
   // 🔓 로그아웃 ---------------------------------------------------------------
   const logout = async () => {
-    const URL = `${IP_ADDRESS}/token/logout`;
+    const URI = `${IP_ADDRESS}/token/logout`;
     const accessToken = localStorage.getItem('accessToken');
 
     try {
-      const response = await instance.post(URL, {
+      const response = await instance.post(URI, {
         headers: {
           'Authorization-Access': accessToken,
         },
@@ -381,14 +382,14 @@ export const UserProvider = ({ children }) => {
 
   // 🪙 새로운 액세스 토큰 발급
   const reIssue = async () => {
-    const URL = `${IP_ADDRESS}/token/reissue`;
+    const URI = `${IP_ADDRESS}/token/reissue`;
     const socialType = localStorage.getItem('socialType');
     const accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
 
     try {
       const response = await instance.post(
-        URL,
+        URI,
         {},
         {
           headers: {
