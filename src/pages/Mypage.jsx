@@ -131,10 +131,10 @@ export default function MyPage() {
   useEffect(() => {
     // 🧑🏽‍🌾 현재 로그인 중인 유저 정보 : 프로필 이미지, 닉네임
     const fetchUserInfo = async () => {
-      const URL = `${IP_ADDRESS}/userinfo`;
+      const URI = `${IP_ADDRESS}/userinfo`;
       try {
         if (accessToken) {
-          const response = await axios.get(URL, {
+          const response = await axios.get(URI, {
             headers: {
               'Authorization-Access': accessToken,
               email: email,
@@ -150,9 +150,9 @@ export default function MyPage() {
 
     // 📝 내가 작성한 레시피 가져오는 함수
     const fetchMyPage = async () => {
-      const URL = `${IP_ADDRESS}/mypost`;
+      const URI = `${IP_ADDRESS}/mypost`;
       try {
-        const response = await axios.get(URL, {
+        const response = await axios.get(URI, {
           headers: {
             'Authorization-Access': accessToken,
             email: email,
@@ -202,9 +202,9 @@ export default function MyPage() {
 
     // 🔥 좋아요 누른 게시물들 가져오는 함수
     const fetchLikeData = async () => {
-      const URL = `${IP_ADDRESS}/likedpost`;
+      const URI = `${IP_ADDRESS}/likedpost`;
       try {
-        const response = await axios.get(URL, {
+        const response = await axios.get(URI, {
           headers: {
             'Authorization-Access': accessToken,
             email: email,

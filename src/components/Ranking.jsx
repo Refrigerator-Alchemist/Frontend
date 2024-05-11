@@ -61,10 +61,10 @@ export default function Ranking() {
 
   useEffect(() => {
     const fetchRanking = async () => {
-      const URL = `${IP_ADDRESS}/ranking/top3`;
+      const URI = `${IP_ADDRESS}/ranking/top3`;
 
       try {
-        const response = await axios.get(URL);
+        const response = await axios.get(URI);
 
         if (response.data && Array.isArray(response.data.items)) {
           const items = response.data.items.map((item) => ({

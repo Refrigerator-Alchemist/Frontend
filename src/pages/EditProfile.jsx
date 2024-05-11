@@ -27,11 +27,11 @@ export default function EditProfile() {
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const URL = `${IP_ADDRESS}/reset/info`;
+      const URI = `${IP_ADDRESS}/reset/info`;
 
       try {
         if (accessToken) {
-          const response = await axios.get(URL, {
+          const response = await axios.get(URI, {
             headers: {
               'Authorization-Access': accessToken,
             },
@@ -73,7 +73,7 @@ export default function EditProfile() {
 
   // 2️⃣ 프로필 이미지 저장하기
   const uploadImage = async (file) => {
-    const URL = `${IP_ADDRESS}/reset/profile`;
+    const URI = `${IP_ADDRESS}/reset/profile`;
 
     const formData = new FormData();
     const nickNameBlob = new Blob([JSON.stringify({ nickName })], {
@@ -83,7 +83,7 @@ export default function EditProfile() {
     formData.append('file', file);
 
     try {
-      await axios.post(URL, formData, {
+      await axios.post(URI, formData, {
         headers: {
           'Authorization-Access': accessToken,
         },
@@ -108,13 +108,13 @@ export default function EditProfile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const URL = `${IP_ADDRESS}/reset/nickname`;
+    const URI = `${IP_ADDRESS}/reset/nickname`;
 
     try {
       if (nameError === false) {
         await axios
           .post(
-            URL,
+            URI,
             {
               presentNickName: nickName,
               changeNickName: changeNickName,

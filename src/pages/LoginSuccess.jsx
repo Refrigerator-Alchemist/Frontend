@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
-import { useUserState, useUserDispatch } from '../context/UserContext.jsx';
+import { useUserDispatch } from '../context/UserContext.jsx';
 import { useNavigate } from 'react-router-dom';
 
 export default function LoginSuccess() {
-  const { dispatch, handleError } = useUserDispatch();
-  const user = useUserState();
+  const { handleError } = useUserDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,20 +26,6 @@ export default function LoginSuccess() {
           localStorage.setItem('email', email);
           localStorage.setItem('socialId', socialId);
           localStorage.setItem('socialType', socialType);
-
-          console.log(`⭕ 로컬스토리지 저장 완료`);
-
-          let user = {
-            socialId: localStorage.getItem('socialId'),
-            socialType: localStorage.getItem('socialType'),
-          };
-
-          console.log(`⭕ 유저 데이터 저장 완료`);
-
-          // ▶ dispatch로 리듀서에 저장
-          dispatch({ type: 'SET_USER', user });
-
-          return user;
         } else {
           return;
         }
@@ -49,28 +34,19 @@ export default function LoginSuccess() {
       }
     };
 
-    fetchLoginData()
-      .then((user) => {
-        if (user) {
-          console.log(`⭕ 유저 데이터를 컨텍스트에 저장 완료`);
-          navigate('/main');
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [navigate, dispatch, handleError]);
+    fetchLoginData().then(navigate('/main'));
+  }, [navigate, handleError]);
 
   return (
     <section>
-      {user ? (
+      {localStorage.getItem('accessToken') ? (
         <div className="flex flex-col justify-center items-center font-score space-y-3">
           <h1 className="text-3xl font-bold">메인페이지로 이동합니다</h1>
         </div>
       ) : (
         <div className="flex flex-col justify-center items-center font-score space-y-3">
           <h1 className="text-3xl font-bold">
-            ❌ 콘솔과 네트워크에서 문제를 확인하세요
+            콘솔과 네트워크에서 문제를 확인하세요
           </h1>
         </div>
       )}
