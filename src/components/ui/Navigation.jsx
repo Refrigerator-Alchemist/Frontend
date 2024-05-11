@@ -5,16 +5,12 @@ import { IoAccessibilityOutline, IoAccessibility } from 'react-icons/io5';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import { NavigationContext } from '../../context/NavigationContext';
-import { useUserState } from '../../context/UserContext';
 
 export default function Navigation() {
   const { selected, setSelected } = useContext(NavigationContext);
-  const { user } = useUserState();
-
+  const ICON_STYLE = `mx-12 text-4xl text-main cursor-pointer hover:text-main-dark hover:scale-110 transition-all duration-300`;
   const navigate = useNavigate();
   const location = useLocation();
-
-  const iconStyle = `mx-12 text-4xl text-main cursor-pointer hover:text-main-dark hover:scale-110 transition-all duration-300`;
 
   useEffect(() => {
     const currentPath = location.pathname;
@@ -47,7 +43,7 @@ export default function Navigation() {
           setSelected('food');
           navigate('/board');
         }}
-        className={`${iconStyle} ${selected === 'food' ? 'selected-icon' : ''}`}
+        className={`${ICON_STYLE} ${selected === 'food' ? 'selected-icon' : ''}`}
       >
         {selected === 'food' ? <PiCookingPotFill /> : <PiCookingPot />}
       </div>
@@ -57,7 +53,7 @@ export default function Navigation() {
           setSelected('home');
           navigate('/main');
         }}
-        className={`${iconStyle} ${selected === 'home' ? 'selected-icon' : ''}`}
+        className={`${ICON_STYLE} ${selected === 'home' ? 'selected-icon' : ''}`}
       >
         {selected === 'home' ? <GoHomeFill /> : <GoHome />}
       </div>
@@ -65,12 +61,10 @@ export default function Navigation() {
         style={{ position: 'relative' }}
         onClick={() => {
           setSelected('profile');
-          // ▶️ 로그인에 따라 경로가 바뀜
-          navigate(
-            user || localStorage.getItem('nickName') ? '/mypage' : '/login'
-          );
+          // 토큰 ? 마이페이지 : 로그인 필요
+          navigate(localStorage.getItem('accessToken') ? '/mypage' : '/login');
         }}
-        className={`${iconStyle} ${
+        className={`${ICON_STYLE} ${
           selected === 'profile' ? 'selected-icon' : ''
         }`}
       >

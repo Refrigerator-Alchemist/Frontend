@@ -1,97 +1,49 @@
-import React, {
-  useState,
-  useReducer,
-  createContext,
-  useContext,
-  useEffect,
-} from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, createContext, useContext } from 'react';
 import axios from 'axios';
-import errorCode from '../utils/ErrorCode';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import errorCode from '../utils/errorCode';
+import ReIssue from '../components/ReIssue';
 
-// 🌱 IP : 현재 사용 환경의 IP
+// 🌱 IP 주소
 export const IP_ADDRESS = 'http://localhost:8080';
 
-// 🌱 axios 인스턴스 : URI 관리 및 인터셉터 설정
-export const instance = axios.create({
-  baseURL: `${IP_ADDRESS}`,
-});
-
-instance.interceptors.request.use(
-  function (config) {
-    const accessToken = localStorage.getItem('accessToken');
-    const refreshToken = localStorage.getItem('refreshToken');
-    if (accessToken) {
-      config.headers['Authorization-Access'] = accessToken;
-    }
-    if (refreshToken) {
-      config.headers['Authorization-Refresh'] = refreshToken;
-    }
-    return config;
+// 🌱 응답 인터셉터
+axios.interceptors.response.use(
+  function (response) {
+    return response;
   },
 
-  function (error) {
+  async function (error) {
+    const originalRequest = error.config; // 원래 요청
+    if (
+      error.response.headers.status === 400 &&
+      error.response.headers.code === 'RAT8'
+    ) {
+      // 재발급 후 원래 요청 재시도
+      await ReIssue();
+      const accessToken = localStorage.getItem('accessToken');
+      originalRequest.headers['Authorization-Access'] = accessToken;
+      return axios(originalRequest);
+    }
+
     return Promise.reject(error);
   }
 );
 
-// 🌱 state에 유저 상태 저장하는 리듀서
-// 유저 상태 초기화
-const initialState = {
-  user: null,
-};
-
-// 액션 타입
-const SET_USER = 'SET_USER';
-
-// 리듀서
-const reducer = (state, action) => {
-  switch (action.type) {
-    case SET_USER:
-      return {
-        ...state,
-        user: action.user, // 유저의 액션
-      };
-    default:
-      throw new Error(`확인되지 않은 액션 타입: ${action.type}`);
-  }
-};
-
-const UserStateContext = createContext();
 const UserDispatchContext = createContext();
-const TokenContext = createContext();
 
-export const TokenProvider = ({ children }) => {
-  const { reIssue } = useUserDispatch();
-  const [token, setToken] = useState(localStorage.getItem('accessToken'));
-  const socialId = localStorage.getItem('socialId');
-
-  useEffect(() => {
-    // 로그인 되어있다가 토큰이 만료됨
-    if (socialId && token === null) {
-      reIssue();
-    }
-  }, [socialId, token, reIssue]);
-
-  return (
-    <TokenContext.Provider value={{ token, setToken }}>
-      {children}
-    </TokenContext.Provider>
-  );
-};
-
+// 🌱 유저 정보 관리
 export const UserProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
   const [emailExists, setEmailExists] = useState(true);
   const [verified, setVerified] = useState(false);
   const [nameDuplicated, setNameDuplicated] = useState(true);
+  const navigate = useNavigate();
 
-  // 🙍‍♂️ SNS 로그인 엔드 포인트
+  // 🔴🟡🟢 SNS URL
   const googleURL = `${IP_ADDRESS}/oauth2/authorization/google`;
   const kakaoURL = `${IP_ADDRESS}/oauth2/authorization/kakao`;
   const naverURL = `${IP_ADDRESS}/oauth2/authorization/naver`;
-  const navigate = useNavigate();
 
   // 👩🏻‍🔧 커스텀 에러 처리
   const handleError = async (error) => {
@@ -113,6 +65,7 @@ export const UserProvider = ({ children }) => {
       console.log('서버와 연결되어있지 않습니다');
       toast.error(`서버와 연결되어있지 않습니다`);
     } else {
+      // 예외
       console.log(`확인되지 않은 에러, ${error}`);
       toast.error(`알 수 없는 에러가 발생했습니다`);
     }
@@ -123,7 +76,7 @@ export const UserProvider = ({ children }) => {
     const URI = `${IP_ADDRESS}/auth/email`;
 
     try {
-      const response = await instance.post(URI, {
+      const response = await axios.post(URI, {
         email,
         emailType,
         socialType,
@@ -148,7 +101,7 @@ export const UserProvider = ({ children }) => {
     const URI = `${IP_ADDRESS}/auth/email`;
 
     try {
-      const response = await instance.post(URI, {
+      const response = await axios.post(URI, {
         email,
         emailType,
         socialType,
@@ -168,7 +121,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // ✅ 이메일 인증 확인 ------------------------------------------------------------
+  // ✅ 이메일 인증 확인 ---------------------------------------------------------------
   const checkCodeVerification = async (
     email,
     emailType,
@@ -184,7 +137,7 @@ export const UserProvider = ({ children }) => {
     }
 
     try {
-      const response = await instance.post(
+      const response = await axios.post(
         `${IP_ADDRESS}/auth/register/authentication/number`,
         {
           email,
@@ -206,10 +159,10 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // ✅ 닉네임 중복 확인 ------------------------------------------------
+  // ✅ 닉네임 중복 확인 ------------------------------------------------------------
   const checkNameDuplication = async (nickName) => {
     try {
-      const response = await instance.post(
+      const response = await axios.post(
         `${IP_ADDRESS}/auth/register/authentication/nickname`,
         {
           nickName,
@@ -218,7 +171,7 @@ export const UserProvider = ({ children }) => {
 
       if (response.status === 204) {
         setNameDuplicated(false);
-        toast.success('사용 가능한 닉네임입니다:)');
+        toast.success('사용 가능한 닉네임입니다');
       } else {
         return;
       }
@@ -228,11 +181,11 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // 📝 회원가입 ---------------------------------------------------------------
+  // 📝 회원가입 -----------------------------------------------------------------
   const signup = async (email, password, nickName, socialType) => {
     const URI = `${IP_ADDRESS}/auth/register`;
     try {
-      const response = await instance.post(
+      const response = await axios.post(
         URI,
         {
           email: email,
@@ -261,13 +214,13 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // 👋🏻 회원탈퇴 ---------------------------------------------------------------
+  // 👋🏻 회원탈퇴 -----------------------------------------------------------------
   const deleteUser = async () => {
     const URI = `${IP_ADDRESS}/auth/delete`;
 
     // 다시 합의 후 수정 필요
     try {
-      await instance.delete(URI, {
+      await axios.delete(URI, {
         data: localStorage.getItem('socialId'),
       });
       logout();
@@ -277,12 +230,12 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // 🔐 로그인 ---------------------------------------------------------------
+  // 🔐 로그인 -------------------------------------------------------------------
   const login = async (email, password, socialType) => {
     const URI = `${IP_ADDRESS}/token/login`;
 
     try {
-      const response = await instance.post(
+      const response = await axios.post(
         URI,
         {
           email: email,
@@ -299,10 +252,8 @@ export const UserProvider = ({ children }) => {
       );
 
       if (response.headers) {
-        localStorage.setItem(
-          'accessToken',
-          response.headers['authorization-access']
-        );
+        const accessToken = response.headers['authorization-access'];
+        localStorage.setItem('accessToken', accessToken);
         localStorage.setItem(
           'refreshToken',
           response.headers['authorization-refresh']
@@ -314,13 +265,6 @@ export const UserProvider = ({ children }) => {
         localStorage.setItem('email', email);
         localStorage.setItem('socialId', response.headers.get('socialId'));
         localStorage.setItem('socialType', socialType);
-        console.log(`⭕ 로컬스토리지 저장 완료`);
-        let user = {
-          socialId: localStorage.getItem('socialId'),
-          socialType: socialType,
-        };
-        console.log(`⭕ 유저 정보 저장 완료`);
-        dispatch({ type: SET_USER, user });
         toast.success('로그인 되었습니다!');
         navigate('/main');
       }
@@ -329,13 +273,13 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // 🔓 로그아웃 ---------------------------------------------------------------
+  // 🔓 로그아웃 --------------------------------------------------------------------
   const logout = async () => {
     const URI = `${IP_ADDRESS}/token/logout`;
     const accessToken = localStorage.getItem('accessToken');
 
     try {
-      const response = await instance.post(URI, {
+      const response = await axios.post(URI, {
         headers: {
           'Authorization-Access': accessToken,
         },
@@ -349,7 +293,6 @@ export const UserProvider = ({ children }) => {
         localStorage.removeItem('email');
         localStorage.removeItem('socialType');
 
-        dispatch({ type: SET_USER, user: null });
         toast.success('로그아웃 되었습니다!');
         navigate('/main');
       }
@@ -361,61 +304,16 @@ export const UserProvider = ({ children }) => {
   // 🔄 비밀번호 재설정 ---------------------------------------------------------------
   const resetPassword = async (email, password, rePassword, socialType) => {
     try {
-      const response = await instance.post(
-        `${IP_ADDRESS}/auth/reset/password`,
-        {
-          email,
-          password,
-          rePassword,
-          socialType,
-        }
-      );
+      const response = await axios.post(`${IP_ADDRESS}/auth/reset/password`, {
+        email,
+        password,
+        rePassword,
+        socialType,
+      });
 
       if (response.status === 204) {
         toast.success('비밀번호가 성공적으로 재설정되었습니다');
         navigate('/login');
-      }
-    } catch (error) {
-      handleError(error);
-    }
-  };
-
-  // 🪙 새로운 액세스 토큰 발급
-  const reIssue = async () => {
-    const URI = `${IP_ADDRESS}/token/reissue`;
-    const socialType = localStorage.getItem('socialType');
-    const accessToken = localStorage.getItem('accessToken');
-    const refreshToken = localStorage.getItem('refreshToken');
-
-    try {
-      const response = await instance.post(
-        URI,
-        {},
-        {
-          headers: {
-            'Authorization-Access': accessToken,
-            'Authorization-Refresh': refreshToken,
-          },
-        }
-      );
-
-      if (response.status === 204 && socialType === 'Refrigerator-Alchemist') {
-        localStorage.setItem(
-          'accessToken',
-          response.headers['authorization-access']
-        );
-        console.log(`새로운 액세스 토큰을 발급받았습니다`);
-      } else if (
-        response.status === 204 &&
-        socialType !== 'Refrigerator-Alchemist'
-      ) {
-        localStorage.setItem(
-          'accessToken',
-          'Bearer ' + response.headers['authorization-access']
-        );
-        console.log(`새로운 액세스 토큰을 발급받았습니다`);
-      } else {
-        return;
       }
     } catch (error) {
       handleError(error);
@@ -454,8 +352,6 @@ export const UserProvider = ({ children }) => {
 
   // dispatch로 사용가능한 상태 및 함수
   const value = {
-    state,
-    dispatch,
     handleError,
     login,
     logout,
@@ -472,7 +368,6 @@ export const UserProvider = ({ children }) => {
     checkNameDuplication,
     nameDuplicated,
     setNameDuplicated,
-    reIssue,
     kakaoLogin,
     googleLogin,
     naverLogin,
@@ -480,36 +375,16 @@ export const UserProvider = ({ children }) => {
 
   return (
     <UserDispatchContext.Provider value={value}>
-      <UserStateContext.Provider value={state}>
-        {children}
-      </UserStateContext.Provider>
+      {children}
     </UserDispatchContext.Provider>
   );
 };
 
-// user 객체를 이용하게 해준다
-export const useUserState = () => {
-  const context = useContext(UserStateContext);
-  if (!context) {
-    throw new Error('Cannot find UserProvider');
-  }
-  return context;
-};
-
-// value를 이용하게 해준다
+// Provider 내부의 함수들을 사용가능하게 해준다
 export const useUserDispatch = () => {
   const context = useContext(UserDispatchContext);
   if (!context) {
-    throw new Error('Cannot find UserProvider');
-  }
-  return context;
-};
-
-// 토큰 재발급을 이용하게 해준다
-export const useToken = () => {
-  const context = useContext(TokenContext);
-  if (!context) {
-    throw new Error('Cannot find TokenProvider');
+    throw new Error('UserProvider를 찾을 수 없음');
   }
   return context;
 };
