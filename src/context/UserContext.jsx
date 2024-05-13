@@ -28,13 +28,12 @@ axios.interceptors.response.use(
 );
 let isRefreshing = false;
 const reIssue = async () => {
+  if (isRefreshing) return;
+  isRefreshing = true;
   const URI = `${IP_ADDRESS}/token/reissue`;
   const socialType = localStorage.getItem('socialType');
   const accessToken = localStorage.getItem('accessToken');
   const refreshToken = localStorage.getItem('refreshToken');
-  if (isRefreshing) return;
-
-  isRefreshing = true;
 
   try {
     const response = await axios.post(
@@ -51,7 +50,7 @@ const reIssue = async () => {
     if (response.status === 204 && socialType === 'Refrigerator-Alchemist') {
       localStorage.setItem(
         'accessToken',
-        response.headers['authorization-access']
+        response.headers.get('authorization-access')
       );
       console.log(`새로운 액세스 토큰을 발급받았습니다`);
     } else if (
@@ -60,7 +59,7 @@ const reIssue = async () => {
     ) {
       localStorage.setItem(
         'accessToken',
-        'Bearer ' + response.headers['authorization-access']
+        'Bearer ' + response.headers.get('authorization-access')
       );
       console.log(`새로운 액세스 토큰을 발급받았습니다`);
     } else {
@@ -317,16 +316,20 @@ export const UserProvider = ({ children }) => {
     const accessToken = localStorage.getItem('accessToken');
 
     try {
-      const response = await axios.post(URI, {
-        headers: {
-          'Authorization-Access': accessToken,
-        },
-      });
+      const response = await axios.post(
+        URI,
+        {},
+        {
+          headers: {
+            'Authorization-Access': accessToken,
+          },
+        }
+      );
 
       if (response.status === 204) {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
-        localStorage.removeItem('socialid');
+        localStorage.removeItem('socialId');
         localStorage.removeItem('nickName');
         localStorage.removeItem('email');
         localStorage.removeItem('socialType');
