@@ -26,20 +26,17 @@ export default function Login() {
 
   const socialType = 'Refrigerator-Alchemist';
 
-  // 🚷 로그인 유저 접속 차단
   useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
-    if (accessToken) {
+    const socialId = localStorage.getItem('socialId');
+    if (socialId) {
       toast.error('이미 로그인 상태입니다');
-      setTimeout(() => {
-        navigate(-1);
-      }, 2000);
+      navigate(-1);
     }
   }, [navigate, location]);
 
-  // 🔓 로그인 버튼 활성화
+  // 🔓 로그인 버튼 활성화 : 이메일 유효 + 비밀번호 유효
   useEffect(() => {
-    if (emailValid && password.length > 8) {
+    if (emailValid && password.length > 8 && password.length <= 15) {
       setNotAllow(false);
       return;
     }

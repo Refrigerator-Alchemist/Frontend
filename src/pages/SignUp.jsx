@@ -6,7 +6,7 @@ import {
   GoEyeClosed,
 } from 'react-icons/go';
 import { FaArrowLeft } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useUserDispatch } from '../context/UserContext';
 import { toast } from 'react-toastify';
 
@@ -32,6 +32,15 @@ export default function SignUp() {
   } = useUserDispatch();
   const emailType = 'sign-up';
   const socialType = 'Refrigerator-Alchemist';
+  const location = useLocation();
+
+  useEffect(() => {
+    const socialId = localStorage.getItem('socialId');
+    if (socialId) {
+      toast.error('이미 로그인 상태입니다');
+      navigate(-1);
+    }
+  }, [navigate, location]);
 
   // 1️⃣ 이메일 저장
   const handleEmailChange = (e) => setEmail(e.target.value);
@@ -284,15 +293,15 @@ export default function SignUp() {
                   passwordMessage === null
                     ? ''
                     : passwordMessage
-                    ? 'text-emerald'
-                    : 'text-red-500'
+                      ? 'text-emerald'
+                      : 'text-red-500'
                 }`}
               >
                 {passwordMessage === null
                   ? '\u00A0'
                   : passwordMessage
-                  ? '비밀번호가 일치합니다'
-                  : '비밀번호가 일치하지 않습니다'}
+                    ? '비밀번호가 일치합니다'
+                    : '비밀번호가 일치하지 않습니다'}
               </p>
               <ul className="mt-4 mb-4 font-score">
                 <li className="mb-2 flex items-center">
