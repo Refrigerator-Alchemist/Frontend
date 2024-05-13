@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import errorCode from '../utils/errorCode';
-import ReIssue from '../components/ReIssue';
 
 // 🌱 IP 주소
 export const IP_ADDRESS = 'http://localhost:8080';
@@ -15,13 +14,10 @@ axios.interceptors.response.use(
   },
 
   async function (error) {
-    const originalRequest = error.config; // 원래 요청
-    if (
-      error.response.headers.status === 400 &&
-      error.response.headers.code === 'RAT8'
-    ) {
-      // 재발급 후 원래 요청 재시도
-      await ReIssue();
+    const originalRequest = error.config;
+    const isLoginRequest = originalRequest.url.includes('/token/login');
+    if (!isLoginRequest && error.response.headers.code === 'RAT8') {
+      await reIssue();
       const accessToken = localStorage.getItem('accessToken');
       originalRequest.headers['Authorization-Access'] = accessToken;
       return axios(originalRequest);
@@ -30,6 +26,52 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+let isRefreshing = false;
+const reIssue = async () => {
+  const URI = `${IP_ADDRESS}/token/reissue`;
+  const socialType = localStorage.getItem('socialType');
+  const accessToken = localStorage.getItem('accessToken');
+  const refreshToken = localStorage.getItem('refreshToken');
+  if (isRefreshing) return;
+
+  isRefreshing = true;
+
+  try {
+    const response = await axios.post(
+      URI,
+      {},
+      {
+        headers: {
+          'Authorization-Access': accessToken,
+          'Authorization-Refresh': refreshToken,
+        },
+      }
+    );
+
+    if (response.status === 204 && socialType === 'Refrigerator-Alchemist') {
+      localStorage.setItem(
+        'accessToken',
+        response.headers['authorization-access']
+      );
+      console.log(`새로운 액세스 토큰을 발급받았습니다`);
+    } else if (
+      response.status === 204 &&
+      socialType !== 'Refrigerator-Alchemist'
+    ) {
+      localStorage.setItem(
+        'accessToken',
+        'Bearer ' + response.headers['authorization-access']
+      );
+      console.log(`새로운 액세스 토큰을 발급받았습니다`);
+    } else {
+      return;
+    }
+  } catch (error) {
+    console.error(error);
+  } finally {
+    isRefreshing = false;
+  }
+};
 
 const UserDispatchContext = createContext();
 
