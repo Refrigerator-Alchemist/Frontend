@@ -16,7 +16,7 @@ axios.interceptors.response.use(
   async function (error) {
     const originalRequest = error.config;
     const isLoginRequest = originalRequest.url.includes('/token/login');
-    if (!isLoginRequest && error.response.headers.code === 'RAT8') {
+    if (!isLoginRequest && error.response.data.code === 'RAT8') {
       await reIssue();
       const accessToken = localStorage.getItem('accessToken');
       originalRequest.headers['Authorization-Access'] = accessToken;
@@ -89,19 +89,15 @@ export const UserProvider = ({ children }) => {
 
   // 👩🏻‍🔧 커스텀 에러 처리
   const handleError = async (error) => {
-    if (
-      error.response &&
-      error.response.headers &&
-      error.response.headers.code
-    ) {
+    if (error.response && error.response.data && error.response.data.code) {
       // 백엔드 콘솔 확인용
       const errorName = Object.values(errorCode).find(
-        (obj) => obj.code === error.response.headers.code
+        (obj) => obj.code === error.response.data.code
       );
       const userNotice = errorName.notice; // 유저 토스트 확인용
       console.log(`에러 내용: ${errorName}`);
       toast.error(`${userNotice}`);
-      return error.response.headers.code;
+      return error.response.data.code;
       // 서버 미연결(에러 응답 존재 X)
     } else if (!error.response) {
       console.log('서버와 연결되어있지 않습니다');
