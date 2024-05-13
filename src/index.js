@@ -34,8 +34,8 @@ const router = createBrowserRouter([
       { path: '/main', element: <MainPage /> }, // 메인
 
       // 회원정보 관리 -----------------
-      { path: '/signup', element: <SignUp /> }, // 회원 가입
-      { path: '/login', element: <Login /> }, // 로그인 관련 페이지
+      { path: '/signup', element: <SignUp /> }, // 회원가입 [이미 로그인시 접속 불가]
+      { path: '/login', element: <Login /> }, // 로그인 [이미 로그인시 접속 불가]
       { path: '/login-success', element: <LoginSuccess /> }, // SNS 로그인 성공시 데이터 저장
       {
         path: '/reset-password', // 비밀번호 재설정
@@ -46,7 +46,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: '/delete-user', // 회원 탈퇴
+        path: '/delete-user', // 회원탈퇴
         element: (
           <ProtectedRoute>
             <DeleteUser />
@@ -73,7 +73,7 @@ const router = createBrowserRouter([
       },
 
       // 게시판 ----------------------
-      { path: '/ranking', element: <BoardRanking /> }, // 탑 3 랭킹
+      { path: '/ranking', element: <BoardRanking /> }, // Top 3 랭킹
       { path: '/board', element: <Board /> }, // 게시판
       { path: '/board/:postId', element: <BoardDetail /> }, // 게시물 상세
       {
@@ -94,10 +94,10 @@ const router = createBrowserRouter([
       },
 
       // 냉장고 연금술 -----------------
-      { path: '/recipe/recommend', element: <GptSearch /> }, // 냉장고 연금술사 : 재료 입력
-      { path: '/recipe/recommend/:recommendId', element: <GptResult /> }, // 냉장고 연금술사 : 검색 결과 출력
+      { path: '/recipe/recommend', element: <GptSearch /> }, // 재료 입력
+      { path: '/recipe/recommend/:recommendId', element: <GptResult /> }, // 결과
       {
-        path: '/recipe/myRecipe', // 냉장고 연금술사 : 결과 저장 리스트
+        path: '/recipe/myRecipe', // 결과 저장 리스트
         element: (
           <ProtectedRoute>
             <GptSavedList />
@@ -105,7 +105,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: '/recipe/myRecipe/:recipeId', // 냉장고 연금술사 : 결과-상세페이지
+        path: '/recipe/myRecipe/:recipeId', // 저장된 레시피 상세페이지
         element: (
           <ProtectedRoute>
             <GptSavedDetail />

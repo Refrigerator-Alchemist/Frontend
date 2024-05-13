@@ -20,7 +20,9 @@ const ReIssue = async () => {
       }
     );
 
+    // 만료된 기존 액세스 토큰은 삭제 후 발급받은 토큰 저장
     if (response.status === 204 && socialType === 'Refrigerator-Alchemist') {
+      localStorage.removeItem('accessToken');
       localStorage.setItem(
         'accessToken',
         response.headers['authorization-access']
@@ -30,6 +32,7 @@ const ReIssue = async () => {
       response.status === 204 &&
       socialType !== 'Refrigerator-Alchemist'
     ) {
+      localStorage.removeItem('accessToken');
       localStorage.setItem(
         'accessToken',
         'Bearer ' + response.headers['authorization-access']
