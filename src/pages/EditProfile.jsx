@@ -36,13 +36,6 @@ export default function EditProfile() {
               'Authorization-Access': accessToken,
             },
           });
-          localStorage.setItem(
-            'nickName',
-            decodeURIComponent(response.headers.get('nickName'))
-          );
-          localStorage.setItem('email', response.headers.get('email'));
-          setNickName(response.headers['nickName']);
-          setEmail(response.headers['email']);
         } else {
           return;
         }
