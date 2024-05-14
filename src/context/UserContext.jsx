@@ -2,7 +2,7 @@ import React, { useState, createContext, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import errorCode from '../utils/errorCode';
+import ERRORS from '../utils/errorCode';
 
 // 🌱 IP 주소
 export const IP_ADDRESS = 'http://localhost:8080';
@@ -17,8 +17,7 @@ axios.interceptors.response.use(
     const originalRequest = error.config;
     const isLoginRequest = originalRequest.url.includes('/token/login');
     if (!isLoginRequest && error.response.data.code === 'RAT8') {
-      await reIssue();
-      const accessToken = localStorage.getItem('accessToken');
+      const accessToken = await reIssue();
       originalRequest.headers['Authorization-Access'] = accessToken;
       return axios(originalRequest);
     }
@@ -34,6 +33,7 @@ const reIssue = async () => {
   const socialType = localStorage.getItem('socialType');
   const accessToken = localStorage.getItem('accessToken');
   const refreshToken = localStorage.getItem('refreshToken');
+  let newAccessToken;
 
   try {
     const response = await axios.post(
@@ -47,29 +47,26 @@ const reIssue = async () => {
       }
     );
 
-    if (response.status === 204 && socialType === 'Refrigerator-Alchemist') {
-      localStorage.setItem(
-        'accessToken',
-        response.headers.get('authorization-access')
-      );
+    if (response.status === 200 && socialType === 'Refrigerator-Alchemist') {
+      newAccessToken = response.headers.get('authorization-access');
+      localStorage.setItem('accessToken', newAccessToken);
       console.log(`새로운 액세스 토큰을 발급받았습니다`);
     } else if (
-      response.status === 204 &&
+      response.status === 200 &&
       socialType !== 'Refrigerator-Alchemist'
     ) {
-      localStorage.setItem(
-        'accessToken',
-        'Bearer ' + response.headers.get('authorization-access')
-      );
+      newAccessToken = 'Bearer ' + response.headers.get('authorization-access');
+      localStorage.setItem('accessToken', newAccessToken);
       console.log(`새로운 액세스 토큰을 발급받았습니다`);
     } else {
       return;
     }
   } catch (error) {
-    console.error(error);
+    console.error(error.response.data.code);
   } finally {
     isRefreshing = false;
   }
+  return newAccessToken;
 };
 
 const UserDispatchContext = createContext();
@@ -90,11 +87,11 @@ export const UserProvider = ({ children }) => {
   const handleError = async (error) => {
     if (error.response && error.response.data && error.response.data.code) {
       // 백엔드 콘솔 확인용
-      const errorName = Object.values(errorCode).find(
+      const errorName = Object.values(ERRORS).find(
         (obj) => obj.code === error.response.data.code
       );
       const userNotice = errorName.notice; // 유저 토스트 확인용
-      console.log(`에러 내용: ${errorName}`);
+      console.log(`에러 내용: ${JSON.stringify(errorName)}`);
       toast.error(`${userNotice}`);
       return error.response.data.code;
       // 서버 미연결(에러 응답 존재 X)
