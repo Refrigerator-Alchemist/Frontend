@@ -9,19 +9,15 @@ import IMAGE_PROFILE from '../assets/img/img_profile.png';
 import axios from 'axios';
 
 export default function EditProfile() {
-  const [nameError, setNameError] = useState(false);
-  const [changeNickName, setChangeNickName] = useState(''); // 새로 바꿀 닉네임
-  const [nickName, setNickName] = useState(
-    localStorage.getItem('nickName') || '' // 닉네임
-  );
+  const nickName = localStorage.getItem('nickName') || ''; // 닉네임
+  const email = localStorage.getItem('email') || ''; // 이메일
   const [imageUrl, setImageUrl] = useState(
     localStorage.getItem('imageUrl') || IMAGE_PROFILE // 프로필 이미지
   );
-  const [email, setEmail] = useState(localStorage.getItem('email') || ''); // 이메일
+  const [nameError, setNameError] = useState(false);
+  const [changeNickName, setChangeNickName] = useState(''); // 새로 바꿀 닉네임
   const accessToken = localStorage.getItem('accessToken'); // 액세스 토큰
-
   const fileInput = useRef(null);
-
   const navigate = useNavigate();
   const { handleError } = useUserDispatch();
 
@@ -31,7 +27,7 @@ export default function EditProfile() {
 
       try {
         if (accessToken) {
-          const response = await axios.get(URI, {
+          await axios.get(URI, {
             headers: {
               'Authorization-Access': accessToken,
             },
