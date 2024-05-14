@@ -31,6 +31,7 @@ const reIssue = async () => {
   isRefreshing = true;
   const URI = `${IP_ADDRESS}/token/reissue`;
   const socialType = localStorage.getItem('socialType');
+  const socialId = localStorage.getItem('socialId');
   const accessToken = localStorage.getItem('accessToken');
   const refreshToken = localStorage.getItem('refreshToken');
   let newAccessToken;
@@ -38,7 +39,7 @@ const reIssue = async () => {
   try {
     const response = await axios.post(
       URI,
-      {},
+      { socialId },
       {
         headers: {
           'Authorization-Access': accessToken,
