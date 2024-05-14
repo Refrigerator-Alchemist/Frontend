@@ -8,7 +8,7 @@
 // 406 Not Acceptable - 407 Proxy Authentication Required - 408 Request Timeout - 409 Conflict - 410 Gone - 411 Length Requiredh
 // 412 Precondition Failed - 413 Payload Too Large - 414 URI Too Long - 415 Unsupported Media Type - 416 Requested Range Not Satifiable ...
 
-const errorCode = {
+const ERRORS = {
   EXIST_USER_EMAIL_SOCIALTYPE: {
     status: 409,
     code: 'RAU1',
@@ -331,4 +331,4 @@ const errorCode = {
   },
 };
 
-export default errorCode;
+export default ERRORS;
