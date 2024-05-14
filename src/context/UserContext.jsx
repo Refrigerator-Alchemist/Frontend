@@ -17,14 +17,15 @@ axios.interceptors.response.use(
     const originalRequest = error.config;
     const isLoginRequest = originalRequest.url.includes('/token/login');
     if (!isLoginRequest && error.response.data.code === 'RAT8') {
-      const accessToken = await reIssue();
-      originalRequest.headers['Authorization-Access'] = accessToken;
+      const newAccessToken = await reIssue();
+      originalRequest.headers['Authorization-Access'] = newAccessToken;
       return axios(originalRequest);
     }
 
     return Promise.reject(error);
   }
 );
+
 let isRefreshing = false;
 const reIssue = async () => {
   if (isRefreshing) return;
@@ -39,11 +40,12 @@ const reIssue = async () => {
   try {
     const response = await axios.post(
       URI,
-      { socialId },
+      {},
       {
         headers: {
           'Authorization-Access': accessToken,
           'Authorization-Refresh': refreshToken,
+          socialId,
         },
       }
     );

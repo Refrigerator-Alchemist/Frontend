@@ -22,25 +22,21 @@ export default function EditProfile() {
   const { handleError } = useUserDispatch();
 
   useEffect(() => {
-    const fetchUserInfo = async () => {
+    const checkToken = async () => {
       const URI = `${IP_ADDRESS}/reset/info`;
 
       try {
-        if (accessToken) {
-          await axios.get(URI, {
-            headers: {
-              'Authorization-Access': accessToken,
-            },
-          });
-        } else {
-          return;
-        }
+        await axios.get(URI, {
+          headers: {
+            'Authorization-Access': accessToken,
+          },
+        });
       } catch (error) {
         handleError(error);
       }
     };
 
-    fetchUserInfo();
+    checkToken();
     setChangeNickName(nickName);
   }, [handleError, accessToken, nickName]);
 
