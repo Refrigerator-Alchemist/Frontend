@@ -5,9 +5,7 @@ import { useUserDispatch } from '../context/UserContext';
 
 export default function DeleteUser() {
   const [password, setPassword] = useState('');
-
   const { handleError, deleteUser } = useUserDispatch();
-
   const navigate = useNavigate();
 
   // 1️⃣ 비밀번호 입력
@@ -17,7 +15,7 @@ export default function DeleteUser() {
   const handleDeleteUser = (e) => {
     e.preventDefault();
 
-    // ▶️ 사용자에게 확인 질문
+    // 사용자에게 확인 질문
     const confirmDelete = window.confirm('정말 회원탈퇴를 진행할까요?');
 
     try {
