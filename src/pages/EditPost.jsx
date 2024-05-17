@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { IoAccessibility } from 'react-icons/io5';
 import { toast } from 'react-toastify';
-
 import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
 import axios from 'axios';
 
@@ -11,18 +10,16 @@ export default function UploadBoard() {
   const [title, setTitle] = useState(''); // 레시피 글 제목
   const [description, setDescription] = useState(''); // 내용
   const [ingredients, setIngredients] = useState([]); // 재료
-
   const accessToken = localStorage.getItem('accessToken');
-
-  const navigate = useNavigate();
   const { handleError } = useUserDispatch();
+  const navigate = useNavigate();
 
   // 1️⃣ 해당 게시물의 제목, 설명, 재료를 불러오는 함수
   useEffect(() => {
     const fetchData = async (postId) => {
-      const URI = `${IP_ADDRESS}/board/updateBoard?postId=${postId}`;
+      const URL = `${IP_ADDRESS}/board/updateBoard?postId=${postId}`;
       try {
-        const response = await axios.get(URI, {
+        const response = await axios.get(URL, {
           headers: {
             'Authorization-Access': accessToken,
           },
@@ -62,7 +59,7 @@ export default function UploadBoard() {
   // 4️⃣ 수정 완료
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const URI = `${IP_ADDRESS}/editpost/update`;
+    const URL = `${IP_ADDRESS}/editpost/update`;
 
     const formData = {
       postId: postId,
@@ -72,7 +69,7 @@ export default function UploadBoard() {
     };
 
     try {
-      const response = await axios.post(URI, formData, {
+      const response = await axios.post(URL, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization-Access': accessToken,

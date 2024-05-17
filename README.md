@@ -79,6 +79,7 @@ http://배포후도메인을입력해주세요
 <div>
   <p style='font-weight: bold'>APIs</p>
   <img src="https://img.shields.io/badge/GPT 3.5-412991?style=flat-square&logo=openai&logoColor=white">
+  <img src="https://img.shields.io/badge/GPT 3.5-F2CA30?style=flat-square&logo=openai&logoColor=black">
 </div><br/>
 
 <div>
@@ -104,9 +105,8 @@ http://배포후도메인을입력해주세요
 
 ### 🌱 <span style='color: gold; font-weight:bold;'>Context API (useContext)</span>
 
-- 리액트 애플리케이션에서 전역 상태 관리를 위한 도구로 Context API를 사용한 이유는 3가지가 있습니다.
-  - 우선 Redux를 사용하기 위한 개발 경험이 충분하지 않았습니다. 그래서 좀 더 익숙하며 프로젝트에 들어가는 학습 비용을 줄일 수 있는 방법을 선택했습니다.
-  - Redux는 대규모 애플리케이션의 리소스와 전역 상태 관리에 효율적인 것으로 알고 있습니다. 냉장고 연금술사의 경우 유저 데이터 공유와 네비게이션바를 제외하면 컴포넌트 트리 전체에서 전역으로 공유될 상태가 없어 Context API만으로도 충분하다고 생각했습니다.
+- 우선 Redux를 사용하기 위한 개발 경험이 충분하지 않았습니다. 그래서 좀 더 익숙하며 프로젝트에 들어가는 학습 비용을 줄일 수 있는 방법을 선택했습니다.
+- Redux는 대규모 애플리케이션의 리소스와 전역 상태 관리에 효율적인 것으로 알고 있습니다. 냉장고 연금술사의 경우 유저 데이터 공유와 네비게이션바를 제외하면 컴포넌트 트리 전체에서 전역으로 공유될 상태가 없어 Context API만으로도 충분하다고 생각했습니다.
 
 ### 🌱 <span style='color: gold; font-weight:bold;'>Prettier</span>
 
@@ -214,9 +214,9 @@ http://배포후도메인을입력해주세요
   <span style='color: gold; font-weight:bold;'>프로젝트 공통 적용</span>
 
 - 피그마를 이용한 목업 디자인, UI 설계
-- 프로젝트 로고 이미지 디자인
-- 프로젝트 메인 테마 컬러 결정
-- 프로젝트 디렉토리 구조 세팅
+- 프로젝트 로고 이미지 디자인(Dall-E, 미리캔버스)
+- 프로젝트 테마 컬러 결정(tailwind.config)
+- 프론트 디렉토리 구조 세팅
 - 사용할 폰트 결정
 - UI(버튼, 인풋박스 등)의 CSS 컨벤션 결정
 - 커스텀 에러코드 작성
@@ -231,20 +231,17 @@ http://배포후도메인을입력해주세요
       GetStarted, MainPage, SignUp, Login, LoginSuccess, ResetPassword, EditProfile, EditPost, Mypage, DeleteUser, NotFound, ProtectedRoute
     </li>
     <li>
-      컴포넌트 : Logo, Navigation, Ranking
-    </li>
-    <li>
       컨텍스트 : NavigationContext, UserContext
     </li><br/>
   </ul>
-
-<span style='color: gold; font-weight:bold;'>기능</span><br/>
+  <span style='color: gold; font-weight:bold;'>기능</span>
 
   <ul>
     <li>
       이메일 회원가입, 이메일 로그인, SNS 계정 연동 회원가입, SNS 계정 로그인, 로컬 스토리지와 UserContext에서 유저 데이터 관리, 비밀번호 재설정, 프로필 사진 변경, 닉네임 변경, 액세스 토큰 만료시 재발급, 로그인 유저만 접속할 수 있는 페이지에 비로그인 유저의 접근 차단, 네비게이션바를 통한 페이지 이동, 올린 게시물 수정
     </li>
   </ul>
+
 </div>
 
 <h3 style='font-weight: bold'>✅ 안혜련</h3>
@@ -253,7 +250,8 @@ http://배포후도메인을입력해주세요
   <span style='color: gold; font-weight:bold;'>프로젝트 공통 적용</span>
 
 - 피그마를 이용한 목업 디자인, UI 설계
-- 팝업 react-toastify 적용
+- 커스텀 에러코드 작성
+- react-toastify 적용을 통한 팝업박스 스타일링
 </div><br/>
 
 <div style=''>
@@ -322,7 +320,7 @@ http://배포후도메인을입력해주세요
 
 ## 🚸 개선 예정
 
-## 🥞 개발 회고록
+## 🥞 팀원들의 회고록
 
 ### 🌱 조승빈
 

@@ -13,18 +13,13 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [emailValid, setEmailValid] = useState(false); // 이메일 유효성 검사
   const [emailError, setEmailError] = useState(''); // 로그인 오류 메세지
-
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false); // 비밀번호 표시
-
   const [notAllow, setNotAllow] = useState(true); // 로그인 disabled on/off
-
   const { login, kakaoLogin, googleLogin, naverLogin } = useUserDispatch(); // 로그인 dispatch
-
+  const socialType = 'Refrigerator-Alchemist';
   const navigate = useNavigate();
   const location = useLocation();
-
-  const socialType = 'Refrigerator-Alchemist';
 
   useEffect(() => {
     const socialId = localStorage.getItem('socialId');
