@@ -5,8 +5,7 @@ import { toast } from 'react-toastify';
 import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
 import axios from 'axios';
 import Loading from '../components/gpt/Loading';
-import BackButton from '../components/BackButton';
-
+import BackButton from '../components/ui/BackButton';
 
 const GptResult = () => {
   const [ingredients, setIngredients] = useState([]);
@@ -40,7 +39,6 @@ const GptResult = () => {
         }
       } catch (error) {
         handleError(error);
-
       } finally {
         setIsLoading(false);
       }
@@ -79,7 +77,7 @@ const GptResult = () => {
 
   return (
     <section className="bg-white min-h-screen px-4 py-6">
-      <BackButton destination="/main"/>
+      <BackButton destination="/main" />
       <main className="max-w-md mx-auto bg-white rounded-lg overflow-hidden md:max-w-lg">
         <div className="md:flex">
           <div className="w-full p-4 pt-12">

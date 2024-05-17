@@ -4,10 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import ERRORS from '../utils/errorCode';
 
-// 🌱 IP 주소
 export const IP_ADDRESS = 'http://localhost:8080';
 
-// 🌱 응답 인터셉터
 axios.interceptors.response.use(
   function (response) {
     return response;
@@ -74,14 +72,20 @@ const reIssue = async () => {
 
 const UserDispatchContext = createContext();
 
-// 🌱 유저 정보 관리
+export const useUserDispatch = () => {
+  const context = useContext(UserDispatchContext);
+  if (!context) {
+    throw new Error('UserProvider를 찾을 수 없음');
+  }
+  return context;
+};
+
 export const UserProvider = ({ children }) => {
   const [emailExists, setEmailExists] = useState(true);
   const [verified, setVerified] = useState(false);
   const [nameDuplicated, setNameDuplicated] = useState(true);
   const navigate = useNavigate();
 
-  // 🔴🟡🟢 SNS URL
   const googleURL = `${IP_ADDRESS}/oauth2/authorization/google`;
   const kakaoURL = `${IP_ADDRESS}/oauth2/authorization/kakao`;
   const naverURL = `${IP_ADDRESS}/oauth2/authorization/naver`;
@@ -391,7 +395,6 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // dispatch로 사용가능한 상태 및 함수
   const value = {
     handleError,
     login,
@@ -419,13 +422,4 @@ export const UserProvider = ({ children }) => {
       {children}
     </UserDispatchContext.Provider>
   );
-};
-
-// Provider 내부의 함수들을 사용가능하게 해준다
-export const useUserDispatch = () => {
-  const context = useContext(UserDispatchContext);
-  if (!context) {
-    throw new Error('UserProvider를 찾을 수 없음');
-  }
-  return context;
 };

@@ -4,9 +4,8 @@ import axios from 'axios';
 import Pagination from '../components/Pagination';
 import Navigation from '../components/ui/Navigation';
 import SavedListCard from '../components/gpt/SavedListCard';
-import BackButton from '../components/BackButton';
+import BackButton from '../components/ui/BackButton';
 import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
-
 
 export default function GptSavedList() {
   const [recipes, setRecipes] = useState([]);
@@ -45,7 +44,7 @@ export default function GptSavedList() {
 
   return (
     <section className="history">
-      <BackButton destination="/main"/>
+      <BackButton destination="/main" />
       <div className="my-2 mt-20 mb-4">
         <div className="titlebox mb-6 mt-2">
           <span className="font-score font-extrabold ml-8 text-2xl">

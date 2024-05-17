@@ -5,7 +5,7 @@ import { CiSaveDown2 } from 'react-icons/ci';
 import { toast } from 'react-toastify';
 import TagInput from '../components/gpt/TagInput';
 import Loading from '../components/gpt/Loading';
-import BackButton from '../components/BackButton';
+import BackButton from '../components/ui/BackButton';
 
 import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
 import axios from 'axios';
@@ -41,12 +41,11 @@ const GptSearch = () => {
       const recommendId = response.data;
       if (recommendId) {
         navigate(`/recipe/recommend/${recommendId}`);
-      } 
+      }
     } catch (error) {
       handleError(error);
     } finally {
       setIsLoading(false);
-
     }
   };
 
@@ -56,7 +55,7 @@ const GptSearch = () => {
 
   return (
     <section className="bg-white min-h-screen px-4 py-8 flex flex-col relative">
-      <BackButton destination="/main"/>
+      <BackButton destination="/main" />
       <main className="max-w-lg mx-auto flex-1">
         <h2 className="font-jua text-xl md:text-2xl font-bold mb-12 mt-32 text-center">
           냉장고에서 꺼내 넣어주세요!

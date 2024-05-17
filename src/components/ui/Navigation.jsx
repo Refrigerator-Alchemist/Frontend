@@ -3,18 +3,16 @@ import { PiCookingPot, PiCookingPotFill } from 'react-icons/pi';
 import { GoHome, GoHomeFill } from 'react-icons/go';
 import { IoAccessibilityOutline, IoAccessibility } from 'react-icons/io5';
 import { useNavigate, useLocation } from 'react-router-dom';
-
 import { NavigationContext } from '../../context/NavigationContext';
 
 export default function Navigation() {
   const { selected, setSelected } = useContext(NavigationContext);
-  const ICON_STYLE = `mx-12 text-4xl text-main cursor-pointer hover:text-main-dark hover:scale-110 transition-all duration-300`;
   const navigate = useNavigate();
   const location = useLocation();
+  const ICON_STYLE = `mx-12 text-4xl text-main cursor-pointer hover:text-main-dark hover:scale-110 transition-all duration-300`;
 
   useEffect(() => {
     const currentPath = location.pathname;
-
     if (
       currentPath === '/board' ||
       currentPath.startsWith('/board/') ||
@@ -61,7 +59,6 @@ export default function Navigation() {
         style={{ position: 'relative' }}
         onClick={() => {
           setSelected('profile');
-          // 토큰 ? 마이페이지 : 로그인 필요
           navigate(localStorage.getItem('accessToken') ? '/mypage' : '/login');
         }}
         className={`${ICON_STYLE} ${

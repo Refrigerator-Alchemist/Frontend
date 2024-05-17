@@ -1,32 +1,30 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaArrowLeft } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
-import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
-import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
-
-import { toast } from 'react-toastify';
-import IMAGE_PROFILE from '../assets/img/img_profile.png';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
+import { toast } from 'react-toastify';
+import { FaArrowLeft } from 'react-icons/fa';
+import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
+import IMAGE_PROFILE from '../assets/img/img_profile.png';
 
 export default function EditProfile() {
-  const nickName = localStorage.getItem('nickName') || ''; // 닉네임
-  const email = localStorage.getItem('email') || ''; // 이메일
+  const nickName = localStorage.getItem('nickName') || '';
+  const email = localStorage.getItem('email') || '';
   const [imageUrl, setImageUrl] = useState(
-    localStorage.getItem('imageUrl') || IMAGE_PROFILE // 프로필 이미지
+    localStorage.getItem('imageUrl') || IMAGE_PROFILE
   );
   const [nameError, setNameError] = useState(false);
-  const [changeNickName, setChangeNickName] = useState(''); // 새로 바꿀 닉네임
-  const accessToken = localStorage.getItem('accessToken'); // 액세스 토큰
+  const [changeNickName, setChangeNickName] = useState('');
+  const accessToken = localStorage.getItem('accessToken');
   const fileInput = useRef(null);
-  const navigate = useNavigate();
   const { handleError } = useUserDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const checkToken = async () => {
-      const URI = `${IP_ADDRESS}/reset/info`;
-
+    const checkTokenExpired = async () => {
+      const URL = `${IP_ADDRESS}/reset/info`;
       try {
-        await axios.get(URI, {
+        await axios.get(URL, {
           headers: {
             'Authorization-Access': accessToken,
           },
@@ -35,8 +33,7 @@ export default function EditProfile() {
         handleError(error);
       }
     };
-
-    checkToken();
+    checkTokenExpired();
     setChangeNickName(nickName);
   }, [handleError, accessToken, nickName]);
 
@@ -44,22 +41,18 @@ export default function EditProfile() {
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
       const reader = new FileReader();
-
       reader.onload = async () => {
         if (reader.readyState === 2) {
           setImageUrl(reader.result);
           await uploadImage(e.target.files[0]);
         }
       };
-
       reader.readAsDataURL(e.target.files[0]);
     }
   };
 
-  // 2️⃣ 프로필 이미지 저장하기
   const uploadImage = async (file) => {
-    const URI = `${IP_ADDRESS}/reset/profile`;
-
+    const URL = `${IP_ADDRESS}/reset/profile`;
     const formData = new FormData();
     const nickNameBlob = new Blob([JSON.stringify({ nickName })], {
       type: 'application/json;charset=UTF-8',
@@ -67,18 +60,21 @@ export default function EditProfile() {
     formData.append('nickName', nickNameBlob);
     formData.append('file', file);
 
-    try {
-      await axios.post(URI, formData, {
+    await axios
+      .post(URL, formData, {
         headers: {
           'Authorization-Access': accessToken,
         },
+      })
+      .then(() => {
+        toast.success('이미지를 변경했습니다');
+      })
+      .catch((error) => {
+        handleError(error);
       });
-    } catch (error) {
-      handleError(error);
-    }
   };
 
-  // 3️⃣ 닉네임 유효성 검사
+  // 2️⃣ 닉네임 유효성 검사
   const handleNameChange = (e) => {
     setChangeNickName(e.target.value);
 
@@ -89,40 +85,35 @@ export default function EditProfile() {
     }
   };
 
-  // 4️⃣ 닉네임 저장하기
+  // 3️⃣ 닉네임 저장하기
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const URI = `${IP_ADDRESS}/reset/nickname`;
-
-    try {
-      if (nameError === false) {
-        await axios
-          .post(
-            URI,
-            {
-              presentNickName: nickName,
-              changeNickName: changeNickName,
+    if (nameError === false) {
+      await axios
+        .post(
+          `${IP_ADDRESS}/reset/nickname`,
+          {
+            presentNickName: nickName,
+            changeNickName: changeNickName,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json;charset=UTF-8',
+              Accept: 'application/json',
+              'Access-Control-Allow-Origin': '*',
+              'Authorization-Access': accessToken,
             },
-            {
-              headers: {
-                'Content-Type': 'application/json;charset=UTF-8',
-                Accept: 'application/json',
-                'Access-Control-Allow-Origin': '*',
-                'Authorization-Access': accessToken,
-              },
-            }
-          )
-          .then((result) => {
-            localStorage.setItem('nickName', changeNickName);
-            console.log(`닉네임 재설정 성공 : ${result}`);
-            toast.success('닉네임을 재설정 했습니다');
-          });
-
-        navigate('/mypage');
-      }
-    } catch (error) {
-      handleError(error);
+          }
+        )
+        .then(() => {
+          console.log(`닉네임 재설정 성공`);
+          localStorage.setItem('nickName', changeNickName);
+          toast.success('닉네임을 재설정 했습니다');
+          navigate('/mypage');
+        })
+        .catch((error) => {
+          handleError(error);
+        });
     }
   };
 

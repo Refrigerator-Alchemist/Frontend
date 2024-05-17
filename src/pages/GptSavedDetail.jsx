@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Navigation from '../components/ui/Navigation';
 import axios from 'axios';
-import BackButton from '../components/BackButton';
+import BackButton from '../components/ui/BackButton';
 import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
-
 
 const GptSavedDetail = () => {
   const [recipeData, setRecipeData] = useState({});
@@ -43,7 +42,7 @@ const GptSavedDetail = () => {
   return (
     <>
       <div className="pt-16">
-        <BackButton destination="/main"/>
+        <BackButton destination="/main" />
         <div className="flex flex-col items-center mt-10">
           <div className="flex items-center gap-4">
             <h2 className="font-score text-3xl font-bold">

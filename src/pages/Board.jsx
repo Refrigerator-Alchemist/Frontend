@@ -241,9 +241,9 @@ function Board() {
 
   // 🔥 현재 계정으로 좋아요 누른 게시물들 가져오는 함수
   const fetchLikedPosts = async () => {
-    const URI = `${IP_ADDRESS}/board/islike?id=${email}`;
+    const URL = `${IP_ADDRESS}/board/islike?id=${email}`;
     try {
-      const response = await axios.get(URI, {
+      const response = await axios.get(URL, {
         headers: {
           'Authorization-Access': accessToken,
         },
