@@ -69,7 +69,7 @@ http://배포후도메인을입력해주세요
 </div><br/>
 
 <div>
-  <p style='color:skyblue; font-weight: bold'>Back-end</p>
+  <p style='color:cyan; font-weight: bold'>Back-end</p>
   <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat-square&logo=springboot&logoColor=white">
   <img src="https://img.shields.io/badge/Spring-6DB33F?style=flat-square&logo=Spring&logoColor=white">
   <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white">
@@ -90,7 +90,7 @@ http://배포후도메인을입력해주세요
   <img src="https://img.shields.io/badge/Amazon EC2-FF9900?style=flat-square&logo=amazonec2&logoColor=black">
 </div>
 
-## 💡 도구 및 기술 사용 근거
+## 💡 프로젝트에 도입된 기술 사용 근거
 
 ### 🌱 <span style='color: gold; font-weight:bold;'>React.js + Tailwindcss</span>
 
@@ -111,6 +111,12 @@ http://배포후도메인을입력해주세요
 ### 🌱 <span style='color: gold; font-weight:bold;'>Prettier</span>
 
 - VSC의 강력한 코드 포맷팅 확장프로그램인 Prettier를 사용하여 코드 스타일과 가독성을 효율적으로 관리했습니다.
+
+### 🌱 <span style='color: gold; font-weight:bold;'>JPA</span>
+
+- sql을 직접적으로 사용하지 않아 가독성이 좋고 코드량이 줄어들어 유지보수에 좋으며 객체지향의 장점을 극대화 할 수 있으며, 캐시 기능을 사용하기에
+  높은 성능을 낼 수 있습니다.
+- 다른 애플리케이션 서버 환경에서도 호환성을 보장한다는 장점이 있습니다.
 
 ### 🌱 <span style='color: gold; font-weight:bold;'>JWT</span>
 
@@ -149,7 +155,7 @@ http://배포후도메인을입력해주세요
 
   TTL=(유효시간-경과시간)만큼 설정하여, 재발급하기 전 사용하던 JWT 토큰들을 자동으로 소멸하고 토큰들을 관리하기 효율적입니다. 그래서 Redis를 사용하여 토큰 목록도 관리하였고, 서버는 인증을 위해 들어오는 모든 토큰을 이 목록과 대조하여 검증할 수 있었습니다. Redis의 빠른 데이터 액세스는 JWT 검증 과정을 빠르게 만들어 주었습니다.
 
-## 🧑‍🤝‍🧑 함께한 팀원
+## 🧑‍🤝‍🧑 팀원 & 역할
 
 <table>
   <tbody>
@@ -166,7 +172,7 @@ http://배포후도메인을입력해주세요
       </td>
       <td align="center">
         <a href="https://github.com/anhyeryeon2">
-          <img src="https://image.fmkorea.com/files/attach/new3/20230621/486616/825924136/5891200629/ee5eb9d0301f6f736f791dce9dc20963.png" width="100px;" alt="" style='border-radius:50%'/><br />
+          <img src="https://avatars.githubusercontent.com/u/100520490?v=4" width="100px;" alt="" style='border-radius:50%'/><br />
           <sub>
             <b>안혜련</b>
           </sub>
@@ -176,149 +182,220 @@ http://배포후도메인을입력해주세요
       </td>
       <td align="center">
         <a href="https://github.com/anhyeryeon2">
-          <img src="https://image.fmkorea.com/files/attach/new3/20230621/486616/825924136/5891200629/ee5eb9d0301f6f736f791dce9dc20963.png" width="100px;" alt="" style='border-radius:50%'/><br />
+          <img src="https://avatars.githubusercontent.com/u/112162446?v=4" width="100px;" alt="" style='border-radius:50%'/><br />
           <sub>
             <b>김동윤</b>
           </sub>
         </a><br />
         <sub><b>영남대 컴공 19</b></sub><br />
-        <sub><b style='color:skyblue'>BE</b></sub>
+        <sub><b style='color:cyan'>BE</b></sub>
       </td><td align="center">
         <a href="https://github.com/anhyeryeon2">
-          <img src="https://image.fmkorea.com/files/attach/new3/20230621/486616/825924136/5891200629/ee5eb9d0301f6f736f791dce9dc20963.png" width="100px;" alt="" style='border-radius:50%'/><br />
+          <img src="https://avatars.githubusercontent.com/u/130645006?v=4" width="100px;" alt="" style='border-radius:50%'/><br />
           <sub>
             <b>서효진</b>
           </sub>
         </a><br />
         <sub><b>영남대 컴공 21</b></sub><br />
-        <sub><b style='color:skyblue'>BE</b></sub>
+        <sub><b style='color:cyan'>BE</b></sub>
       </td><td align="center">
         <a href="https://github.com/anhyeryeon2">
-          <img src="https://image.fmkorea.com/files/attach/new3/20230621/486616/825924136/5891200629/ee5eb9d0301f6f736f791dce9dc20963.png" width="100px;" alt="" style='border-radius:50%'/><br />
+          <img src="https://avatars.githubusercontent.com/u/93308824?v=4" width="100px;" alt="" style='border-radius:50%'/><br />
           <sub>
             <b>조승빈</b>
           </sub>
         </a><br />
         <sub><b>영남대 컴공 23</b></sub><br />
-        <sub><b style='color:skyblue'>BE</b></sub>
+        <sub><b style='color:cyan'>BE</b></sub>
       </td>
     </tr>
   </tbody>
 </table>
 
-### 🧑‍💻 팀원별 역할
+### <span style='color:pink'>프론트엔드 팀</span>
 
-<h3 style='font-weight: bold'>✅ 이창욱</h3>
+<h3 style='font-weight: bold'>🧑‍💻 이창욱</h3>
+<form>
+  <div>
+    <span style='color: gold; font-weight:bold;'>프로젝트 공통 적용</span>
+    <ul>
+      <li>피그마를 이용한 목업 디자인, UI 설계</li>
+      <li>프로젝트 로고 이미지 디자인(MS Copilot, 미리캔버스)</li>
+      <li>프로젝트 테마 컬러 결정</li>
+      <li>폰트 디자인 결정</li>
+      <li>UI 요소 CSS 컨벤션 결정</li>
+      <li>커스텀 에러코드 작성</li>
+      <li>프론트엔드 docker 파일 작성</li>
+      <li>README.md 작성</li>
+    </ul>
+  </div><br/>
+  <div>
+    <span style='text-decoration:underline; font-weight:bold;'>파트</span><br/>
+    <ul>
+      <li>페이지 :</li>
+      <ul>
+        <li>GetStarted</li>
+        <li>MainPage</li>
+        <li>SignUp</li>
+        <li>Login</li>
+        <li>LoginSuccess</li>
+        <li>ResetPassword</li>
+        <li>EditProfile</li>
+        <li>EditPost</li>
+        <li>Mypage</li>
+        <li>DeleteUser</li>
+        <li>NotFound</li>
+        <li>ProtectedRoute</li>
+      </ul>
+      <li>컨텍스트 :</li>
+      <ul>
+        <li>NavigationContext</li>
+        <li>UserContext</li>
+      </ul>
+    </ul>
+    <span style='text-decoration:underline; font-weight:bold;'>기능</span><br/>
+    <ul>
+      <li>이메일 회원가입</li>
+      <li>이메일 로그인</li>
+      <li>SNS 계정 연동 회원가입</li>
+      <li>SNS 계정 로그인</li>
+      <li>로컬 스토리지와 UserContext에서 유저 데이터 관리</li>
+      <li>비밀번호 재설정</li>
+      <li>프로필 사진 변경</li>
+      <li>닉네임 변경</li>
+      <li>액세스 토큰 만료시 재발급</li>
+      <li>로그인 유저만 접속할 수 있는 페이지에 비로그인 유저의 접근 차단</li>
+      <li>네비게이션바를 통한 페이지 이동</li>
+      <li>올린 게시물 수정</li>
+    </ul>
+  </div>
+</form><br/>
 
-<div>
-  <span style='color: gold; font-weight:bold;'>프로젝트 공통 적용</span>
+<h3 style='font-weight: bold'>🧑‍💻 안혜련</h3>
+<form>
+  <div>
+    <span style='color: gold; font-weight:bold;'>프로젝트 공통 적용</span>
+    <ul>
+      <li>피그마를 이용한 목업 디자인, UI 설계</li>
+      <li>커스텀 에러코드 작성</li>
+      <li>react-toastify 적용을 통한 팝업박스 스타일링</li>
+    </ul>
+  </div><br/>
+  <div>  
+    <span style='text-decoration:underline; font-weight:bold;'>파트</span><br/>
+    <ul>
+      <li>페이지 :</li>
+      <ul>
+        <li>Board</li>
+        <li>BoardDetail</li>
+        <li>UploadBoard</li>
+        <li>EditPost</li>
+        <li>GptSearch</li>
+        <li>GptResult</li>
+        <li>GptSavedList</li>
+        <li>GptSavedDetail</li>
+      </ul>
+      <li>컴포넌트 :</li>
+      <ul>
+        <li>Pagination</li>
+      </ul>
+    </ul>
+    <span style='text-decoration:underline; font-weight:bold;'>기능</span>
+    <ul>
+      <li>게시판 내 게시물 검색</li>
+      <li>게시물 좋아요/취소(로그인 유저만 가능)</li>
+      <li>게시물 작성</li>
+      <li>게시물 수정</li>
+      <li>게시판과 마이페이지의 게시물들을 페이지네이션으로 구분</li>
+      <li>마이페이지에서 '내가 작성한 레시피', '좋아요 누른 레시피'를 버튼 토글로 조회</li>
+      <li>레시피 연금술 재료 추가</li>
+      <li>레시피 결과 저장</li>
+      <li>저장된 레시피 리스트 조회</li>
+    </ul>
+</form><br/>
 
-- 피그마를 이용한 목업 디자인, UI 설계
-- 프로젝트 로고 이미지 디자인(Dall-E, 미리캔버스)
-- 프로젝트 테마 컬러 결정(tailwind.config)
-- 프론트 디렉토리 구조 세팅
-- 사용할 폰트 결정
-- UI(버튼, 인풋박스 등)의 CSS 컨벤션 결정
-- 커스텀 에러코드 작성
-- README.md 작성
-</div><br/>
+### <span style='color:cyan'>백엔드 팀</span>
 
-<div style=''>
-  <span style='color: gold; font-weight:bold;'>맡은 파트</span><br/>
-  <ul>
-    <li>
-      페이지 : 
-      GetStarted, MainPage, SignUp, Login, LoginSuccess, ResetPassword, EditProfile, EditPost, Mypage, DeleteUser, NotFound, ProtectedRoute
-    </li>
-    <li>
-      컨텍스트 : NavigationContext, UserContext
-    </li><br/>
-  </ul>
-  <span style='color: gold; font-weight:bold;'>기능</span>
+<h3 style='font-weight: bold'>🧑‍💻 김동윤</h3>
+<form>
+  <div>
+    <span style='color: gold; font-weight:bold;'>프로젝트 공통 적용</span>
+    <ul>
+      <li>JWT, OAuth 2.0을 사용하여 로그인 구현</li>
+      <li>Redis 도입</li>
+      <li>커스텀 에러코드 작성</li>
+      <li>백엔드 docker 파일 작성</li>
+    </ul>
+  </div><br/>
+  <div>
+    <span style='text-decoration:underline; font-weight:bold;'>기능</span>
+    <ul>
+      <li>이메일 회원가입</li>
+      <li>이메일 로그인</li>
+      <li>SNS 계정 연동 회원가입</li>
+      <li>SNS 계정 로그인</li>
+      <li>비밀번호 재설정</li>
+      <li>프로필 사진 변경</li>
+      <li>닉네임 변경</li>
+      <li>액세스 토큰 만료시 재발급</li>
+      <li>올린 게시물 수정</li>
+    </ul>
+  </div>
+</form><br/>
 
-  <ul>
-    <li>
-      이메일 회원가입, 이메일 로그인, SNS 계정 연동 회원가입, SNS 계정 로그인, 로컬 스토리지와 UserContext에서 유저 데이터 관리, 비밀번호 재설정, 프로필 사진 변경, 닉네임 변경, 액세스 토큰 만료시 재발급, 로그인 유저만 접속할 수 있는 페이지에 비로그인 유저의 접근 차단, 네비게이션바를 통한 페이지 이동, 올린 게시물 수정
-    </li>
-  </ul>
+<h3 style='font-weight: bold'>🧑‍💻 서효진</h3>
 
-</div>
+<form>
+  <div>
+    <span style='text-decoration:underline; font-weight:bold;'>파트</span><br/>
+    <ul>
+      <li>연금술을 사용한 레시피 생성 및 저장, 조회</li>
+    </ul>
+  </div>
+  <div>
+    <span style='text-decoration:underline; font-weight:bold;'>기능</span>
+    <ul>
+      <li>추천 레시피 생성</li>
+      <li>레시피 저장</li>
+      <li>레시피 목록 조회</li>
+      <li>상세 레시피 조회</li>
+    </ul>
+  </div>
+</form><br/>
 
-<h3 style='font-weight: bold'>✅ 안혜련</h3>
+<h3 style='font-weight: bold'>🧑‍💻 조승빈</h3>
 
-<div>
-  <span style='color: gold; font-weight:bold;'>프로젝트 공통 적용</span>
+<form>
+  <div>
+    <span style='text-decoration:underline; font-weight:bold;'>파트</span><br/>
+    <ul>
+      <li>게시판, 마이페이지의 CRUD 구현</li>
+    </ul>
+  </div>
+  <div>
+    <span style='text-decoration:underline; font-weight:bold;'>기능</span>
+    <ul>
+      <li>게시물 업로드</li>
+      <li>게시물 삭제</li>
+      <li>게시물 수정</li>
+      <li>게시물 좋아요 누르기 및 해제</li>
+      <li>내가 누른 좋아요 목록 보기</li>
+      <li>내가 업로드한 게시물</li>
+    </ul>
+  </div>
+</form>
 
-- 피그마를 이용한 목업 디자인, UI 설계
-- 커스텀 에러코드 작성
-- react-toastify 적용을 통한 팝업박스 스타일링
-</div><br/>
-
-<div style=''>
-  <span style='color: gold; font-weight:bold;'>맡은 파트</span><br/>
-  <ul>
-      <li>
-        페이지 : 
-        Board, BoardDetail, UploadBoard, EditPost, GptSearch, GptResult, GptSavedList, GptSavedDetail
-      </li>
-      <li>
-        컴포넌트 : Pagination
-      </li><br/>
-  </ul>
-
-<span style='color: gold; font-weight:bold;'>기능</span><br/>
-
-  <ul>
-    <li>
-      게시판 내 게시물 검색, 게시물 좋아요/취소(로그인 유저만 가능), 게시물 작성, 게시물 수정, 게시판과 마이페이지의 게시물들을 페이지네이션으로 구분, 마이페이지에서 '내가 작성한 레시피', '좋아요 누른 레시피'를 버튼 토글로 조회, 레시피 연금술 재료 추가, 레시피 결과 저장, 저장된 레시피 리스트 조회
-    </li>
-  </ul>
-</div>
-
-<h3 style='font-weight: bold'>✅ 김동윤</h3>
-
-<div>
-  <span style='color: gold; font-weight:bold;'>프로젝트 공통 적용</span>
-
-- REDIS를 사용한 API 통신
-- 커스텀 에러코드 작성
-</div><br/>
-
-<span style='color: gold; font-weight:bold;'>기능</span><br/>
-
-- 이메일 회원가입, 이메일 로그인, SNS 계정 연동 회원가입, SNS 계정 로그인, 유저 데이터 관리, 비밀번호 재설정, 프로필 사진 변경, 닉네임 변경, 액세스 토큰 만료시 재발급
-
-</div>
-
-<h3 style='font-weight: bold'>✅ 서효진</h3>
-
-<div style=''>
-  <span style='color: gold; font-weight:bold;'>맡은 파트</span><br/>
-
-- 레시피 추천(연금술 실행) 및 저장, 조회
-
-<span style='color: gold; font-weight:bold;'>기능</span><br/>
-
-- 추천 레시피 생성, 레시피 저장, 레시피 목록 조회, 상세 레시피 조회
-</div>
-
-<h3 style='font-weight: bold'>✅ 조승빈</h3>
-
-<div>
-  <span style='color: gold; font-weight:bold;'>맡은 파트</span>
-</div><br/>
-
-<div>
-
-<span style='color: gold; font-weight:bold;'>기능</span><br/>
-
-  <ul>
-  </ul>
-</div>
-
-## 🪺 냉장고 연금술사 사용법
+## ✅ 냉장고 연금술사 사용법
 
 ## 🚸 개선 예정
+
+### <span style='color:pink'>프론트엔드 팀</span>
+
+- useEffect 사용 방식 수정
+- Context API 사용 방식 수정
+- 마이페이지 렌더링시 출현하는 '서버 연결 X' 팝업 문제 해결
+
+### <span style='color:cyan'>백엔드 팀</span>
 
 ## 🥞 팀원들의 회고록
 
