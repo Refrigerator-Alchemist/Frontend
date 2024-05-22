@@ -394,6 +394,7 @@ http://배포후도메인을입력해주세요
 - useEffect 사용 방식 수정
 - Context API 사용 방식 수정
 - 마이페이지 렌더링시 출현하는 '서버 연결 X' 팝업 문제 해결
+- SEO 최적화, OG 설정
 
 ### <span style='color:cyan'>백엔드 팀</span>
 
