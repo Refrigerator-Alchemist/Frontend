@@ -47,13 +47,14 @@ export default function UploadBoard() {
   // 2️⃣ 재료 입력
   const handleIngredientChange = (index, e) => {
     const newIngredients = [...ingredients]; // 기존 재료들
-    newIngredients[index] = e.target.value; // index번째 재료
+    newIngredients[index].name = e.target.value; // index번째 재료
     setIngredients(newIngredients); // 모두 재료들 안에 순서대로 합치기
   };
 
   // 3️⃣ 재료 추가
   const addIngredientField = () => {
-    setIngredients([...ingredients, '']);
+    // setIngredients([...ingredients, '']);
+    setIngredients([...ingredients, { name: '' }]);
   };
 
   // 4️⃣ 수정 완료
@@ -65,7 +66,8 @@ export default function UploadBoard() {
       postId: postId,
       title: title,
       description: description,
-      ingredients: ingredients,
+      // ingredients: ingredients,
+      ingredients: ingredients.map(ingredient => ingredient.name),
     };
 
     try {
@@ -95,7 +97,7 @@ export default function UploadBoard() {
     <section className="pt-16 relative">
       <div
         className="absolute top-5 left-1 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate('/mypage')}
+        onClick={() => navigate("/mypage")}
       >
         <IoAccessibility />
       </div>
@@ -184,7 +186,6 @@ export default function UploadBoard() {
           </button>
           <button
             type="submit"
-            onClick={handleSubmit}
             className="font-score flex-grow text-white rounded-full p-2 transition ease-in-out bg-main hover:bg-emerald hover:text-black"
           >
             수정하기
