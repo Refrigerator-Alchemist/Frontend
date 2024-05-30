@@ -2,7 +2,7 @@ import React, { useState, createContext, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import ERRORS from '../utils/errorCode';
+import ERRORS from '../utils/customedError';
 
 export const IP_ADDRESS = 'http://localhost:8080';
 
