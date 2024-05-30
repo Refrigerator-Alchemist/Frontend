@@ -9,7 +9,7 @@ import LOGO_KAKAO from '../assets/img/logo_kakao.png';
 import LOGO_NAVER from '../assets/img/logo_naver.png';
 import { toast } from 'react-toastify';
 
-export default function Login() {
+export default function SignIn() {
   const [email, setEmail] = useState('');
   const [emailValid, setEmailValid] = useState(false); // 이메일 유효성 검사
   const [emailError, setEmailError] = useState(''); // 로그인 오류 메세지

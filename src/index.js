@@ -7,7 +7,7 @@ import NotFound from './pages/NotFound';
 import GetStarted from './pages/GetStarted';
 import MainPage from './pages/MainPage';
 import SignUp from './pages/SignUp';
-import Login from './pages/Login';
+import SignIn from './pages/SignIn';
 import LoginSuccess from './pages/LoginSuccess';
 import ResetPassword from './pages/ResetPassword';
 import DeleteUser from './pages/DeleteUser';
@@ -34,8 +34,8 @@ const router = createBrowserRouter([
       { path: '/main', element: <MainPage /> }, // 메인
 
       // 회원정보 관리 -----------------
-      { path: '/signup', element: <SignUp /> }, // 회원가입 [이미 로그인시 접속 불가]
-      { path: '/login', element: <Login /> }, // 로그인 [이미 로그인시 접속 불가]
+      { path: '/signup', element: <SignUp /> }, // 회원가입 [로그인 상태에서 접속 불가]
+      { path: '/login', element: <SignIn /> }, // 로그인 [로그인 상태에서 접속 불가]
       { path: '/login-success', element: <LoginSuccess /> }, // SNS 로그인 성공시 데이터 저장
       {
         path: '/reset-password', // 비밀번호 재설정
