@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import Pagination from '../components/Pagination';
 import Navigation from '../components/ui/Navigation';
 import { FaHeart } from 'react-icons/fa';
 import { VscChromeClose } from 'react-icons/vsc';
@@ -107,7 +106,8 @@ const LikedRecipe = ({ postId, title, description, imageUrl }) => {
 // 📂 마이페이지
 export default function MyPage() {
   const [imageUrl, setImageUrl] = useState('' || IMG_PROFILE);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPageMyRecipes, setCurrentPageMyRecipes] = useState(1);
+  const [currentPageLikedRecipes, setCurrentPageLikedRecipes] = useState(1);
   const [recipesPerPage] = useState(5);
   const [totalMyRecipes, setTotalMyRecipes] = useState(0);
   const [totalLikedRecipes, setTotalLikedRecipes] = useState(0);
@@ -116,8 +116,6 @@ export default function MyPage() {
 
   const [recipes, setRecipes] = useState([]); // 내가 저장한 레시피들
   const [likedItems, setLikedItems] = useState([]); // 좋아요 누른 레시피들
-  const [currentPageMyRecipes, setCurrentPageMyRecipes] = useState(1);
-  const [currentPageLikedRecipes, setCurrentPageLikedRecipes] = useState(1);
 
   const { logout, handleError } = useUserDispatch();
 
@@ -126,10 +124,9 @@ export default function MyPage() {
   const email = localStorage.getItem('email');
   const navigate = useNavigate();
 
-  // --------------------------------------------------------------------------------------------------------
+  const observer = useRef();
 
   useEffect(() => {
-    // 🧑🏽‍🌾 현재 로그인 중인 유저 정보 : 프로필 이미지, 닉네임
     const fetchUserInfo = async () => {
       const URL = `${IP_ADDRESS}/userinfo`;
       try {
@@ -148,61 +145,12 @@ export default function MyPage() {
       }
     };
 
-    // 📝 내가 작성한 레시피 가져오는 함수
-    const fetchMyPage = async () => {
-      const URL = `${IP_ADDRESS}/mypost`;
-      try {
-        const response = await axios.get(URL, {
-          headers: {
-            'Authorization-Access': accessToken,
-            email: email,
-          },
-        });
-        if (response.data && Array.isArray(response.data.items)) {
-          const items = response.data.items.map((item) => {
-            return {
-              postId: item.ID,
-              title: item.title,
-              description: item.description,
-              imageUrl: item.imageUrl,
-            };
-          });
-          setRecipes(items);
-          // totalMyRecipes = Math.ceil(response.data.total / recipesPerPage);
-          setTotalMyRecipes(response.data.total);
-          console.log('내가 작성한 레시피 총 갯수:', response.data.total);
-        } else {
-          toast.error('데이터가 배열이 아닙니다');
-        }
-      } catch (error) {
-        handleError(error);
-      }
-    };
+    fetchUserInfo();
+  }, [accessToken, email, handleError]);
 
-    // 📝 작성한 게시물, 좋아요 누른 게시물 mock data
-    // const fetchMockData = async () => {
-    //   try {
-    //     if (mockData.items && Array.isArray(mockData.items)) {
-    //       const items = mockData.items.map((item) => ({
-    //         postId: item.ID,
-    //         title: item.title,
-    //         description: item.description,
-    //         imageUrl: item.imageUrl,
-    //         likeCount: item.likeCount,
-    //       }));
-    //       setRecipes(items);
-    //       setLikedItems(items);
-    //     } else {
-    //       console.error('데이터 타입 오류:', mockData.items);
-    //     }
-    //   } catch (error) {
-    //     console.error('에러 내용:', error);
-    //   }
-    // };
-
-    // 🔥 좋아요 누른 게시물들 가져오는 함수
-    const fetchLikeData = async () => {
-      const URL = `${IP_ADDRESS}/likedpost`;
+  useEffect(() => {
+    const fetchMyPage = async (page) => {
+      const URL = `${IP_ADDRESS}/mypost?page=${page}&size=${recipesPerPage}`;
       try {
         const response = await axios.get(URL, {
           headers: {
@@ -212,72 +160,90 @@ export default function MyPage() {
         });
         if (response.data && Array.isArray(response.data.items)) {
           const items = response.data.items.map((item) => ({
-            id: item.ID,
+            postId: item.ID,
             title: item.title,
             description: item.description,
             imageUrl: item.imageUrl,
-            likeCount: item.likeCount,
           }));
-          setLikedItems(items);
-          // totalLikedRecipes= Math.ceil(response.data.total / recipesPerPage);
-          setTotalLikedRecipes(response.data.total);
-          console.log('좋아요누른 총 레시피 갯수:', response.data.total);
+          setRecipes((prevRecipes) => [...prevRecipes, ...items]);
+          setTotalMyRecipes(response.data.total);
         } else {
-          toast.error('데이터가 배열이 아닙니다!');
+          toast.error('데이터가 배열이 아닙니다');
         }
       } catch (error) {
         handleError(error);
       }
     };
 
-    const fetchMyRecipesCount = async () => {
+    const fetchLikeData = async (page) => {
+      const URL = `${IP_ADDRESS}/likedpost?page=${page}&size=${recipesPerPage}`;
       try {
-        const response = await axios.get(`${IP_ADDRESS}/mypost/size`, {
+        const response = await axios.get(URL, {
           headers: {
             'Authorization-Access': accessToken,
             email: email,
           },
         });
-        setTotalMyRecipes(response.data.total);
+        if (response.data && Array.isArray(response.data.items)) {
+          const items = response.data.items.map((item) => ({
+            postId: item.ID,
+            title: item.title,
+            description: item.description,
+            imageUrl: item.imageUrl,
+          }));
+          setLikedItems((prevItems) => [...prevItems, ...items]);
+          setTotalLikedRecipes(response.data.total);
+        } else {
+          toast.error('데이터가 배열이 아닙니다');
+        }
       } catch (error) {
         handleError(error);
       }
     };
 
-    const fetchLikedRecipesCount = async () => {
-      try {
-        const response = await axios.get(`${IP_ADDRESS}/likedpost/size`, {
-          headers: {
-            'Authorization-Access': accessToken,
-            email: email,
-          },
-        });
-        setTotalLikedRecipes(response.data.total);
-      } catch (error) {
-        handleError(error);
-      }
-    };
-
-    fetchUserInfo();
     if (showMyRecipes) {
-      fetchMyPage();
-      // fetchMockData();
+      fetchMyPage(currentPageMyRecipes);
     } else {
-      // fetchMockData();
-      fetchLikeData();
+      fetchLikeData(currentPageLikedRecipes);
     }
-    if (accessToken) {
-      fetchMyRecipesCount();
-      fetchLikedRecipesCount();
-    }
-  }, [showMyRecipes, accessToken, email, handleError]);
+  }, [
+    showMyRecipes,
+    currentPageMyRecipes,
+    currentPageLikedRecipes,
+    accessToken,
+    email,
+    handleError,
+    recipesPerPage,
+  ]);
 
-  // 1️⃣ 레시피 수정
+  const lastRecipeElementRef = useCallback(
+    (node) => {
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          if (showMyRecipes && currentPageMyRecipes < Math.ceil(totalMyRecipes / recipesPerPage)) {
+            setCurrentPageMyRecipes((prevPage) => prevPage + 1);
+          } else if (!showMyRecipes && currentPageLikedRecipes < Math.ceil(totalLikedRecipes / recipesPerPage)) {
+            setCurrentPageLikedRecipes((prevPage) => prevPage + 1);
+          }
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [
+      showMyRecipes,
+      currentPageMyRecipes,
+      currentPageLikedRecipes,
+      totalMyRecipes,
+      totalLikedRecipes,
+      recipesPerPage,
+    ]
+  );
+
   const handleEdit = (postId) => {
     navigate(`/editpost/${postId}`);
   };
 
-  // 2️⃣ 레시피 삭제
   const deleteRecipe = async (postId) => {
     try {
       await axios.post(`${IP_ADDRESS}/mypost/delete`, postId, {
@@ -290,11 +256,10 @@ export default function MyPage() {
       );
     } catch (error) {
       handleError(error);
-
       throw error;
     }
   };
-  // 3️⃣ 레시피 삭제 확인
+
   const handleDeleteConfirmation = async (postId) => {
     const confirmDelete = window.confirm('정말로 삭제하시겠습니까?');
     if (confirmDelete) {
@@ -309,26 +274,10 @@ export default function MyPage() {
 
   const toggleRecipeView = (view) => {
     setShowMyRecipes(view);
-    setCurrentPage(1); // 목록을 전환할 때마다 첫 페이지로 설정
-  };
-
-  // Active 상태에 따라 현재 페이지 번호와 레시피 목록 계산
-  let currentRecipes;
-  if (showMyRecipes) {
-    const indexOfLastRecipe = currentPageMyRecipes * recipesPerPage;
-    const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-    currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
-  } else {
-    const indexOfLastRecipe = currentPageLikedRecipes * recipesPerPage;
-    const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-    currentRecipes = likedItems.slice(indexOfFirstRecipe, indexOfLastRecipe);
-  }
-  // 보여줄 레시피 목록에 따라 총 레시피 수를 결정
-  const handlePageChangeMyRecipes = (pageNumber) => {
-    setCurrentPageMyRecipes(pageNumber);
-  };
-  const handlePageChangeLikedRecipes = (pageNumber) => {
-    setCurrentPageLikedRecipes(pageNumber);
+    setCurrentPageMyRecipes(1);
+    setCurrentPageLikedRecipes(1);
+    setRecipes([]);
+    setLikedItems([]);
   };
 
   return (
@@ -375,31 +324,25 @@ export default function MyPage() {
 
         <div className="flex">
           <button
-            onClick={() => toggleRecipeView(true)} // 내가 작성한 레시피 on
+            onClick={() => toggleRecipeView(true)}
             className={`font-score mx-1 py-2 px-4 rounded ${
-              showMyRecipes === true
-                ? 'bg-main text-white'
-                : 'bg-gray-100 text-black'
+              showMyRecipes ? 'bg-main text-white' : 'bg-gray-100 text-black'
             }`}
           >
             내가 작성한 레시피
           </button>
           <button
-            onClick={() => toggleRecipeView(false)} // 좋아요 누른 레시피 on
+            onClick={() => toggleRecipeView(false)}
             className={`font-score mx-1 py-2 px-4 rounded ${
-              showMyRecipes === false
-                ? 'bg-main text-white'
-                : 'bg-gray-100 text-black'
+              !showMyRecipes ? 'bg-main text-white' : 'bg-gray-100 text-black'
             }`}
           >
             좋아요 누른 레시피
           </button>
         </div>
-        {/* true : 내가 저장한 레시피 */}
         {showMyRecipes ? (
-          // 내가 저장한 레시피
           <div className="recipe-card-container w-full flex flex-wrap">
-            {currentRecipes.map((recipe) => (
+            {recipes.map((recipe, index) => (
               <SavedRecipe
                 key={recipe.postId}
                 postId={recipe.postId}
@@ -409,37 +352,27 @@ export default function MyPage() {
                 showEditDeleteButtons={showMyRecipes}
                 onDelete={handleDeleteConfirmation}
                 onEdit={handleEdit}
+                ref={
+                  recipes.length === index + 1 ? lastRecipeElementRef : null
+                }
               />
             ))}
           </div>
         ) : (
-          // 좋아요 누른 레시피 -> likeItems에 들어있는 postId만 사용하도록 변경해야 함
           <div className="recipe-card-container w-full flex flex-wrap">
-            {likedItems.map((recipe) => (
+            {likedItems.map((recipe, index) => (
               <LikedRecipe
                 key={recipe.postId}
                 postId={recipe.postId}
                 title={recipe.title}
                 description={recipe.description}
                 imageUrl={recipe.imageUrl}
+                ref={
+                  likedItems.length === index + 1 ? lastRecipeElementRef : null
+                }
               />
             ))}
           </div>
-        )}
-        {showMyRecipes ? (
-          <Pagination
-            currentPage={currentPageMyRecipes}
-            recipesPerPage={recipesPerPage}
-            totalItems={totalMyRecipes}
-            paginate={handlePageChangeMyRecipes}
-          />
-        ) : (
-          <Pagination
-            currentPage={currentPageLikedRecipes}
-            recipesPerPage={recipesPerPage}
-            totalItems={totalLikedRecipes}
-            paginate={handlePageChangeLikedRecipes}
-          />
         )}
       </main>
       <footer
