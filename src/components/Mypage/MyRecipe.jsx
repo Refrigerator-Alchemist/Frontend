@@ -19,7 +19,7 @@ const MyRecipe = React.forwardRef(({
 
   return (
     <div ref={ref} className="text-black ml-6 mr-6 mt-2 w-full max-w-md relative">
-      <div className="bg-white mx-2 my-2 p-4 rounded-xl shadow overflow-hidden relative flex flex-col md:flex-row">
+      <div className="bg-white mx-2 my-1 p-2 rounded-xl shadow overflow-hidden relative flex flex-col md:flex-row">
         <Link to={`/board/${postId}`} className="flex-grow flex items-center">
           <div className="flex-none w-20 h-20 md:w-20 md:h-20 max-w-xs rounded-xl border-2 border-gray-300 overflow-hidden mr-4">
             <img

@@ -11,7 +11,7 @@ const LikedRecipe = React.forwardRef(({ postId, title, description, imageUrl }, 
 
   return (
     <div ref={ref} className="text-black ml-6 mr-6 mt-2 w-full max-w-md">
-      <div className="bg-white mx-2 my-2 p-4 rounded-xl shadow overflow-hidden relative flex flex-col">
+      <div className="bg-white mx-2 my-1 p-2 rounded-xl shadow overflow-hidden relative flex flex-col">
         <Link
           to={`/board/${postId}`}
           className="flex flex-grow items-center justify-between"
