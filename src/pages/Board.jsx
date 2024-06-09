@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
@@ -8,6 +7,8 @@ import SearchBar from '../components/Board/SearchBar';
 import WriteButton from '../components/Board/WriteButton';
 import RankingBoard from '../components/Board/RankingBoard';
 import Navigation from '../components/ui/Navigation';
+import ScrollToTopButton from '../components/ui/ScrollToTopButton';
+import useScrollToTop from '../components/ui/useScrollToTop';
 
 const accessToken = localStorage.getItem('accessToken');
 const email = localStorage.getItem('email');
@@ -25,6 +26,8 @@ const Board = () => {
   const recipesPerPage = 6;
   const { handleError } = useUserDispatch();
   const observer = useRef();
+
+  const { showScrollToTop, scrollToTop } = useScrollToTop();
 
   useEffect(() => {
     fetchLikedPosts();
@@ -164,6 +167,7 @@ const Board = () => {
         )}
         {loading && <div>Loading...</div>}
       </main>
+      <ScrollToTopButton showScrollToTop={showScrollToTop} scrollToTop={scrollToTop} />
       <footer
         style={{
           position: 'fixed',

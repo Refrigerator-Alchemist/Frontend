@@ -1,124 +1,28 @@
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Navigation from '../components/ui/Navigation';
-import { FaHeart } from 'react-icons/fa';
-import { VscChromeClose } from 'react-icons/vsc';
 import { toast } from 'react-toastify';
 import { useUserDispatch, IP_ADDRESS } from '../context/UserContext';
-
+import MyRecipe from '../components/Mypage/MyRecipe';
+import LikedRecipe from '../components/Mypage/LikedRecipe';
+import ScrollToTopButton from '../components/Mypage/ScrollToTop';
 import IMG_PROFILE from '../assets/img/img_profile.png';
 
-// 🃏 내가 저장한 게시물
-const SavedRecipe = ({
-  postId,
-  title,
-  description,
-  imageUrl,
-  onEdit,
-  onDelete,
-  showEditDeleteButtons = true,
-}) => {
-  const maxLength = 30; // 본문의 최대 길이 설정
-  const shortDescription =
-    description.length > maxLength
-      ? description.slice(0, maxLength) + '...'
-      : description;
-
-  return (
-    <div className="text-black ml-6 mr-6 mt-2 w-full max-w-md relative">
-      <div className="bg-white mx-2 my-2 p-4 rounded-xl shadow overflow-hidden relative flex flex-col md:flex-row">
-        <Link to={`/board/${postId}`} className="flex-grow flex items-center">
-          <div className="flex-none w-20 h-20 md:w-20 md:h-20 max-w-xs rounded-xl border-2 border-gray-300 overflow-hidden mr-4">
-            <img
-              className="w-full h-full object-cover"
-              src={imageUrl}
-              alt={title}
-            />
-          </div>
-          <div className="md:pl-4 mt-4 md:mt-0">
-            <h3 className="text-lg font-score font-semibold">{title}</h3>
-            <p className="text-gray-500 pt-1 text-sm font-score md:max-w-xs">
-              {shortDescription}
-            </p>
-          </div>
-        </Link>
-        {showEditDeleteButtons && (
-          <div className="absolute top-4 right-2 flex flex-row space-x-1">
-            <button
-              onClick={() => onEdit(postId)}
-              className="pr-3 text-sm text-gray-300"
-            >
-              수정
-            </button>
-            <button
-              onClick={() => onDelete(postId)}
-              className=" text-gray-400 pr-2"
-            >
-              <VscChromeClose />
-            </button>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-// 🃏 좋아요 누른 레시피
-const LikedRecipe = ({ postId, title, description, imageUrl }) => {
-  const maxLength = 25; // 본문의 최대 길이 설정
-  const shortDescription =
-    description.length > maxLength
-      ? description.slice(0, maxLength) + '...'
-      : description;
-
-  return (
-    <div className="text-black ml-6 mr-6 mt-2 w-full max-w-md">
-      <div className="bg-white mx-2 my-2 p-4 rounded-xl shadow overflow-hidden relative flex flex-col">
-        <Link
-          to={`/board/${postId}`}
-          className="flex flex-grow items-center justify-between"
-        >
-          <div className="flex items-center">
-            <div className="flex-none w-20 h-20 max-w-xs rounded-xl border-2 border-gray-300 overflow-hidden mr-4">
-              <img
-                className="w-full h-full object-cover"
-                src={imageUrl}
-                alt={title}
-              />
-            </div>
-            <div className=" mt-3">
-              <h3 className="text-lg font-score font-semibold">{title}</h3>
-              <p className="text-gray-500 pt-1 text-sm font-score md:max-w-xs">
-                {shortDescription}
-              </p>
-            </div>
-          </div>
-          <div className="heart-icon-container">
-            <FaHeart className="text-red-500 text-2xl heart-icon" />
-          </div>
-        </Link>
-      </div>
-    </div>
-  );
-};
-
-// 📂 마이페이지
 export default function MyPage() {
-  const [imageUrl, setImageUrl] = useState('' || IMG_PROFILE);
+  const [imageUrl, setImageUrl] = useState(IMG_PROFILE);
   const [currentPageMyRecipes, setCurrentPageMyRecipes] = useState(1);
   const [currentPageLikedRecipes, setCurrentPageLikedRecipes] = useState(1);
   const [recipesPerPage] = useState(5);
   const [totalMyRecipes, setTotalMyRecipes] = useState(0);
   const [totalLikedRecipes, setTotalLikedRecipes] = useState(0);
   const [showMyRecipes, setShowMyRecipes] = useState(true);
-  // 토글 기능 - true :작성한 레시피 / false : 좋아요 누른 레시피
-
   const [recipes, setRecipes] = useState([]); // 내가 저장한 레시피들
   const [likedItems, setLikedItems] = useState([]); // 좋아요 누른 레시피들
+  const [showScrollToTop, setShowScrollToTop] = useState(false);
 
   const { logout, handleError } = useUserDispatch();
-
   const accessToken = localStorage.getItem('accessToken');
   const nickName = localStorage.getItem('nickName');
   const email = localStorage.getItem('email');
@@ -216,6 +120,19 @@ export default function MyPage() {
     recipesPerPage,
   ]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowScrollToTop(true);
+      } else {
+        setShowScrollToTop(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const lastRecipeElementRef = useCallback(
     (node) => {
       if (observer.current) observer.current.disconnect();
@@ -278,6 +195,10 @@ export default function MyPage() {
     setCurrentPageLikedRecipes(1);
     setRecipes([]);
     setLikedItems([]);
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -343,7 +264,7 @@ export default function MyPage() {
         {showMyRecipes ? (
           <div className="recipe-card-container w-full flex flex-wrap">
             {recipes.map((recipe, index) => (
-              <SavedRecipe
+              <MyRecipe
                 key={recipe.postId}
                 postId={recipe.postId}
                 title={recipe.title}
@@ -375,6 +296,7 @@ export default function MyPage() {
           </div>
         )}
       </main>
+      <ScrollToTopButton showScrollToTop={showScrollToTop} scrollToTop={scrollToTop} />
       <footer
         style={{
           position: 'fixed',
