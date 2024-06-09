@@ -86,7 +86,7 @@ export default function Ranking() {
 
   return (
     <article
-      className="hover:cursor-pointer w-full my-2 px-3"
+      className="hover:cursor-pointer w-full my-2"
       onClick={() => {
         navigate('/ranking');
       }}

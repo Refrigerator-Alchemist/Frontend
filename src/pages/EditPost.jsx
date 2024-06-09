@@ -25,17 +25,11 @@ export default function UploadBoard() {
           },
         });
 
-        if (response.data) {
-          if (response.data && Array.isArray(response.data.items)) {
-            const items = response.data.items.map((item) => ({
-              title: item.title,
-              description: item.description,
-              ingredients: item.ingredients.map((ingredient) => ingredient),
-            }));
-            setTitle(items[0].title);
-            setDescription(items[0].description);
-            setIngredients(items[0].ingredients);
-          }
+        if (response.data && Array.isArray(response.data.items)) {
+          const item = response.data.items[0];
+          setTitle(item.title);
+          setDescription(item.description);
+          setIngredients(item.ingredients.map((ingredient) => ({ name: ingredient })));
         }
       } catch (error) {
         handleError(error);
@@ -46,14 +40,13 @@ export default function UploadBoard() {
 
   // 2️⃣ 재료 입력
   const handleIngredientChange = (index, e) => {
-    const newIngredients = [...ingredients]; // 기존 재료들
-    newIngredients[index].name = e.target.value; // index번째 재료
-    setIngredients(newIngredients); // 모두 재료들 안에 순서대로 합치기
+    const newIngredients = [...ingredients];
+    newIngredients[index].name = e.target.value;
+    setIngredients(newIngredients);
   };
 
   // 3️⃣ 재료 추가
   const addIngredientField = () => {
-    // setIngredients([...ingredients, '']);
     setIngredients([...ingredients, { name: '' }]);
   };
 
@@ -66,8 +59,7 @@ export default function UploadBoard() {
       postId: postId,
       title: title,
       description: description,
-      // ingredients: ingredients,
-      ingredients: ingredients.map(ingredient => ingredient.name),
+      ingredients: ingredients.map((ingredient) => ingredient.name),
     };
 
     try {
@@ -147,7 +139,7 @@ export default function UploadBoard() {
             <div key={index} className="font-score flex items-center space-x-2">
               <input
                 type="text"
-                value={ingredient}
+                value={ingredient.name}
                 onChange={(e) => handleIngredientChange(index, e)}
                 placeholder="재료를 입력하세요"
                 className="border border-gray-300 rounded-md p-2 text-sm flex-grow"
