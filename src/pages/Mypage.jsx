@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Navigation from '../components/ui/Navigation';
+import Navigation from '../components/UI/Navigation';
 import { toast } from 'react-toastify';
 import { useUserApi, IP_ADDRESS } from '../context/UserContext';
 import MyRecipe from '../components/Mypage/MyRecipe';

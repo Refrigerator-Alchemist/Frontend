@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import Logo from '../components/ui/Logo';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { FaArrowLeft } from 'react-icons/fa';
-import { GoEye, GoEyeClosed } from 'react-icons/go';
 import { useUserApi } from '../context/UserContext';
+import { IP_ADDRESS } from '../context/UserContext';
+import { toast } from 'react-toastify';
+import { GoEye, GoEyeClosed } from 'react-icons/go';
+import { FaArrowLeft } from 'react-icons/fa';
+import Logo from '../components/UI/Logo';
 import LOGO_GOOGLE from '../assets/img/logo_google.png';
 import LOGO_KAKAO from '../assets/img/logo_kakao.png';
 import LOGO_NAVER from '../assets/img/logo_naver.png';
-import { toast } from 'react-toastify';
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
@@ -16,7 +17,7 @@ export default function SignIn() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false); // 비밀번호 표시
   const [notAllow, setNotAllow] = useState(true); // 로그인 disabled on/off
-  const { login, kakaoLogin, googleLogin, naverLogin } = useUserApi(); // 로그인 dispatch
+  const { login, handleError } = useUserApi(); // 로그인 dispatch
   const socialType = 'Refrigerator-Alchemist';
   const navigate = useNavigate();
   const location = useLocation();
@@ -68,6 +69,31 @@ export default function SignIn() {
   const onLogin = (e) => {
     e.preventDefault();
     login(email, password, socialType);
+  };
+
+  const kakaoLogin = () => {
+    try {
+      window.location.href = `${IP_ADDRESS}/oauth2/authorization/kakao`;
+      console.log('카카오 로그인');
+    } catch (error) {
+      handleError(error);
+    }
+  };
+  const googleLogin = () => {
+    try {
+      window.location.href = `${IP_ADDRESS}/oauth2/authorization/google`;
+      console.log('구글 로그인');
+    } catch (error) {
+      handleError(error);
+    }
+  };
+  const naverLogin = () => {
+    try {
+      window.location.href = `${IP_ADDRESS}/oauth2/authorization/naver`;
+      console.log('네이버 로그인');
+    } catch (error) {
+      handleError(error);
+    }
   };
 
   return (

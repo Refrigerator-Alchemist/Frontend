@@ -22,8 +22,8 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-let isRefreshing = false;
 
+let isRefreshing = false;
 const reIssue = async () => {
   if (isRefreshing) return;
   isRefreshing = true;
@@ -73,6 +73,10 @@ export const useUserApi = () => {
   return useContext(UserContext);
 };
 
+/** 유저 Context Provider
+ - 인증번호 요청, 인증 확인, 회원 가입, 로그인, 로그아웃, 비밀번호 재설정, 회원탈퇴
+ - API의 Body에는 순서대로 값을 넣어야 한다
+ */
 export const UserApiProvider = ({ children }) => {
   const [emailExists, setEmailExists] = useState(true);
   const [verified, setVerified] = useState(false);
@@ -157,14 +161,14 @@ export const UserApiProvider = ({ children }) => {
    - 요청 Body
         - email 이메일
         - emailType 회원가입 | 비밀번호 변경
-        - socialType 서비스 타입
         - inputNum 인증번호
+        - socialType 서비스 타입
    */
   const checkCodeVerification = async (
     email,
     emailType,
-    socialType,
-    inputNum
+    inputNum,
+    socialType
   ) => {
     const NO_CODE_ERROR = '인증번호를 입력해주세요';
     if (!inputNum) {
@@ -388,31 +392,6 @@ export const UserApiProvider = ({ children }) => {
     }
   };
 
-  const kakaoLogin = () => {
-    try {
-      window.location.href = `${IP_ADDRESS}/oauth2/authorization/kakao`;
-      console.log('카카오 로그인');
-    } catch (error) {
-      handleError(error);
-    }
-  };
-  const googleLogin = () => {
-    try {
-      window.location.href = `${IP_ADDRESS}/oauth2/authorization/google`;
-      console.log('구글 로그인');
-    } catch (error) {
-      handleError(error);
-    }
-  };
-  const naverLogin = () => {
-    try {
-      window.location.href = `${IP_ADDRESS}/oauth2/authorization/naver`;
-      console.log('네이버 로그인');
-    } catch (error) {
-      handleError(error);
-    }
-  };
-
   const value = {
     handleError,
     login,
@@ -430,9 +409,6 @@ export const UserApiProvider = ({ children }) => {
     checkNameDuplication,
     nameDuplicated,
     setNameDuplicated,
-    kakaoLogin,
-    googleLogin,
-    naverLogin,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

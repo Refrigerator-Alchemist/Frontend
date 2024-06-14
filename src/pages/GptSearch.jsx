@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import { CiSaveDown2 } from 'react-icons/ci';
 import { toast } from 'react-toastify';
-import TagInput from '../components/gpt/TagInput';
-import Loading from '../components/gpt/Loading';
-import BackButton from '../components/ui/BackButton';
+import TagInput from '../components/Gpt/TagInput';
+import Loading from '../components/Gpt/Loading';
+import BackButton from '../components/UI/BackButton';
 import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 import axios from 'axios';
 

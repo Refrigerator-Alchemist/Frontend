@@ -19,17 +19,9 @@ export default function SignUp() {
   const [password, setPassword] = useState(''); // 비밀번호
   const [checkPassword, setCheckPassword] = useState(''); // 비밀번호 확인
   const [passwordMessage, setPasswordMessage] = useState(null); // 비밀번호 일치여부 안내 문구
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // 비밀번호 표시
   const navigate = useNavigate();
-  const {
-    signUp, // 가입하기
-    requestEmailForSignUp, // 인증요청
-    emailExists, // 이메일 중복 확인
-    checkCodeVerification, // 인증확인
-    verified, // 인증 여부
-    checkNameDuplication, // 닉네임 중복 확인
-    nameDuplicated, // 중복 여부
-  } = useUserApi();
+  const userApi = useUserApi();
   const emailType = 'sign-up';
   const socialType = 'Refrigerator-Alchemist';
   const location = useLocation();
@@ -42,47 +34,45 @@ export default function SignUp() {
     }
   }, [navigate, location]);
 
-  // 1️⃣ 이메일 저장
+  /** 이메일 입력값 */
   const handleEmailChange = (e) => setEmail(e.target.value);
 
-  // 2️⃣ 인증 요청
-  const onRequest = async (e) => {
+  /** 인증 요청
+   * - userApi
+   */
+  const requestVerifying = async (e) => {
     e.preventDefault();
     console.log(`입력한 이메일 : ${email}`);
-
     const pattern =
       /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-
     if (!email) {
       toast.error('이메일을 입력해주세요');
       return;
     }
-
     if (!pattern.test(email)) {
       setEmailError('이메일 형식이 올바르지 않습니다');
       setEmail('');
       return;
     }
-
     setEmailError('');
-
-    requestEmailForSignUp(email, emailType, socialType);
+    userApi.requestEmailForSignUp(email, emailType, socialType);
   };
 
-  // 3️⃣ 인증 확인
-  const onCheckCode = (e) => {
+  /** 인증 확인
+   * - userApi
+   */
+  const checkVerifying = (e) => {
     e.preventDefault();
     console.log(`입력한 인증번호 : ${inputNum}`);
-
-    checkCodeVerification(email, emailType, inputNum, socialType);
+    userApi.checkCodeVerification(email, emailType, inputNum, socialType);
   };
 
-  // 4️⃣ 닉네임 중복 확인
-  const onCheckName = (e) => {
+  /** 닉네임 중복 확인
+   * - userApi
+   */
+  const checkDuplication = (e) => {
     e.preventDefault();
-
     const pattern = /^[가-힣0-9]{2,}$|^[A-Za-z0-9]{3,}$/;
-
     if (!pattern.test(nickName)) {
       console.log(`입력한 닉네임 : ${nickName}`);
       setNameError(
@@ -92,11 +82,11 @@ export default function SignUp() {
     } else {
       console.log(`입력한 닉네임 : ${nickName}`);
       setNameError('');
-      checkNameDuplication(nickName);
+      userApi.checkNameDuplication(nickName);
     }
   };
 
-  // 5️⃣ 비밀번호 유효성 검사
+  /** 비밀번호 유효성 검사 */
   const isPasswordValid = (password) => {
     return (
       password.length >= 8 &&
@@ -107,7 +97,7 @@ export default function SignUp() {
     );
   };
 
-  // 6️⃣ 비밀번호 확인 (e.preventDefault 설정 X)
+  /** 비밀번호 일치 확인 */
   const isSamePassword = () => {
     if (password && checkPassword) {
       password !== checkPassword
@@ -122,16 +112,18 @@ export default function SignUp() {
     isSamePassword();
   });
 
-  // 비밀번호 보기
+  /** 비밀번호 보기 */
   const toggleShowPassword = (e) => {
     e.preventDefault();
     setShowPassword(!showPassword);
   };
 
-  // 7️⃣ 회원가입
+  /** 회원가입
+   * - userApi
+   */
   const onSignUp = (e) => {
     e.preventDefault();
-    signUp(email, password, nickName, socialType);
+    userApi.signUp(email, password, nickName, socialType);
   };
 
   return (
@@ -169,7 +161,7 @@ export default function SignUp() {
               />
               <div>
                 <button
-                  onClick={onRequest}
+                  onClick={requestVerifying}
                   className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtrabold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:scale-110 hover:bg-indigo duration-300"
                 >
                   인증 요청
@@ -210,7 +202,7 @@ export default function SignUp() {
                 />
               </div>
               <button
-                onClick={onCheckCode}
+                onClick={checkVerifying}
                 className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtrabold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:scale-110 hover:bg-indigo duration-300"
               >
                 인증 확인
@@ -236,7 +228,7 @@ export default function SignUp() {
                 />
                 {/* 중복확인 */}
                 <button
-                  onClick={onCheckName}
+                  onClick={checkDuplication}
                   className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtrabold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:scale-110 hover:bg-indigo duration-300"
                 >
                   중복 확인
@@ -306,7 +298,7 @@ export default function SignUp() {
               <ul className="mt-4 mb-4 font-score">
                 <li className="mb-2 flex items-center">
                   <span role="img" aria-label="check" className="flex">
-                    {!emailExists ? (
+                    {!userApi.emailExists ? (
                       <GoCheckCircleFill className="text-emerald" />
                     ) : (
                       <GoCheckCircle className="text-emerald" />
@@ -316,7 +308,7 @@ export default function SignUp() {
                 </li>
                 <li className="mb-2 flex items-center">
                   <span role="img" aria-label="check" className="flex">
-                    {verified ? (
+                    {userApi.verified ? (
                       <GoCheckCircleFill className="text-emerald" />
                     ) : (
                       <GoCheckCircle className="text-emerald" />
@@ -326,7 +318,7 @@ export default function SignUp() {
                 </li>
                 <li className="mb-2 flex items-center">
                   <span role="img" aria-label="check" className="flex">
-                    {!nameDuplicated ? (
+                    {!userApi.nameDuplicated ? (
                       <GoCheckCircleFill className="text-emerald" />
                     ) : (
                       <GoCheckCircle className="text-emerald" />
@@ -363,9 +355,9 @@ export default function SignUp() {
               <button
                 type="submit"
                 disabled={
-                  emailExists === true &&
-                  verified === false &&
-                  nameDuplicated === true &&
+                  userApi.emailExists === true &&
+                  userApi.verified === false &&
+                  userApi.nameDuplicated === true &&
                   (password.length < 8 || password.length > 15) &&
                   isPasswordValid(password) === false &&
                   !passwordMessage

@@ -1,5 +1,5 @@
 import React from 'react';
-import Navigation from '../components/ui/Navigation';
+import Navigation from '../components/UI/Navigation';
 import { useNavigate } from 'react-router-dom';
 import { FaReact } from 'react-icons/fa';
 import Ranking from '../components/Ranking';
