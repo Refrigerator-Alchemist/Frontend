@@ -10,7 +10,6 @@ axios.interceptors.response.use(
   function (response) {
     return response;
   },
-
   async function (error) {
     const originalRequest = error.config;
     const isLoginRequest = originalRequest.url.includes('/token/login');
@@ -23,21 +22,19 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
 let isRefreshing = false;
 const reIssue = async () => {
   if (isRefreshing) return;
   isRefreshing = true;
-  const URI = `${IP_ADDRESS}/token/reissue`;
+  const URL = `${IP_ADDRESS}/token/reissue`;
   const socialType = localStorage.getItem('socialType');
   const socialId = localStorage.getItem('socialId');
   const accessToken = localStorage.getItem('accessToken');
   const refreshToken = localStorage.getItem('refreshToken');
   let newAccessToken;
-
   try {
     const response = await axios.post(
-      URI,
+      URL,
       {},
       {
         headers: {
@@ -47,7 +44,6 @@ const reIssue = async () => {
         },
       }
     );
-
     if (response.status === 200 && socialType === 'Refrigerator-Alchemist') {
       newAccessToken = response.headers.get('authorization-access');
       localStorage.setItem('accessToken', newAccessToken);
@@ -90,41 +86,43 @@ export const UserProvider = ({ children }) => {
   const kakaoURL = `${IP_ADDRESS}/oauth2/authorization/kakao`;
   const naverURL = `${IP_ADDRESS}/oauth2/authorization/naver`;
 
-  // 👩🏻‍🔧 커스텀 에러 처리
+  /** 커스텀 에러 처리 
+   - errorName : 백엔드 확인용 에러명
+   - errorName.notice : 유저 확인용 메세지
+  */
   const handleError = async (error) => {
     if (error.response && error.response.data && error.response.data.code) {
-      // 백엔드 콘솔 확인용
       const errorName = Object.values(ERRORS).find(
         (obj) => obj.code === error.response.data.code
       );
-      const userNotice = errorName.notice; // 유저 토스트 확인용
+      const userNotice = errorName.notice;
       console.log(`에러 내용: ${JSON.stringify(errorName)}`);
       toast.error(`${userNotice}`);
       return error.response.data.code;
-      // 서버 미연결(에러 응답 존재 X)
     } else if (!error.response) {
       console.log('서버와 연결되어있지 않습니다');
       toast.error(`서버와 연결되어있지 않습니다`);
     } else {
-      // 예외
       console.log(`확인되지 않은 에러, ${error}`);
       toast.error(`알 수 없는 에러가 발생했습니다`);
     }
   };
 
-  // 📧 이메일 인증 요청 (회원가입용) -------------------------------------------------
+  /** 이메일 인증 요청 : 회원가입용
+   - 요청 Body 
+        - email 이메일
+        - emailType 회원가입 | 비밀번호 변경
+        - socialType 서비스 타입
+   */
   const requestEmailForSignUp = async (email, emailType, socialType) => {
-    const URI = `${IP_ADDRESS}/auth/email`;
-
+    const URL = `${IP_ADDRESS}/auth/email`;
     try {
-      const response = await axios.post(URI, {
+      const response = await axios.post(URL, {
         email,
         emailType,
         socialType,
       });
-
       console.log(`이메일: ${email} 회원가입 유형: ${socialType}`);
-
       if (response.status === 204) {
         setEmailExists(false);
         toast.success('인증번호가 발송되었습니다');
@@ -137,19 +135,21 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // 📧 이메일 인증 요청 (비밀번호 재설정용) ---------------------------------------------
+  /** 이메일 인증 요청 : 비밀번호 재설정용
+   - 요청 Body
+        - email 이메일
+        - emailType 회원가입 | 비밀번호 변경
+        - socialType 서비스 타입
+  */
   const requestEmailForReset = async (email, emailType, socialType) => {
-    const URI = `${IP_ADDRESS}/auth/email`;
-
+    const URL = `${IP_ADDRESS}/auth/email`;
     try {
-      const response = await axios.post(URI, {
+      const response = await axios.post(URL, {
         email,
         emailType,
         socialType,
       });
-
       console.log(`이메일: ${email} 회원가입 유형: ${socialType}`);
-
       if (response.status === 204) {
         setEmailExists(true);
         toast.success('인증번호가 발송되었습니다');
@@ -162,21 +162,24 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // ✅ 이메일 인증 확인 ---------------------------------------------------------------
+  /** 이메일 인증 확인
+   - 요청 Body
+        - email 이메일
+        - emailType 회원가입 | 비밀번호 변경
+        - socialType 서비스 타입
+        - inputNum 인증번호
+   */
   const checkCodeVerification = async (
     email,
     emailType,
-    inputNum,
-    socialType
+    socialType,
+    inputNum
   ) => {
     const NO_CODE_ERROR = '인증번호를 입력해주세요';
-
-    // 인증번호 입력 여부 확인
     if (!inputNum) {
       toast.error(NO_CODE_ERROR);
       return;
     }
-
     try {
       const response = await axios.post(
         `${IP_ADDRESS}/auth/register/authentication/number`,
@@ -187,7 +190,6 @@ export const UserProvider = ({ children }) => {
           socialType,
         }
       );
-
       if (response.status === 204) {
         setVerified(true);
         toast.success('인증 완료!');
@@ -200,7 +202,10 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // ✅ 닉네임 중복 확인 ------------------------------------------------------------
+  /** 닉네임 중복 확인
+   - 요청 Body
+        - nickName 닉네임 
+  */
   const checkNameDuplication = async (nickName) => {
     try {
       const response = await axios.post(
@@ -209,7 +214,6 @@ export const UserProvider = ({ children }) => {
           nickName,
         }
       );
-
       if (response.status === 204) {
         setNameDuplicated(false);
         toast.success('사용 가능한 닉네임입니다');
@@ -222,12 +226,22 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // 📝 회원가입 -----------------------------------------------------------------
-  const signup = async (email, password, nickName, socialType) => {
-    const URI = `${IP_ADDRESS}/auth/register`;
+  /** 회원가입 요청
+   - 요청 Body
+        - email 이메일
+        - nickName 닉네임 
+        - password 비밀번호
+        - socialType 서비스 타입
+  
+  - 요청 Header
+        - 'Content-Type': 'application/json;charset=UTF-8'
+        - Accept: 'application/json'
+  */
+  const signUp = async (email, password, nickName, socialType) => {
+    const URL = `${IP_ADDRESS}/auth/register`;
     try {
       const response = await axios.post(
-        URI,
+        URL,
         {
           email: email,
           password: password,
@@ -241,7 +255,6 @@ export const UserProvider = ({ children }) => {
           },
         }
       );
-
       if (response.status === 204) {
         toast.success('회원가입이 완료되었습니다');
         setTimeout(() => {
@@ -255,13 +268,13 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // 👋🏻 회원탈퇴 -----------------------------------------------------------------
+  /** 회원 탈퇴
+   - 백엔드 구현 X, 수정 필요
+  */
   const deleteUser = async () => {
-    const URI = `${IP_ADDRESS}/auth/delete`;
-
-    // 다시 합의 후 수정 필요
+    const URL = `${IP_ADDRESS}/auth/delete`;
     try {
-      await axios.delete(URI, {
+      await axios.delete(URL, {
         data: localStorage.getItem('socialId'),
       });
       logout();
@@ -271,13 +284,22 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // 🔐 로그인 -------------------------------------------------------------------
+  /** 로그인
+   - 요청 Body
+        - email 이메일
+        - password 비밀번호
+        - socialType 서비스 타입
+  
+  - 요청 Header
+        - 'Content-Type': 'application/json;charset=UTF-8'
+        - Accept: 'application/json'
+        - 'Access-Control-Allow-Origin': '*'
+  */
   const login = async (email, password, socialType) => {
-    const URI = `${IP_ADDRESS}/token/login`;
-
+    const URL = `${IP_ADDRESS}/token/login`;
     try {
       const response = await axios.post(
-        URI,
+        URL,
         {
           email: email,
           password: password,
@@ -291,7 +313,6 @@ export const UserProvider = ({ children }) => {
           },
         }
       );
-
       if (response.headers) {
         const accessToken = response.headers['authorization-access'];
         localStorage.setItem('accessToken', accessToken);
@@ -314,14 +335,17 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // 🔓 로그아웃 --------------------------------------------------------------------
+  /** 로그아웃
+   - 요청 Header
+        - accessToken 액세스 토큰
+   */
   const logout = async () => {
-    const URI = `${IP_ADDRESS}/token/logout`;
+    const URL = `${IP_ADDRESS}/token/logout`;
     const accessToken = localStorage.getItem('accessToken');
 
     try {
       const response = await axios.post(
-        URI,
+        URL,
         {},
         {
           headers: {
@@ -346,13 +370,19 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // 🔄 비밀번호 재설정 ---------------------------------------------------------------
-  const resetPassword = async (email, password, rePassword, socialType) => {
+  /** 비밀번호 재설정
+   - 요청 Body :
+        - email 이메일
+        - password 비밀번호
+        - newPassword 새로운 비밀번호
+        - socialType 서비스 타입
+   */
+  const resetPassword = async (email, password, newPassword, socialType) => {
     try {
       const response = await axios.post(`${IP_ADDRESS}/auth/reset/password`, {
         email,
         password,
-        rePassword,
+        rePassword: newPassword,
         socialType,
       });
 
@@ -365,7 +395,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // 🟡 카카오 --------------------------------------------------
+  // 🟡 카카오
   const kakaoLogin = () => {
     try {
       window.location.href = kakaoURL;
@@ -375,7 +405,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // 🔴 구글 ----------------------------------------------------
+  // 🔴 구글
   const googleLogin = () => {
     try {
       window.location.href = googleURL;
@@ -385,7 +415,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // 🟢 네이버 --------------------------------------------------
+  // 🟢 네이버
   const naverLogin = () => {
     try {
       window.location.href = naverURL;
@@ -399,7 +429,7 @@ export const UserProvider = ({ children }) => {
     handleError,
     login,
     logout,
-    signup,
+    signUp,
     deleteUser,
     resetPassword,
     requestEmailForSignUp,

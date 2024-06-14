@@ -22,7 +22,7 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const {
-    signup, // 가입하기
+    signUp, // 가입하기
     requestEmailForSignUp, // 인증요청
     emailExists, // 이메일 중복 확인
     checkCodeVerification, // 인증확인
@@ -131,7 +131,7 @@ export default function SignUp() {
   // 7️⃣ 회원가입
   const onSignUp = (e) => {
     e.preventDefault();
-    signup(email, password, nickName, socialType);
+    signUp(email, password, nickName, socialType);
   };
 
   return (
