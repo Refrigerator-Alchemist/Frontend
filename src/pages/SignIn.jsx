@@ -3,7 +3,7 @@ import Logo from '../components/ui/Logo';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import { GoEye, GoEyeClosed } from 'react-icons/go';
-import { useUserDispatch } from '../context/UserContext';
+import { useUserApi } from '../context/UserContext';
 import LOGO_GOOGLE from '../assets/img/logo_google.png';
 import LOGO_KAKAO from '../assets/img/logo_kakao.png';
 import LOGO_NAVER from '../assets/img/logo_naver.png';
@@ -16,7 +16,7 @@ export default function SignIn() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false); // 비밀번호 표시
   const [notAllow, setNotAllow] = useState(true); // 로그인 disabled on/off
-  const { login, kakaoLogin, googleLogin, naverLogin } = useUserDispatch(); // 로그인 dispatch
+  const { login, kakaoLogin, googleLogin, naverLogin } = useUserApi(); // 로그인 dispatch
   const socialType = 'Refrigerator-Alchemist';
   const navigate = useNavigate();
   const location = useLocation();

@@ -6,8 +6,7 @@ import { toast } from 'react-toastify';
 import TagInput from '../components/gpt/TagInput';
 import Loading from '../components/gpt/Loading';
 import BackButton from '../components/ui/BackButton';
-
-import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
+import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 import axios from 'axios';
 
 const GptSearch = () => {
@@ -18,7 +17,7 @@ const GptSearch = () => {
   const nickName = localStorage.getItem('nickName') || '';
 
   const navigate = useNavigate();
-  const { handleError } = useUserDispatch();
+  const { handleError } = useUserApi();
 
   // Gpt로 레시피 검색 요청하는 함수
   const handleNextButtonClick = async () => {

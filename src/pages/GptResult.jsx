@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { GoHome } from 'react-icons/go';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
+import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 import axios from 'axios';
 import Loading from '../components/gpt/Loading';
 import BackButton from '../components/ui/BackButton';
@@ -16,7 +16,7 @@ const GptResult = () => {
   const accessToken = localStorage.getItem('accessToken');
 
   const navigate = useNavigate();
-  const { handleError } = useUserDispatch();
+  const { handleError } = useUserApi();
 
   // 🤖 GPT 레시피 결과 불러오는 함수
   useEffect(() => {

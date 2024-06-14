@@ -7,7 +7,7 @@ import {
 } from 'react-icons/go';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useUserDispatch } from '../context/UserContext';
+import { useUserApi } from '../context/UserContext';
 import { toast } from 'react-toastify';
 
 export default function SignUp() {
@@ -29,7 +29,7 @@ export default function SignUp() {
     verified, // 인증 여부
     checkNameDuplication, // 닉네임 중복 확인
     nameDuplicated, // 중복 여부
-  } = useUserDispatch();
+  } = useUserApi();
   const emailType = 'sign-up';
   const socialType = 'Refrigerator-Alchemist';
   const location = useLocation();

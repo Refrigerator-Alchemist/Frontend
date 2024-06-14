@@ -1,10 +1,12 @@
 import React, { useState, createContext, useContext } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 import ERRORS from '../utils/customedError';
 
 export const IP_ADDRESS = 'http://localhost:8080';
+const accessToken = localStorage.getItem('accessToken');
+const refreshToken = localStorage.getItem('refreshToken');
 
 axios.interceptors.response.use(
   function (response) {
@@ -29,8 +31,7 @@ const reIssue = async () => {
   const URL = `${IP_ADDRESS}/token/reissue`;
   const socialType = localStorage.getItem('socialType');
   const socialId = localStorage.getItem('socialId');
-  const accessToken = localStorage.getItem('accessToken');
-  const refreshToken = localStorage.getItem('refreshToken');
+
   let newAccessToken;
   try {
     const response = await axios.post(
@@ -66,17 +67,12 @@ const reIssue = async () => {
   return newAccessToken;
 };
 
-const UserDispatchContext = createContext();
-
-export const useUserDispatch = () => {
-  const context = useContext(UserDispatchContext);
-  if (!context) {
-    throw new Error('UserProvider를 찾을 수 없음');
-  }
-  return context;
+const UserContext = createContext();
+export const useUserApi = () => {
+  return useContext(UserContext);
 };
 
-export const UserProvider = ({ children }) => {
+export const UserApiProvider = ({ children }) => {
   const [emailExists, setEmailExists] = useState(true);
   const [verified, setVerified] = useState(false);
   const [nameDuplicated, setNameDuplicated] = useState(true);
@@ -314,8 +310,10 @@ export const UserProvider = ({ children }) => {
         }
       );
       if (response.headers) {
-        const accessToken = response.headers['authorization-access'];
-        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem(
+          'accessToken',
+          response.headers['authorization-access']
+        );
         localStorage.setItem(
           'refreshToken',
           response.headers['authorization-refresh']
@@ -447,9 +445,5 @@ export const UserProvider = ({ children }) => {
     naverLogin,
   };
 
-  return (
-    <UserDispatchContext.Provider value={value}>
-      {children}
-    </UserDispatchContext.Provider>
-  );
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
+import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 import { toast } from 'react-toastify';
 import { FaArrowLeft } from 'react-icons/fa';
 import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
@@ -17,7 +17,7 @@ export default function EditProfile() {
   const [changeNickName, setChangeNickName] = useState('');
   const accessToken = localStorage.getItem('accessToken');
   const fileInput = useRef(null);
-  const { handleError } = useUserDispatch();
+  const { handleError } = useUserApi();
   const navigate = useNavigate();
 
   useEffect(() => {

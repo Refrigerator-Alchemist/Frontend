@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
+import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 import { FaHeart } from 'react-icons/fa';
 
 // 📋 각 게시물
@@ -56,8 +56,8 @@ function RankingItem({
 // 🏆 Top3 게시물
 export default function Ranking() {
   const [topItems, setTopItems] = useState([]);
+  const { handleError } = useUserApi();
   const navigate = useNavigate();
-  const { handleError } = useUserDispatch();
 
   useEffect(() => {
     const fetchRanking = async () => {
@@ -82,7 +82,7 @@ export default function Ranking() {
     };
 
     fetchRanking();
-  }, []);
+  }, [handleError]);
 
   return (
     <article

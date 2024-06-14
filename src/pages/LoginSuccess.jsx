@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
-import { useUserDispatch } from '../context/UserContext.jsx';
+import { useUserApi } from '../context/UserContext.jsx';
 import { useNavigate } from 'react-router-dom';
 
 export default function LoginSuccess() {
-  const { handleError } = useUserDispatch();
+  const { handleError } = useUserApi();
   const navigate = useNavigate();
 
   useEffect(() => {

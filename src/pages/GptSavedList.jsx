@@ -5,7 +5,7 @@ import Pagination from '../components/Pagination';
 import Navigation from '../components/ui/Navigation';
 import SavedListCard from '../components/gpt/SavedListCard';
 import BackButton from '../components/ui/BackButton';
-import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
+import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 
 export default function GptSavedList() {
   const [recipes, setRecipes] = useState([]);
@@ -16,7 +16,7 @@ export default function GptSavedList() {
   const accessToken = localStorage.getItem('accessToken');
 
   const navigate = useNavigate();
-  const { handleError } = useUserDispatch();
+  const { handleError } = useUserApi();
 
   // 저장한 목록 보기
   useEffect(() => {
