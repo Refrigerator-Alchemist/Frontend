@@ -1,10 +1,9 @@
-
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Navigation from '../components/ui/Navigation';
 import { toast } from 'react-toastify';
-import { useUserDispatch, IP_ADDRESS } from '../context/UserContext';
+import { useUserApi, IP_ADDRESS } from '../context/UserContext';
 import MyRecipe from '../components/Mypage/MyRecipe';
 import LikedRecipe from '../components/Mypage/LikedRecipe';
 import ScrollToTopButton from '../components/Mypage/ScrollToTop';
@@ -22,7 +21,7 @@ export default function MyPage() {
   const [likedItems, setLikedItems] = useState([]); // 좋아요 누른 레시피들
   const [showScrollToTop, setShowScrollToTop] = useState(false);
 
-  const { logout, handleError } = useUserDispatch();
+  const { logout, handleError } = useUserApi();
   const accessToken = localStorage.getItem('accessToken');
   const nickName = localStorage.getItem('nickName');
   const email = localStorage.getItem('email');
@@ -138,9 +137,16 @@ export default function MyPage() {
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
-          if (showMyRecipes && currentPageMyRecipes < Math.ceil(totalMyRecipes / recipesPerPage)) {
+          if (
+            showMyRecipes &&
+            currentPageMyRecipes < Math.ceil(totalMyRecipes / recipesPerPage)
+          ) {
             setCurrentPageMyRecipes((prevPage) => prevPage + 1);
-          } else if (!showMyRecipes && currentPageLikedRecipes < Math.ceil(totalLikedRecipes / recipesPerPage)) {
+          } else if (
+            !showMyRecipes &&
+            currentPageLikedRecipes <
+              Math.ceil(totalLikedRecipes / recipesPerPage)
+          ) {
             setCurrentPageLikedRecipes((prevPage) => prevPage + 1);
           }
         }
@@ -273,9 +279,7 @@ export default function MyPage() {
                 showEditDeleteButtons={showMyRecipes}
                 onDelete={handleDeleteConfirmation}
                 onEdit={handleEdit}
-                ref={
-                  recipes.length === index + 1 ? lastRecipeElementRef : null
-                }
+                ref={recipes.length === index + 1 ? lastRecipeElementRef : null}
               />
             ))}
           </div>
@@ -296,7 +300,10 @@ export default function MyPage() {
           </div>
         )}
       </main>
-      <ScrollToTopButton showScrollToTop={showScrollToTop} scrollToTop={scrollToTop} />
+      <ScrollToTopButton
+        showScrollToTop={showScrollToTop}
+        scrollToTop={scrollToTop}
+      />
       <footer
         style={{
           position: 'fixed',

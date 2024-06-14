@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { IoAccessibility } from 'react-icons/io5';
 import { toast } from 'react-toastify';
-import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
+import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 import axios from 'axios';
 
 export default function UploadBoard() {
@@ -11,7 +11,7 @@ export default function UploadBoard() {
   const [description, setDescription] = useState(''); // 내용
   const [ingredients, setIngredients] = useState([]); // 재료
   const accessToken = localStorage.getItem('accessToken');
-  const { handleError } = useUserDispatch();
+  const { handleError } = useUserApi();
   const navigate = useNavigate();
 
   // 1️⃣ 해당 게시물의 제목, 설명, 재료를 불러오는 함수
@@ -29,7 +29,9 @@ export default function UploadBoard() {
           const item = response.data.items[0];
           setTitle(item.title);
           setDescription(item.description);
-          setIngredients(item.ingredients.map((ingredient) => ({ name: ingredient })));
+          setIngredients(
+            item.ingredients.map((ingredient) => ({ name: ingredient }))
+          );
         }
       } catch (error) {
         handleError(error);
@@ -89,7 +91,7 @@ export default function UploadBoard() {
     <section className="pt-16 relative">
       <div
         className="absolute top-5 left-1 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate("/mypage")}
+        onClick={() => navigate('/mypage')}
       >
         <IoAccessibility />
       </div>

@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
-import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
+import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 
 import { toast } from 'react-toastify';
 
@@ -20,7 +20,7 @@ export default function UploadBoard() {
   const fileInput = useRef(null);
 
   const navigate = useNavigate();
-  const { handleError } = useUserDispatch();
+  const { handleError } = useUserApi();
 
   // 1️⃣ 재료 입력
   const handleIngredientChange = (index, event) => {

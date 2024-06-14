@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Navigation from '../components/ui/Navigation';
 import axios from 'axios';
 import BackButton from '../components/ui/BackButton';
-import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
+import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 
 const GptSavedDetail = () => {
   const [recipeData, setRecipeData] = useState({});
@@ -12,7 +12,7 @@ const GptSavedDetail = () => {
   const accessToken = localStorage.getItem('accessToken');
 
   const navigate = useNavigate();
-  const { handleError } = useUserDispatch();
+  const { handleError } = useUserApi();
 
   // id로 세부내용 불러오기
   useEffect(() => {

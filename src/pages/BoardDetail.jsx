@@ -1,9 +1,8 @@
-
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { IP_ADDRESS, useUserDispatch } from '../context/UserContext';
+import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 import Header from '../components/BoardDetail/Header';
 import BoardDetailMain from '../components/BoardDetail/BoardDetailMain';
 import Footer from '../components/BoardDetail/Footer';
@@ -22,7 +21,7 @@ const BoardDetail = () => {
   const accessToken = localStorage.getItem('accessToken');
   const myEmail = localStorage.getItem('email');
   const location = useLocation();
-  const { handleError } = useUserDispatch();
+  const { handleError } = useUserApi();
 
   useEffect(() => {
     const fetchLikedPosts = async () => {

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
-import { useUserDispatch } from '../context/UserContext';
+import { useUserApi } from '../context/UserContext';
 
 export default function DeleteUser() {
   const [password, setPassword] = useState('');
-  const { handleError, deleteUser } = useUserDispatch();
+  const { handleError, deleteUser } = useUserApi();
   const navigate = useNavigate();
 
   // 1️⃣ 비밀번호 입력

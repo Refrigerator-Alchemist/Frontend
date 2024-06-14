@@ -7,7 +7,7 @@ import {
 } from 'react-icons/go';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { useUserDispatch } from '../context/UserContext';
+import { useUserApi } from '../context/UserContext';
 import { toast } from 'react-toastify';
 
 export default function ResetPassword() {
@@ -24,7 +24,7 @@ export default function ResetPassword() {
     emailExists, // 이메일 존재 여부 판단
     checkCodeVerification, // 인증 확인
     verified, // 인증 여부
-  } = useUserDispatch();
+  } = useUserApi();
   const emailType = 'reset-password';
   const socialType = 'Refrigerator-Alchemist';
 
@@ -220,15 +220,15 @@ export default function ResetPassword() {
                 passwordMessage === null
                   ? ''
                   : passwordMessage
-                  ? 'text-green-500'
-                  : 'text-red-500'
+                    ? 'text-green-500'
+                    : 'text-red-500'
               }`}
             >
               {passwordMessage === null
                 ? '\u00A0'
                 : passwordMessage
-                ? '비밀번호가 일치합니다'
-                : '비밀번호가 일치하지 않습니다'}
+                  ? '비밀번호가 일치합니다'
+                  : '비밀번호가 일치하지 않습니다'}
             </p>
           </div>
 
