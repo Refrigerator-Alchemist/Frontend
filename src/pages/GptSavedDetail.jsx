@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Navigation from '../components/ui/Navigation';
+import Navigation from '../components/UI/Navigation';
 import axios from 'axios';
-import BackButton from '../components/ui/BackButton';
+import BackButton from '../components/UI/BackButton';
 import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 
 const GptSavedDetail = () => {

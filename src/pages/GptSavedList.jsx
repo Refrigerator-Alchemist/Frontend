@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Pagination from '../components/Pagination';
-import Navigation from '../components/ui/Navigation';
-import SavedListCard from '../components/gpt/SavedListCard';
-import BackButton from '../components/ui/BackButton';
+import Navigation from '../components/UI/Navigation';
+import SavedListCard from '../components/Gpt/SavedListCard';
+import BackButton from '../components/UI/BackButton';
 import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 
 export default function GptSavedList() {

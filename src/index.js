@@ -39,11 +39,7 @@ const router = createBrowserRouter([
       { path: '/login-success', element: <LoginSuccess /> }, // SNS 로그인 성공시 데이터 저장
       {
         path: '/reset-password', // 비밀번호 재설정
-        element: (
-          <ProtectedRoute>
-            <ResetPassword />
-          </ProtectedRoute>
-        ),
+        element: <ResetPassword />,
       },
       {
         path: '/delete-user', // 회원탈퇴
