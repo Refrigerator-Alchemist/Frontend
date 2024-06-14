@@ -5,8 +5,6 @@ import axios from 'axios';
 import ERRORS from '../utils/customedError';
 
 export const IP_ADDRESS = 'http://localhost:8080';
-const accessToken = localStorage.getItem('accessToken');
-const refreshToken = localStorage.getItem('refreshToken');
 
 axios.interceptors.response.use(
   function (response) {
@@ -25,10 +23,13 @@ axios.interceptors.response.use(
   }
 );
 let isRefreshing = false;
+
 const reIssue = async () => {
   if (isRefreshing) return;
   isRefreshing = true;
   const URL = `${IP_ADDRESS}/token/reissue`;
+  const accessToken = localStorage.getItem('accessToken');
+  const refreshToken = localStorage.getItem('refreshToken');
   const socialType = localStorage.getItem('socialType');
   const socialId = localStorage.getItem('socialId');
 
@@ -78,10 +79,6 @@ export const UserApiProvider = ({ children }) => {
   const [nameDuplicated, setNameDuplicated] = useState(true);
   const navigate = useNavigate();
 
-  const googleURL = `${IP_ADDRESS}/oauth2/authorization/google`;
-  const kakaoURL = `${IP_ADDRESS}/oauth2/authorization/kakao`;
-  const naverURL = `${IP_ADDRESS}/oauth2/authorization/naver`;
-
   /** 커스텀 에러 처리 
    - errorName : 백엔드 확인용 에러명
    - errorName.notice : 유저 확인용 메세지
@@ -111,9 +108,8 @@ export const UserApiProvider = ({ children }) => {
         - socialType 서비스 타입
    */
   const requestEmailForSignUp = async (email, emailType, socialType) => {
-    const URL = `${IP_ADDRESS}/auth/email`;
     try {
-      const response = await axios.post(URL, {
+      const response = await axios.post(`${IP_ADDRESS}/auth/email`, {
         email,
         emailType,
         socialType,
@@ -138,9 +134,8 @@ export const UserApiProvider = ({ children }) => {
         - socialType 서비스 타입
   */
   const requestEmailForReset = async (email, emailType, socialType) => {
-    const URL = `${IP_ADDRESS}/auth/email`;
     try {
-      const response = await axios.post(URL, {
+      const response = await axios.post(`${IP_ADDRESS}/auth/email`, {
         email,
         emailType,
         socialType,
@@ -393,30 +388,25 @@ export const UserApiProvider = ({ children }) => {
     }
   };
 
-  // 🟡 카카오
   const kakaoLogin = () => {
     try {
-      window.location.href = kakaoURL;
+      window.location.href = `${IP_ADDRESS}/oauth2/authorization/kakao`;
       console.log('카카오 로그인');
     } catch (error) {
       handleError(error);
     }
   };
-
-  // 🔴 구글
   const googleLogin = () => {
     try {
-      window.location.href = googleURL;
+      window.location.href = `${IP_ADDRESS}/oauth2/authorization/google`;
       console.log('구글 로그인');
     } catch (error) {
       handleError(error);
     }
   };
-
-  // 🟢 네이버
   const naverLogin = () => {
     try {
-      window.location.href = naverURL;
+      window.location.href = `${IP_ADDRESS}/oauth2/authorization/naver`;
       console.log('네이버 로그인');
     } catch (error) {
       handleError(error);
