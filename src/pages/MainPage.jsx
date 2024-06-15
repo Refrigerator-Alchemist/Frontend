@@ -5,8 +5,6 @@ import { FaReact } from 'react-icons/fa';
 import Ranking from '../components/Ranking';
 
 export default function MainPage() {
-  const navigate = useNavigate();
-
   return (
     <section className="flex flex-col items-center mt-6 justify-center min-h-screen">
       <header className="relative flex flex-col items-center justify-center text-4xl font-bold mb-12">
@@ -18,7 +16,6 @@ export default function MainPage() {
           refrigerator?
         </div>
       </header>
-
       <main className="flex flex-col mb-5 justify-center items-center">
         <p className="font-dongle text-2xl md:text-3xl mb-4">
           재료는 있는데 뭘 해먹을지 모르겠다구요?! <br />
@@ -31,22 +28,17 @@ export default function MainPage() {
           <br />
           먹기 전에 예쁘게 찍어서 자랑하는 걸 깜빡하지 마세요!
         </p>
-
         <button
           className=" flex items-center justify-center space-x-4 text-white text-2xl p-5 mb-4 font-bold font-jua transition ease-in-out rounded-md bg-main hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300 ..."
-          onClick={() => {
-            navigate('/recipe/recommend');
-          }}
+          onClick={useNavigate('/recipe/recommend')}
         >
           <span>냉장고 연금술 시작</span>{' '}
           <span>
             <FaReact />
           </span>
         </button>
-
         <Ranking />
       </main>
-
       <footer
         style={{
           position: 'fixed',

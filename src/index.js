@@ -1,6 +1,6 @@
+import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App';
 import NotFound from './pages/NotFound';
@@ -13,7 +13,7 @@ import ResetPassword from './pages/ResetPassword';
 import DeleteUser from './pages/DeleteUser';
 import Mypage from './pages/Mypage';
 import EditProfile from './pages/EditProfile';
-import BoardRanking from './pages/BoardRanking';
+import RankingDetail from './pages/RankingDetail';
 import Board from './pages/Board';
 import BoardDetail from './pages/BoardDetail';
 import UploadBoard from './pages/UploadBoard';
@@ -69,7 +69,7 @@ const router = createBrowserRouter([
       },
 
       // 게시판 ----------------------
-      { path: '/ranking', element: <BoardRanking /> }, // Top 3 랭킹
+      { path: '/ranking', element: <RankingDetail /> }, // Top 3 랭킹
       { path: '/board', element: <Board /> }, // 게시판
       { path: '/board/:postId', element: <BoardDetail /> }, // 게시물 상세
       {
