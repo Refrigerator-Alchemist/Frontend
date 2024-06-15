@@ -1,46 +1,31 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FaArrowLeft } from 'react-icons/fa';
 import { useUserApi } from '../context/UserContext';
+import BackButton from '../components/UI/BackButton';
+import { toast } from 'react-toastify';
 
 export default function DeleteUser() {
   const [password, setPassword] = useState('');
-  const { handleError, deleteUser } = useUserApi();
-  const navigate = useNavigate();
-
-  // 1️⃣ 비밀번호 입력
+  const user = useUserApi();
   const handlePasswordChange = (e) => setPassword(e.target.value);
-
-  // 2️⃣ 회원 탈퇴
+  /** 회원탈퇴 API
+   * - 백엔드 API 개발 X
+   */
   const handleDeleteUser = (e) => {
     e.preventDefault();
-
-    // 사용자에게 확인 질문
     const confirmDelete = window.confirm('정말 회원탈퇴를 진행할까요?');
-
     try {
       if (confirmDelete) {
-        deleteUser();
+        toast.info('개발자에게 문의해주세요!');
       }
     } catch (error) {
-      handleError(error);
+      user.handleError(error);
     }
   };
 
   return (
     <section className="relative flex flex-col justify-center items-center h-screen p-8 font-score">
-      {/* 뒤로 가기 */}
-      <div
-        className="absolute top-5 left-5 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate('/mypage')}
-      >
-        <FaArrowLeft />
-      </div>
-
-      {/* 타이틀 */}
+      <BackButton destination={-1} />
       <h1 className="text-3xl font-scoreExtrabold mb-2">회원 탈퇴</h1>
-
-      {/* 비밀번호 입력 폼 */}
       <form
         className="flex flex-col items-center w-full"
         onSubmit={handleDeleteUser}
