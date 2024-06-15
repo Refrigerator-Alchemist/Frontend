@@ -78,9 +78,9 @@ export const useUserApi = () => {
  - API의 Body에는 순서대로 값을 넣어야 한다
  */
 export const UserApiProvider = ({ children }) => {
-  const [emailExists, setEmailExists] = useState(true);
+  const [emailExists, setEmailExists] = useState(false);
   const [verified, setVerified] = useState(false);
-  const [nameDuplicated, setNameDuplicated] = useState(true);
+  const [nameAvailable, setNameAvailable] = useState(false);
   const navigate = useNavigate();
 
   /** 커스텀 에러 처리 
@@ -146,13 +146,11 @@ export const UserApiProvider = ({ children }) => {
       });
       console.log(`이메일: ${email} 회원가입 유형: ${socialType}`);
       if (response.status === 204) {
-        setEmailExists(true);
         toast.success('인증번호가 발송되었습니다');
       } else {
         return;
       }
     } catch (error) {
-      setEmailExists(false);
       handleError(error);
     }
   };
@@ -210,13 +208,13 @@ export const UserApiProvider = ({ children }) => {
         }
       );
       if (response.status === 204) {
-        setNameDuplicated(false);
+        setNameAvailable(true);
         toast.success('사용 가능한 닉네임입니다');
       } else {
         return;
       }
     } catch (error) {
-      setNameDuplicated(true);
+      setNameAvailable(false);
       handleError(error);
     }
   };
@@ -407,8 +405,8 @@ export const UserApiProvider = ({ children }) => {
     verified,
     setVerified,
     checkNameDuplication,
-    nameDuplicated,
-    setNameDuplicated,
+    nameAvailable,
+    setNameAvailable,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

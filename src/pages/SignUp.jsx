@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import {
-  GoCheckCircle,
-  GoCheckCircleFill,
-  GoEye,
-  GoEyeClosed,
-} from 'react-icons/go';
-import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useUserApi } from '../context/UserContext';
 import { toast } from 'react-toastify';
-import InputEmail from '../components/Account/InputVeriNum';
+import InputPassword from '../components/Account/InputPassword';
+import BackButton from '../components/UI/BackButton';
+import AccountHeader from '../components/Account/AccountHeader';
+import CheckedList from '../components/Account/CheckedList';
+import PasswordMatch from '../components/Account/PasswordMatch';
+import InputVeriNum from '../components/Account/InputVeriNum';
+import SubmitButton from '../components/Account/SubmitButton';
+import CheckNickname from '../components/Account/CheckNickname';
 
 export default function SignUp() {
   const [email, setEmail] = useState(''); // 이메일
@@ -108,7 +108,6 @@ export default function SignUp() {
       setPasswordMessage(null);
     }
   };
-
   useEffect(() => {
     isSamePassword();
   });
@@ -129,25 +128,14 @@ export default function SignUp() {
 
   return (
     <section className="flex flex-col justify-center items-center min-h-screen px-10 relative">
-      {/* 뒤로가기 버튼 */}
-      <div
-        className="absolute top-5 left-5 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate('/login')}
-      >
-        <FaArrowLeft />
-      </div>
-
-      {/* 타이틀 */}
-      <header className="flex flex-col items-center mt-10">
-        <h1 className="font-score text-3xl">신규 회원가입</h1>
-        <p className="font-score text-md text-gray-400 mt-2">
-          환영합니다! 냉장고 연금술과 레시피 나눔을 해보세요
-        </p>
-      </header>
-
+      <BackButton destination={'/login'} />
+      <AccountHeader
+        title={'신규 회원가입'}
+        mention={'환영합니다! 냉장고 연금술과 레시피 나눔을 해보세요'}
+      />
       <form onSubmit={onSignUp}>
         <main className="mt-10 w-full px-2">
-          <InputEmail
+          <InputVeriNum
             email={email}
             handleEmailChange={handleEmailChange}
             requestVerifying={requestVerifying}
@@ -157,168 +145,61 @@ export default function SignUp() {
             checkVerifying={checkVerifying}
           />
         </main>
-
         <footer className="flex flex-col mt-6 w-full p-3">
+          <CheckNickname
+            nickName={nickName}
+            setNickName={setNickName}
+            checkDuplication={checkDuplication}
+            nameError={nameError}
+          />
           <div>
-            {/* 닉네임 입력 */}
-            <label className="mb-4 text-md font-bold font-undong text-center">
-              닉네임
-            </label>
-            <div className="flex flex-col mb-6 justify-between">
-              <div className="flex">
-                <input
-                  type="text"
-                  value={nickName}
-                  onChange={(e) => setNickName(e.target.value)}
-                  placeholder="닉네임"
-                  className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo"
-                />
-                {/* 중복확인 */}
-                <button
-                  onClick={checkDuplication}
-                  className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtrabold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:scale-110 hover:bg-indigo duration-300"
-                >
-                  중복 확인
-                </button>
-              </div>
-              <p
-                className={`text-red-500 text-sm pl-3 mt-1 ${
-                  nameError ? 'visible' : 'invisible'
-                }`}
-              >
-                {nameError || 'empty'}
-              </p>
-            </div>
-
-            {/* 비밀번호 입력 */}
-            <label className="mb-4 text-md font-bold font-undong text-center">
-              비밀번호
-            </label>
             <div className="flex flex-col">
-              <div className="flex mb-4">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="비밀번호"
-                  className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo"
-                />
-                <button
-                  onClick={toggleShowPassword}
-                  className="inline-block whitespace-nowrap h-12 ml-5 mt-2 rounded-xl font-score text-md hover:text-red-500"
-                >
-                  {showPassword ? <GoEye /> : <GoEyeClosed />}
-                </button>
-              </div>
-
-              {/* 비밀번호 확인 */}
-              <label className="flex text-md font-bold font-undong text-center">
-                비밀번호 확인
-              </label>
-              <div className="flex">
-                <input
-                  type="password"
-                  value={checkPassword}
-                  onChange={(e) => {
-                    setCheckPassword(e.target.value);
-                    isSamePassword();
-                  }}
-                  placeholder="한 번 더 입력하세요"
-                  className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo"
-                />
-              </div>
-              <p
-                className={`text-sm pl-3 mt-1 ${
-                  passwordMessage === null
-                    ? ''
-                    : passwordMessage
-                      ? 'text-emerald'
-                      : 'text-red-500'
-                }`}
-              >
-                {passwordMessage === null
-                  ? '\u00A0'
-                  : passwordMessage
-                    ? '비밀번호가 일치합니다'
-                    : '비밀번호가 일치하지 않습니다'}
-              </p>
+              <InputPassword
+                showPassword={showPassword}
+                password={password}
+                setPassword={setPassword}
+                toggleShowPassword={toggleShowPassword}
+                checkPassword={checkPassword}
+                setCheckPassword={setCheckPassword}
+                isSamePassword={isSamePassword}
+              />
+              <PasswordMatch passwordMessage={passwordMessage} />
               <ul className="mt-4 mb-4 font-score">
-                <li className="mb-2 flex items-center">
-                  <span role="img" aria-label="check" className="flex">
-                    {!userApi.emailExists ? (
-                      <GoCheckCircleFill className="text-emerald" />
-                    ) : (
-                      <GoCheckCircle className="text-emerald" />
-                    )}
-                  </span>{' '}
-                  <span className="ml-3">이메일 사용 가능</span>
-                </li>
-                <li className="mb-2 flex items-center">
-                  <span role="img" aria-label="check" className="flex">
-                    {userApi.verified ? (
-                      <GoCheckCircleFill className="text-emerald" />
-                    ) : (
-                      <GoCheckCircle className="text-emerald" />
-                    )}
-                  </span>{' '}
-                  <span className="ml-3">이메일 인증 완료</span>
-                </li>
-                <li className="mb-2 flex items-center">
-                  <span role="img" aria-label="check" className="flex">
-                    {!userApi.nameDuplicated ? (
-                      <GoCheckCircleFill className="text-emerald" />
-                    ) : (
-                      <GoCheckCircle className="text-emerald" />
-                    )}
-                  </span>{' '}
-                  <span className="ml-3">닉네임 사용 가능</span>
-                </li>
-                <li className="mb-2 flex items-center">
-                  <span role="img" aria-label="check" className="flex">
-                    {password.length >= 8 ? (
-                      <GoCheckCircleFill className="text-emerald" />
-                    ) : (
-                      <GoCheckCircle className="text-emerald" />
-                    )}
-                  </span>{' '}
-                  <span className="ml-3">
-                    8자 이상 15자 이하의 비밀번호를 입력해주세요
-                  </span>
-                </li>
-                <li className="mb-2 flex items-center">
-                  <span role="img" aria-label="check" className="flex">
-                    {isPasswordValid(password) ? (
-                      <GoCheckCircleFill className="text-emerald" />
-                    ) : (
-                      <GoCheckCircle className="text-emerald" />
-                    )}
-                  </span>{' '}
-                  <span className="ml-3">
-                    영문, 숫자, 특수문자 각각 1자 이상을 포함해주세요
-                  </span>
-                </li>
+                <CheckedList
+                  props={userApi.emailExists}
+                  mention={'이메일 사용 가능'}
+                />
+                <CheckedList
+                  props={userApi.verified}
+                  mention={'이메일 인증 완료'}
+                />
+                <CheckedList
+                  props={userApi.nameAvailable}
+                  mention={'닉네임 사용 가능'}
+                />
+                <CheckedList
+                  props={password.length >= 8}
+                  mention={'8자 이상 15자 이하의 비밀번호를 입력해주세요'}
+                />
+                <CheckedList
+                  props={isPasswordValid(password)}
+                  mention={'영문, 숫자, 특수문자 각각 1자 이상을 포함해주세요'}
+                />
               </ul>
-              {/* 가입 버튼*/}
-              <button
-                type="submit"
-                disabled={
-                  userApi.emailExists === true &&
-                  userApi.verified === false &&
-                  userApi.nameDuplicated === true &&
-                  (password.length < 8 || password.length > 15) &&
-                  isPasswordValid(password) === false &&
+              <SubmitButton
+                disabledCondition={
+                  userApi.emailExists === true ||
+                  userApi.verified === false ||
+                  userApi.nameAvailable === false ||
+                  password.length < 8 ||
+                  password.length > 15 ||
+                  isPasswordValid(password) === false ||
                   !passwordMessage
                 }
-                className={`p-3 mx-20 mt-3 rounded-3xl font-scoreExtrabold font-extrabold text-xl transition ease-in-out duration-300
-              ${
-                passwordMessage
-                  ? 'text-white bg-main hover:bg-emerald hover:text-black hover:cursor-pointer hover:-translate-y-1 hover:scale-110'
-                  : 'bg-gray-500 text-black'
-              }
-              `}
-              >
-                가입하기
-              </button>
+                passwordMessage={passwordMessage}
+                password={password}
+                buttonText={'가입하기'}
+              />
             </div>
           </div>
         </footer>
