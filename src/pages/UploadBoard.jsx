@@ -33,7 +33,9 @@ export default function UploadBoard() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append('image', fileInput.current.files[0]);
+    if (fileInput.current.files[0]) {
+      formData.append('image', fileInput.current.files[0]);
+    }
     formData.append('title', title);
     formData.append('description', description);
     formData.append('nickName', nickName);
@@ -43,6 +45,7 @@ export default function UploadBoard() {
         formData.append(`ingredient${index + 1}`, ingredient);
       }
     });
+
     try {
       const response = await axios.post(
         `${IP_ADDRESS}/board/upload/post`,
@@ -88,12 +91,11 @@ export default function UploadBoard() {
 
   return (
     <section className="pt-16">
-      <UploadBoard />
       <form
         onSubmit={handleSubmit}
         className="flex flex-col space-y-6 mx-auto p-8"
       >
-        <div className="form-group ">
+        <div className="form-group">
           <label
             htmlFor="cover-photo"
             className="font-score block mt-4 mb-2 text-sm font-medium text-gray-700"
@@ -104,7 +106,7 @@ export default function UploadBoard() {
             type="file"
             id="cover-photo"
             onChange={handleImageChange}
-            className="font-score w-full  border-2 border-dashed  border-gray-300 rounded-md p-4 text-sm text-gray-700"
+            className="font-score w-full border-2 border-dashed border-gray-300 rounded-md p-4 text-sm text-gray-700"
             ref={fileInput}
           />
         </div>

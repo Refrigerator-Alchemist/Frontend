@@ -1,6 +1,5 @@
-import React, { useState, useRef } from 'react';
+import React, { useState} from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaArrowLeft } from 'react-icons/fa';
 import { CiSaveDown2 } from 'react-icons/ci';
 import { toast } from 'react-toastify';
 import TagInput from '../components/Gpt/TagInput';

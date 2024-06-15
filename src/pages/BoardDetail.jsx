@@ -11,12 +11,12 @@ const BoardDetail = () => {
   const { postId } = useParams();
   const [imageUrl, setImageUrl] = useState('');
   const [title, setTitle] = useState('');
-  const [email, setEmail] = useState('');
+  const [, setEmail] = useState('');
   const [description, setDescription] = useState('');
   const [ingredients, setIngredients] = useState([]);
   const [Liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState('');
-  const [likedPosts, setLikedPosts] = useState([]);
+  const [, setLikedPosts] = useState([]);
   const [nickName, setNickName] = useState('');
   const accessToken = localStorage.getItem('accessToken');
   const myEmail = localStorage.getItem('email');

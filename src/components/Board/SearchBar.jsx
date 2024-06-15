@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import ICON_SEARCHING from '../../assets/img/search.png';
-import { useUserApi } from '../../context/UserContext';
+import { IP_ADDRESS,useUserApi } from '../../context/UserContext';
 
 const accessToken = localStorage.getItem('accessToken');
-const IP_ADDRESS = 'http://your.api.address'; // IP_ADDRESS 임시값
 
 const SearchBar = ({ onSearch }) => {
   const [query, setQuery] = useState('');

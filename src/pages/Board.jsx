@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
+import {Link, useLocation } from 'react-router-dom';
 import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 import RecipeCard from '../components/Board/RecipeCard';
 import SearchBar from '../components/Board/SearchBar';
@@ -9,7 +9,7 @@ import RankingBoard from '../components/Board/RankingBoard';
 import Navigation from '../components/UI/Navigation';
 import ScrollToTopButton from '../components/UI/ScrollToTopButton';
 import useScrollToTop from '../components/UI/useScrollToTop';
-
+import { PiPencilSimpleLine } from 'react-icons/pi';  
 const accessToken = localStorage.getItem('accessToken');
 const email = localStorage.getItem('email');
 
@@ -121,6 +121,7 @@ const Board = () => {
     });
     if (node) observer.current.observe(node);
   };
+  
 
   return (
     <section className="Board pb-24">
