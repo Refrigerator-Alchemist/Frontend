@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 import Header from '../components/BoardDetail/Header';
 import BoardDetailMain from '../components/BoardDetail/BoardDetailMain';
-import Footer from '../components/BoardDetail/Footer';
+import Footer from '../components/UI/Footer';
 
 const BoardDetail = () => {
   const { postId } = useParams();
