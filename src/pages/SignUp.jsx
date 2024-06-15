@@ -9,6 +9,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useUserApi } from '../context/UserContext';
 import { toast } from 'react-toastify';
+import InputEmail from '../components/Account/InputVeriNum';
 
 export default function SignUp() {
   const [email, setEmail] = useState(''); // 이메일
@@ -146,69 +147,15 @@ export default function SignUp() {
 
       <form onSubmit={onSignUp}>
         <main className="mt-10 w-full px-2">
-          {/* 이메일 중복 확인 & 인증 요청 */}
-          <div>
-            <label className="mb-4 text-md font-bold font-undong text-center ">
-              이메일
-            </label>
-            <div className="flex items-center">
-              <input
-                type="email"
-                value={email}
-                onChange={handleEmailChange}
-                className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo"
-                placeholder="이메일"
-              />
-              <div>
-                <button
-                  onClick={requestVerifying}
-                  className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtrabold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:scale-110 hover:bg-indigo duration-300"
-                >
-                  인증 요청
-                </button>
-              </div>
-            </div>
-            <p
-              className={`text-red-500 text-sm pl-3 mt-1 ${
-                emailError ? 'visible' : 'invisible'
-              }`}
-            >
-              {emailError || 'empty'}
-            </p>
-          </div>
-
-          {/* 인증 확인 */}
-          <div className="mt-6">
-            <label className="mb-4 font-bold font-undong text-center text-md">
-              인증번호
-            </label>
-            <div className="flex items-center justify-between">
-              <div className="flex max-w-xs mt-2">
-                <input
-                  id="input"
-                  value={inputNum}
-                  type="tel"
-                  maxLength="4"
-                  placeholder="????"
-                  onChange={(e) => {
-                    if (
-                      e.target.value === '' ||
-                      (!isNaN(e.target.value) && e.target.value.length <= 4)
-                    ) {
-                      setInputNum(e.target.value);
-                    }
-                  }}
-                  className="w-40 h-12 mx-1 text-center border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo"
-                />
-              </div>
-              <button
-                onClick={checkVerifying}
-                className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtrabold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:scale-110 hover:bg-indigo duration-300"
-              >
-                인증 확인
-              </button>
-            </div>
-          </div>
+          <InputEmail
+            email={email}
+            handleEmailChange={handleEmailChange}
+            requestVerifying={requestVerifying}
+            selectOption={emailError}
+            inputNum={inputNum}
+            setInputNum={setInputNum}
+            checkVerifying={checkVerifying}
+          />
         </main>
 
         <footer className="flex flex-col mt-6 w-full p-3">
