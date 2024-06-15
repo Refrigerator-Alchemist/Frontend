@@ -1,10 +1,10 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 import { FaHeart } from 'react-icons/fa';
+import { useQuery } from '@tanstack/react-query';
 
-// 📋 각 게시물
 function RankingItem({
   rank,
   imageUrl,
@@ -35,13 +35,11 @@ function RankingItem({
               className=" w-full h-full object-cover"
             />
           </div>
-
           <div className="flex flex-col">
             <span className="font-score font-semibold">{title}</span>
             <span className="font-score text-sm">{ingredients.join(', ')}</span>
           </div>
         </div>
-
         <div>
           <span className="font-score flex gap-2 text-md font-bold ml-5 mr-5">
             {likeCount}
@@ -53,36 +51,50 @@ function RankingItem({
   );
 }
 
-// 🏆 Top3 게시물
+/** 🏆 랭킹보드 : Top3 게시물
+ * - 리액트 쿼리 사용
+        - 실시간 업데이트하지 않아도 됨
+ */
 export default function Ranking() {
-  const [topItems, setTopItems] = useState([]);
   const { handleError } = useUserApi();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchRanking = async () => {
-      const URI = `${IP_ADDRESS}/ranking/top3`;
-
-      try {
-        const response = await axios.get(URI);
-
-        if (response.data && Array.isArray(response.data.items)) {
-          const items = response.data.items.map((item) => ({
-            id: item.ID,
-            imageUrl: item.imageUrl,
-            title: item.title,
-            ingredients: item.ingredients.map((ingredient) => ingredient),
-            likeCount: item.likeCount,
-          }));
-          setTopItems(items);
-        }
-      } catch (error) {
-        handleError(error);
+  const fetchRanking = async () => {
+    try {
+      const response = await axios.get(`${IP_ADDRESS}/ranking/top3`);
+      if (response.data && Array.isArray(response.data.items)) {
+        return response.data.items.map((item) => ({
+          id: item.ID,
+          imageUrl: item.imageUrl,
+          title: item.title,
+          ingredients: item.ingredients.map((ingredient) => ingredient),
+          likeCount: item.likeCount,
+        }));
       }
-    };
+    } catch (error) {
+      handleError(error);
+      throw error;
+    }
+  };
 
-    fetchRanking();
-  }, [handleError]);
+  const {
+    isPending,
+    isError,
+    data: topItems,
+    error,
+  } = useQuery({
+    queryKey: ['topItems'],
+    queryFn: () => fetchRanking(),
+    staleTime: 1000 * 60 * 5,
+  });
+
+  if (isPending) {
+    // 로딩 애니메이션으로 교체
+    return <span>Loading...</span>;
+  }
+  if (isError) {
+    // 에러 메세지
+    return <span>에러 발생 : {error}</span>;
+  }
 
   return (
     <article
@@ -96,7 +108,6 @@ export default function Ranking() {
           가장 많은 좋아요를 받은 레시피는?
         </span>
       </div>
-
       <ul>
         {topItems.map((topItem, index) => (
           <RankingItem
