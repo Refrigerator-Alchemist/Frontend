@@ -41,7 +41,7 @@ export default function MyPage() {
             },
           });
           setImageUrl(response.data.imageUrl);
-          localStorage.setItem(response.data.imageUrl); // 로컬스토리지에 저장
+          localStorage.setItem('imageUrl', response.data.imageUrl); // 로컬스토리지에 저장
         }
       } catch (error) {
         handleError(error);

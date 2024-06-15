@@ -1,8 +1,8 @@
 import React from 'react';
-import Navigation from '../components/UI/Navigation';
 import { useNavigate } from 'react-router-dom';
 import { FaReact } from 'react-icons/fa';
 import Ranking from '../components/Ranking';
+import Footer from '../components/UI/Footer';
 
 export default function MainPage() {
   return (
@@ -39,16 +39,7 @@ export default function MainPage() {
         </button>
         <Ranking />
       </main>
-      <footer
-        style={{
-          position: 'fixed',
-          bottom: '0',
-          width: '100%',
-          maxWidth: '31rem',
-        }}
-      >
-        <Navigation />
-      </footer>
+      <Footer />
     </section>
   );
 }

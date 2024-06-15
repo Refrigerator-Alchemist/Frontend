@@ -315,10 +315,9 @@ export const UserApiProvider = ({ children }) => {
           'refreshToken',
           response.headers['authorization-refresh']
         );
-        localStorage.setItem(
-          'nickName',
-          decodeURIComponent(response.headers.get('nickName'))
-        );
+        const textDecoder = new TextDecoder();
+        const nickName = textDecoder.decode(response.headers['nickName']);
+        localStorage.setItem('nickName', nickName);
         localStorage.setItem('email', email);
         localStorage.setItem('socialId', response.headers.get('socialId'));
         localStorage.setItem('socialType', socialType);
@@ -356,6 +355,7 @@ export const UserApiProvider = ({ children }) => {
         localStorage.removeItem('nickName');
         localStorage.removeItem('email');
         localStorage.removeItem('socialType');
+        localStorage.removeItem('imageUrl');
 
         toast.success('로그아웃 되었습니다!');
         navigate('/main');

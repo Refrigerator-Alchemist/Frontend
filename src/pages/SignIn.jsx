@@ -4,11 +4,11 @@ import { useUserApi } from '../context/UserContext';
 import { IP_ADDRESS } from '../context/UserContext';
 import { toast } from 'react-toastify';
 import { GoEye, GoEyeClosed } from 'react-icons/go';
-import { FaArrowLeft } from 'react-icons/fa';
 import Logo from '../components/UI/Logo';
 import LOGO_GOOGLE from '../assets/img/logo_google.png';
 import LOGO_KAKAO from '../assets/img/logo_kakao.png';
 import LOGO_NAVER from '../assets/img/logo_naver.png';
+import BackButton from '../components/UI/BackButton';
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
@@ -98,20 +98,12 @@ export default function SignIn() {
 
   return (
     <section className="relative flex flex-col items-center justify-center min-h-screen">
-      {/* 뒤로가기 버튼 */}
-      <div
-        className="absolute top-5 left-5 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate('/main')}
-      >
-        <FaArrowLeft />
-      </div>
-
+      <BackButton destination={'/main'} />
       {/* 로고, 타이틀 */}
       <header className="flex flex-col items-center justify-center">
         <Logo page="login" width="250px" height="250px" />
         <h1 className="text-3xl font-jua">로그인</h1>
       </header>
-
       {/* 이메일, 비밀번호 입력 + 로그인 */}
       <main>
         <form
@@ -180,7 +172,6 @@ export default function SignIn() {
           </button>
         </form>
       </main>
-
       {/* 신규 회원가입 */}
       <footer className="flex flex-col items-center mb-4">
         {/* SNS 계정으로 가입 */}
@@ -211,7 +202,6 @@ export default function SignIn() {
             ></img>
           </button>
         </figure>
-
         {/* 이메일 회원가입 */}
         <div className="flex">
           <span className="font-score">계정이 없으신가요?</span>

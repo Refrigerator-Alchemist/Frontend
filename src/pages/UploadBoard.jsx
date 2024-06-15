@@ -1,9 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
 import { IP_ADDRESS, useUserApi } from '../context/UserContext';
-
 import { toast } from 'react-toastify';
 
 // ✍️ 게시물 작성
@@ -12,13 +10,10 @@ export default function UploadBoard() {
   const [description, setDescription] = useState('');
   const [ingredients, setIngredients] = useState(['']);
   const [imagePreviewUrl, setImagePreviewUrl] = useState('');
-
   const nickName = localStorage.getItem('nickName');
   const email = localStorage.getItem('email');
   const accessToken = localStorage.getItem('accessToken');
-
   const fileInput = useRef(null);
-
   const navigate = useNavigate();
   const { handleError } = useUserApi();
 
@@ -37,20 +32,17 @@ export default function UploadBoard() {
   // 3️⃣ 게시물 작성 버튼
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const formData = new FormData();
     formData.append('image', fileInput.current.files[0]);
     formData.append('title', title);
     formData.append('description', description);
     formData.append('nickName', nickName);
     formData.append('email', email);
-
     ingredients.forEach((ingredient, index) => {
       if (ingredient.trim() !== '') {
         formData.append(`ingredient${index + 1}`, ingredient);
       }
     });
-
     try {
       const response = await axios.post(
         `${IP_ADDRESS}/board/upload/post`,
@@ -96,13 +88,7 @@ export default function UploadBoard() {
 
   return (
     <section className="pt-16">
-      <div
-        className="absolute top-5 left-42 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate('/board')}
-      >
-        <FaArrowLeft />
-      </div>
-
+      <UploadBoard />
       <form
         onSubmit={handleSubmit}
         className="flex flex-col space-y-6 mx-auto p-8"
@@ -114,7 +100,6 @@ export default function UploadBoard() {
           >
             사진 추가하기
           </label>
-
           <input
             type="file"
             id="cover-photo"
@@ -150,7 +135,6 @@ export default function UploadBoard() {
             className="font-score w-full border border-gray-300 rounded-md p-2 text-sm"
           />
         </div>
-
         <div className="form-group">
           <label
             htmlFor="description"
@@ -166,7 +150,6 @@ export default function UploadBoard() {
             className="font-score w-full border border-gray-300 rounded-md p-2 text-sm h-28"
           />
         </div>
-
         <div className="form-group">
           <label className="block mb-2 text-sm font-medium text-gray-700">
             재료
@@ -204,7 +187,6 @@ export default function UploadBoard() {
             재료 추가
           </button>
         </div>
-
         <footer className="flex space-x-2">
           <button
             type="button"
