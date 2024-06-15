@@ -5,6 +5,12 @@ import Ranking from '../components/Ranking';
 import Footer from '../components/UI/Footer';
 
 export default function MainPage() {
+  const navigate = useNavigate();  
+
+  const handleStart = () => {
+    navigate('/recipe/recommend');  
+  };
+
   return (
     <section className="flex flex-col items-center mt-6 justify-center min-h-screen">
       <header className="relative flex flex-col items-center justify-center text-4xl font-bold mb-12">
@@ -29,8 +35,8 @@ export default function MainPage() {
           먹기 전에 예쁘게 찍어서 자랑하는 걸 깜빡하지 마세요!
         </p>
         <button
-          className=" flex items-center justify-center space-x-4 text-white text-2xl p-5 mb-4 font-bold font-jua transition ease-in-out rounded-md bg-main hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300 ..."
-          onClick={useNavigate('/recipe/recommend')}
+          className="flex items-center justify-center space-x-4 text-white text-2xl p-5 mb-4 font-bold font-jua transition ease-in-out rounded-md bg-main hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300 ..."
+          onClick={handleStart}  
         >
           <span>냉장고 연금술 시작</span>{' '}
           <span>
