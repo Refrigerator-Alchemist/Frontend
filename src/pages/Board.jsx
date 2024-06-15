@@ -39,6 +39,9 @@ const Board = () => {
   }, [currentPage]);
 
   const fetchLikedPosts = async () => {
+    if (!accessToken) {
+      return; 
+    }
     const URL = `${IP_ADDRESS}/board/islike?id=${email}`;
     try {
       const response = await axios.get(URL, {

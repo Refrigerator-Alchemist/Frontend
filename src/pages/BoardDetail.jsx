@@ -25,6 +25,9 @@ const BoardDetail = () => {
 
   useEffect(() => {
     const fetchLikedPosts = async () => {
+      if (!accessToken) {
+        return; 
+      }
       const URL = `${IP_ADDRESS}/board/islike?id=${myEmail}`;
       try {
         const response = await axios.get(URL, {

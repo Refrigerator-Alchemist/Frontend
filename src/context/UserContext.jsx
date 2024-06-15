@@ -87,23 +87,33 @@ export const UserApiProvider = ({ children }) => {
    - errorName : 백엔드 확인용 에러명
    - errorName.notice : 유저 확인용 메세지
   */
+  
   const handleError = async (error) => {
+    const genericToastId = "generic-error";
+  
     if (error.response && error.response.data && error.response.data.code) {
       const errorName = Object.values(ERRORS).find(
         (obj) => obj.code === error.response.data.code
       );
-      const userNotice = errorName.notice;
+      const userNotice = errorName ? errorName.notice : '인식되지 않은 에러';  
       console.log(`에러 내용: ${JSON.stringify(errorName)}`);
-      toast.error(`${userNotice}`);
+      toast.error(userNotice, {
+        toastId: error.response.data.code
+      });
       return error.response.data.code;
     } else if (!error.response) {
       console.log('서버와 연결되어있지 않습니다');
-      toast.error(`서버와 연결되어있지 않습니다`);
+      toast.error('서버와 연결되어있지 않습니다', {
+        toastId: "no-server-connection"  
+      });
     } else {
       console.log(`확인되지 않은 에러, ${error}`);
-      toast.error(`알 수 없는 에러가 발생했습니다`);
+      toast.error('알 수 없는 에러가 발생했습니다', {
+        toastId: genericToastId  
+      });
     }
   };
+  
 
   /** 이메일 인증 요청 : 회원가입용
    - 요청 Body 

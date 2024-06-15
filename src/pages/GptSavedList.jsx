@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Pagination from '../components/Pagination';
 import Navigation from '../components/UI/Navigation';
 import SavedListCard from '../components/Gpt/SavedListCard';
 import BackButton from '../components/UI/BackButton';
@@ -9,16 +7,12 @@ import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 
 export default function GptSavedList() {
   const [recipes, setRecipes] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [recipesPerPage] = useState(7);
 
   const nickName = localStorage.getItem('nickName') || '';
   const accessToken = localStorage.getItem('accessToken');
 
-  const navigate = useNavigate();
   const { handleError } = useUserApi();
 
-  // 저장한 목록 보기
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
@@ -37,11 +31,6 @@ export default function GptSavedList() {
     }
   }, [accessToken, handleError]);
 
-  const indexOfLastRecipe = currentPage * recipesPerPage;
-  const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-  const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
   return (
     <section className="history">
       <BackButton destination="/main" />
@@ -51,7 +40,7 @@ export default function GptSavedList() {
             {accessToken ? `${nickName}의 연금술 기록` : '연금술 기록'}
           </span>
         </div>
-        {currentRecipes.map((recipe) => (
+        {recipes.map((recipe) => (
           <SavedListCard
             key={recipe.recipeId}
             recipeId={recipe.recipeId}
@@ -59,12 +48,6 @@ export default function GptSavedList() {
             ingredientList={recipe.ingredientList}
           />
         ))}
-        <Pagination
-          currentPage={currentPage}
-          recipesPerPage={recipesPerPage}
-          totalRecipes={recipes.length}
-          paginate={paginate}
-        />
       </div>
       <footer
         style={{
