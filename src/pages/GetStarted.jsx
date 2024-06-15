@@ -1,6 +1,6 @@
 import React from 'react';
 import Logo from '../components/UI/Logo';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Title = () => {
   const letters = ['냉', '장', '고', '　', '연', '금', '술', '사'];
@@ -23,8 +23,6 @@ const Title = () => {
 };
 
 export default function GetStarted() {
-  const navigate = useNavigate();
-
   return (
     <section className="min-h-screen bg-change-color flex items-center justify-center">
       <main className="text-center flex flex-col space-y-8 items-center h-full py-8">
@@ -32,9 +30,7 @@ export default function GetStarted() {
         <Logo page="start" width="300px" height="300px" />
         <Link
           className="text-3xl p-5 font-bold font-jua transition ease-in-out rounded-md bg-transparent text-white hover:-translate-y-1 hover:scale-110 hover:bg-emerald hover:text-black duration-300 ..."
-          onClick={() => {
-            navigate('/main');
-          }}
+          to={'/main'}
         >
           시작하기
         </Link>

@@ -1,15 +1,15 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Logo from '../components/UI/Logo';
+import BackButton from '../components/UI/BackButton';
 
 export default function NotFound() {
   return (
-    <section className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-xl">완성되지 않았거나 없는 페이지입니다😅</h1>
-      <div className="mt-4">
-        <Link to="/main" className="underline italic hover:text-red-500">
-          메인페이지로 돌아가기
-        </Link>
-      </div>
+    <section className="relative flex flex-col items-center justify-center h-screen">
+      <BackButton destination={'/main'} />
+      <h1 className="text-xl font-score">
+        잘못된 경로입니다! 뒤로가기를 눌러주세요:)
+      </h1>
+      <Logo page="start" width="550px" height="550px" />
     </section>
   );
 }
