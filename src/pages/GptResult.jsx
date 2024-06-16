@@ -81,56 +81,56 @@ const GptResult = () => {
       <main className="max-w-md mx-auto bg-white rounded-lg overflow-hidden md:max-w-lg">
         <div className="md:flex">
           <div className="w-full p-4 pt-12">
-            <div className="border-b-2 border-gray-100 py-2">
-              <h1 className="m-4 tfont-score text-3xl font-bold text-gray-800 text-center">
+            <header className="border-b-2 border-gray-100 py-2">
+              <h1 className="m-4 font-score text-3xl font-bold text-gray-800 text-center">
                 {title}
               </h1>
-            </div>
-            <div className="mt-8 recipebox p-4 bg-gray-100 rounded-lg overflow-y-auto max-h-200">
-              <h2 className="font-score text-lg font-bold text-gray-800">
-                재료
-              </h2>
-              <ul className="py-2 flex flex-wrap">
-                {ingredients.map((ingredient, index) => (
-                  <ul
-                    key={index}
-                    className="font-score text-gray-600 mr-4 mb-2"
-                  >
-                    {ingredient}
-                  </ul>
-                ))}
-              </ul>
-              <h2 className="font-score text-lg font-bold text-gray-800 mt-4 ">
-                레시피
-              </h2>
-              <ol
-                className="list-decimal list-inside"
-                style={{ listStyleType: 'none' }}
-              >
-                {steps.map((step, index) => (
-                  <li key={index} className="font-score text-gray-600 pt-3">
-                    {step}
-                  </li>
-                ))}
-              </ol>
-            </div>
+            </header>
+            <article className="mt-8 p-4 bg-gray-100 rounded-lg overflow-y-auto max-h-200">
+              <section>
+                <h2 className="font-score text-lg font-bold text-gray-800">
+                  재료
+                </h2>
+                <ul className="py-2 flex flex-wrap">
+                  {ingredients.map((ingredient, index) => (
+                    <li
+                      key={index}
+                      className="font-score text-gray-600 mr-4 mb-2"
+                    >
+                      {ingredient}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+              <section>
+                <h2 className="font-score text-lg font-bold text-gray-800 mt-4">
+                  레시피
+                </h2>
+                <ol className="list-decimal list-inside">
+                  {steps.map((step, index) => (
+                    <li key={index} className="font-score text-gray-600 pt-3">
+                      {step}
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            </article>
           </div>
         </div>
       </main>
       <footer className="fixed bottom-5 left-0 right-0 px-6 text-sm md:text-lg">
-        <div
-          className="mx-auto flex justify-between mb-4"
-          style={{ maxWidth: '400px' }}
-        >
+        <div className="mx-auto flex justify-between mb-4" style={{ maxWidth: '400px' }}>
           <button
             className="font-score transition ease-in-out bg-gray-400 hover:bg-gray-600 text-white font-bold py-3 px-9 rounded-full"
             onClick={() => navigate('/recipe/recommend')}
+            aria-label="Recommend another recipe"
           >
             다시 할래요 👎🏿
           </button>
           <button
-            className="font-score font-bold py-3 px-9 rounded-full transition ease-in-out bg-main hover:bg-emerald hover:cursor-pointer text-white hover:text-black"
+            className="font-score py-3 px-9 rounded-full transition ease-in-out bg-main hover:bg-emerald hover:cursor-pointer text-white hover:text-black"
             onClick={handleSaveButtonClick}
+            aria-label="Save this recipe"
           >
             저장할꼬얌 💛
           </button>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import {Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 import RecipeCard from '../components/Board/RecipeCard';
 import SearchBar from '../components/Board/SearchBar';
@@ -9,7 +9,6 @@ import RankingBoard from '../components/Board/RankingBoard';
 import Navigation from '../components/UI/Navigation';
 import ScrollToTopButton from '../components/UI/ScrollToTopButton';
 import useScrollToTop from '../components/UI/useScrollToTop';
-import { PiPencilSimpleLine } from 'react-icons/pi';  
 const accessToken = localStorage.getItem('accessToken');
 const email = localStorage.getItem('email');
 
@@ -124,29 +123,21 @@ const Board = () => {
   
 
   return (
-    <section className="Board pb-24">
+    <main className="Board pb-24">
       <header className="bg-white px-6 py-7">
-        <span className="font-scoreExtrabold font-extrabold text-3xl">
-          레시피 게시판
-        </span>
+        <h1 className="font-scoreExtrabold font-extrabold text-3xl">레시피 게시판</h1>
       </header>
-      <div className=" flex items-center mx-6">
+      <section className="flex items-center mx-6">
         <SearchBar onSearch={handleSearch} />
         <WriteButton />
-      </div>
-      <main>
+      </section>
+      <section>
         {isSearching ? (
           <div className="my-2 mt-4">
-            <span className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
-              검색 결과
-            </span>
+            <h2 className="font-scoreExtrabold font-extrabold ml-6 text-2xl">검색 결과</h2>
             {searchResults.map((recipe, index) => (
               <RecipeCard
-                ref={
-                  searchResults.length === index + 1
-                    ? lastRecipeElementRef
-                    : null
-                }
+                ref={searchResults.length === index + 1 ? lastRecipeElementRef : null}
                 key={recipe.id}
                 postId={recipe.id}
                 title={recipe.title}
@@ -161,14 +152,10 @@ const Board = () => {
           <>
             <RankingBoard />
             <div className="my-2">
-              <span className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
-                레시피🌮
-              </span>
+              <h2  className="font-scoreExtrabold font-extrabold ml-6 text-2xl">레시피</h2>
               {recipes.map((recipe, index) => (
                 <RecipeCard
-                  ref={
-                    recipes.length === index + 1 ? lastRecipeElementRef : null
-                  }
+                  ref={recipes.length === index + 1 ? lastRecipeElementRef : null}
                   key={recipe.id}
                   postId={recipe.id}
                   title={recipe.title}
@@ -181,23 +168,15 @@ const Board = () => {
             </div>
           </>
         )}
-        {loading && <div>Loading...</div>}
-      </main>
+      </section>
       <ScrollToTopButton
         showScrollToTop={showScrollToTop}
         scrollToTop={scrollToTop}
       />
-      <footer
-        style={{
-          position: 'fixed',
-          bottom: '0',
-          width: '100%',
-          maxWidth: '31rem',
-        }}
-      >
+      <footer style={{ position: 'fixed', bottom: '0', width: '100%', maxWidth: '31rem' }}>
         <Navigation />
       </footer>
-    </section>
+    </main>
   );
 };
 
