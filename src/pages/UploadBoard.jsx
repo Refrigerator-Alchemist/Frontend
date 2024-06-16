@@ -33,6 +33,19 @@ export default function UploadBoard() {
   // 3️⃣ 게시물 작성 버튼
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!title.trim()) {
+      toast.error('음식 이름을 입력하세요.');
+      return;
+    }
+    if (ingredients.length === 0 || ingredients.every(ingredient => !ingredient.trim())) {
+      toast.error('하나 이상의 재료를 입력하세요.');
+      return;
+    }
+    if (!fileInput.current.files.length) {
+      toast.error('사진을 추가해주세요.');
+      return;
+    }
+
     const formData = new FormData();
     if (fileInput.current.files[0]) {
       formData.append('image', fileInput.current.files[0]);
