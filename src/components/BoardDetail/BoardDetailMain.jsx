@@ -16,8 +16,8 @@ const BoardDetailMain = ({
   return (
     <main className="pt-12 px-5">
       <div className="flex flex-col items-center">
-        <div className="w-full max-w-4xl bg-white rounded-lg shadow-md overflow-hidden flex flex-col md:flex-row">
-          <div className="md:w-1/2">
+        <div className="w-full max-w-4xl bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
+          <div className="w-full">
             <img
               src={imageUrl}
               alt={title}
