@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 
-const BackButton = ({ destination }) => {
+const BackButton = React.memo(({ destination }) => {
   const navigate = useNavigate();
 
   return (
@@ -13,6 +13,6 @@ const BackButton = ({ destination }) => {
         <FaArrowLeft />
     </div>
   );
-};
+});
 
 export default BackButton;

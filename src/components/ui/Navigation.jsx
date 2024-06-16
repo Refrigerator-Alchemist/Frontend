@@ -5,7 +5,7 @@ import { IoAccessibilityOutline, IoAccessibility } from 'react-icons/io5';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { NavigationContext } from '../../context/NavigationContext';
 
-export default function Navigation() {
+export default React.memo(function Navigation() {
   const { selected, setSelected } = useContext(NavigationContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -73,4 +73,4 @@ export default function Navigation() {
       </div>
     </div>
   );
-}
+});

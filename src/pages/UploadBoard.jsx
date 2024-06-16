@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 import { toast } from 'react-toastify';
+import BackButton from '../components/UI/BackButton'
 
 // ✍️ 게시물 작성
 export default function UploadBoard() {
@@ -32,6 +33,19 @@ export default function UploadBoard() {
   // 3️⃣ 게시물 작성 버튼
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!title.trim()) {
+      toast.error('음식 이름을 입력하세요.');
+      return;
+    }
+    if (ingredients.length === 0 || ingredients.every(ingredient => !ingredient.trim())) {
+      toast.error('하나 이상의 재료를 입력하세요.');
+      return;
+    }
+    if (!fileInput.current.files.length) {
+      toast.error('사진을 추가해주세요.');
+      return;
+    }
+
     const formData = new FormData();
     if (fileInput.current.files[0]) {
       formData.append('image', fileInput.current.files[0]);
@@ -90,16 +104,11 @@ export default function UploadBoard() {
   };
 
   return (
-    <section className="pt-16">
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col space-y-6 mx-auto p-8"
-      >
+    <section className="pt-10">
+      <BackButton destination="/main" />
+      <form onSubmit={handleSubmit} className="flex flex-col space-y-6 mx-auto p-8">
         <div className="form-group">
-          <label
-            htmlFor="cover-photo"
-            className="font-score block mt-4 mb-2 text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="cover-photo" className=" font-score block mt-4 mb-2 text-md font-bold text-gray-700">
             사진 추가하기
           </label>
           <input
@@ -109,53 +118,41 @@ export default function UploadBoard() {
             className="font-score w-full border-2 border-dashed border-gray-300 rounded-md p-4 text-sm text-gray-700"
             ref={fileInput}
           />
-        </div>
-        {imagePreviewUrl && (
-          <div className="flex justify-center items-center">
-            <div className="w-64 h-64 border-2 border-gray-300 rounded-lg overflow-hidden">
-              <img
-                src={imagePreviewUrl}
-                alt="Preview"
-                className="w-full h-full object-cover"
-              />
+          {imagePreviewUrl && (
+            <div className="flex justify-center items-center mt-4">
+              <img src={imagePreviewUrl} alt="Preview" className="w-64 h-64 border-2 border-gray-300 rounded-lg overflow-hidden object-cover" />
             </div>
+          )}
+        </div>
+        <fieldset>
+          <div className="form-group">
+            <label htmlFor="food-name" className="font-bold font-score block mb-2 text-md  text-gray-700">
+              음식 이름
+            </label>
+            <input
+              type="text"
+              id="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="음식 이름을 입력하세요"
+              className="font-score w-full border border-gray-300 rounded-md p-2 text-sm"
+            />
           </div>
-        )}
-        <div className="form-group">
-          <label
-            htmlFor="food-name"
-            className="font-score block mb-2 text-sm font-medium text-gray-700"
-          >
-            음식 이름
-          </label>
-          <input
-            type="text"
-            id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="음식 이름을 입력하세요"
-            className="font-score w-full border border-gray-300 rounded-md p-2 text-sm"
-          />
-        </div>
-        <div className="form-group">
-          <label
-            htmlFor="description"
-            className="font-score block mb-2 text-sm font-medium text-gray-700"
-          >
-            설명
-          </label>
-          <textarea
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="음식에 대한 설명을 적어주세요"
-            className="font-score w-full border border-gray-300 rounded-md p-2 text-sm h-28"
-          />
-        </div>
-        <div className="form-group">
-          <label className="block mb-2 text-sm font-medium text-gray-700">
-            재료
-          </label>
+          <div className="form-group">
+            <label htmlFor="description" className="font-score block mb-2 text-md font-bold text-gray-700">
+              설명
+            </label>
+            <textarea
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="음식에 대한 설명을 적어주세요"
+              className="font-score w-full border border-gray-300 rounded-md p-2 text-sm h-20"
+            />
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend className="font-score text-md font-bold mb-4">재료 목록</legend>
           {ingredients.map((ingredient, index) => (
             <div key={index} className="font-score flex items-center space-x-2">
               <input
@@ -163,18 +160,14 @@ export default function UploadBoard() {
                 value={ingredient}
                 onChange={(e) => handleIngredientChange(index, e)}
                 placeholder="재료를 입력하세요"
-                className="border border-gray-300 rounded-md p-2 text-sm flex-grow mb-2"
+                className="flex-grow border border-gray-300 rounded-md p-2 text-sm mb-2"
               />
               {ingredients.length > 1 && (
                 <button
                   type="button"
                   className="font-score text-gray-500 hover:text-gray-700"
-                  onClick={() => {
-                    const newIngredients = ingredients.filter(
-                      (_, idx) => idx !== index
-                    );
-                    setIngredients(newIngredients);
-                  }}
+                  onClick={() => setIngredients(ingredients.filter((_, idx) => idx !== index))}
+                  aria-label="Remove ingredient"
                 >
                   &times;
                 </button>
@@ -184,27 +177,30 @@ export default function UploadBoard() {
           <button
             type="button"
             onClick={addIngredientField}
-            className="font-score flex items-center justify-center px-10 py-2 mt-5 border border-gray-400 text-black rounded-full shadow-sm hover:border-yellow-500 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50"
+            className="font-score mt-5 px-10 py-2 border border-gray-400 text-black rounded-full shadow-sm hover:border-yellow-500 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50"
+            aria-label="Add ingredient"
           >
             재료 추가
           </button>
-        </div>
-        <footer className="flex space-x-2">
+        </fieldset>
+        <div className="flex space-x-2 mt-6">
           <button
             type="button"
             onClick={handleCancel}
             className="font-score flex-grow bg-gray-300 rounded-full p-2 hover:bg-gray-400"
+            aria-label="Cancel"
           >
             취소
           </button>
           <button
             type="submit"
             className="font-score flex-grow transition ease-in-out bg-main hover:bg-emerald hover:text-black text-white rounded-full p-2"
+            aria-label="Submit"
           >
             올리기
           </button>
-        </footer>
+        </div>
       </form>
     </section>
   );
-}
+};

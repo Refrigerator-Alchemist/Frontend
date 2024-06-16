@@ -41,30 +41,27 @@ const GptSavedDetail = () => {
 
   return (
     <>
-      <div className="pt-16">
-        <BackButton destination="/main" />
-        <div className="flex flex-col items-center mt-10">
-          <div className="flex items-center gap-4">
-            <h2 className="font-score text-3xl font-bold">
+      <BackButton destination="/main" />
+      <main className="pt-16">
+        <section className="flex flex-col items-center mt-10">
+          <header className="flex items-center gap-4">
+            <h1 className="font-score text-3xl font-bold">
               {recipeData.foodName}
-            </h2>
-          </div>
+            </h1>
+          </header>
           <div className="font-score text-lg text-gray-500 my-8">
             {recipeData.ingredients ? recipeData.ingredients.join(' · ') : ''}
           </div>
-          <div className="text-gray-700 font-score mt-6 m-6 p-5">
+          <article className="text-gray-700 font-score mt-6 m-6 p-5">
             {recipeData.recipe &&
-              recipeData.recipe.map((step, index) => <p key={index}>{step}</p>)}
-          </div>
-        </div>
-      </div>
+              recipeData.recipe.map((step, index) => (
+                <p key={index}>{step}</p>
+              ))}
+          </article>
+        </section>
+      </main>
       <footer
-        style={{
-          position: 'fixed',
-          bottom: '0',
-          width: '100%',
-          maxWidth: '31rem',
-        }}
+        className="fixed bottom-0 w-full max-w-md mx-auto px-4"
       >
         <Navigation />
       </footer>
