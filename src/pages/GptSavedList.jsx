@@ -1,36 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import Navigation from '../components/UI/Navigation';
 import SavedListCard from '../components/Gpt/SavedListCard';
 import BackButton from '../components/UI/BackButton';
 import { IP_ADDRESS, useUserApi } from '../context/UserContext';
+import Loading from '../components/Gpt/Loading';
 
 export default function GptSavedList() {
-  const [recipes, setRecipes] = useState([]);
-
   const nickName = localStorage.getItem('nickName') || '';
   const accessToken = localStorage.getItem('accessToken');
-
   const { handleError } = useUserApi();
 
-  useEffect(() => {
-    const fetchRecipes = async () => {
-      try {
-        const response = await axios.get(`${IP_ADDRESS}/recipe/myRecipe`, {
-          headers: {
-            'Authorization-Access': accessToken,
-          },
-        });
-        setRecipes(response.data);
-      } catch (error) {
-        handleError(error);
-      }
-    };
-    if (accessToken) {
-      fetchRecipes();
-    }
-  }, [accessToken, handleError]);
+  const fetchRecipes = async () => {
+    const response = await axios.get(`${IP_ADDRESS}/recipe/myRecipe`, {
+      headers: { 'Authorization-Access': accessToken },
+    });
+    return response.data;
+  };
 
+  const { data: recipes, error, isLoading } = useQuery({
+    queryKey: ['recipes', accessToken], 
+    queryFn: fetchRecipes, 
+    enabled: !!accessToken, 
+    onError: handleError, 
+    retry: false, 
+    staleTime: 5 * 60 * 1000 
+  });
+  
+
+  if (isLoading) return <Loading />;
+  if (error) return <div>오류가 발생했습니다: {error.message}</div>;
   return (
     <section className="history">
       <BackButton destination="/main" />

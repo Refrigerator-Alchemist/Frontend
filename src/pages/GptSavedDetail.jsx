@@ -1,43 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
-import Navigation from '../components/UI/Navigation';
 import axios from 'axios';
+import Navigation from '../components/UI/Navigation';
 import BackButton from '../components/UI/BackButton';
 import { IP_ADDRESS, useUserApi } from '../context/UserContext';
+import Loading from '../components/Gpt/Loading'; 
 
 const GptSavedDetail = () => {
-  const [recipeData, setRecipeData] = useState({});
   const { recipeId } = useParams();
-
   const accessToken = localStorage.getItem('accessToken');
-
   const navigate = useNavigate();
   const { handleError } = useUserApi();
 
-  // id로 세부내용 불러오기
-  useEffect(() => {
-    const fetchRecipeData = async () => {
-      try {
-        if (!recipeId) {
-          throw new Error('Recipe ID가 존재하지 않습니다.');
-        }
+  const fetchRecipeData = async () => {
+    if (!recipeId) throw new Error('Recipe ID가 존재하지 않습니다.');
+    const response = await axios.get(`${IP_ADDRESS}/recipe/myRecipe/${recipeId}`, {
+      headers: { 'Authorization-Access': accessToken }
+    });
+    return response.data;
+  };
 
-        const response = await axios.get(
-          `${IP_ADDRESS}/recipe/myRecipe/${recipeId}`,
-          {
-            headers: {
-              'Authorization-Access': accessToken,
-            },
-          }
-        );
-        setRecipeData(response.data);
-      } catch (error) {
-        handleError(error);
-      }
-    };
+  const { data: recipeData, error, isLoading } = useQuery({
+    queryKey: ['recipe', recipeId], 
+    queryFn: fetchRecipeData, 
+    enabled: !!accessToken && !!recipeId, 
+    onError: handleError, 
+  });
 
-    if (accessToken) fetchRecipeData();
-  }, [recipeId, accessToken, handleError]);
+  if (isLoading) return <Loading />; 
+  if (error) return <div>오류가 발생했습니다: {error.message}</div>; 
 
   return (
     <>
@@ -45,24 +37,19 @@ const GptSavedDetail = () => {
       <main className="pt-16">
         <section className="flex flex-col items-center mt-10">
           <header className="flex items-center gap-4">
-            <h1 className="font-score text-3xl font-bold">
-              {recipeData.foodName}
-            </h1>
+            <h1 className="font-score text-3xl font-bold">{recipeData?.foodName}</h1>
           </header>
           <div className="font-score text-lg text-gray-500 my-8">
-            {recipeData.ingredients ? recipeData.ingredients.join(' · ') : ''}
+            {recipeData?.ingredients ? recipeData.ingredients.join(' · ') : ''}
           </div>
           <article className="text-gray-700 font-score mt-6 m-6 p-5">
-            {recipeData.recipe &&
-              recipeData.recipe.map((step, index) => (
-                <p key={index}>{step}</p>
-              ))}
+            {recipeData?.recipe?.map((step, index) => (
+              <p key={index}>{step}</p>
+            ))}
           </article>
         </section>
       </main>
-      <footer
-        className="fixed bottom-0 w-full max-w-md mx-auto px-4"
-      >
+      <footer className="fixed bottom-0 w-full max-w-md mx-auto px-4">
         <Navigation />
       </footer>
     </>
