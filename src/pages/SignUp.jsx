@@ -166,7 +166,7 @@ export default function SignUp() {
               <PasswordMatch passwordMessage={passwordMessage} />
               <ul className="mt-4 mb-4 font-score">
                 <CheckedList
-                  props={userApi.emailExists}
+                  props={userApi.emailExists === false}
                   mention={'이메일 사용 가능'}
                 />
                 <CheckedList
