@@ -12,15 +12,15 @@ import SubmitButton from '../components/Account/SubmitButton';
 import CheckNickname from '../components/Account/CheckNickname';
 
 export default function SignUp() {
-  const [email, setEmail] = useState(''); // 이메일
-  const [emailError, setEmailError] = useState(''); // 로그인 오류 메세지
-  const [inputNum, setInputNum] = useState(''); // 입력한 인증번호
-  const [nickName, setNickName] = useState(''); // 닉네임
-  const [nameError, setNameError] = useState(''); // 닉네임 오류 메세지
-  const [password, setPassword] = useState(''); // 비밀번호
-  const [checkPassword, setCheckPassword] = useState(''); // 비밀번호 확인
-  const [passwordMessage, setPasswordMessage] = useState(null); // 비밀번호 일치여부 안내 문구
-  const [showPassword, setShowPassword] = useState(false); // 비밀번호 표시
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [inputNum, setInputNum] = useState('');
+  const [nickName, setNickName] = useState('');
+  const [nameError, setNameError] = useState('');
+  const [password, setPassword] = useState('');
+  const [checkPassword, setCheckPassword] = useState('');
+  const [passwordMessage, setPasswordMessage] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const userApi = useUserApi();
   const emailType = 'sign-up';

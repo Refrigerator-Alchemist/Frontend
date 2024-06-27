@@ -22,7 +22,7 @@ export default function LoginSuccess() {
         if (accessToken && refreshToken && socialId) {
           localStorage.setItem('accessToken', 'Bearer ' + accessToken);
           localStorage.setItem('refreshToken', 'Bearer ' + refreshToken);
-          localStorage.setItem('nickName', nickName);
+          localStorage.setItem('nickName', decodeURIComponent(nickName));
           localStorage.setItem('email', email);
           localStorage.setItem('socialId', socialId);
           localStorage.setItem('socialType', socialType);

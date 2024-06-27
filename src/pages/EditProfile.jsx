@@ -17,6 +17,7 @@ export default function EditProfile() {
   const [imageUrl, setImageUrl] = useState(
     localStorage.getItem('imageUrl') || IMAGE_PROFILE
   );
+  // const [selectedImage, setSelectedImage] = useState(null);
   const [nameError, setNameError] = useState(false);
   const [changeNickName, setChangeNickName] = useState(nickName);
 
@@ -36,44 +37,42 @@ export default function EditProfile() {
     setChangeNickName(nickName);
   }, [handleError, accessToken, nickName]);
 
-  /** 프로필 이미지 선택 */
-  const handleImageChange = (e) => {
-    if (e.target.files[0]) {
-      const reader = new FileReader();
-      reader.onload = async () => {
-        if (reader.readyState === 2) {
-          setImageUrl(reader.result);
-          await uploadImage(e.target.files[0]);
-        }
-      };
-      reader.readAsDataURL(e.target.files[0]);
-    }
-  };
+  // const handleImageChange = (e) => {
+  //   if (e.target.files[0]) {
+  //     const file = e.target.files[0];
+  //     setSelectedImage(file);
 
-  /** 이미지 업로드 */
-  const uploadImage = async (file) => {
-    const formData = new FormData();
-    const nickNameBlob = new Blob([JSON.stringify({ nickName })], {
-      type: 'application/json;charset=UTF-8',
-    });
-    formData.append('nickName', nickNameBlob);
-    formData.append('file', file);
-    await axios
-      .post(`${IP_ADDRESS}/reset/profile`, formData, {
-        headers: {
-          'Authorization-Access': accessToken,
-        },
-      })
-      .then(() => {
-        toast.success('이미지를 변경했습니다');
-      })
-      .catch((error) => {
-        handleError(error);
-      });
-  };
+  //     const imageUrl = URL.createObjectURL(file);
+  //     setImageUrl(imageUrl);
+  //   }
+  // };
+
+  // const handleSubmitImage = async () => {
+  //   const formData = new FormData();
+  //   const nickNameBlob = new Blob([JSON.stringify({ nickName })], {
+  //     type: 'application/json;charset=UTF-8',
+  //   });
+  //   formData.append('nickName', nickNameBlob);
+  //   formData.append('file', selectedImage);
+
+  //   try {
+  //     const response = await axios.post(
+  //       `${IP_ADDRESS}/reset/profile`,
+  //       formData,
+  //       {
+  //         headers: {
+  //           'Authorization-Access': accessToken,
+  //         },
+  //       }
+  //     );
+  //     console.log(response.data);
+  //   } catch (error) {
+  //     handleError(error);
+  //   }
+  // };
 
   /** 새로운 닉네임 입력 */
-  const handleNameChange = (e) => {
+  const handleNicknameChange = (e) => {
     setChangeNickName(e.target.value);
     if (!e.target.value.match(/^[가-힣0-9]{2,}$|^[A-Za-z0-9]{3,}$/)) {
       setNameError('한글은 최소 2글자, 영문은 최소 3글자 이상 입력하세요');
@@ -82,8 +81,8 @@ export default function EditProfile() {
     }
   };
 
-  /** 프로필 이미지, 닉네임 폼 전송*/
-  const handleSubmit = async (e) => {
+  /** 닉네임 변경하기 */
+  const handleSubmitNickname = async (e) => {
     e.preventDefault();
     if (nameError === false) {
       try {
@@ -130,12 +129,15 @@ export default function EditProfile() {
           <input
             type="file"
             accept="image/jpg,image/png,image/jpeg"
-            onChange={handleImageChange}
+            // onChange={handleImageChange}
             ref={fileInput}
             className="rounded-full absolute inset-0 w-full h-full opacity-0 cursor-pointer hover:opacity-50 duration-200 ease-out transition-opacity bg-gray-500"
           />
         </div>
-        <form className="flex flex-col mt-8 mx-10" onSubmit={handleSubmit}>
+        <form
+          className="flex flex-col mt-8 mx-10"
+          onSubmit={handleSubmitNickname}
+        >
           {/* 이메일 박스 */}
           <div className="flex-grow mr-3 mb-4">
             <label
@@ -165,7 +167,7 @@ export default function EditProfile() {
               id="nickName"
               type="text"
               value={changeNickName}
-              onChange={handleNameChange}
+              onChange={handleNicknameChange}
             />
             {nameError ? (
               <p className="text-red-500 text-xs italic">{nameError}</p>
@@ -185,12 +187,12 @@ export default function EditProfile() {
               <span className="ml-3">닉네임 사용 가능</span>
             </li>
           </p>
-          <div className="flex mt-2 mr-3">
+          <div className="flex mt-2 mr-3 gap-3">
             <button
               type="submit"
               className="font-score flex-grow text-white rounded-2xl p-2 bg-main transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-emerald hover:text-black"
             >
-              닉네임 저장하기
+              닉네임 변경
             </button>
           </div>
         </form>
