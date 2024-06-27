@@ -106,13 +106,20 @@ const GptResult = () => {
                 <h2 className="font-score text-lg font-bold text-gray-800 mt-4">
                   레시피
                 </h2>
-                <ol className="list-decimal list-inside">
+                <div className="py-3">
                   {steps.map((step, index) => (
-                    <li key={index} className="font-score text-gray-600 pt-3">
-                      {step}
-                    </li>
+                    <div key={index} className="font-score text-gray-600 mb-4">
+                      {index % 2 === 0 && steps.length > index + 1 ? (
+                        <div>
+                          <div>{step}</div>
+                          <div>{steps[index + 1]}</div>
+                        </div>
+                      ) : index % 2 === 0 ? (
+                        <div>{step}</div>
+                      ) : null}
+                    </div>
                   ))}
-                </ol>
+                </div>
               </section>
             </article>
           </div>
