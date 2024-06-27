@@ -78,7 +78,7 @@ export const useUserApi = () => {
  - API의 Body에는 순서대로 값을 넣어야 한다
  */
 export const UserApiProvider = ({ children }) => {
-  const [emailExists, setEmailExists] = useState(false);
+  const [emailExists, setEmailExists] = useState(true);
   const [verified, setVerified] = useState(false);
   const [nameAvailable, setNameAvailable] = useState(false);
   const navigate = useNavigate();
