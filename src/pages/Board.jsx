@@ -31,7 +31,7 @@ const Board = () => {
   useEffect(() => {
     fetchLikedPosts();
     fetchTotalRecipes();
-  }, [location.pathname]);
+  }, [location.pathname,accessToken]);
 
   useEffect(() => {
     fetchRecipesByPage(currentPage);
@@ -84,7 +84,7 @@ const Board = () => {
         }));
         setRecipes((prevRecipes) => [...prevRecipes, ...formattedData]);
       } else {
-        console.error(' 데이터 형식이 다름 에러내용:', response.data);
+        console.error(' error:', response.data);
       }
     } catch (error) {
       handleError(error);
