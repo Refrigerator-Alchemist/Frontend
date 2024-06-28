@@ -213,7 +213,7 @@ export default function MyPage() {
       style={{ marginBottom: '100px' }}
     >
       <header className="flex justify-end w-full mt-2 space-x-2 mr-12">
-        <button
+        {/* <button
           className="font-score text-gray-300"
           onClick={(e) => {
             e.preventDefault();
@@ -221,7 +221,7 @@ export default function MyPage() {
           }}
         >
           회원 탈퇴
-        </button>
+        </button> */}
         <button
           className="font-score outline-none font-semibold underline underline-offset-2 hover:text-red-500"
           onClick={() => {
