@@ -1,15 +1,16 @@
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
 import Navigation from '../components/UI/Navigation';
 import SavedListCard from '../components/Gpt/SavedListCard';
 import BackButton from '../components/UI/BackButton';
 import { IP_ADDRESS, useUserApi } from '../context/UserContext';
-import Loading from '../components/Gpt/Loading';
+import Loading from '../components/Gpt/Loading'; 
 
 export default function GptSavedList() {
   const nickName = localStorage.getItem('nickName') || '';
   const accessToken = localStorage.getItem('accessToken');
+
   const { handleError } = useUserApi();
 
   const fetchRecipes = async () => {
@@ -21,16 +22,16 @@ export default function GptSavedList() {
 
   const { data: recipes, error, isLoading } = useQuery({
     queryKey: ['recipes', accessToken], 
-    queryFn: fetchRecipes, 
+    queryFn: fetchRecipes,
     enabled: !!accessToken, 
-    onError: handleError, 
-    retry: false, 
+    onError: handleError,
+    retry: false,
     staleTime: 5 * 60 * 1000 
   });
-  
 
   if (isLoading) return <Loading />;
   if (error) return <div>오류가 발생했습니다: {error.message}</div>;
+
   return (
     <section className="history">
       <BackButton destination="/main" />
@@ -40,7 +41,7 @@ export default function GptSavedList() {
             {accessToken ? `${nickName}의 연금술 기록` : '연금술 기록'}
           </span>
         </div>
-        {recipes.map((recipe) => (
+        {recipes?.map((recipe) => (
           <SavedListCard
             key={recipe.recipeId}
             recipeId={recipe.recipeId}
