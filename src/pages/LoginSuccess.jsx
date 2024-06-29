@@ -13,7 +13,6 @@ export default function LoginSuccess() {
       const accessToken = urlParams.get('accessToken');
       const refreshToken = urlParams.get('refreshToken');
       const socialId = urlParams.get('socialId');
-      const socialType = urlParams.get('socialType');
       const nickName = urlParams.get('nickName');
       const email = urlParams.get('email');
 
@@ -25,7 +24,6 @@ export default function LoginSuccess() {
           localStorage.setItem('nickName', decodeURIComponent(nickName));
           localStorage.setItem('email', email);
           localStorage.setItem('socialId', socialId);
-          localStorage.setItem('socialType', socialType);
         } else {
           return;
         }

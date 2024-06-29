@@ -18,7 +18,6 @@ export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false); // 비밀번호 표시
   const [notAllow, setNotAllow] = useState(true); // 로그인 disabled on/off
   const { login, handleError } = useUserApi(); // 로그인 dispatch
-  const socialType = 'Refrigerator-Alchemist';
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -68,7 +67,7 @@ export default function SignIn() {
   // 3️⃣ 서버에 로그인 정보 (이메일, 패스워드, socialType) 전송 : 로그인 버튼
   const onLogin = (e) => {
     e.preventDefault();
-    login(email, password, socialType);
+    login(email, password, 'Refrigerator-Alchemist');
   };
 
   const kakaoLogin = () => {
