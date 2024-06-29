@@ -9,16 +9,16 @@ const TagInput = ({ tags, setTags }) => {
     };
 
     const handleInputKeyDown = (e) => {
-        if (e.key === 'Enter' && inputValue.trim() !== '' && !tags.includes(inputValue.trim())) {
+        if (e.key === 'Enter') {
             e.preventDefault();
-            setTags([...tags, inputValue.trim()]);
-            setInputValue('');
+            addTag();
         }
     };
 
     const addTag = () => {
-        if (inputValue.trim() !== '' && !tags.includes(inputValue.trim())) {
-            setTags([...tags, inputValue.trim()]);
+        const trimmedValue = inputValue.trim();
+        if (trimmedValue !== '' && !tags.includes(trimmedValue)) {
+            setTags([...tags, trimmedValue]);
             setInputValue('');
         }
         inputRef.current.focus();
