@@ -11,7 +11,9 @@ const TagInput = ({ tags, setTags }) => {
     const handleInputKeyDown = (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
-            addTag();
+            if (inputValue.trim() !== '') {
+                addTag();
+            };
         }
     };
 
@@ -19,7 +21,7 @@ const TagInput = ({ tags, setTags }) => {
         const trimmedValue = inputValue.trim();
         if (trimmedValue !== '' && !tags.includes(trimmedValue)) {
             setTags([...tags, trimmedValue]);
-            setInputValue('');
+            setInputValue(' ');
         }
         inputRef.current.focus();
     };
