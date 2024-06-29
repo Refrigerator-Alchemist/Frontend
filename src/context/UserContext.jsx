@@ -81,6 +81,7 @@ export const UserApiProvider = ({ children }) => {
   const [emailExists, setEmailExists] = useState(true);
   const [verified, setVerified] = useState(false);
   const [nameAvailable, setNameAvailable] = useState(false);
+
   const navigate = useNavigate();
 
   /** 커스텀 에러 처리 
@@ -323,9 +324,8 @@ export const UserApiProvider = ({ children }) => {
           'refreshToken',
           response.headers['authorization-refresh']
         );
-        const textDecoder = new TextDecoder();
-        const nickName = textDecoder.decode(response.headers['nickName']);
-        localStorage.setItem('nickName', nickName);
+        const nickName = response.headers['nickName'];
+        localStorage.setItem('nickName', decodeURIComponent(nickName));
         localStorage.setItem('email', email);
         localStorage.setItem('socialId', response.headers.get('socialId'));
         localStorage.setItem('socialType', socialType);
