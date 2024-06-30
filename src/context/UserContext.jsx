@@ -324,8 +324,10 @@ export const UserApiProvider = ({ children }) => {
           'refreshToken',
           response.headers['authorization-refresh']
         );
-        const nickName = response.headers['nickName'];
-        localStorage.setItem('nickName', decodeURIComponent(nickName));
+        localStorage.setItem(
+          'nickName',
+          decodeURIComponent(response.headers.get('nickName'))
+        );
         localStorage.setItem('email', email);
         localStorage.setItem('socialId', response.headers.get('socialId'));
         localStorage.setItem('socialType', socialType);
