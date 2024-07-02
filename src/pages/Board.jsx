@@ -31,6 +31,10 @@ const Board = () => {
   useEffect(() => {
     fetchLikedPosts();
     fetchTotalRecipes();
+    if (!window.location.hash) {
+      window.location = window.location + '#loaded';
+      window.location.reload();
+    }
   }, [location.pathname,accessToken]);
 
   useEffect(() => {
