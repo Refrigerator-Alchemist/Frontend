@@ -102,8 +102,8 @@ export const UserApiProvider = ({ children }) => {
       });
       return error.response.data.code;
     } else if (!error.response) {
-      console.log('서버와 연결되어있지 않습니다');
-      toast.error('서버와 연결되어있지 않습니다', {
+      console.log('서버로부터 응답이 없습니다');
+      toast.error('서버로부터 응답이 없습니다', {
         toastId: 'no-server-connection',
       });
     } else {

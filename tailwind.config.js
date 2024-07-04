@@ -19,6 +19,10 @@ module.exports = {
         sam: ['establishRoomNo703OTF'],
       },
 
+      fontSize: {
+        '2xs': '.3rem',
+      },
+
       dropShadow: {
         '3xl': '14px 14px 11px -7px rgba(47,49,51,0.75)',
       },

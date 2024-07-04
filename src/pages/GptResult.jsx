@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { GoHome } from 'react-icons/go';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { IP_ADDRESS, useUserApi } from '../context/UserContext';
@@ -76,7 +75,7 @@ const GptResult = () => {
   }
 
   return (
-    <section className="bg-white min-h-screen px-4 py-6">
+    <section className="bg-white min-h-screen px-4 py-6 relative">
       <BackButton destination="/main" />
       <main className="max-w-md mx-auto bg-white rounded-lg overflow-hidden md:max-w-lg">
         <div className="md:flex">
@@ -126,7 +125,10 @@ const GptResult = () => {
         </div>
       </main>
       <footer className="fixed bottom-5 left-0 right-0 px-6 text-sm md:text-lg">
-        <div className="mx-auto flex justify-between mb-4" style={{ maxWidth: '400px' }}>
+        <div
+          className="mx-auto flex justify-between mb-4"
+          style={{ maxWidth: '400px' }}
+        >
           <button
             className="font-score transition ease-in-out bg-gray-400 hover:bg-gray-600 text-white font-bold py-3 px-9 rounded-full"
             onClick={() => navigate('/recipe/recommend')}
