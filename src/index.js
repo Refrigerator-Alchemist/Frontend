@@ -5,7 +5,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App';
 import NotFound from './pages/NotFound';
 import GetStarted from './pages/GetStarted';
-import MainPage from './pages/MainPage';
+import Home from './pages/Home';
 import SignUp from './pages/SignUp';
 import SignIn from './pages/SignIn';
 import LoginSuccess from './pages/LoginSuccess';
@@ -16,7 +16,7 @@ import EditProfile from './pages/EditProfile';
 import RankingDetail from './pages/RankingDetail';
 import Board from './pages/Board';
 import BoardDetail from './pages/BoardDetail';
-import UploadBoard from './pages/UploadBoard';
+import UploadPost from './pages/UploadPost';
 import EditPost from './pages/EditPost';
 import GptSearch from './pages/GptSearch';
 import GptResult from './pages/GptResult';
@@ -31,7 +31,7 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
     children: [
       { index: true, element: <GetStarted /> }, // 초기화면
-      { path: '/main', element: <MainPage /> }, // 메인
+      { path: '/main', element: <Home /> }, // 메인
 
       // 회원정보 관리 -----------------
       { path: '/signup', element: <SignUp /> }, // 회원가입 [로그인 상태에서 접속 불가]
@@ -76,7 +76,7 @@ const router = createBrowserRouter([
         path: '/board/upload', // 게시물 작성
         element: (
           <ProtectedRoute>
-            <UploadBoard />
+            <UploadPost />
           </ProtectedRoute>
         ),
       },

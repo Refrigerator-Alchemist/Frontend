@@ -135,10 +135,13 @@ export default function UploadBoard() {
 
         <div className="form-group">
           <label className="block mb-2 text-sm font-medium text-gray-700">
-            재료
+            재료 목록
           </label>
           {ingredients.map((ingredient, index) => (
-            <div key={index} className="font-score flex items-center space-x-2">
+            <div
+              key={index}
+              className="font-score flex items-center space-x-2 mb-3"
+            >
               <input
                 type="text"
                 value={ingredient.name}
