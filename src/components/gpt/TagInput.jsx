@@ -7,13 +7,14 @@ const TagInput = ({ tags, setTags }) => {
 
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
-        console.log("입력 값 변경 ", e.target.value); 
+        console.log("입력 값 변경 :", e.target.value); 
     };
 
     const handleInputKeyDown = (e) => {
-        console.log("엔터키 눌렀을 때:", e.key); 
+        // console.log("엔터키 눌렀을 때:", e.key); 
         if (e.key === 'Enter') {
             e.preventDefault();
+            e.stopPropagation(); // 이벤트 버블링 방지
             if (inputValue.trim() !== '') {
                 addTag();
             };
@@ -27,6 +28,7 @@ const TagInput = ({ tags, setTags }) => {
             setTags([...tags, trimmedValue]);
             setInputValue('');
             console.log("태그 추가됨 : ", trimmedValue);
+            inputRef.current.value = ''; // input 요소의 실제 값을 즉시 초기화
         }
         inputRef.current.focus();
     };
