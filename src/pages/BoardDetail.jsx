@@ -132,9 +132,13 @@ const BoardDetail = () => {
           },
         }
       );
+      if (response) console.log(response.data);
 
-      if (response.status === 200) {
+      if (response && response.data === 'ok') {
         toast.success('해당 게시물을 신고했습니다');
+      }
+      if (response && response.data === 'no') {
+        toast.error('이미 신고한 게시물입니다');
       }
     } catch (error) {
       handleError(error);
