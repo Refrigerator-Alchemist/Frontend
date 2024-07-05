@@ -6,9 +6,11 @@ const TagInput = ({ tags, setTags }) => {
 
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
+        console.log("입력 값 변경 ", e.target.value); 
     };
 
     const handleInputKeyDown = (e) => {
+        console.log("엔터키 눌렀을 때:", e.key); 
         if (e.key === 'Enter') {
             e.preventDefault();
             if (inputValue.trim() !== '') {
@@ -19,9 +21,11 @@ const TagInput = ({ tags, setTags }) => {
 
     const addTag = () => {
         const trimmedValue = inputValue.trim();
+        console.log("태그 추가 시도 :", trimmedValue);
         if (trimmedValue !== '' && !tags.includes(trimmedValue)) {
             setTags([...tags, trimmedValue]);
-            setInputValue(' ');
+            setInputValue('');
+            console.log("태그 추가됨 : ", trimmedValue);
         }
         inputRef.current.focus();
     };
