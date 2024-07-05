@@ -502,6 +502,16 @@ http://배포후도메인
 
 ### 9. 게시물 신고하기
 
+<img src="./src/assets/img/readme/신고 1.gif" width="300" height="650"/>
+<img src="./src/assets/img/readme/신고 2.gif" width="300" height="650"/>
+
+<br/><span>👉 광고, 비방글, 음란물 신고를 위한 기능</span>
+
+<ul>
+  <li>게시물 상세 페이지에서 해당 게시물을 신고할 수 있습니다</li>
+  <li>총 3개의 신고를 받으면 해당 게시물은 삭제되며, 이미 신고한 계정은 중복 신고할 수 없도록 설정했습니다</li>
+</ul>
+
 ### 10. 게시물 수정하기
 
 <img src="./src/assets/img/readme/게시물 수정.gif" width="300" height="650"/><br/>
