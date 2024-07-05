@@ -4,6 +4,7 @@ import { IoAccessibility } from 'react-icons/io5';
 import { toast } from 'react-toastify';
 import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 import axios from 'axios';
+import BackButton from '../components/UI/BackButton';
 
 export default function UploadBoard() {
   const { postId } = useParams(); // 라우터 엔드포인트
@@ -89,12 +90,7 @@ export default function UploadBoard() {
 
   return (
     <section className="pt-16 relative">
-      <div
-        className="absolute top-5 left-1 ml-4 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate('/mypage')}
-      >
-        <IoAccessibility />
-      </div>
+      <BackButton destination={-1} />
 
       <form
         onSubmit={handleSubmit}
@@ -135,10 +131,13 @@ export default function UploadBoard() {
 
         <div className="form-group">
           <label className="block mb-2 text-sm font-medium text-gray-700">
-            재료
+            재료 목록
           </label>
           {ingredients.map((ingredient, index) => (
-            <div key={index} className="font-score flex items-center space-x-2">
+            <div
+              key={index}
+              className="font-score flex items-center space-x-2 mb-3"
+            >
               <input
                 type="text"
                 value={ingredient.name}

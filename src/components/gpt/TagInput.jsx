@@ -2,9 +2,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import './LoadingDots.css';
 
 const TagInput = ({ tags, setTags }) => {
+
     const [inputValue, setInputValue] = useState('');
     const [loading, setLoading] = useState(false);
     const inputRef = useRef(null);
+
 
     useEffect(() => {
         if (!loading && inputRef.current) {
@@ -88,6 +90,7 @@ const TagInput = ({ tags, setTags }) => {
             </div>
         </div>
     );
+
 };
 
 export default TagInput;

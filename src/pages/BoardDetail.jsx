@@ -18,7 +18,9 @@ const BoardDetail = () => {
   const queryClient = useQueryClient();
 
   const fetchPostData = async () => {
-    const response = await axios.get(`${IP_ADDRESS}/board/specific?postId=${postId}`);
+    const response = await axios.get(
+      `${IP_ADDRESS}/board/specific?postId=${postId}`
+    );
     if (response.data && Array.isArray(response.data.items)) {
       const item = response.data.items[0];
       return {
@@ -49,7 +51,7 @@ const BoardDetail = () => {
   const postQuery = useQuery({
     queryKey: ['postData', postId],
     queryFn: fetchPostData,
-    enabled: !!postId, //postId 있을때만 쿼리 활성화 
+    enabled: !!postId, //postId 있을때만 쿼리 활성화
   });
 
   const likedPostsQuery = useQuery({
@@ -118,11 +120,9 @@ const BoardDetail = () => {
 
   const reportPost = async (e) => {
     e.preventDefault();
-    const URL = `${IP_ADDRESS}/board/report`;
-
     try {
       const response = await axios.post(
-        URL,
+        `${IP_ADDRESS}/board/report`,
         { email: myEmail, postId: postId },
         {
           headers: {
@@ -132,9 +132,13 @@ const BoardDetail = () => {
           },
         }
       );
+      if (response) console.log(response.data);
 
-      if (response.status === 200) {
+      if (response && response.data === 'ok') {
         toast.success('해당 게시물을 신고했습니다');
+      }
+      if (response && response.data === 'no') {
+        toast.error('이미 신고한 게시물입니다');
       }
     } catch (error) {
       handleError(error);
@@ -146,7 +150,9 @@ const BoardDetail = () => {
   }
 
   if (postQuery.isError || likedPostsQuery.isError) {
-    return <span>Error occurred: {postQuery.error || likedPostsQuery.error}</span>;
+    return (
+      <span>Error occurred: {postQuery.error || likedPostsQuery.error}</span>
+    );
   }
 
   return (
