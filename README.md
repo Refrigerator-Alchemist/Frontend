@@ -229,13 +229,11 @@ http://배포후도메인
     <ul>
       <li>피그마를 이용한 목업 디자인, UI/UX 설계</li>
       <li>프로젝트 로고 이미지 디자인(MS Copilot, 미리캔버스)</li>
-      <li>tailwind.config CSS 변수 설정</li>
-      <li>프로젝트 테마 컬러 결정</li>
-      <li>폰트 디자인 결정</li>
-      <li>UI 애니메이션 결정</li>
+      <li>tailwind.config 세팅</li>
+      <li>프로젝트 테마 컬러, UI 애니메이션, 폰트 디자인 결정</li>
       <li>커스텀 에러코드 작성</li>
       <li>README.md 작성</li>
-      <li>서비스 배포</li>
+      <li>배포</li>
     </ul>
   </div><br/>
   <div>
@@ -297,7 +295,7 @@ http://배포후도메인
         <li>GptSavedList</li>
         <li>GptSavedDetail</li>
       </ul>
-    </ul>
+    </ul><br/>
     <span>👉 기능</span>
     <ul>
       <li>게시판 내 게시물 검색</li>
@@ -305,7 +303,7 @@ http://배포후도메인
       <li>게시물 작성</li>
       <li>게시물 수정</li>
       <li>게시판과 마이페이지의 게시물들을 페이지네이션으로 구분</li>
-      <li>마이페이지에서 '내가 작성한 레시피', '좋아요 누른 레시피'를 버튼 토글로 조회</li>
+      <li>마이페이지에서 '내가 작성한 레시피', '좋아요 누른 레시피' 내용 조회</li>
       <li>레시피 연금술 재료 추가</li>
       <li>레시피 결과 저장</li>
       <li>저장된 레시피 리스트 조회</li>
@@ -322,20 +320,22 @@ http://배포후도메인
       <li>JWT, OAuth 2.0을 사용하여 로그인 구현</li>
       <li>Redis 도입</li>
       <li>커스텀 에러코드 작성</li>
-      <li>백엔드 docker 파일 작성</li>
+    </ul>
+  </div><br/>
+  <div>
+    <span>👉 파트</span><br/>
+    <ul>
+      <li>유저 데이터 생성 및 관리</li>
     </ul>
   </div><br/>
   <div>
     <span>👉 기능</span>
     <ul>
-      <li>이메일 회원가입</li>
-      <li>이메일 로그인</li>
-      <li>SNS 계정 연동 회원가입</li>
-      <li>SNS 계정 로그인</li>
+      <li>이메일 회원가입 및 로그인</li>
+      <li>SNS 계정 연동 회원가입 및 로그인</li>
       <li>비밀번호 재설정</li>
-      <li>프로필 사진 변경</li>
       <li>닉네임 변경</li>
-      <li>액세스 토큰 만료시 재발급</li>
+      <li>액세스 토큰 재발급</li>
       <li>올린 게시물 수정</li>
     </ul>
   </div>
@@ -345,6 +345,12 @@ http://배포후도메인
 
 <form>
   <div>
+    <span>👉 프로젝트 공통 적용</span>
+    <ul>
+      <li>커스텀 에러코드 작성</li>
+    </ul>
+  </div><br/>
+  <div>
     <span>👉 파트</span><br/>
     <ul>
       <li>연금술을 사용한 레시피 생성 및 저장, 조회</li>
@@ -353,10 +359,10 @@ http://배포후도메인
   <div>
     <span>👉 기능</span>
     <ul>
-      <li>추천 레시피 생성</li>
-      <li>레시피 저장</li>
-      <li>레시피 목록 조회</li>
-      <li>상세 레시피 조회</li>
+      <li>레시피 연금술</li>
+      <li>만들어진 레시피 저장</li>
+      <li>생성했던 레시피 목록 조회</li>
+      <li>레시피 상세 페이지</li>
     </ul>
   </div>
 </form><br/>
@@ -374,11 +380,9 @@ http://배포후도메인
     <span>👉 기능</span>
     <ul>
       <li>게시물 업로드</li>
-      <li>게시물 삭제</li>
-      <li>게시물 수정</li>
+      <li>게시물 삭제, 수정, 신고</li>
       <li>게시물 좋아요 누르기 및 해제</li>
-      <li>내가 누른 좋아요 목록 보기</li>
-      <li>내가 업로드한 게시물</li>
+      <li>마이페이지 : 내가 업로드한 게시물, 좋아요 누른 게시물 목록 확인</li>
     </ul>
   </div>
 </form>
@@ -387,9 +391,9 @@ http://배포후도메인
 
 ### 1. 접속
 
-<img src="./src/assets/img/readme/초기화면.gif" width="300" height="650"/><br/>
+<img src="./src/assets/img/readme/초기화면.gif" width="300" height="650"/>
 
-<span>👉 시작하기</span>
+<br/><span>👉 시작하기</span>
 
 <ul>
   <li>처음 들어오면 귀여운 냉장고가 웃으면서 반겨줍니다</li>
@@ -400,9 +404,9 @@ http://배포후도메인
 ### 2. 회원가입
 
 <img src="./src/assets/img/readme/회원가입 인증요청.gif" width="300" height="650"/>
-<img src="./src/assets/img/readme/회원가입.gif" width="300" height="650"/><br/>
+<img src="./src/assets/img/readme/회원가입.gif" width="300" height="650"/>
 
-<span>👉 이메일 계정</span>
+<br/><span>👉 이메일 계정</span>
 
 <ul>
   <li>가입에 사용할 이메일을 입력하고 인증번호를 요청합니다</li>
@@ -423,9 +427,9 @@ http://배포후도메인
 ### 3. 로그인
 
 <img src="./src/assets/img/readme/이메일-로그인.gif" width="300" height="650"/>
-<img src="./src/assets/img/readme/SNS-로그인.gif" width="300" height="650"/><br/>
+<img src="./src/assets/img/readme/SNS-로그인.gif" width="300" height="650"/>
 
-<span>👉 이메일 계정</span>
+<br/><span>👉 이메일 계정</span>
 
 <ul>
   <li>가입했던 이메일과 비밀번호를 입력하여 로그인 해줍니다</li>
@@ -439,17 +443,22 @@ http://배포후도메인
 
 ### 4. 비로그인 접속 차단
 
-<img src="./src/assets/img/readme/비로그인-유저-차단.gif" width="300" height="650"/>
+<img src="./src/assets/img/readme/비로그인-유저-차단.gif" width="300" height="650"/><br/>
+
+<span>👉 액세스 토큰으로 로그인 확인</span>
 
 <ul>
   <li>게시판의 게시물 작성, 좋아요 누르기 기능, 연금술로 만든 레시피 저장과 같은 활동은 로그인을 해야 가능합니다</li>
-  <li>그래서 유저가 좋아요를 누르거나, UI를 통하든 주소창에 경로를 입력하든 해당 페이지로 이동시 액세스 토큰의 존재 유무를 확인합니다</li>
+  <li>그래서 유저가 좋아요를 누르거나, UI를 통해 접속을 시도하면 해당 페이지로 이동시 액세스 토큰의 존재 유무를 확인합니다</li>
   <li>액세스 토큰이 없는 비로그인 유저가 접근을 시도하면 팝업으로 안내 후 로그인 페이지로 이동시켜줍니다</li>
+  <li>마찬가지로 주소창에 URL을 입력하여 접속하고자해도 액세스 토큰이 없다면 로그인 페이지로 이동됩니다</li>
 </ul>
 
 ### 5. 레시피 연금술
 
-<img src="./src/assets/img/readme/레시피 연금술.gif" width="300" height="550"/>
+<img src="./src/assets/img/readme/레시피 연금술.gif" width="300" height="550"/><br/>
+
+<span>👉 연금술로 레시피 만들기</span>
 
 <ul>
   <li>홈에서 '냉장고 연금술 시작'을 누르면 연금술 페이지로 이동합니다</li>
@@ -460,26 +469,86 @@ http://배포후도메인
 
 ### 6. 저장된 레시피 확인하기
 
-<img src="./src/assets/img/readme/저장된 레시피 확인.gif" width="300" height="650"/>
+<img src="./src/assets/img/readme/저장된 레시피 확인.gif" width="300" height="650"/><br/>
+
+<span>👉 연금술 시작 페이지에서 확인</span>
 
 <ul>
   <li>연금술을 시작하는 페이지에서 '레시피 기록 열기' 버튼을 누르면 과거에 연금술로 만들고 저장했던 레시피들을 모두 확인할 수 있습니다</li>
 </ul>
 
-### 7. 게시판에 게시물 올리기
+### 7. 게시물 올리기
 
-### 8. 게시물 수정하기
+<img src="./src/assets/img/readme/게시물 올리기.gif" width="300" height="650"/><br/>
 
-### 9. 좋아요 랭킹 탑3 페이지
+<span>👉 내가 만든 레시피 공유</span>
+
+<ul>
+  <li>로그인을 한 상태에서 게시판 페이지로 온 다음 검색바 오른쪽의 작성 버튼을 누르면 이동합니다</li>
+  <li>이미지 파일을 추가하고(jpg, png) 음식 이름, 설명, 재료를 추가한 뒤 '올리기' 버튼을 누르면 업로드됩니다</li>
+</ul>
+
+### 8. 랭킹 탑3 명예의 전당
 
 <img src="./src/assets/img/readme/랭킹-반영.gif" width="300" height="650"/>
 <img src="./src/assets/img/readme/랭킹-페이지.gif" width="300" height="650"/>
 
-### 10. 마이페이지에서 내 게시물, 좋아요 누른 게시물 확인
+<br/><span>👉 가장 좋아요를 많이 받은 게시물</span>
 
-### 11. 닉네임 수정하기
+<ul>
+  <li>좋아요를 가장 많이 받은 순서대로 1~3위의 게시물을 홈과 게시판 페이지에서 보여줍니다</li>
+  <li>랭킹 페이지에서 따로 확인도 가능합니다</li>
+</ul>
 
-### 12. 비밀번호 재설정(초기화)
+### 9. 게시물 신고하기
+
+### 10. 게시물 수정하기
+
+<img src="./src/assets/img/readme/게시물 수정.gif" width="300" height="650"/><br/>
+
+<span>👉 내용 수정하기</span>
+
+<ul>
+  <li>음식 이름, 설명을 변경할 수 있습니다</li>
+  <li>재료를 새로 추가하거나, 삭제할 수 있습니다</li>
+</ul>
+
+### 11. 마이페이지
+
+<img src="./src/assets/img/readme/마이페이지.gif" width="300" height="650"/><br/>
+
+<span>👉 내가 작성한 레시피, 좋아요 누른 레시피 확인</span>
+
+<ul>
+  <li>내가 작성한 레시피 목록을 확인할 수 있습니다</li>
+  <li>좋아요 누른 게시물 목록을 확인할 수 있습니다</li>
+</ul><br/>
+
+<span>👉 로그아웃</span>
+
+<ul>
+  <li>로그아웃을 할 수 있습니다</li>
+</ul>
+
+### 12. 닉네임 수정하기
+
+<img src="./src/assets/img/readme/닉네임 수정.gif" width="300" height="650"/><br/>
+
+<span>👉 닉네임 바꾸기</span>
+
+<ul>
+  <li>원하는 닉네임으로 변경할 수 있습니다</li>
+</ul>
+
+### 13. 비밀번호 재설정(초기화)
+
+<img src="./src/assets/img/readme/비밀번호 재설정.gif" width="300" height="650"/><br/>
+
+<span>👉 비밀번호를 까먹어도 걱정 X</span>
+
+<ul>
+  <li>비밀번호를 잊어버려도 다시 이메일 인증을 하고 재설정할 수 있습니다</li>
+</ul>
 
 ## 🥞 프로젝트 회고록
 
