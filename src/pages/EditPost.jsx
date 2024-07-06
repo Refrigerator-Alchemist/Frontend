@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { IoAccessibility } from 'react-icons/io5';
 import { toast } from 'react-toastify';
 import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 import axios from 'axios';
