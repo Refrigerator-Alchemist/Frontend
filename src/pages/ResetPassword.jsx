@@ -48,7 +48,7 @@ export default function ResetPassword() {
   /** 비밀번호 유효성 검사 */
   const isPasswordValid = (password) => {
     return (
-      password.length >= 8 &&
+      password.length >= 10 &&
       password.length <= 15 &&
       /\d/.test(password) &&
       /[!@#$%^&*]/.test(password) &&
