@@ -31,7 +31,7 @@ export default function SignIn() {
 
   // 🔓 로그인 버튼 활성화 : 이메일 유효 + 비밀번호 유효
   useEffect(() => {
-    if (emailValid && password.length > 8 && password.length <= 15) {
+    if (emailValid && password.length > 10 && password.length <= 15) {
       setNotAllow(false);
       return;
     }
