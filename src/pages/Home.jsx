@@ -34,15 +34,15 @@ export default function MainPage() {
           <br />
           먹기 전에 예쁘게 찍어서 자랑하는 걸 깜빡하지 마세요!
         </p>
+        
         <button
-          className="flex items-center justify-center space-x-4 text-white text-2xl p-5 mb-4 font-bold font-jua transition ease-in-out rounded-md bg-main hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300 ..."
-          onClick={handleStart}  
-        >
-          <span>냉장고 연금술 시작</span>{' '}
-          <span>
-            <FaReact />
-          </span>
-        </button>
+        name='냉장고 연금술 시작'
+        aria-label='냉장고 연금술 시작하기 '
+        className="flex items-center justify-center text-2xl space-x-4 p-5 mb-4 font-bold font-jua transition ease-in-out rounded-md bg-main text-white hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
+  onClick={handleStart}  
+>
+  <span>냉장고 연금술 시작</span> <span><FaReact /></span>
+</button>
         <Ranking />
       </main>
       <Footer />

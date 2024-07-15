@@ -7,6 +7,8 @@ import Header from '../components/BoardDetail/Header';
 import BoardDetailMain from '../components/BoardDetail/BoardDetailMain';
 import Footer from '../components/UI/Footer';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import Skeleton from '@mui/material/Skeleton';
+import Box from '@mui/material/Box';
 
 const BoardDetail = () => {
   const { postId } = useParams();
@@ -51,7 +53,7 @@ const BoardDetail = () => {
   const postQuery = useQuery({
     queryKey: ['postData', postId],
     queryFn: fetchPostData,
-    enabled: !!postId, //postId 있을때만 쿼리 활성화
+    enabled: !!postId, 
   });
 
   const likedPostsQuery = useQuery({
@@ -82,8 +84,9 @@ const BoardDetail = () => {
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['postData', postId]);
+      queryClient.invalidateQueries(['postData', postId],{ refetchActive: true });
       queryClient.invalidateQueries(['likedPosts']);
+      fetchPostData();
     },
     onError: handleError,
   });

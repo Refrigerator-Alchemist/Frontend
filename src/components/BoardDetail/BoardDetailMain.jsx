@@ -24,7 +24,7 @@ const BoardDetailMain = ({
               className="w-full h-96 object-cover"
             />
           </div>
-          <div className="p-6 md:w-1/2 flex flex-col justify-between">
+          <div className="p-6  flex flex-col justify-between">
             <div>
               <div className="flex justify-between items-start">
                 <h2 className="font-sam text-3xl md:text-3xl mt-3 font-bold">
@@ -32,6 +32,8 @@ const BoardDetailMain = ({
                 </h2>
                 <div className="flex flex-col items-center">
                   <button
+                  name='like'
+                  aria-label='like'
                     className="p-2"
                     onClick={
                       accessToken
@@ -57,10 +59,10 @@ const BoardDetailMain = ({
                   </span>
                 </div>
               </div>
-              <h3 className="font-score text-lg font-bold mt-2">
+              <h3 className="font-score text-sm font-bold mt-2">
                 작성자: {nickName}
               </h3>
-              <div className="font-score text-sm text-gray-500 my-4">
+              <div className="font-score text-md text-gray-500 my-4">
                 {ingredients ? ingredients.join(' · ') : ''}
               </div>
               <div className="w-full h-0.5 bg-gray-100 my-4"></div>
