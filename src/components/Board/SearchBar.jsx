@@ -55,6 +55,8 @@ const SearchBar = ({ onSearch }) => {
     <div className="font-score flex-grow flex items-center rounded-full bg-gray-50 p-1 shadow">
       <input
         className="w-full pl-2 py-2 text-sm focus:outline-none bg-gray-50"
+        title='검색'
+        aria-label='검색'
         type="text"
         placeholder="검색"
         value={query}

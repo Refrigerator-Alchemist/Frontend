@@ -42,9 +42,12 @@ export default function UploadBoard() {
 
   // 2️⃣ 재료 입력
   const handleIngredientChange = (index, e) => {
-    const newIngredients = [...ingredients];
-    newIngredients[index].name = e.target.value;
-    setIngredients(newIngredients);
+    setIngredients(prevIngredients => prevIngredients.map((ingredient, idx) => {
+      if (idx === index) {
+        return { ...ingredient, name: e.target.value };
+      }
+      return ingredient;
+    }));
   };
 
   // 3️⃣ 재료 추가
@@ -57,12 +60,13 @@ export default function UploadBoard() {
     e.preventDefault();
     const URL = `${IP_ADDRESS}/editpost/update`;
 
-    const formData = {
-      postId: postId,
-      title: title,
-      description: description,
-      ingredients: ingredients.map((ingredient) => ingredient.name),
-    };
+    const formData = new FormData();
+  formData.append('postId', postId);
+  formData.append('title', title);
+  formData.append("description", description);
+  ingredients.forEach((ingredient, index) => {
+    formData.append(`ingredient[${index}]`, ingredient.name);
+  });
 
     try {
       const response = await axios.post(URL, formData, {

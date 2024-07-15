@@ -223,6 +223,8 @@ export default function MyPage() {
           회원 탈퇴
         </button> */}
         <button
+        name='로그아웃'
+        aria-label='로그아웃'
           className="font-score outline-none font-semibold underline underline-offset-2 hover:text-red-500"
           onClick={() => {
             logout();
@@ -237,12 +239,15 @@ export default function MyPage() {
             src={imageUrl}
             alt="프로필 사진"
             className="rounded-full h-32 w-32 object-cover"
+            
           />
         </div>
         <h1 className="font-score mt-5 text-xl font-semibold text-center">
           {nickName}
         </h1>
         <button
+        name='내 프로필 수정'
+        aria-label='내 프로필 수정'
           onClick={() => navigate('/mypage/edit/profile')}
           className="font-score my-2 bg-white py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-opacity-50 underline hover:text-red-500"
         >
@@ -251,6 +256,8 @@ export default function MyPage() {
 
         <div className="flex">
           <button
+          name='내가 작성한 레시피'
+          aria-label='내가 작성한 레시피'
             onClick={() => toggleRecipeView(true)}
             className={`font-score mx-1 py-2 px-4 rounded ${
               showMyRecipes ? 'bg-main text-white' : 'bg-gray-100 text-black'
@@ -259,6 +266,8 @@ export default function MyPage() {
             내가 작성한 레시피
           </button>
           <button
+          name='좋아요 누른 레시피'
+          aria-label='좋아요 누른 레시피'
             onClick={() => toggleRecipeView(false)}
             className={`font-score mx-1 py-2 px-4 rounded ${
               !showMyRecipes ? 'bg-main text-white' : 'bg-gray-100 text-black'
