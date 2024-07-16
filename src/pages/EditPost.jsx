@@ -6,10 +6,10 @@ import axios from 'axios';
 import BackButton from '../components/UI/BackButton';
 
 export default function UploadBoard() {
-  const { postId } = useParams(); // 라우터 엔드포인트
-  const [title, setTitle] = useState(''); // 레시피 글 제목
-  const [description, setDescription] = useState(''); // 내용
-  const [ingredients, setIngredients] = useState([]); // 재료
+  const { postId } = useParams();
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [ingredients, setIngredients] = useState([]);
   const accessToken = localStorage.getItem('accessToken');
   const { handleError } = useUserApi();
   const navigate = useNavigate();
@@ -42,12 +42,14 @@ export default function UploadBoard() {
 
   // 2️⃣ 재료 입력
   const handleIngredientChange = (index, e) => {
-    setIngredients(prevIngredients => prevIngredients.map((ingredient, idx) => {
-      if (idx === index) {
-        return { ...ingredient, name: e.target.value };
-      }
-      return ingredient;
-    }));
+    setIngredients((prevIngredients) =>
+      prevIngredients.map((ingredient, idx) => {
+        if (idx === index) {
+          return { ...ingredient, name: e.target.value };
+        }
+        return ingredient;
+      })
+    );
   };
 
   // 3️⃣ 재료 추가
@@ -61,12 +63,12 @@ export default function UploadBoard() {
     const URL = `${IP_ADDRESS}/editpost/update`;
 
     const formData = new FormData();
-  formData.append('postId', postId);
-  formData.append('title', title);
-  formData.append("description", description);
-  ingredients.forEach((ingredient, index) => {
-    formData.append(`ingredient[${index}]`, ingredient.name);
-  });
+    formData.append('postId', postId);
+    formData.append('title', title);
+    formData.append('description', description);
+    ingredients.forEach((ingredient, index) => {
+      formData.append(`ingredient[${index}]`, ingredient.name);
+    });
 
     try {
       const response = await axios.post(URL, formData, {
