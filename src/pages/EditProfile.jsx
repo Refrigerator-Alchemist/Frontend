@@ -5,7 +5,7 @@ import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 import { toast } from 'react-toastify';
 import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
 import IMAGE_PROFILE from '../assets/img/img_profile.png';
-import BackButton from '../components/UI/BackButton';
+import BackButton from '../components/ui/BackButton';
 
 export default function EditProfile() {
   const fileInput = useRef(null);

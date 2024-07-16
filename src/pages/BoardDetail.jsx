@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 import Header from '../components/BoardDetail/Header';
 import BoardDetailMain from '../components/BoardDetail/BoardDetailMain';
-import Footer from '../components/UI/Footer';
+import Footer from '../components/ui/Footer';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Skeleton from '@mui/material/Skeleton';
 import Box from '@mui/material/Box';
@@ -53,7 +53,7 @@ const BoardDetail = () => {
   const postQuery = useQuery({
     queryKey: ['postData', postId],
     queryFn: fetchPostData,
-    enabled: !!postId, 
+    enabled: !!postId,
   });
 
   const likedPostsQuery = useQuery({
@@ -84,7 +84,9 @@ const BoardDetail = () => {
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['postData', postId],{ refetchActive: true });
+      queryClient.invalidateQueries(['postData', postId], {
+        refetchActive: true,
+      });
       queryClient.invalidateQueries(['likedPosts']);
       fetchPostData();
     },

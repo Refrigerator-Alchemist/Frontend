@@ -1,11 +1,11 @@
 import React from 'react';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import Navigation from '../components/UI/Navigation';
-import SavedListCard from '../components/Gpt/SavedListCard';
-import BackButton from '../components/UI/BackButton';
+import Navigation from '../components/ui/Navigation';
+import SavedListCard from '../components/gpt/SavedListCard';
+import BackButton from '../components/ui/BackButton';
 import { IP_ADDRESS, useUserApi } from '../context/UserContext';
-import Loading from '../components/Gpt/Loading'; 
+import Loading from '../components/gpt/Loading';
 
 export default function GptSavedList() {
   const nickName = localStorage.getItem('nickName') || '';
@@ -20,13 +20,17 @@ export default function GptSavedList() {
     return response.data;
   };
 
-  const { data: recipes, error, isLoading } = useQuery({
-    queryKey: ['recipes', accessToken], 
+  const {
+    data: recipes,
+    error,
+    isLoading,
+  } = useQuery({
+    queryKey: ['recipes', accessToken],
     queryFn: fetchRecipes,
-    enabled: !!accessToken, 
+    enabled: !!accessToken,
     onError: handleError,
     retry: false,
-    staleTime: 5 * 60 * 1000 
+    staleTime: 5 * 60 * 1000,
   });
 
   if (isLoading) return <Loading />;

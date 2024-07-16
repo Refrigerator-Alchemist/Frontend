@@ -1,5 +1,5 @@
 import React from 'react';
-import Logo from '../components/UI/Logo';
+import Logo from '../components/ui/Logo';
 import { Link } from 'react-router-dom';
 
 const Title = () => {

@@ -2,10 +2,10 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import Navigation from '../components/UI/Navigation';
-import BackButton from '../components/UI/BackButton';
+import Navigation from '../components/ui/Navigation';
+import BackButton from '../components/ui/BackButton';
 import { IP_ADDRESS, useUserApi } from '../context/UserContext';
-import Loading from '../components/Gpt/Loading'; 
+import Loading from '../components/gpt/Loading';
 
 const GptSavedDetail = () => {
   const { recipeId } = useParams();
@@ -15,21 +15,28 @@ const GptSavedDetail = () => {
 
   const fetchRecipeData = async () => {
     if (!recipeId) throw new Error('Recipe ID가 존재하지 않습니다.');
-    const response = await axios.get(`${IP_ADDRESS}/recipe/myRecipe/${recipeId}`, {
-      headers: { 'Authorization-Access': accessToken }
-    });
+    const response = await axios.get(
+      `${IP_ADDRESS}/recipe/myRecipe/${recipeId}`,
+      {
+        headers: { 'Authorization-Access': accessToken },
+      }
+    );
     return response.data;
   };
 
-  const { data: recipeData, error, isLoading } = useQuery({
-    queryKey: ['recipe', recipeId], 
-    queryFn: fetchRecipeData, 
-    enabled: !!accessToken && !!recipeId, 
-    onError: handleError, 
+  const {
+    data: recipeData,
+    error,
+    isLoading,
+  } = useQuery({
+    queryKey: ['recipe', recipeId],
+    queryFn: fetchRecipeData,
+    enabled: !!accessToken && !!recipeId,
+    onError: handleError,
   });
 
-  if (isLoading) return <Loading />; 
-  if (error) return <div>오류가 발생했습니다: {error.message}</div>; 
+  if (isLoading) return <Loading />;
+  if (error) return <div>오류가 발생했습니다: {error.message}</div>;
 
   return (
     <>
@@ -37,7 +44,9 @@ const GptSavedDetail = () => {
       <main className="pt-16">
         <section className="flex flex-col items-center mt-10">
           <header className="flex items-center gap-4">
-            <h1 className="font-score text-3xl font-bold">{recipeData?.foodName}</h1>
+            <h1 className="font-score text-3xl font-bold">
+              {recipeData?.foodName}
+            </h1>
           </header>
           <div className="font-score text-lg text-gray-500 my-8">
             {recipeData?.ingredients ? recipeData.ingredients.join(' · ') : ''}
