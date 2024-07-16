@@ -23,6 +23,7 @@ import GptResult from './pages/GptResult';
 import GptSavedList from './pages/GptSavedList';
 import GptSavedDetail from './pages/GptSavedDetail';
 import ProtectedRoute from './pages/ProtectedRoute';
+import IsSignIn from './pages/IsSignIn';
 
 const router = createBrowserRouter([
   {
@@ -30,7 +31,15 @@ const router = createBrowserRouter([
     element: <App />,
     errorElement: <NotFound />,
     children: [
-      { index: true, element: <GetStarted /> }, // 초기화면
+      {
+        // 초기화면
+        index: true,
+        element: (
+          <IsSignIn>
+            <GetStarted />
+          </IsSignIn>
+        ),
+      },
       { path: '/main', element: <Home /> }, // 메인
 
       // 회원정보 관리 -----------------
