@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useUserApi } from '../context/UserContext';
 import { toast } from 'react-toastify';
 import InputPassword from '../components/Account/InputPassword';
-import BackButton from '../components/UI/BackButton';
+import BackButton from '../components/ui/BackButton';
 import AccountHeader from '../components/Account/AccountHeader';
 import CheckedList from '../components/Account/CheckedList';
 import PasswordMatch from '../components/Account/PasswordMatch';

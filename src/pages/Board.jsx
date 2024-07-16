@@ -6,9 +6,9 @@ import RecipeCard from '../components/Board/RecipeCard';
 import SearchBar from '../components/Board/SearchBar';
 import WriteButton from '../components/Board/WriteButton';
 import RankingBoard from '../components/Board/RankingBoard';
-import Navigation from '../components/UI/Navigation';
-import ScrollToTopButton from '../components/UI/ScrollToTopButton';
-import useScrollToTop from '../components/UI/useScrollToTop';
+import Navigation from '../components/ui/Navigation';
+import ScrollToTopButton from '../components/ui/ScrollToTopButton';
+import useScrollToTop from '../components/ui/useScrollToTop';
 const accessToken = localStorage.getItem('accessToken');
 const email = localStorage.getItem('email');
 
@@ -35,7 +35,7 @@ const Board = () => {
       window.location = window.location + '#loaded';
       window.location.reload();
     }
-  }, [location.pathname,accessToken]);
+  }, [location.pathname, accessToken]);
 
   useEffect(() => {
     fetchRecipesByPage(currentPage);
@@ -43,7 +43,7 @@ const Board = () => {
 
   const fetchLikedPosts = async () => {
     if (!accessToken) {
-      return; 
+      return;
     }
     const URL = `${IP_ADDRESS}/board/islike?id=${email}`;
     try {
@@ -124,12 +124,13 @@ const Board = () => {
     });
     if (node) observer.current.observe(node);
   };
-  
 
   return (
     <main className="Board pb-24">
       <header className="bg-white px-6 py-7">
-        <h1 className="font-scoreExtrabold font-extrabold text-3xl">레시피 게시판</h1>
+        <h1 className="font-scoreExtrabold font-extrabold text-3xl">
+          레시피 게시판
+        </h1>
       </header>
       <section className="flex items-center mx-6">
         <SearchBar onSearch={handleSearch} />
@@ -138,10 +139,16 @@ const Board = () => {
       <section>
         {isSearching ? (
           <div className="my-2 mt-4">
-            <h2 className="font-scoreExtrabold font-extrabold ml-6 text-2xl">검색 결과</h2>
+            <h2 className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
+              검색 결과
+            </h2>
             {searchResults.map((recipe, index) => (
               <RecipeCard
-                ref={searchResults.length === index + 1 ? lastRecipeElementRef : null}
+                ref={
+                  searchResults.length === index + 1
+                    ? lastRecipeElementRef
+                    : null
+                }
                 key={recipe.id}
                 postId={recipe.id}
                 title={recipe.title}
@@ -156,10 +163,14 @@ const Board = () => {
           <>
             <RankingBoard />
             <div className="my-2">
-              <h2  className="font-scoreExtrabold font-extrabold ml-6 text-2xl">레시피</h2>
+              <h2 className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
+                레시피
+              </h2>
               {recipes.map((recipe, index) => (
                 <RecipeCard
-                  ref={recipes.length === index + 1 ? lastRecipeElementRef : null}
+                  ref={
+                    recipes.length === index + 1 ? lastRecipeElementRef : null
+                  }
                   key={recipe.id}
                   postId={recipe.id}
                   title={recipe.title}
@@ -177,7 +188,14 @@ const Board = () => {
         showScrollToTop={showScrollToTop}
         scrollToTop={scrollToTop}
       />
-      <footer style={{ position: 'fixed', bottom: '0', width: '100%', maxWidth: '31rem' }}>
+      <footer
+        style={{
+          position: 'fixed',
+          bottom: '0',
+          width: '100%',
+          maxWidth: '31rem',
+        }}
+      >
         <Navigation />
       </footer>
     </main>

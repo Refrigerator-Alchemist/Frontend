@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 import axios from 'axios';
-import BackButton from '../components/UI/BackButton';
+import BackButton from '../components/ui/BackButton';
 
 export default function UploadBoard() {
   const { postId } = useParams();

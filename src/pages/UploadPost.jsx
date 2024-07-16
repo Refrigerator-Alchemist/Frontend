@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 import { toast } from 'react-toastify';
-import BackButton from '../components/UI/BackButton';
+import BackButton from '../components/ui/BackButton';
 import { Skeleton, Box } from '@mui/material';
 
 export default function UploadBoard() {
@@ -111,15 +111,43 @@ export default function UploadBoard() {
       <BackButton destination="/main" />
       {loading ? (
         <Box>
-          <Skeleton variant="rectangular" width="100%" height={40} style={{ marginBottom: 16 }} />
-          <Skeleton variant="rectangular" width="100%" height={200} style={{ marginBottom: 16 }} />
-          <Skeleton variant="text" width="100%" height={40} style={{ marginBottom: 16 }} />
-          <Skeleton variant="text" width="100%" height={40} style={{ marginBottom: 16 }} />
-          <Skeleton variant="text" width="100%" height={40} style={{ marginBottom: 16 }} />
+          <Skeleton
+            variant="rectangular"
+            width="100%"
+            height={40}
+            style={{ marginBottom: 16 }}
+          />
+          <Skeleton
+            variant="rectangular"
+            width="100%"
+            height={200}
+            style={{ marginBottom: 16 }}
+          />
+          <Skeleton
+            variant="text"
+            width="100%"
+            height={40}
+            style={{ marginBottom: 16 }}
+          />
+          <Skeleton
+            variant="text"
+            width="100%"
+            height={40}
+            style={{ marginBottom: 16 }}
+          />
+          <Skeleton
+            variant="text"
+            width="100%"
+            height={40}
+            style={{ marginBottom: 16 }}
+          />
           <Skeleton variant="rectangular" width="100%" height={40} />
         </Box>
       ) : (
-        <form onSubmit={handleSubmit} className="flex flex-col space-y-6 mx-auto p-8">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col space-y-6 mx-auto p-8"
+        >
           <div className="form-group">
             <label
               htmlFor="cover-photo"
@@ -129,8 +157,8 @@ export default function UploadBoard() {
             </label>
             <input
               type="file"
-              title='파일을 추가해주세요'
-              aria-label='파일을 추가해주세요'
+              title="파일을 추가해주세요"
+              aria-label="파일을 추가해주세요"
               id="cover-photo"
               onChange={handleImageChange}
               className="font-score w-full border-2 border-dashed border-gray-300 rounded-md p-4 text-sm text-gray-700"
@@ -157,8 +185,8 @@ export default function UploadBoard() {
               <input
                 type="text"
                 id="title"
-                title='음식이름을 입력하세요'
-                aria-label='음식이름을 입력하세요'
+                title="음식이름을 입력하세요"
+                aria-label="음식이름을 입력하세요"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="음식 이름을 입력하세요"
@@ -175,8 +203,8 @@ export default function UploadBoard() {
               <textarea
                 id="description"
                 value={description}
-                title='음식에 대한 설명을 적어주세요'
-                aria-label='음식에 대한 설명을 적어주세요'
+                title="음식에 대한 설명을 적어주세요"
+                aria-label="음식에 대한 설명을 적어주세요"
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="음식에 대한 설명을 적어주세요"
                 className="font-score w-full border border-gray-300 rounded-md p-2 text-sm h-20"
@@ -188,12 +216,15 @@ export default function UploadBoard() {
               재료 목록
             </legend>
             {ingredients.map((ingredient, index) => (
-              <div key={index} className="font-score flex items-center space-x-2">
+              <div
+                key={index}
+                className="font-score flex items-center space-x-2"
+              >
                 <input
                   type="text"
                   value={ingredient}
-                  title='재료를 입력하세요'
-                  aria-label='재료를 입력하세요'
+                  title="재료를 입력하세요"
+                  aria-label="재료를 입력하세요"
                   onChange={(e) => handleIngredientChange(index, e)}
                   placeholder="재료를 입력하세요"
                   className="flex-grow border border-gray-300 rounded-md p-2 text-sm mb-2"

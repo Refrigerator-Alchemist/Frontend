@@ -4,11 +4,11 @@ import { useUserApi } from '../context/UserContext';
 import { IP_ADDRESS } from '../context/UserContext';
 import { toast } from 'react-toastify';
 import { GoEye, GoEyeClosed } from 'react-icons/go';
-import Logo from '../components/UI/Logo';
+import Logo from '../components/ui/Logo';
 import LOGO_GOOGLE from '../assets/img/logo_google.png';
 import LOGO_KAKAO from '../assets/img/logo_kakao.png';
 import LOGO_NAVER from '../assets/img/logo_naver.png';
-import BackButton from '../components/UI/BackButton';
+import BackButton from '../components/ui/BackButton';
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
