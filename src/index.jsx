@@ -23,7 +23,6 @@ import GptResult from './pages/GptResult';
 import GptSavedList from './pages/GptSavedList';
 import GptSavedDetail from './pages/GptSavedDetail';
 import ProtectedRoute from './pages/ProtectedRoute';
-import IsSignIn from './pages/IsSignIn';
 
 const router = createBrowserRouter([
   {
@@ -34,11 +33,7 @@ const router = createBrowserRouter([
       {
         // 초기화면
         index: true,
-        element: (
-          <IsSignIn>
-            <GetStarted />
-          </IsSignIn>
-        ),
+        element: <GetStarted />,
       },
       { path: '/main', element: <Home /> }, // 메인
 
