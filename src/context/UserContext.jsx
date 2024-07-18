@@ -5,6 +5,7 @@ import axios from 'axios';
 import ERRORS from '../utils/customedError';
 
 export const IP_ADDRESS = 'http://43.201.57.180:8080';
+// export const IP_ADDRESS = 'http://localhost:8080';
 
 axios.interceptors.response.use(
   function (response) {

@@ -179,7 +179,7 @@ export default function SignUp() {
                 />
                 <CheckedList
                   props={password.length >= 8}
-                  mention={'8자 이상 15자 이하의 비밀번호를 입력해주세요'}
+                  mention={'10자 이상 15자 이하의 비밀번호를 입력해주세요'}
                 />
                 <CheckedList
                   props={isPasswordValid(password)}
