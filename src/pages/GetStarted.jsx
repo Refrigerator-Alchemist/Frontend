@@ -25,7 +25,7 @@ const Title = () => {
 export default function GetStarted() {
   return (
     <section className="min-h-screen bg-change-color flex items-center justify-center">
-      <main className="text-center flex flex-col space-y-8 items-center h-full py-8">
+      <main className="text-center flex flex-col space-y-8 items-center h-full py-10">
         <Title />
         <Logo page="start" width="300px" height="300px" />
         <Link
@@ -35,9 +35,9 @@ export default function GetStarted() {
           시작하기
         </Link>
       </main>
-      <header className="absolute bottom-0 text-center pl-6 py-4 text-xs">
+      <footer className="absolute bottom-0 text-center py-4 text-xs">
         <p>ⓒ 2024 Refrigerator-Alchemist All Copyrights Reserved.</p>
-      </header>
+      </footer>
     </section>
   );
 }

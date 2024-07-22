@@ -7,7 +7,6 @@ export default function LoginSuccess() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // 1️⃣ 서버에서 SNS 로그인 데이터를 받아오는 함수
     const fetchLoginData = async () => {
       const urlParams = new URLSearchParams(window.location.search);
       const accessToken = urlParams.get('accessToken');
@@ -17,7 +16,8 @@ export default function LoginSuccess() {
       const email = urlParams.get('email');
 
       try {
-        // ▶ 로컬 스토리지 : 액세스, 리프레시, 닉네임, 소셜ID, 소셜타입, 이메일
+        // 로컬 스토리지
+        // ▶ 액세스 토큰, 리프레시 토큰, 닉네임, 소셜ID, 소셜타입, 이메일
         if (accessToken && refreshToken && socialId) {
           localStorage.setItem('accessToken', 'Bearer ' + accessToken);
           localStorage.setItem('refreshToken', 'Bearer ' + refreshToken);

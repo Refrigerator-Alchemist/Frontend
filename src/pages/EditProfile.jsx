@@ -7,6 +7,71 @@ import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
 import IMAGE_PROFILE from '../assets/img/img_profile.png';
 import BackButton from '../components/ui/BackButton';
 
+function FormGroup({
+  label,
+  htmlFor,
+  type,
+  value,
+  onChange,
+  readOnly,
+  children,
+}) {
+  return (
+    <div className="flex-grow mr-3 mb-4">
+      <label
+        className="font-score block text-black-300 text-lg font-bold mb-2 text-start"
+        htmlFor={htmlFor}
+      >
+        {label}
+      </label>
+      {children || (
+        <input
+          className="shadow appearance-none border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id={htmlFor}
+          type={type}
+          value={value}
+          onChange={onChange}
+          readOnly={readOnly}
+        />
+      )}
+    </div>
+  );
+}
+
+function Image({ imageUrl }) {
+  return (
+    <div className="relative inline-block rounded-full bg-gray-200 h-32 w-32">
+      <img
+        src={imageUrl}
+        alt="프로필 사진"
+        className="rounded-full h-32 w-32 object-cover border-2"
+      />
+    </div>
+  );
+}
+
+function FormButton({ type, onClick, children, className }) {
+  return (
+    <button
+      type={type}
+      onClick={onClick}
+      className={`font-score flex-grow rounded-2xl p-2 ${className}`}
+    >
+      {children}
+    </button>
+  );
+}
+
+function ErrorMessage({ error }) {
+  return (
+    <p
+      className={`text-red-500 text-xs italic ${error ? 'visible' : 'invisible'}`}
+    >
+      {error || 'nameError'}
+    </p>
+  );
+}
+
 export default function EditProfile() {
   const fileInput = useRef(null);
   const { handleError } = useUserApi();
@@ -14,12 +79,14 @@ export default function EditProfile() {
   const nickName = localStorage.getItem('nickName') || '';
   const email = localStorage.getItem('email') || '';
   const accessToken = localStorage.getItem('accessToken');
-  const [imageUrl, setImageUrl] = useState(
-    localStorage.getItem('imageUrl') || IMAGE_PROFILE
-  );
+  const [imageUrl, setImageUrl] = useState(IMAGE_PROFILE);
   // const [selectedImage, setSelectedImage] = useState(null);
   const [nameError, setNameError] = useState(false);
   const [changeNickName, setChangeNickName] = useState(nickName);
+
+  useEffect(() => {
+    setImageUrl(localStorage.getItem('imageUrl'));
+  });
 
   useEffect(() => {
     const checkTokenExpired = async () => {
@@ -120,48 +187,25 @@ export default function EditProfile() {
         프로필 수정
       </header>
       <main className="mt-6 text-center">
-        <div className="relative inline-block rounded-full bg-gray-200 h-32 w-32">
-          <img
-            src={imageUrl}
-            alt="프로필 사진"
-            className="rounded-full h-32 w-32 object-cover border-2"
-          />
-          <input
-            type="file"
-            accept="image/jpg,image/png,image/jpeg"
-            // onChange={handleImageChange}
-            ref={fileInput}
-            className="rounded-full absolute inset-0 w-full h-full opacity-0 cursor-pointer hover:opacity-50 duration-200 ease-out transition-opacity bg-gray-500"
-          />
-        </div>
+        <Image imageUrl={imageUrl} />
         <form
           className="flex flex-col mt-8 mx-10"
           onSubmit={handleSubmitNickname}
         >
-          {/* 이메일 박스 */}
-          <div className="flex-grow mr-3 mb-4">
-            <label
-              className="font-score block text-black-300 text-lg font-bold mb-2 text-start"
-              htmlFor="email"
-            >
-              연결된 이메일
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="email"
-              type="email"
-              value={email}
-              readOnly
-            />
-          </div>
-          {/* 닉네임 박스 */}
-          <div className="flex-grow mr-3 mb-2">
-            <label
-              className="font-score block text-black-300 text-lg font-bold mb-2 text-start"
-              htmlFor="nickName"
-            >
-              닉네임
-            </label>
+          <FormGroup
+            label="연결된 이메일"
+            htmlFor="email"
+            type="email"
+            value={email}
+            readOnly
+          />
+          <FormGroup
+            label="닉네임"
+            htmlFor="nickName"
+            type="text"
+            value={changeNickName}
+            onChange={handleNicknameChange}
+          >
             <input
               className="shadow appearance-none border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="nickName"
@@ -169,12 +213,8 @@ export default function EditProfile() {
               value={changeNickName}
               onChange={handleNicknameChange}
             />
-            {nameError ? (
-              <p className="text-red-500 text-xs italic">{nameError}</p>
-            ) : (
-              <p className="text-red-500 text-xs italic invisible">nameError</p>
-            )}
-          </div>
+            <ErrorMessage error={nameError} />
+          </FormGroup>
           <p className="mt-6">
             <li className="mb-2 flex items-center">
               <span role="img" aria-label="check" className="flex">
@@ -188,12 +228,12 @@ export default function EditProfile() {
             </li>
           </p>
           <div className="flex mt-2 mr-3 gap-3">
-            <button
+            <FormButton
               type="submit"
-              className="font-score flex-grow text-white rounded-2xl p-2 bg-main transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-emerald hover:text-black"
+              className="text-white bg-main transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-emerald hover:text-black"
             >
               닉네임 변경
-            </button>
+            </FormButton>
           </div>
         </form>
       </main>

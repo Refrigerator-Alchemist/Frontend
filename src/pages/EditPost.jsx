@@ -5,6 +5,55 @@ import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 import axios from 'axios';
 import BackButton from '../components/ui/BackButton';
 
+function FormGroup({ label, children }) {
+  return (
+    <div className="form-group">
+      <label className="font-score block mb-2 text-sm font-medium text-gray-700">
+        {label}
+      </label>
+      {children}
+    </div>
+  );
+}
+
+function IngredientInput({
+  ingredient,
+  index,
+  handleIngredientChange,
+  handleRemoveIngredient,
+}) {
+  return (
+    <div className="font-score flex items-center space-x-2 mb-3">
+      <input
+        type="text"
+        value={ingredient.name}
+        onChange={(e) => handleIngredientChange(index, e)}
+        placeholder="재료를 입력하세요"
+        className="border border-gray-300 rounded-md p-2 text-sm flex-grow"
+      />
+      <button
+        type="button"
+        className="font-score text-gray-500 hover:text-gray-700"
+        onClick={() => handleRemoveIngredient(index)}
+      >
+        &times;
+      </button>
+    </div>
+  );
+}
+
+function FormButton({ type, onClick, children, className }) {
+  return (
+    <button
+      type={type}
+      onClick={onClick}
+      className={`font-score flex-grow rounded-full p-2 ${className}`}
+    >
+      {children}
+    </button>
+  );
+}
+
 export default function UploadBoard() {
   const { postId } = useParams();
   const [title, setTitle] = useState('');
@@ -14,7 +63,7 @@ export default function UploadBoard() {
   const { handleError } = useUserApi();
   const navigate = useNavigate();
 
-  // 1️⃣ 해당 게시물의 제목, 설명, 재료를 불러오는 함수
+  /** 해당 게시물의 제목, 설명, 재료를 불러오는 함수 */
   useEffect(() => {
     const fetchData = async (postId) => {
       const URL = `${IP_ADDRESS}/board/updateBoard?postId=${postId}`;
@@ -40,7 +89,7 @@ export default function UploadBoard() {
     fetchData(postId);
   }, [handleError, postId, accessToken]);
 
-  // 2️⃣ 재료 입력
+  /** 재료 입력 */
   const handleIngredientChange = (index, e) => {
     setIngredients((prevIngredients) =>
       prevIngredients.map((ingredient, idx) => {
@@ -52,12 +101,12 @@ export default function UploadBoard() {
     );
   };
 
-  // 3️⃣ 재료 추가
+  /** 재료 추가 */
   const addIngredientField = () => {
     setIngredients([...ingredients, { name: '' }]);
   };
 
-  // 4️⃣ 수정 완료
+  /** 수정 완료 */
   const handleSubmit = async (e) => {
     e.preventDefault();
     const URL = `${IP_ADDRESS}/editpost/update`;
@@ -88,7 +137,7 @@ export default function UploadBoard() {
     }
   };
 
-  // 5️⃣ 취소
+  /** 취소 */
   const handleCancel = () => {
     navigate(-1);
   };
@@ -96,18 +145,11 @@ export default function UploadBoard() {
   return (
     <section className="pt-16 relative">
       <BackButton destination={-1} />
-
       <form
         onSubmit={handleSubmit}
         className="flex flex-col space-y-6 mx-auto p-8"
       >
-        <div className="form-group">
-          <label
-            htmlFor="food-name"
-            className="font-score block mb-2 text-sm font-medium text-gray-700"
-          >
-            음식 이름
-          </label>
+        <FormGroup label="음식 이름">
           <input
             type="text"
             id="food-name"
@@ -116,15 +158,8 @@ export default function UploadBoard() {
             placeholder="음식 이름을 입력하세요"
             className="font-score w-full border border-gray-300 rounded-md p-2 text-sm"
           />
-        </div>
-
-        <div className="form-group">
-          <label
-            htmlFor="description"
-            className="font-score block mb-2 text-sm font-medium text-gray-700"
-          >
-            설명
-          </label>
+        </FormGroup>
+        <FormGroup label="설명">
           <textarea
             id="description"
             value={description}
@@ -132,62 +167,41 @@ export default function UploadBoard() {
             placeholder="음식에 대한 설명을 적어주세요"
             className="font-score w-full border border-gray-300 rounded-md p-2 text-sm h-40"
           />
-        </div>
-
-        <div className="form-group">
-          <label className="block mb-2 text-sm font-medium text-gray-700">
-            재료 목록
-          </label>
+        </FormGroup>
+        <FormGroup label="재료 목록">
           {ingredients.map((ingredient, index) => (
-            <div
+            <IngredientInput
               key={index}
-              className="font-score flex items-center space-x-2 mb-3"
-            >
-              <input
-                type="text"
-                value={ingredient.name}
-                onChange={(e) => handleIngredientChange(index, e)}
-                placeholder="재료를 입력하세요"
-                className="border border-gray-300 rounded-md p-2 text-sm flex-grow"
-              />
-              {ingredients.length > 1 && (
-                <button
-                  type="button"
-                  className="font-score text-gray-500 hover:text-gray-700"
-                  onClick={() =>
-                    setIngredients(
-                      ingredients.filter((_, idx) => idx !== index)
-                    )
-                  }
-                >
-                  &times;
-                </button>
-              )}
-            </div>
+              ingredient={ingredient}
+              index={index}
+              handleIngredientChange={handleIngredientChange}
+              handleRemoveIngredient={(index) =>
+                setIngredients(ingredients.filter((_, idx) => idx !== index))
+              }
+            />
           ))}
-          <button
+          <FormButton
             type="button"
             onClick={addIngredientField}
-            className="font-score flex items-center justify-center px-10 py-2 mt-5 border border-gray-400 text-black rounded-full shadow-sm hover:border-yellow-500 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50"
+            className="flex items-center justify-center px-10 py-2 mt-5 border border-gray-400 text-black shadow-sm hover:border-yellow-500 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50"
           >
             재료 추가
-          </button>
-        </div>
-
+          </FormButton>
+        </FormGroup>
         <footer className="flex space-x-2">
-          <button
+          <FormButton
             type="button"
             onClick={handleCancel}
-            className="font-score flex-grow bg-gray-300 rounded-full p-2 hover:bg-gray-400"
+            className="bg-gray-300 hover:bg-gray-400"
           >
             취소
-          </button>
-          <button
+          </FormButton>
+          <FormButton
             type="submit"
-            className="font-score flex-grow text-white rounded-full p-2 transition ease-in-out bg-main hover:bg-emerald hover:text-black"
+            className="text-white transition ease-in-out bg-main hover:bg-emerald hover:text-black"
           >
             수정하기
-          </button>
+          </FormButton>
         </footer>
       </form>
     </section>
