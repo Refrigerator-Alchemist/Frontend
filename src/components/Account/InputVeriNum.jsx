@@ -3,11 +3,11 @@ import React from 'react';
 export default function InputVeriNum({
   email,
   handleEmailChange,
-  requestVerifying,
+  handleRequest,
   selectOption,
   inputNum,
   setInputNum,
-  checkVerifying,
+  isVerified,
 }) {
   return (
     <>
@@ -25,7 +25,7 @@ export default function InputVeriNum({
             placeholder="이메일"
           />
           <button
-            onClick={requestVerifying}
+            onClick={handleRequest}
             className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtrabold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:scale-110 hover:bg-indigo duration-300"
           >
             인증 요청
@@ -65,7 +65,7 @@ export default function InputVeriNum({
             />
           </div>
           <button
-            onClick={checkVerifying}
+            onClick={isVerified}
             className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtrabold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:scale-110 hover:bg-indigo duration-300"
           >
             인증 확인

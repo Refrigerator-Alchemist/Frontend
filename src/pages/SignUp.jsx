@@ -38,10 +38,8 @@ export default function SignUp() {
   /** 이메일 입력값 */
   const handleEmailChange = (e) => setEmail(e.target.value);
 
-  /** 인증 요청
-   * - userApi
-   */
-  const requestVerifying = async (e) => {
+  /** 인증 요청 */
+  const handleRequest = async (e) => {
     e.preventDefault();
     console.log(`입력한 이메일 : ${email}`);
     const pattern =
@@ -59,19 +57,15 @@ export default function SignUp() {
     userApi.requestEmailForSignUp(email, emailType, socialType);
   };
 
-  /** 인증 확인
-   * - userApi
-   */
-  const checkVerifying = (e) => {
+  /** 인증 확인 */
+  const isVerified = (e) => {
     e.preventDefault();
     console.log(`입력한 인증번호 : ${inputNum}`);
     userApi.checkCodeVerification(email, emailType, inputNum, socialType);
   };
 
-  /** 닉네임 중복 확인
-   * - userApi
-   */
-  const checkDuplication = (e) => {
+  /** 닉네임 중복 확인*/
+  const isDuplicated = (e) => {
     e.preventDefault();
     const pattern = /^[가-힣0-9]{2,}$|^[A-Za-z0-9]{3,}$/;
     if (!pattern.test(nickName)) {
@@ -90,7 +84,7 @@ export default function SignUp() {
   /** 비밀번호 유효성 검사 */
   const isPasswordValid = (password) => {
     return (
-      password.length >= 8 &&
+      password.length >= 10 &&
       password.length <= 15 &&
       /\d/.test(password) &&
       /[!@#$%^&*]/.test(password) &&
@@ -108,6 +102,7 @@ export default function SignUp() {
       setPasswordMessage(null);
     }
   };
+
   useEffect(() => {
     isSamePassword();
   });
@@ -118,10 +113,8 @@ export default function SignUp() {
     setShowPassword(!showPassword);
   };
 
-  /** 회원가입
-   * - userApi
-   */
-  const onSignUp = (e) => {
+  /** 회원가입 */
+  const handleSignUp = (e) => {
     e.preventDefault();
     userApi.signUp(email, password, nickName, socialType);
   };
@@ -133,23 +126,23 @@ export default function SignUp() {
         title={'신규 회원가입'}
         mention={'환영합니다! 냉장고 연금술과 레시피 나눔을 해보세요'}
       />
-      <form onSubmit={onSignUp}>
+      <form onSubmit={handleSignUp}>
         <main className="mt-10 w-full px-2">
           <InputVeriNum
             email={email}
             handleEmailChange={handleEmailChange}
-            requestVerifying={requestVerifying}
+            handleRequest={handleRequest}
             selectOption={emailError}
             inputNum={inputNum}
             setInputNum={setInputNum}
-            checkVerifying={checkVerifying}
+            isVerified={isVerified}
           />
         </main>
         <footer className="flex flex-col mt-6 w-full p-3">
           <CheckNickname
             nickName={nickName}
             setNickName={setNickName}
-            checkDuplication={checkDuplication}
+            isDuplicated={isDuplicated}
             nameError={nameError}
           />
           <div>
@@ -179,7 +172,7 @@ export default function SignUp() {
                 />
                 <CheckedList
                   props={password.length >= 8}
-                  mention={'8자 이상 15자 이하의 비밀번호를 입력해주세요'}
+                  mention={'10자 이상 15자 이하의 비밀번호를 입력해주세요'}
                 />
                 <CheckedList
                   props={isPasswordValid(password)}
@@ -191,7 +184,7 @@ export default function SignUp() {
                   userApi.emailExists === true ||
                   userApi.verified === false ||
                   userApi.nameAvailable === false ||
-                  password.length < 8 ||
+                  password.length < 10 ||
                   password.length > 15 ||
                   isPasswordValid(password) === false ||
                   !passwordMessage

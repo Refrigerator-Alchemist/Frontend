@@ -26,7 +26,7 @@ export default function ResetPassword() {
   /** 인증 요청
    * - userApi
    */
-  const requestVerifying = async (e) => {
+  const handleRequest = async (e) => {
     e.preventDefault();
     console.log(`입력한 이메일 : ${email}`);
     if (!email) {
@@ -39,7 +39,7 @@ export default function ResetPassword() {
   /** 인증 확인
    * - userApi
    */
-  const checkVerifying = async (e) => {
+  const isVerified = async (e) => {
     e.preventDefault();
     console.log(`입력한 인증번호 : ${inputNum}`);
     userApi.checkCodeVerification(email, emailType, inputNum, socialType);
@@ -96,11 +96,11 @@ export default function ResetPassword() {
           <InputVeriNum
             email={email}
             handleEmailChange={handleEmailChange}
-            requestVerifying={requestVerifying}
+            handleRequest={handleRequest}
             selectOption={userApi.emailExists}
             inputNum={inputNum}
             setInputNum={setInputNum}
-            checkVerifying={checkVerifying}
+            isVerified={isVerified}
           />
         </main>
         <footer className="flex flex-col mt-10 w-full p-3">
@@ -121,7 +121,7 @@ export default function ResetPassword() {
             />
             <CheckedList
               props={password.length >= 8}
-              mention={'8자 이상 15자 이하의 비밀번호를 입력해주세요'}
+              mention={'10자 이상 15자 이하의 비밀번호를 입력해주세요'}
             />
             <CheckedList
               props={isPasswordValid(password)}
@@ -131,7 +131,7 @@ export default function ResetPassword() {
           <SubmitButton
             disabledCondition={
               userApi.verified === false ||
-              password.length < 8 ||
+              password.length < 10 ||
               password.length > 15 ||
               isPasswordValid(password) === false ||
               !passwordMessage

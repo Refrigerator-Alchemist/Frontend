@@ -12,7 +12,6 @@ RUN yarn add -D vite @vitejs/plugin-react
 RUN yarn add vite-plugin-svgr
 RUN yarn build
 
-
 EXPOSE 3000
 
 CMD ["yarn", "start"]

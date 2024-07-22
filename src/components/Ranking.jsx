@@ -104,7 +104,7 @@ export default function Ranking() {
       }}
     >
       <div className="flex justify-end">
-        <span className="flex flex-col justify-end font-score text-sm hover:text-indigo">
+        <span className="flex flex-col justify-end font-score text-sm hover:text-indigo mr-4">
           가장 많은 좋아요를 받은 레시피는?
         </span>
       </div>
