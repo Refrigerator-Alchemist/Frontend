@@ -75,7 +75,7 @@ http://43.201.57.180:3000 <br/>
 <div>
   <p style='color:cyan; font-weight: bold'>BE Stack</p>
 
-  <img src="https://img.shields.io/badge/Spring-6DB33F?style=flat-square&logo=Spring&logoColor=white">
+  <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat-square&logo=springboot&logoColor=white">
   <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white">
   <img src="https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=redis&logoColor=white">
 </div><br/>
@@ -205,7 +205,7 @@ http://43.201.57.180:3000 <br/>
             <b>서효진</b>
           </sub>
         </a><br />
-        <sub><b>영남대 컴공 21</b></sub><br />
+        <sub><b>영남대 컴공 20</b></sub><br />
         <sub><b style='color:cyan'>BE</b></sub>
       </td><td align="center">
         <a href="https://github.com/anhyeryeon2">
