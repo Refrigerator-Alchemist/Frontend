@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IP_ADDRESS, useUserApi } from '../context/UserContext';
+import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
 import { FaHeart } from 'react-icons/fa';
 import { useQuery } from '@tanstack/react-query';
 

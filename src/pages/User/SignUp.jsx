@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useUserApi } from '../context/UserContext';
 import { toast } from 'react-toastify';
-import InputPassword from '../components/Account/InputPassword';
-import BackButton from '../components/global/BackButton';
-import AccountHeader from '../components/Account/AccountHeader';
-import CheckedList from '../components/Account/CheckedList';
-import PasswordMatch from '../components/Account/PasswordMatch';
-import InputVeriNum from '../components/Account/InputVeriNum';
-import SubmitButton from '../components/Account/SubmitButton';
-import CheckNickname from '../components/Account/CheckNickname';
+import { useUserApi } from '../../context/UserContext';
+import InputPassword from '../../components/Account/InputPassword';
+import BackButton from '../../components/global/BackButton';
+import AccountHeader from '../../components/Account/AccountHeader';
+import CheckedList from '../../components/Account/CheckedList';
+import PasswordMatch from '../../components/Account/PasswordMatch';
+import InputVeriNum from '../../components/Account/InputVeriNum';
+import SubmitButton from '../../components/Account/SubmitButton';
+import CheckNickname from '../../components/Account/CheckNickname';
 
 export default function SignUp() {
   const [email, setEmail] = useState('');

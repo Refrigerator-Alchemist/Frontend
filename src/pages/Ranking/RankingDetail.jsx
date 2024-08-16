@@ -1,6 +1,5 @@
-import React from 'react';
-import Ranking from '../components/Ranking';
-import BackButton from '../components/global/BackButton';
+import Ranking from '../../components/global/Ranking';
+import BackButton from '../../components/global/BackButton';
 
 export default function RankingDetail() {
   return (

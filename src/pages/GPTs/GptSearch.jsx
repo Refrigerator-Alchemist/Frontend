@@ -3,10 +3,10 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { CiSaveDown2 } from 'react-icons/ci';
 import { toast } from 'react-toastify';
-import { IP_ADDRESS, useUserApi } from '../context/UserContext';
-import TagInput from '../components/gpt/TagInput';
-import Loading from '../components/gpt/Loading';
-import BackButton from '../components/global/BackButton';
+import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
+import TagInput from '../../components/GPTs/TagInput';
+import Loading from '../../components/GPTs/Loading';
+import BackButton from '../../components/global/BackButton';
 
 const GptSearch = () => {
   const [tags, setTags] = useState([]);

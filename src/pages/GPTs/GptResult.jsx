@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { IP_ADDRESS, useUserApi } from '../context/UserContext';
-import Loading from '../components/gpt/Loading';
-import BackButton from '../components/global/BackButton';
+import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
+import Loading from '../../components/GPTs/Loading';
+import BackButton from '../../components/global/BackButton';
 
 const GptResult = () => {
   const [ingredients, setIngredients] = useState([]);
