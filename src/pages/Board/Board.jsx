@@ -25,7 +25,6 @@ const Board = () => {
   const recipesPerPage = 6;
   const { handleError } = useUserApi();
   const observer = useRef();
-
   const { showScrollToTop, scrollToTop } = useScrollToTop();
 
   useEffect(() => {
@@ -38,6 +37,7 @@ const Board = () => {
   }, [location.pathname, accessToken]);
 
   useEffect(() => {
+    setRecipes([]);
     fetchRecipesByPage(currentPage);
   }, [currentPage]);
 
@@ -86,7 +86,7 @@ const Board = () => {
           imageUrl: item.imageUrl,
           likeCount: item.likeCount,
         }));
-        setRecipes((prevRecipes) => [...prevRecipes, ...formattedData]);
+        setRecipes(formattedData);
       } else {
         console.error(' error:', response.data);
       }
@@ -149,7 +149,7 @@ const Board = () => {
                     ? lastRecipeElementRef
                     : null
                 }
-                key={recipe.id}
+                key={`${recipe.id}-${index}`}
                 postId={recipe.id}
                 title={recipe.title}
                 description={recipe.description}
@@ -171,7 +171,7 @@ const Board = () => {
                   ref={
                     recipes.length === index + 1 ? lastRecipeElementRef : null
                   }
-                  key={recipe.id}
+                  key={`${recipe.id}-${index}`}
                   postId={recipe.id}
                   title={recipe.title}
                   description={recipe.description}
