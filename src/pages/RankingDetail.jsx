@@ -1,6 +1,6 @@
 import React from 'react';
 import Ranking from '../components/Ranking';
-import BackButton from '../components/ui/BackButton';
+import BackButton from '../components/global/BackButton';
 
 export default function RankingDetail() {
   return (

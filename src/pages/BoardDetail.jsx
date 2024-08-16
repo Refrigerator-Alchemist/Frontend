@@ -2,13 +2,11 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 import Header from '../components/BoardDetail/Header';
 import BoardDetailMain from '../components/BoardDetail/BoardDetailMain';
-import Footer from '../components/ui/Footer';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import Skeleton from '@mui/material/Skeleton';
-import Box from '@mui/material/Box';
+import Footer from '../components/global/Footer';
 
 const BoardDetail = () => {
   const { postId } = useParams();

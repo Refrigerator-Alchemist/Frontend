@@ -1,9 +1,9 @@
 import React from 'react';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import Navigation from '../components/ui/Navigation';
+import Navigation from '../components/global/Navigation';
 import SavedListCard from '../components/gpt/SavedListCard';
-import BackButton from '../components/ui/BackButton';
+import BackButton from '../components/global/BackButton';
 import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 import Loading from '../components/gpt/Loading';
 
