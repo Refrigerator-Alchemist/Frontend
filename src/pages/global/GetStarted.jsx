@@ -1,6 +1,5 @@
-import React from 'react';
-import Logo from '../components/global/Logo';
 import { Link } from 'react-router-dom';
+import Logo from '../../components/global/Logo';
 
 const Title = () => {
   const letters = ['냉', '장', '고', '　', '연', '금', '술', '사'];
@@ -11,8 +10,7 @@ const Title = () => {
         {letters.map((letter, index) => (
           <span
             key={index}
-            className={`inline-block animate-bounce delay-${index}00 font-jua`}
-            style={{ position: 'relative', top: '20px' }}
+            className={`inline-block relative animate-bounce top-1 delay-${index}00 font-jua`}
           >
             {letter}
           </span>

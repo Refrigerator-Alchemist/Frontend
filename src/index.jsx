@@ -3,26 +3,26 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App';
-import NotFound from './pages/NotFound';
-import GetStarted from './pages/GetStarted';
-import Home from './pages/Home';
-import SignUp from './pages/SignUp';
-import SignIn from './pages/SignIn';
-import LoginSuccess from './pages/LoginSuccess';
-import ResetPassword from './pages/ResetPassword';
-import DeleteUser from './pages/DeleteUser';
-import Mypage from './pages/Mypage';
-import EditProfile from './pages/EditProfile';
-import RankingDetail from './pages/RankingDetail';
-import Board from './pages/Board';
-import BoardDetail from './pages/BoardDetail';
-import UploadPost from './pages/UploadPost';
-import EditPost from './pages/EditPost';
-import GptSearch from './pages/GptSearch';
-import GptResult from './pages/GptResult';
-import GptSavedList from './pages/GptSavedList';
-import GptSavedDetail from './pages/GptSavedDetail';
-import ProtectedRoute from './pages/ProtectedRoute';
+import NotFound from './pages/global/NotFound';
+import GetStarted from './pages/global/GetStarted';
+import Home from './pages/global/Home';
+import ProtectedRoute from './pages/global/ProtectedRoute';
+import SignUp from './pages/User/SignUp';
+import SignIn from './pages/User/SignIn';
+import LoginSuccess from './pages/User/LoginSuccess';
+import ResetPassword from './pages/User/ResetPassword';
+import DeleteUser from './pages/User/DeleteUser';
+import Mypage from './pages/User/Mypage';
+import EditProfile from './pages/User/EditProfile';
+import RankingDetail from './pages/Ranking/RankingDetail';
+import Board from './pages/Board/Board';
+import BoardDetail from './pages/Board/BoardDetail';
+import UploadPost from './pages/Board/UploadPost';
+import EditPost from './pages/Board/EditPost';
+import GptSearch from './pages/GPTs/GptSearch';
+import GptResult from './pages/GPTs/GptResult';
+import GptSavedList from './pages/GPTs/GptSavedList';
+import GptSavedDetail from './pages/GPTs/GptSavedDetail';
 
 const router = createBrowserRouter([
   {
@@ -30,8 +30,8 @@ const router = createBrowserRouter([
     element: <App />,
     errorElement: <NotFound />,
     children: [
+      // 초기화면
       {
-        // 초기화면
         index: true,
         element: <GetStarted />,
       },
@@ -117,7 +117,7 @@ const router = createBrowserRouter([
 ]);
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  // <React.StrictMode>
-  <RouterProvider router={router} />
-  // </React.StrictMode>
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>
 );

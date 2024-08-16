@@ -1,11 +1,10 @@
-import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import Navigation from '../components/global/Navigation';
-import BackButton from '../components/global/BackButton';
-import { IP_ADDRESS, useUserApi } from '../context/UserContext';
-import Loading from '../components/gpt/Loading';
+import Navigation from '../../components/global/Navbar';
+import BackButton from '../../components/global/BackButton';
+import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
+import Loading from '../../components/GPTs/Loading';
 
 const GptSavedDetail = () => {
   const { recipeId } = useParams();

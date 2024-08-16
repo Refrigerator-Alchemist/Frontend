@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { useUserApi } from '../context/UserContext.jsx';
+import { useEffect } from 'react';
+import { useUserApi } from '../../context/UserContext.jsx';
 import { useNavigate } from 'react-router-dom';
 
 export default function LoginSuccess() {

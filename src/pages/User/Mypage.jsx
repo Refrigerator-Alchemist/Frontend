@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useUserApi, IP_ADDRESS } from '../context/UserContext';
-import Navigation from '../components/global/Navigation';
-import MyRecipe from '../components/Mypage/MyRecipe';
-import LikedRecipe from '../components/Mypage/LikedRecipe';
-import ScrollToTopButton from '../components/Mypage/ScrollToTop';
+import { useUserApi, IP_ADDRESS } from '../../context/UserContext';
+import Navigation from '../../components/global/Navbar';
+import MyRecipe from '../../components/Mypage/MyRecipe';
+import LikedRecipe from '../../components/Mypage/LikedRecipe';
+import ScrollToTopButton from '../../components/Mypage/ScrollToTop';
 import IMG_PROFILE from '/assets/img/img_profile.png';
 
 export default function MyPage() {

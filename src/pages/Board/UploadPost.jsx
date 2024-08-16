@@ -2,8 +2,8 @@ import { useState, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { IP_ADDRESS, useUserApi } from '../context/UserContext';
-import BackButton from '../components/global/BackButton';
+import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
+import BackButton from '../../components/global/BackButton';
 import { Skeleton, Box } from '@mui/material';
 
 export default function UploadBoard() {

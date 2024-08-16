@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useUserApi } from '../context/UserContext';
-import BackButton from '../components/global/BackButton';
+import { useState } from 'react';
+import { useUserApi } from '../../context/UserContext';
+import BackButton from '../../components/global/BackButton';
 import { toast } from 'react-toastify';
 
 export default function DeleteUser() {

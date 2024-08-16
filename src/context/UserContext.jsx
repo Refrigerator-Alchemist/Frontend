@@ -1,4 +1,4 @@
-import React, { useState, createContext, useContext } from 'react';
+import { useState, createContext, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
@@ -288,15 +288,7 @@ export const UserApiProvider = ({ children }) => {
   };
 
   /** 로그인
-   - 요청 Body
-        - email 이메일
-        - password 비밀번호
-        - socialType 서비스 타입
-  
-  - 요청 Header
-        - 'Content-Type': 'application/json;charset=UTF-8'
-        - Accept: 'application/json'
-        - 'Access-Control-Allow-Origin': '*'
+   @params 이메일, 비밀번호, 서비스 타입
   */
   const login = async (email, password, socialType) => {
     const URL = `${IP_ADDRESS}/token/login`;
@@ -341,8 +333,7 @@ export const UserApiProvider = ({ children }) => {
   };
 
   /** 로그아웃
-   - 요청 Header
-        - accessToken 액세스 토큰
+   @params 액세스 토큰
    */
   const logout = async () => {
     const URL = `${IP_ADDRESS}/token/logout`;
@@ -377,11 +368,7 @@ export const UserApiProvider = ({ children }) => {
   };
 
   /** 비밀번호 재설정
-   - 요청 Body :
-        - email 이메일
-        - password 비밀번호
-        - newPassword 새로운 비밀번호
-        - socialType 서비스 타입
+   @params 이메일, 비밀번호, 새로운 비밀번호, 소셜타입 : 페이로드
    */
   const resetPassword = async (email, password, newPassword, socialType) => {
     try {

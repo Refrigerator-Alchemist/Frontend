@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
-import { IP_ADDRESS, useUserApi } from '../context/UserContext';
-import RecipeCard from '../components/Board/RecipeCard';
-import SearchBar from '../components/Board/SearchBar';
-import WriteButton from '../components/Board/WriteButton';
-import RankingBoard from '../components/Board/RankingBoard';
-import Navigation from '../components/global/Navigation';
-import ScrollToTopButton from '../components/global/ScrollToTopButton';
-import useScrollToTop from '../components/global/useScrollToTop';
+import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
+import RecipeCard from '../../components/Board/RecipeCard';
+import SearchBar from '../../components/Board/SearchBar';
+import WriteButton from '../../components/Board/WriteButton';
+import RankingBoard from '../../components/Board/RankingBoard';
+import Navigation from '../../components/global/Navbar';
+import ScrollToTopButton from '../../components/global/ScrollToTopButton';
+import useScrollToTop from '../../components/global/useScrollToTop';
 const accessToken = localStorage.getItem('accessToken');
 const email = localStorage.getItem('email');
 
