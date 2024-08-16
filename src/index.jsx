@@ -30,8 +30,8 @@ const router = createBrowserRouter([
     element: <App />,
     errorElement: <NotFound />,
     children: [
+      // 초기화면
       {
-        // 초기화면
         index: true,
         element: <GetStarted />,
       },

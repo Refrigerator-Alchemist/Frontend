@@ -6,7 +6,7 @@ import RecipeCard from '../../components/Board/RecipeCard';
 import SearchBar from '../../components/Board/SearchBar';
 import WriteButton from '../../components/Board/WriteButton';
 import RankingBoard from '../../components/Board/RankingBoard';
-import Navigation from '../../components/global/Navigation';
+import Navigation from '../../components/global/Navbar';
 import ScrollToTopButton from '../../components/global/ScrollToTopButton';
 import useScrollToTop from '../../components/global/useScrollToTop';
 const accessToken = localStorage.getItem('accessToken');

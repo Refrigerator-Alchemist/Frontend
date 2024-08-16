@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import Navigation from '../../components/global/Navigation';
+import Navigation from '../../components/global/Navbar';
 import SavedListCard from '../../components/GPTs/SavedListCard';
 import BackButton from '../../components/global/BackButton';
 import { IP_ADDRESS, useUserApi } from '../../context/UserContext';

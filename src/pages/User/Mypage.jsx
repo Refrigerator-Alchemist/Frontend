@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useUserApi, IP_ADDRESS } from '../../context/UserContext';
-import Navigation from '../../components/global/Navigation';
+import Navigation from '../../components/global/Navbar';
 import MyRecipe from '../../components/Mypage/MyRecipe';
 import LikedRecipe from '../../components/Mypage/LikedRecipe';
 import ScrollToTopButton from '../../components/Mypage/ScrollToTop';
