@@ -9,7 +9,6 @@ RUN corepack enable
 RUN yarn set version berry
 RUN yarn install
 RUN yarn add -D vite @vitejs/plugin-react
-RUN yarn add vite-plugin-svgr
 RUN yarn build
 
 EXPOSE 3000

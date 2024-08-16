@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useUserApi } from '../context/UserContext';
-import { IP_ADDRESS } from '../context/UserContext';
 import { toast } from 'react-toastify';
 import { GoEye, GoEyeClosed } from 'react-icons/go';
-import Logo from '../components/ui/Logo';
-import LOGO_KAKAO from '../assets/img/logo_kakao.png';
-import LOGO_NAVER from '../assets/img/logo_naver.png';
-import BackButton from '../components/ui/BackButton';
+import { useUserApi, IP_ADDRESS } from '../context/UserContext';
+import Logo from '../components/global/Logo';
+import BackButton from '../components/global/BackButton';
+import LOGO_GOOGLE from '/assets/img/logo_google.png';
+import LOGO_KAKAO from '/assets/img/logo_kakao.png';
+import LOGO_NAVER from '/assets/img/logo_naver.png';
 
-function SocialLogin({ callBack, img, socialType }) {
+/** 
+ @description 소셜 로그인 버튼 
+ */
+function SocialLogin({ callback, img, socialType }) {
   return (
-    <button onClick={callBack}>
+    <button onClick={callback}>
       <img
         className="mx-3 hover:scale-110"
         style={{ width: '45px', height: '45px' }}
@@ -22,6 +25,9 @@ function SocialLogin({ callBack, img, socialType }) {
   );
 }
 
+/** 
+ @description 인풋 박스 - 이메일, 비밀번호 
+ */
 function InputField({
   label,
   type,
@@ -57,6 +63,9 @@ function InputField({
   );
 }
 
+/** 
+ @description 이메일 유효성 검사 에러 메세지
+ */
 function ErrorMessage({ message, isVisible }) {
   return (
     <p
@@ -67,6 +76,9 @@ function ErrorMessage({ message, isVisible }) {
   );
 }
 
+/** 
+ @description 비밀번호 재설정 페이지 이동 링크
+ */
 function LinkText({ onClick, children }) {
   return (
     <p
@@ -78,6 +90,10 @@ function LinkText({ onClick, children }) {
   );
 }
 
+/**
+ * @description 로그인 페이지
+ * @returns {JSX.Element} 로그인 페이지 UI
+ */
 export default function SignIn() {
   const [email, setEmail] = useState('');
   const [emailValid, setEmailValid] = useState(false);
@@ -88,12 +104,15 @@ export default function SignIn() {
   const { login, handleError } = useUserApi();
   const navigate = useNavigate();
   const location = useLocation();
+  const LAYOUT = 'flex flex-col items-center justify-center';
 
   useEffect(() => {
     const socialId = localStorage.getItem('socialId');
     if (socialId) {
       toast.error('이미 로그인 상태입니다');
-      navigate(-1);
+      setTimeout(() => {
+        navigate(-1);
+      }, 1000);
     }
   }, [navigate, location]);
 
@@ -105,7 +124,6 @@ export default function SignIn() {
     setNotAllow(true);
   }, [emailValid, password]);
 
-  /** 이메일 입력값 저장 */
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
 
@@ -121,7 +139,6 @@ export default function SignIn() {
     }
   };
 
-  /** 비밀번호 입력값 저장 */
   const handlePasswordChange = (e) => setPassword(e.target.value);
 
   const toggleShowPassword = (e) => {
@@ -129,16 +146,22 @@ export default function SignIn() {
     setShowPassword(!showPassword);
   };
 
-  /** 서버에 로그인 정보 (이메일, 패스워드, socialType) 전송 : 로그인 버튼 */
   const onLogin = (e) => {
     e.preventDefault();
     login(email, password, 'Refrigerator-Alchemist');
   };
 
+  const goolgleLogin = () => {
+    try {
+      window.location.href = `${IP_ADDRESS}/oauth2/authorization/google`;
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
   const kakaoLogin = () => {
     try {
       window.location.href = `${IP_ADDRESS}/oauth2/authorization/kakao`;
-      console.log('카카오 로그인');
     } catch (error) {
       handleError(error);
     }
@@ -147,25 +170,20 @@ export default function SignIn() {
   const naverLogin = () => {
     try {
       window.location.href = `${IP_ADDRESS}/oauth2/authorization/naver`;
-      console.log('네이버 로그인');
     } catch (error) {
       handleError(error);
     }
   };
 
   return (
-    <section className="relative flex flex-col items-center justify-center min-h-screen">
+    <section className={`relative min-h-screen ${LAYOUT}`}>
       <BackButton destination={'/main'} />
-      <header className="flex flex-col items-center justify-center">
+      <header className={LAYOUT}>
         <Logo page="login" width="250px" height="250px" />
         <h1 className="text-3xl font-jua">로그인</h1>
       </header>
       <main>
-        <form
-          className="p-4 rounded-xl"
-          style={{ width: '400px' }}
-          onSubmit={onLogin}
-        >
+        <form className="p-4 rounded-xl w-96" onSubmit={onLogin}>
           <InputField
             label="이메일"
             type="email"
@@ -203,12 +221,17 @@ export default function SignIn() {
         <p className="my-4 text-gray-400 font-score">SNS 간편 로그인</p>
         <figure className="flex mb-4">
           <SocialLogin
-            callBack={kakaoLogin}
+            callback={goolgleLogin}
+            img={LOGO_GOOGLE}
+            socialType={'Google'}
+          />
+          <SocialLogin
+            callback={kakaoLogin}
             img={LOGO_KAKAO}
             socialType={'Kakao'}
           />
           <SocialLogin
-            callBack={naverLogin}
+            callback={naverLogin}
             img={LOGO_NAVER}
             socialType={'Naver'}
           />

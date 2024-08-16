@@ -3,15 +3,18 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'Jua';
-  src: url('./assets/fonts/Jua-Regular.ttf') format('truetype');
-  font-weight: 400;
+  font-family: 'LeeSeoyun';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/LeeSeoyun.woff')
+    format('woff');
+  font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Dongle';
-  src: url('./assets/fonts/Dongle-Light.ttf') format('truetype');
+  font-family: 'Jua';
+  src: url('/assets/fonts/Jua-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
 }
 
 @font-face {

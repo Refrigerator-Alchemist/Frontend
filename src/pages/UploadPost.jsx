@@ -1,9 +1,9 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { IP_ADDRESS, useUserApi } from '../context/UserContext';
-import BackButton from '../components/ui/BackButton';
+import BackButton from '../components/global/BackButton';
 import { Skeleton, Box } from '@mui/material';
 
 export default function UploadBoard() {
@@ -11,7 +11,7 @@ export default function UploadBoard() {
   const [description, setDescription] = useState('');
   const [ingredients, setIngredients] = useState(['']);
   const [imagePreviewUrl, setImagePreviewUrl] = useState('');
-  const [loading, setLoading] = useState(false); // Add loading state
+  const [loading, setLoading] = useState(false);
   const nickName = localStorage.getItem('nickName');
   const email = localStorage.getItem('email');
   const accessToken = localStorage.getItem('accessToken');

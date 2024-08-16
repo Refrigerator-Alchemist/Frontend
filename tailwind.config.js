@@ -11,12 +11,12 @@ module.exports = {
 
       fontFamily: {
         jua: ['Jua', 'sans-serif'],
-        dongle: ['Dongle', 'sans-serif'],
         score: ['S-CoreDream-3Light'],
         scoreExtrabold: ['S-CoreDream-7ExtraBold'],
         ansung: ['Ansungtangmyun-Bold'],
         bagle: ['BagelFatOne-Regular'],
         sam: ['establishRoomNo703OTF'],
+        seoyun: ['LeeSeoyun'],
       },
 
       fontSize: {

@@ -1,6 +1,6 @@
 import React from 'react';
-import Logo from '../components/ui/Logo';
-import BackButton from '../components/ui/BackButton';
+import Logo from '../components/global/Logo';
+import BackButton from '../components/global/BackButton';
 
 export default function NotFound() {
   return (

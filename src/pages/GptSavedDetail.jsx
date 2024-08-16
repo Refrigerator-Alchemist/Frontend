@@ -2,8 +2,8 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import Navigation from '../components/ui/Navigation';
-import BackButton from '../components/ui/BackButton';
+import Navigation from '../components/global/Navigation';
+import BackButton from '../components/global/BackButton';
 import { IP_ADDRESS, useUserApi } from '../context/UserContext';
 import Loading from '../components/gpt/Loading';
 
