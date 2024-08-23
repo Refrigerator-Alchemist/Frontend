@@ -1,24 +1,22 @@
-import { useState } from 'react';
 import axios from 'axios';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CiSaveDown2 } from 'react-icons/ci';
 import { toast } from 'react-toastify';
 import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
 import TagInput from '../../components/GPTs/TagInput';
-import Loading from '../../components/GPTs/Loading';
-import BackButton from '../../components/global/BackButton';
+import Loading from '../../components/Global/Loading';
+import BackButton from '../../components/Global/BackButton';
 
 const GptSearch = () => {
+  const { handleError } = useUserApi();
   const [tags, setTags] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
+  const navigate = useNavigate();
   const accessToken = localStorage.getItem('accessToken');
   const nickName = localStorage.getItem('nickName') || '';
 
-  const navigate = useNavigate();
-  const { handleError } = useUserApi();
-
-  // Gpt로 레시피 검색 요청하는 함수
+  /** 레시피 검색 요청하는 함수 */
   const handleNextButtonClick = async () => {
     setIsLoading(true);
 

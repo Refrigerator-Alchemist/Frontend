@@ -1,14 +1,14 @@
-import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
 import RecipeCard from '../../components/Board/RecipeCard';
 import SearchBar from '../../components/Board/SearchBar';
 import WriteButton from '../../components/Board/WriteButton';
 import RankingBoard from '../../components/Board/RankingBoard';
-import Navigation from '../../components/global/Navbar';
-import ScrollToTopButton from '../../components/global/ScrollToTopButton';
-import useScrollToTop from '../../components/global/useScrollToTop';
+import Navigation from '../../components/Global/Navbar';
+import ScrollToTopButton from '../../components/Global/ScrollToTopButton';
+import useScrollToTop from '../../components/Global/useScrollToTop';
 const accessToken = localStorage.getItem('accessToken');
 const email = localStorage.getItem('email');
 
@@ -42,9 +42,8 @@ const Board = () => {
   }, [currentPage]);
 
   const fetchLikedPosts = async () => {
-    if (!accessToken) {
-      return;
-    }
+    if (!accessToken) return;
+
     const URL = `${IP_ADDRESS}/board/islike?id=${email}`;
     try {
       const response = await axios.get(URL, {
@@ -52,6 +51,7 @@ const Board = () => {
           'Authorization-Access': accessToken,
         },
       });
+
       if (response.data) {
         const posts = response.data.map(Number);
         setLikedPosts(posts);
@@ -78,6 +78,7 @@ const Board = () => {
       const response = await axios.get(`${IP_ADDRESS}/board/page`, {
         params: { data: pageNumber.toString() },
       });
+
       if (response.data && Array.isArray(response.data.items)) {
         const formattedData = response.data.items.map((item) => ({
           id: item.ID,

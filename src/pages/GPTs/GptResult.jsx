@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
-import Loading from '../../components/GPTs/Loading';
-import BackButton from '../../components/global/BackButton';
+import Loading from '../../components/Global/Loading';
+import BackButton from '../../components/Global/BackButton';
 
 const GptResult = () => {
   const [ingredients, setIngredients] = useState([]);
@@ -12,13 +12,12 @@ const GptResult = () => {
   const [title, setTitle] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const { recommendId } = useParams();
+  const { handleError } = useUserApi();
+  const navigate = useNavigate();
   const accessToken = localStorage.getItem('accessToken');
 
-  const navigate = useNavigate();
-  const { handleError } = useUserApi();
-
-  // 🤖 GPT 레시피 결과 불러오는 함수
   useEffect(() => {
+    /** 🤖 GPT 레시피 결과 불러오는 함수 */
     const fetchData = async () => {
       setIsLoading(true);
       try {
@@ -47,7 +46,7 @@ const GptResult = () => {
     }
   }, [recommendId, accessToken, handleError]);
 
-  // gpt레시피 저장하기
+  /** 레시피 저장하기 */
   const handleSaveButtonClick = async () => {
     try {
       await axios.post(

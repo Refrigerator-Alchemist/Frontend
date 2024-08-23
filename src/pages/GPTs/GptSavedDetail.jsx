@@ -1,10 +1,10 @@
+import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
-import Navigation from '../../components/global/Navbar';
-import BackButton from '../../components/global/BackButton';
 import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
-import Loading from '../../components/GPTs/Loading';
+import Navigation from '../../components/Global/Navbar';
+import BackButton from '../../components/Global/BackButton';
+import Loading from '../../components/Global/Loading';
 
 const GptSavedDetail = () => {
   const { recipeId } = useParams();
@@ -35,7 +35,7 @@ const GptSavedDetail = () => {
   });
 
   if (isLoading) return <Loading />;
-  if (error) return <div>오류가 발생했습니다: {error.message}</div>;
+  if (error) return <Error />;
 
   return (
     <>

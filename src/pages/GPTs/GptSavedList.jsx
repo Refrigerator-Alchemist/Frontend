@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import Navigation from '../../components/global/Navbar';
-import SavedListCard from '../../components/GPTs/SavedListCard';
-import BackButton from '../../components/global/BackButton';
 import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
-import Loading from '../../components/GPTs/Loading';
+import Navigation from '../../components/Global/Navbar';
+import SavedListCard from '../../components/GPTs/SavedListCard';
+import BackButton from '../../components/Global/BackButton';
+import Loading from '../../components/Global/Loading';
+import Error from '../../components/Global/Error';
 
 export default function GptSavedList() {
   const nickName = localStorage.getItem('nickName') || '';
@@ -33,7 +34,7 @@ export default function GptSavedList() {
   });
 
   if (isLoading) return <Loading />;
-  if (error) return <div>오류가 발생했습니다: {error.message}</div>;
+  if (error) return <Error />;
 
   return (
     <section className="history">

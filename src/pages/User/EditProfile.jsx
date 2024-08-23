@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
 import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
-import IMAGE_PROFILE from '/assets/img/img_profile.png';
 import BackButton from '../../components/Global/BackButton';
+import IMAGE_PROFILE from '/assets/img/img_profile.png';
 
 function FormGroup({
   label,
