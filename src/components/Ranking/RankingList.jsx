@@ -1,9 +1,11 @@
 import axios from 'axios';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
-import { FaHeart } from 'react-icons/fa';
 import { useQuery } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
+import { FaHeart } from 'react-icons/fa';
+import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
+import Loading from '../Global/Loading';
+import Error from '../Global/Error';
 
 function RankingCard({
   rank,
@@ -76,24 +78,17 @@ export default function RankingList() {
   };
 
   const {
-    isPending,
-    isError,
     data: topItems,
+    isPending,
     error,
   } = useQuery({
     queryKey: ['topItems'],
-    queryFn: () => fetchRanking(),
+    queryFn: fetchRanking,
     staleTime: 1000 * 60 * 5,
   });
 
-  if (isPending) {
-    // 로딩 애니메이션으로 교체
-    return <span>Loading...</span>;
-  }
-  if (isError) {
-    // 에러 메세지
-    return <span>에러 발생 : {error}</span>;
-  }
+  if (isPending) return <Loading />;
+  if (error) return <Error />;
 
   return (
     <article

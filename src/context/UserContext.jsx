@@ -4,8 +4,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import ERRORS from '../utils/customedError';
 
-// export const IP_ADDRESS = 'http://43.201.57.180:8080'; // 배포 환경
-export const IP_ADDRESS = 'http://localhost:8080'; // 로컬 환경
+export const IP_ADDRESS = 'http://localhost:8080'; // 배포시 IP 변경
 
 axios.interceptors.response.use(
   function (response) {

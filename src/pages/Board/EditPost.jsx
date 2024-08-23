@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
-import BackButton from '../../components/global/BackButton';
+import BackButton from '../../components/Global/BackButton';
 
 function FormGroup({ label, children }) {
   return (

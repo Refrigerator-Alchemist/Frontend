@@ -1,21 +1,22 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
 import Header from '../../components/BoardDetail/Header';
 import BoardDetailMain from '../../components/BoardDetail/BoardDetailMain';
-import Footer from '../../components/global/Footer';
+import Footer from '../../components/Global/Footer';
+import Loading from '../../components/Global/Loading';
+import Error from '../../components/Global/Error';
 
 const BoardDetail = () => {
-  const { postId } = useParams();
   const [Liked, setLiked] = useState(false);
-  const accessToken = localStorage.getItem('accessToken');
-  const myEmail = localStorage.getItem('email');
-  const location = useLocation();
+  const { postId } = useParams();
   const { handleError } = useUserApi();
   const queryClient = useQueryClient();
+  const accessToken = localStorage.getItem('accessToken');
+  const myEmail = localStorage.getItem('email');
 
   const fetchPostData = async () => {
     const response = await axios.get(
@@ -148,15 +149,8 @@ const BoardDetail = () => {
     }
   };
 
-  if (postQuery.isLoading || likedPostsQuery.isLoading) {
-    return <span>Loading...</span>;
-  }
-
-  if (postQuery.isError || likedPostsQuery.isError) {
-    return (
-      <span>Error occurred: {postQuery.error || likedPostsQuery.error}</span>
-    );
-  }
+  if (postQuery.isLoading || likedPostsQuery.isLoading) return <Loading />;
+  if (postQuery.isError || likedPostsQuery.isError) return <Error />;
 
   return (
     <section style={{ marginBottom: '90px' }}>
