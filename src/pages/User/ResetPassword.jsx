@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useUserApi } from '../../context/UserContext';
-import BackButton from '../../components/global/BackButton';
-import InputPassword from '../../components/Account/InputPassword';
-import AccountHeader from '../../components/Account/AccountHeader';
-import CheckedList from '../../components/Account/CheckedList';
-import PasswordMatch from '../../components/Account/PasswordMatch';
-import InputVeriNum from '../../components/Account/InputVeriNum';
-import SubmitButton from '../../components/Account/SubmitButton';
+import BackButton from '../../components/Global/BackButton';
+import InputPassword from '../../components/User/InputPassword';
+import AccountHeader from '../../components/User/AccountHeader';
+import CheckedList from '../../components/User/CheckedList';
+import PasswordMatch from '../../components/User/PasswordMatch';
+import InputVeriNum from '../../components/User/InputVeriNum';
+import SubmitButton from '../../components/User/SubmitButton';
 
 export default function ResetPassword() {
   const [email, setEmail] = useState(''); // 이메일

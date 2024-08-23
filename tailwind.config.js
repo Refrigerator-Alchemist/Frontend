@@ -38,6 +38,7 @@ module.exports = {
     require('tailwindcss-textshadow'),
     function ({ addComponents }) {
       const newComponents = {
+        // Navbar 아이콘 액티브 인디케이터 '▲'
         '.selected-icon::before': {
           content: '""',
           position: 'absolute',
@@ -59,6 +60,28 @@ module.exports = {
           borderRight: '10px solid transparent',
           borderBottom: '10px solid #f8bb01',
           zIndex: '2',
+        },
+        // 전역 버튼 스타일
+        '.btn': {
+          display: 'inline-block',
+          whiteSpace: 'nowrap',
+          height: '3rem',
+          paddingLeft: '1.5rem',
+          paddingRight: '1.5rem',
+          marginLeft: '1.25rem',
+          marginTop: '0.5rem',
+          color: '#ffffff',
+          backgroundColor: '#F8BB01',
+          borderRadius: '1.5rem',
+          fontFamily: 'S-CoreDream-7ExtraBold',
+          fontWeight: '800',
+          fontSize: '1.25rem',
+          transition: 'ease-in-out 0.3s',
+          '&:hover': {
+            cursor: 'pointer',
+            transform: 'scale(1.1)',
+            backgroundColor: '#6366f1',
+          },
         },
       };
       addComponents(newComponents);

@@ -11,10 +11,14 @@ const accessToken = localStorage.getItem('accessToken');
 const email = localStorage.getItem('email');
 
 const RecipeCard = forwardRef(
-  ({ postId, title, description, img, initialLikeCount, isLiked, loading }, ref) => {
+  (
+    { postId, title, description, img, initialLikeCount, isLiked, loading },
+    ref
+  ) => {
     const [Liked, setLiked] = useState(isLiked);
     const [likeCount, setLikeCount] = useState(parseInt(initialLikeCount));
     const { handleError } = useUserApi();
+    const textStyle = 'text-lg font-score font-semibold';
 
     useEffect(() => {
       setLiked(isLiked);
@@ -71,24 +75,33 @@ const RecipeCard = forwardRef(
     }
 
     return (
-      <div ref={ref} className="flex items-center bg-white mx-6 my-2 p-4 rounded-xl shadow">
+      <div
+        ref={ref}
+        className="flex items-center bg-white mx-6 my-2 p-4 rounded-xl shadow"
+      >
         <Link to={`/board/${postId}`} className="flex-grow flex">
           <div className="flex-none w-20 h-20 rounded-xl border-2 border-gray-300 overflow-hidden">
-            <img className="w-full h-full object-cover" src={img} alt={`View of ${title}`}  />
+            <img
+              className="w-full h-full object-cover"
+              src={img}
+              alt={`View of ${title}`}
+            />
           </div>
           <div className="px-4 py-4">
-            <h3 className="text-lg font-score font-semibold">{title}</h3>
+            <h3 className={textStyle}>{title}</h3>
             <p className="text-gray-500 text-sm font-score">{description}</p>
           </div>
         </Link>
         <div className="mr-2">
-          <span className="text-lg font-score font-semibold">{likeCount}</span>
+          <span className={textStyle}>{likeCount}</span>
         </div>
         <button
-          name='like'
-          aria-label='like'
+          name="like"
+          aria-label="like"
           className="p-2"
-          onClick={accessToken ? toggleLike : () => toast.error('로그인이 필요합니다.')}
+          onClick={
+            accessToken ? toggleLike : () => toast.error('로그인이 필요합니다.')
+          }
         >
           {accessToken ? (
             Liked ? (

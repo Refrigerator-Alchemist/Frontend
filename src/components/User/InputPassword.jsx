@@ -10,18 +10,20 @@ export default function InputPassword({
   setCheckPassword,
   isSamePassword,
 }) {
+  const inputStyle =
+    'w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo';
+  const labelStyle = 'text-md font-bold font-undong text-center';
+
   return (
     <div>
-      <label className="mb-4 text-md font-bold font-undong text-center">
-        비밀번호
-      </label>
+      <label className={`mb-4 ${labelStyle}`}>비밀번호</label>
       <div className="flex mb-4">
         <input
           type={showPassword ? 'text' : 'password'}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="비밀번호"
-          className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo"
+          className={inputStyle}
         />
         <button
           onClick={toggleShowPassword}
@@ -30,9 +32,7 @@ export default function InputPassword({
           {showPassword ? <GoEye /> : <GoEyeClosed />}
         </button>
       </div>
-      <label className="flex text-md font-bold font-undong text-center">
-        비밀번호 확인
-      </label>
+      <label className={`flex ${labelStyle}`}>비밀번호 확인</label>
       <div className="flex">
         <input
           type="password"
@@ -42,7 +42,7 @@ export default function InputPassword({
             isSamePassword();
           }}
           placeholder="한 번 더 입력하세요"
-          className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo"
+          className={inputStyle}
         />
       </div>
     </div>

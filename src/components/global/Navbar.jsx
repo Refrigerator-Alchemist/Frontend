@@ -5,6 +5,7 @@ import { IoAccessibilityOutline, IoAccessibility } from 'react-icons/io5';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { NavigationContext } from '../../context/NavbarContext';
 
+// selected-icon : tailwind.config.js
 function NavbarIcon({ iconStyle, onClick, selected, type, icon, activeIcon }) {
   return (
     <div

@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useUserApi } from '../../context/UserContext';
-import InputPassword from '../../components/Account/InputPassword';
+import InputPassword from '../../components/User/InputPassword';
 import BackButton from '../../components/global/BackButton';
-import AccountHeader from '../../components/Account/AccountHeader';
-import CheckedList from '../../components/Account/CheckedList';
-import PasswordMatch from '../../components/Account/PasswordMatch';
-import InputVeriNum from '../../components/Account/InputVeriNum';
-import SubmitButton from '../../components/Account/SubmitButton';
-import CheckNickname from '../../components/Account/CheckNickname';
+import AccountHeader from '../../components/User/AccountHeader';
+import CheckedList from '../../components/User/CheckedList';
+import PasswordMatch from '../../components/User/PasswordMatch';
+import InputVeriNum from '../../components/User/InputVeriNum';
+import SubmitButton from '../../components/User/SubmitButton';
+import CheckNickname from '../../components/User/CheckNickname';
 
 export default function SignUp() {
   const [email, setEmail] = useState('');

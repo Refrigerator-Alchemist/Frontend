@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useUserApi } from '../../context/UserContext.jsx';
 import { useNavigate } from 'react-router-dom';
+import { useUserApi } from '../../context/UserContext.jsx';
 
 export default function LoginSuccess() {
   const { handleError } = useUserApi();
@@ -16,8 +16,7 @@ export default function LoginSuccess() {
       const email = urlParams.get('email');
 
       try {
-        // 로컬 스토리지
-        // ▶ 액세스 토큰, 리프레시 토큰, 닉네임, 소셜ID, 소셜타입, 이메일
+        // 액세스 토큰, 리프레시 토큰, 닉네임, 소셜ID, 소셜타입, 이메일
         if (accessToken && refreshToken && socialId) {
           localStorage.setItem('accessToken', 'Bearer ' + accessToken);
           localStorage.setItem('refreshToken', 'Bearer ' + refreshToken);
