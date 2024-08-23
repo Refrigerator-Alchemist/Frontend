@@ -22,7 +22,7 @@ export default function CheckNickname({
           />
           <button
             onClick={isDuplicated}
-            className="inline-block whitespace-nowrap h-12 px-6 ml-5 mt-2 text-white bg-main rounded-3xl font-scoreExtrabold font-extrabold text-xl transition ease-in-out hover:cursor-pointer hover:scale-110 hover:bg-indigo duration-300"
+            className="inline-block h-12 px-6 ml-5 mt-2 whitespace-nowrap text-white font-scoreExtrabold font-extrabold text-xl bg-main rounded-3xl transition ease-in-out hover:cursor-pointer hover:scale-110 hover:bg-indigo duration-300"
           >
             중복 확인
           </button>

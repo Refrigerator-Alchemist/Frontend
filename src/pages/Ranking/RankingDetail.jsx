@@ -1,4 +1,4 @@
-import Ranking from '../../components/global/Ranking';
+import Ranking from '../../components/Ranking/RankingList';
 import BackButton from '../../components/global/BackButton';
 
 export default function RankingDetail() {

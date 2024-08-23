@@ -1,5 +1,5 @@
 import React from 'react';
-import Ranking from '../global/Ranking';
+import Ranking from '../Ranking/RankingList';
 
 const RankingBoard = () => {
   return (

@@ -1,15 +1,13 @@
 import { useState } from 'react';
-import { useUserApi } from '../../context/UserContext';
-import BackButton from '../../components/global/BackButton';
 import { toast } from 'react-toastify';
+import { useUserApi } from '../../context/UserContext';
+import BackButton from '../../components/Global/BackButton';
 
 export default function DeleteUser() {
   const [password, setPassword] = useState('');
   const user = useUserApi();
   const handlePasswordChange = (e) => setPassword(e.target.value);
-  /** 회원탈퇴 API
-   * - 백엔드 API 개발 X
-   */
+  /** 회원탈퇴 API - 백엔드 개발 X */
   const handleDeleteUser = (e) => {
     e.preventDefault();
     const confirmDelete = window.confirm('정말 회원탈퇴를 진행할까요?');
