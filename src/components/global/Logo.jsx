@@ -1,6 +1,6 @@
 import React from 'react';
-import logo from '/assets/img/logo.png';
-import logo_transparent from '/assets/img/logo_transparent.png';
+import logo from '/assets/img/logo.webp';
+import logo_transparent from '/assets/img/logo_transparent.webp';
 
 export default function Logo({ page, width, height }) {
   // 🏃‍♀️ 시작 페이지 : 일반

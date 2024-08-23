@@ -5,9 +5,9 @@ import { GoEye, GoEyeClosed } from 'react-icons/go';
 import { useUserApi, IP_ADDRESS } from '../../context/UserContext';
 import Logo from '../../components/Global/Logo';
 import BackButton from '../../components/Global/BackButton';
-import LOGO_GOOGLE from '/assets/img/logo_google.png';
-import LOGO_KAKAO from '/assets/img/logo_kakao.png';
-import LOGO_NAVER from '/assets/img/logo_naver.png';
+import LOGO_GOOGLE from '/assets/img/logo_google.webp';
+import LOGO_KAKAO from '/assets/img/logo_kakao.webp';
+import LOGO_NAVER from '/assets/img/logo_naver.webp';
 
 /** 
  @description 소셜 로그인 버튼 
