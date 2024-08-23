@@ -98,8 +98,11 @@ export default function RankingList() {
       }}
     >
       <div className="flex justify-end">
-        <span className="flex flex-col justify-end font-score text-sm hover:text-indigo mr-4">
+        <span className="relative flex flex-col justify-end font-score text-sm hover:text-indigo mr-4 group">
           가장 많은 좋아요를 받은 레시피는?
+          <div className="absolute bottom-full right-2 mb-1 hidden group-hover:block z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-2 font-score text-xs font-normal text-white opacity-50">
+            랭킹보드 이동
+          </div>
         </span>
       </div>
       <ul>

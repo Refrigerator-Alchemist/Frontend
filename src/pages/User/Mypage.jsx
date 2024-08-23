@@ -7,7 +7,7 @@ import Navigation from '../../components/Global/Navbar';
 import MyRecipe from '../../components/Mypage/MyRecipe';
 import LikedRecipe from '../../components/Mypage/LikedRecipe';
 import ScrollToTopButton from '../../components/Mypage/ScrollToTop';
-import IMG_PROFILE from '/assets/img/img_profile.png';
+import IMG_PROFILE from '/assets/img/img_profile.webp';
 
 export default function MyPage() {
   const [imageUrl, setImageUrl] = useState(IMG_PROFILE);

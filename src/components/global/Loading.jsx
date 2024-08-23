@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import LOGO from '/assets/img/logo.png';
+import LOGO from '/assets/img/logo.webp';
 
 const Loading = () => {
   const navigate = useNavigate();
