@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { CiSaveDown2 } from 'react-icons/ci';
 import { toast } from 'react-toastify';
 import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
-import TagInput from '../../components/GPTs/TagInput';
-import Loading from '../../components/Global/Loading';
-import BackButton from '../../components/Global/BackButton';
+import TagInput from '../../components/gpts/TagInput';
+import Loading from '../../components/common/Loading';
+import BackButton from '../../components/common/BackButton';
 
 const GptSearch = () => {
   const { handleError } = useUserApi();

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useUserApi } from '../../context/UserContext';
-import BackButton from '../../components/common/BackButton';
+import BackButton from '../../components/Global/BackButton';
 import InputPassword from '../../components/user/InputPassword';
 import AccountHeader from '../../components/user/AccountHeader';
 import CheckedList from '../../components/user/CheckedList';

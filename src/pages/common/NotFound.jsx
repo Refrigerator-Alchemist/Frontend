@@ -1,5 +1,5 @@
-import Logo from '../../components/Global/Logo';
-import BackButton from '../../components/Global/BackButton';
+import Logo from '../../components/common/Logo';
+import BackButton from '../../components/common/BackButton';
 
 export default function NotFound() {
   return (

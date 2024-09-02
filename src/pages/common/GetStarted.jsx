@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import Logo from '../../components/Global/Logo';
+import Logo from '../../components/common/Logo';
 
 const Title = () => {
   const letters = ['냉', '장', '고', '　', '연', '금', '술', '사'];

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
-import BackButton from '../../components/Global/BackButton';
+import BackButton from '../../components/common/BackButton';
 import { Skeleton, Box } from '@mui/material';
 
 export default function UploadBoard() {

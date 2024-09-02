@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { FaReact } from 'react-icons/fa';
 import Ranking from '../../components/Ranking/RankingList';
-import Footer from '../../components/Global/Footer';
+import Footer from '../../components/common/Footer';
 
 function HeadScript() {
   return (

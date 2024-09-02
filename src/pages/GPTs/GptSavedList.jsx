@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
-import Navigation from '../../components/Global/Navbar';
-import SavedListCard from '../../components/GPTs/SavedListCard';
-import BackButton from '../../components/Global/BackButton';
-import Loading from '../../components/Global/Loading';
-import Error from '../../components/Global/Error';
+import Navigation from '../../components/common/Navbar';
+import SavedListCard from '../../components/gpts/SavedListCard';
+import BackButton from '../../components/common/BackButton';
+import Loading from '../../components/common/Loading';
+import Error from '../../components/common/Error';
 
 export default function GptSavedList() {
   const nickName = localStorage.getItem('nickName') || '';
