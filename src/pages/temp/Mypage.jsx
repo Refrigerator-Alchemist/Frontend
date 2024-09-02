@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useUserApi, IP_ADDRESS } from '../../context/UserContext';
-import Navigation from '../../components/common/Navbar';
+import Navigation from '../../components/Global/Navbar';
 import MyRecipe from '../../components/mypage/MyRecipe';
 import LikedRecipe from '../../components/mypage/LikedRecipe';
 import ScrollToTopButton from '../../components/mypage/ScrollToTop';

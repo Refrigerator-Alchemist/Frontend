@@ -4,8 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { FaHeart } from 'react-icons/fa';
 import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
-import Loading from '../Global/Loading';
-import Error from '../Global/Error';
+import Loading from '../common/Loading';
+import Error from '../common/Error';
 
 function RankingCard({
   rank,

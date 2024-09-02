@@ -2,9 +2,9 @@ import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
-import Navigation from '../../components/Global/Navbar';
-import BackButton from '../../components/Global/BackButton';
-import Loading from '../../components/Global/Loading';
+import Navigation from '../../components/common/Navbar';
+import BackButton from '../../components/common/BackButton';
+import Loading from '../../components/common/Loading';
 
 const GptSavedDetail = () => {
   const { recipeId } = useParams();

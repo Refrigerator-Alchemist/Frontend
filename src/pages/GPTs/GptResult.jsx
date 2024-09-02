@@ -3,8 +3,8 @@ import { toast } from 'react-toastify';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
-import Loading from '../../components/Global/Loading';
-import BackButton from '../../components/Global/BackButton';
+import Loading from '../../components/common/Loading';
+import BackButton from '../../components/common/BackButton';
 
 const GptResult = () => {
   const [ingredients, setIngredients] = useState([]);

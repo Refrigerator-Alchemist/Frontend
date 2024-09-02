@@ -1,6 +1,6 @@
 import React from 'react';
-import Logo from '../../components/Global/Logo';
-import BackButton from '../../components/Global/BackButton';
+import Logo from './Logo';
+import BackButton from './BackButton';
 
 export default function Error() {
   return (

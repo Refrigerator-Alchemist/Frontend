@@ -4,11 +4,11 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
-import Header from '../../components/BoardDetail/Header';
-import BoardDetailMain from '../../components/BoardDetail/BoardDetailMain';
-import Footer from '../../components/Global/Footer';
-import Loading from '../../components/Global/Loading';
-import Error from '../../components/Global/Error';
+import Header from '../../components/boarddetail/Header';
+import BoardDetailMain from '../../components/boarddetail/BoardDetailMain';
+import Footer from '../../components/common/Footer';
+import Loading from '../../components/common/Loading';
+import Error from '../../components/common/Error';
 
 const BoardDetail = () => {
   const [Liked, setLiked] = useState(false);
