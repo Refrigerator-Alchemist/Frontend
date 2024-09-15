@@ -1,10 +1,9 @@
 # 🧙 냉장고 연금술사
 
-![프로젝트 썸네일](./public/thumbnail.png)
+![프로젝트 썸네일](./public/assets/img/thumbnail.webp)
 
 ## 📋 목차
 
-- [🔗 접속 링크](#🔗-접속-링크)
 - [📝 기간](#📝-기간)
 - [✅ 사용한 도구들](#✅-사용한-도구들)
 - [🧑‍🤝‍🧑 팀원 & 역할](#🧑‍🤝‍🧑-팀원--역할)
@@ -21,16 +20,10 @@
 연금술을 사용해서 레시피를 만들어 내고, 커뮤니티에서 사람들과 레시피를 서로 공유 해주세요!
 인기만점 랭킹 Top3 게시물은 명예의 전당에도 오른답니다😀
 
-## 🔗 접속 링크
-
-http://43.201.57.180:3000 <br/>
-(도메인 네임 적용 예정)
-
 ## 📝 기간
 
 - 기능 구현 및 테스트 : 2024.01.31 ~ 2024.04.31
-- EC2 배포 : 2024.07.17 ~
-- 버그 발견시 상시 디버깅
+- EC2 배포 : 2024.07.17 ~ 08.01 (Expired)
 
 ## 🎙️ 커뮤니케이션 방식
 
@@ -49,12 +42,12 @@ http://43.201.57.180:3000 <br/>
 </div><br/>
 
 <div>
-  <p style='font-weight: bold; color:orange'>디자인</p>
+  <p style='font-weight: bold;'>디자인</p>
   <img src="https://img.shields.io/badge/Figma-F24E1E?style=flat-square&logo=figma&logoColor=black">
 </div><br/>
 
 <div>
-  <p style='font-weight: bold; color:gold'>협업</p>
+  <p style='font-weight: bold;'>협업</p>
   <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white">
   <img src="https://img.shields.io/badge/Notion-000000?style=flat-square&logo=notion&logoColor=white">
   <img src="https://img.shields.io/badge/Discord-5865F2?style=flat-square&logo=discord&logoColor=white">
@@ -62,7 +55,7 @@ http://43.201.57.180:3000 <br/>
 </div><br/>
 
 <div>
-  <p style='color:pink; font-weight: bold'>FE Stack</p>
+  <p style='font-weight: bold'>FE Stack</p>
   <img src="https://img.shields.io/badge/React.js-61DAFB?style=flat-square&logo=react&logoColor=black">
   <img src="https://img.shields.io/badge/Javascript-F7DF1E?style=flat-square&logo=javascript&logoColor=black">
   <img src="https://img.shields.io/badge/React Query-FF4154?style=flat-square&logo=reactquery&logoColor=white">
@@ -73,7 +66,7 @@ http://43.201.57.180:3000 <br/>
 </div><br/>
 
 <div>
-  <p style='color:cyan; font-weight: bold'>BE Stack</p>
+  <p style='font-weight: bold'>BE Stack</p>
 
   <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat-square&logo=springboot&logoColor=white">
   <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white">
@@ -83,15 +76,17 @@ http://43.201.57.180:3000 <br/>
 <div>
   <p style='font-weight: bold'>APIs</p>
   <img src="https://img.shields.io/badge/GPT 3.5-412991?style=flat-square&logo=openai&logoColor=white">
+  <img src="https://img.shields.io/badge/Kakao Oauth-FFCD00?style=flat-square&logo=kakao&logoColor=white">
+  <img src="https://img.shields.io/badge/Naver Oauth-03C75A?style=flat-square&logo=naver&logoColor=white">
 </div><br/>
 
 <div>
-  <p style='color:cyan; font-weight: bold'>배포</p>
+  <p style='font-weight: bold'>배포</p>
   <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white">
   <img src="https://img.shields.io/badge/Amazon EC2-FF9900?style=flat-square&logo=amazonec2&logoColor=black">
 </div>
 
-## ⚠️ 프로젝트에 도입된 기술
+## 프로젝트에 도입된 기술
 
 ### <span>프론트엔드</span>
 
@@ -392,7 +387,7 @@ http://43.201.57.180:3000 <br/>
 
 ### 1. 접속
 
-<img src="./src/assets/img/readme/초기화면.gif" width="300" height="650"/>
+<img src="./public/assets/img/readme/초기화면.gif" width="300" height="650"/>
 
 <br/><span>👉 시작하기</span>
 
@@ -404,8 +399,8 @@ http://43.201.57.180:3000 <br/>
 
 ### 2. 회원가입
 
-<img src="./src/assets/img/readme/회원가입 인증요청.gif" width="300" height="650"/>
-<img src="./src/assets/img/readme/회원가입.gif" width="300" height="650"/>
+<img src="./public/assets/img/readme/회원가입 인증요청.gif" width="300" height="650"/>
+<img src="./public/assets/img/readme/회원가입.gif" width="300" height="650"/>
 
 <br/><span>👉 이메일 계정</span>
 
@@ -427,8 +422,8 @@ http://43.201.57.180:3000 <br/>
 
 ### 3. 로그인
 
-<img src="./src/assets/img/readme/이메일-로그인.gif" width="300" height="650"/>
-<img src="./src/assets/img/readme/SNS-로그인.gif" width="300" height="650"/>
+<img src="./public/assets/img/readme/이메일-로그인.gif" width="300" height="650"/>
+<img src="./public/assets/img/readme/SNS-로그인.gif" width="300" height="650"/>
 
 <br/><span>👉 이메일 계정</span>
 
@@ -444,7 +439,7 @@ http://43.201.57.180:3000 <br/>
 
 ### 4. 비로그인 접속 차단
 
-<img src="./src/assets/img/readme/비로그인-유저-차단.gif" width="300" height="650"/><br/>
+<img src="./public/assets/img/readme/비로그인-유저-차단.gif" width="300" height="650"/><br/>
 
 <span>👉 액세스 토큰으로 로그인 확인</span>
 
@@ -457,7 +452,7 @@ http://43.201.57.180:3000 <br/>
 
 ### 5. 레시피 연금술
 
-<img src="./src/assets/img/readme/레시피 연금술.gif" width="300" height="550"/><br/>
+<img src="./public/assets/img/readme/레시피 연금술.gif" width="300" height="550"/><br/>
 
 <span>👉 연금술로 레시피 만들기</span>
 
@@ -470,7 +465,7 @@ http://43.201.57.180:3000 <br/>
 
 ### 6. 저장된 레시피 확인하기
 
-<img src="./src/assets/img/readme/저장된 레시피 확인.gif" width="300" height="650"/><br/>
+<img src="./public/assets/img/readme/저장된 레시피 확인.gif" width="300" height="650"/><br/>
 
 <span>👉 연금술 시작 페이지에서 확인</span>
 
@@ -480,7 +475,7 @@ http://43.201.57.180:3000 <br/>
 
 ### 7. 게시물 올리기
 
-<img src="./src/assets/img/readme/게시물 올리기.gif" width="300" height="650"/><br/>
+<img src="./public/assets/img/readme/게시물 올리기.gif" width="300" height="650"/><br/>
 
 <span>👉 내가 만든 레시피 공유</span>
 
@@ -491,8 +486,8 @@ http://43.201.57.180:3000 <br/>
 
 ### 8. 랭킹 탑3 명예의 전당
 
-<img src="./src/assets/img/readme/랭킹-반영.gif" width="300" height="650"/>
-<img src="./src/assets/img/readme/랭킹-페이지.gif" width="300" height="650"/>
+<img src="./public/assets/img/readme/랭킹-반영.gif" width="300" height="650"/>
+<img src="./public/assets/img/readme/랭킹-페이지.gif" width="300" height="650"/>
 
 <br/><span>👉 가장 좋아요를 많이 받은 게시물</span>
 
@@ -503,8 +498,8 @@ http://43.201.57.180:3000 <br/>
 
 ### 9. 게시물 신고하기
 
-<img src="./src/assets/img/readme/신고 1.gif" width="300" height="650"/>
-<img src="./src/assets/img/readme/신고 2.gif" width="300" height="650"/>
+<img src="./public/assets/img/readme/신고 1.gif" width="300" height="650"/>
+<img src="./public/assets/img/readme/신고 2.gif" width="300" height="650"/>
 
 <br/><span>👉 광고, 비방글, 음란물 신고를 위한 기능</span>
 
@@ -515,7 +510,7 @@ http://43.201.57.180:3000 <br/>
 
 ### 10. 게시물 수정하기
 
-<img src="./src/assets/img/readme/게시물 수정.gif" width="300" height="650"/><br/>
+<img src="./public/assets/img/readme/게시물 수정.gif" width="300" height="650"/><br/>
 
 <span>👉 내용 수정하기</span>
 
@@ -526,7 +521,7 @@ http://43.201.57.180:3000 <br/>
 
 ### 11. 마이페이지
 
-<img src="./src/assets/img/readme/마이페이지.gif" width="300" height="650"/><br/>
+<img src="./public/assets/img/readme/마이페이지.gif" width="300" height="650"/><br/>
 
 <span>👉 내가 작성한 레시피, 좋아요 누른 레시피 확인</span>
 
@@ -543,7 +538,7 @@ http://43.201.57.180:3000 <br/>
 
 ### 12. 닉네임 수정하기
 
-<img src="./src/assets/img/readme/닉네임 수정.gif" width="300" height="650"/><br/>
+<img src="./public/assets/img/readme/닉네임 수정.gif" width="300" height="650"/><br/>
 
 <span>👉 닉네임 바꾸기</span>
 
@@ -553,7 +548,7 @@ http://43.201.57.180:3000 <br/>
 
 ### 13. 비밀번호 재설정(초기화)
 
-<img src="./src/assets/img/readme/비밀번호 재설정.gif" width="300" height="650"/><br/>
+<img src="./public/assets/img/readme/비밀번호 재설정.gif" width="300" height="650"/><br/>
 
 <span>👉 비밀번호를 까먹어도 걱정 X</span>
 
