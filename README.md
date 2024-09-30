@@ -6,6 +6,7 @@
 
 - [📝 기간](#📝-기간)
 - [✅ 사용한 도구들](#✅-사용한-도구들)
+- [🧱 아키텍처](#🧱-아키텍처)
 - [🧑‍🤝‍🧑 팀원 & 역할](#🧑‍🤝‍🧑-팀원--역할)
 - [🧚🏻 냉장고 연금술사 사용법](#🧚🏻-냉장고-연금술사-사용법)
 - [🥞 프로젝트 회고록](#🥞-프로젝트-회고록)
@@ -185,7 +186,7 @@ TTL=(유효시간-경과시간)만큼 설정하여, 재발급하기 전 사용�
   <tbody>
     <tr>
       <td align="center">
-        <a href="https://github.com/devkoow">
+        <a href="https://github.com/window-ook">
           <img src="https://avatars.githubusercontent.com/u/112608822?v=4" width="100px;" alt="" style='border-radius:50%'/><br />
           <sub>
             <b>이창욱</b>
