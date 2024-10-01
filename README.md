@@ -69,6 +69,7 @@
   <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat-square&logo=springboot&logoColor=white">
   <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white">
   <img src="https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=redis&logoColor=white">
+  <img src="https://img.shields.io/badge/S3-f0463a?style=flat-square&logo=amazons3&logoColor=white">
 </div><br/>
 
 <div>
@@ -86,7 +87,7 @@
 
 ## 🧱 아키텍처
 
-![아키텍처](./public/assets/img/readme/냉장고연금술사_아키텍처.webp)
+![아키텍처](./public/assets/img/readme/refrigerator_architecture.webp)
 
 ### ✨ 프론트엔드
 
