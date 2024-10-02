@@ -3,13 +3,74 @@
 @tailwind utilities;
 
 @font-face {
+  font-family: 'LeeSeoyun';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/LeeSeoyun.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
   font-family: 'Jua';
-  src: url('./fonts/Jua-Regular.ttf') format('truetype');
+  src: url('/assets/fonts/Jua-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'S-CoreDream-3Light';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'S-CoreDream-7ExtraBold';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-7ExtraBold.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Ansungtangmyun-Bold';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/Ansungtangmyun-Bold.woff2')
+    format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'BagelFatOne-Regular';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_JAMO@1.0/BagelFatOne-Regular.woff2')
+    format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'establishRoomNo703OTF';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2112@1.0/establishRoomNo703OTF.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
+  overflow-y: scroll;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  min-height: calc(100% + env(safe-area-inset-top));
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
 body {
@@ -17,12 +78,29 @@ body {
   justify-content: center;
   background-color: #e9e9e9;
   min-height: 100vh;
-  margin: 0;
+  overflow-x: hidden;
 }
 
+/* PWA body */
 body > div {
   width: 100%;
-  max-width: 32rem;
+  max-width: 31rem;
   background-color: white;
   box-shadow: 0 1px 3px 0 rgb(181, 181, 181);
+}
+
+@keyframes change-background-color {
+  0% {
+    background-color: #f8bb01;
+  }
+  50% {
+    background-color: #6366f1;
+  }
+  100% {
+    background-color: #f8bb01;
+  }
+}
+
+.bg-change-color {
+  animation: change-background-color 5s linear infinite;
 }
