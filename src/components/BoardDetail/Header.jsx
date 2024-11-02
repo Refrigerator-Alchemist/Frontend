@@ -1,7 +1,7 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import { PiSirenFill } from 'react-icons/pi';
-import { useNavigate } from 'react-router-dom';
 
 const BoardDetailHeader = ({ reportPost }) => {
   const navigate = useNavigate();

@@ -1,9 +1,9 @@
 import { useContext, useEffect, memo } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { NavigationContext } from '../../context/NavbarContext';
 import { PiCookingPot, PiCookingPotFill } from 'react-icons/pi';
 import { GoHome, GoHomeFill } from 'react-icons/go';
 import { IoAccessibilityOutline, IoAccessibility } from 'react-icons/io5';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { NavigationContext } from '../../context/NavbarContext';
 
 // selected-icon : tailwind.config.js
 function NavbarIcon({ iconStyle, onClick, selected, type, icon, activeIcon }) {

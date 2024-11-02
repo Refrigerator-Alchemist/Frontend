@@ -32,8 +32,8 @@ const BoardDetailMain = ({
                 </h2>
                 <div className="flex flex-col items-center">
                   <button
-                  name='like'
-                  aria-label='like'
+                    name="like"
+                    aria-label="like"
                     className="p-2"
                     onClick={
                       accessToken

@@ -1,34 +1,32 @@
 import { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
 import { useUserApi } from '../../context/UserContext';
+import { isPasswordValid } from '../../utils/common';
+import { toast } from 'react-toastify';
 import BackButton from '../../components/common/BackButton';
-import InputPassword from '../../components/user/InputPassword';
-import AccountHeader from '../../components/user/AccountHeader';
-import CheckedList from '../../components/user/CheckedList';
-import PasswordMatch from '../../components/user/PasswordMatch';
-import InputVeriNum from '../../components/user/InputVeriNum';
-import SubmitButton from '../../components/user/SubmitButton';
+import InputPassword from '../../components/User/SignUpAndResetPassword/InputPassword';
+import FormHeader from '../../components/User/SignUpAndResetPassword/FormHeader';
+import CheckedList from '../../components/User/SignUpAndResetPassword/CheckedList';
+import PasswordMatch from '../../components/User/SignUpAndResetPassword/PasswordMatch';
+import InputVeriNum from '../../components/User/SignUpAndResetPassword/InputVeriNum';
+import SubmitButton from '../../components/User/SignUpAndResetPassword/SubmitButton';
 
 export default function ResetPassword() {
-  const [email, setEmail] = useState(''); // 이메일
-  const [inputNum, setInputNum] = useState(''); // 입력한 인증번호
-  const [password, setPassword] = useState(''); // 비밀번호
-  const [checkPassword, setCheckPassword] = useState(''); // 비밀번호 확인
-  const [passwordMessage, setPasswordMessage] = useState(null); // 비밀번호 일치여부 안내 문구
+  const [email, setEmail] = useState('');
+  const [inputNum, setInputNum] = useState('');
+  const [password, setPassword] = useState('');
+  const [checkPassword, setCheckPassword] = useState('');
+  const [passwordMessage, setPasswordMessage] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
+
   const userApi = useUserApi();
+
   const emailType = 'reset-password';
   const socialType = 'Refrigerator-Alchemist';
 
-  /** 이메일 입력값 */
   const handleEmailChange = (e) => setEmail(e.target.value);
 
-  /** 인증 요청
-   * - userApi
-   */
   const handleRequest = async (e) => {
     e.preventDefault();
-    console.log(`입력한 이메일 : ${email}`);
     if (!email) {
       toast.error('이메일을 입력해주세요');
       return;
@@ -36,27 +34,11 @@ export default function ResetPassword() {
     userApi.requestEmailForReset(email, emailType, socialType);
   };
 
-  /** 인증 확인
-   * - userApi
-   */
   const isVerified = async (e) => {
     e.preventDefault();
-    console.log(`입력한 인증번호 : ${inputNum}`);
     userApi.checkCodeVerification(email, emailType, inputNum, socialType);
   };
 
-  /** 비밀번호 유효성 검사 */
-  const isPasswordValid = (password) => {
-    return (
-      password.length >= 10 &&
-      password.length <= 15 &&
-      /\d/.test(password) &&
-      /[!@#$%^&*]/.test(password) &&
-      /[a-zA-Z]/.test(password)
-    );
-  };
-
-  /** 비밀번호 일치 확인 */
   const isSamePassword = () => {
     if (password && checkPassword) {
       password !== checkPassword
@@ -66,20 +48,17 @@ export default function ResetPassword() {
       setPasswordMessage(null);
     }
   };
+
   useEffect(() => {
     isSamePassword();
   });
 
-  /** 비밀번호 보기 */
   const toggleShowPassword = (e) => {
     e.preventDefault();
     setShowPassword(!showPassword);
   };
 
-  /** 재설정하기
-   * - userApi
-   */
-  const onReset = (e) => {
+  const submitReset = (e) => {
     e.preventDefault();
     userApi.resetPassword(email, password, checkPassword, socialType);
   };
@@ -87,11 +66,11 @@ export default function ResetPassword() {
   return (
     <section className="flex flex-col justify-center items-center min-h-screen px-8 relative">
       <BackButton destination={'/login'} />
-      <AccountHeader
+      <FormHeader
         title={'비밀번호 재설정'}
         mention={'인증을 완료하고, 새로운 비밀번호를 설정하세요'}
       />
-      <form onSubmit={onReset}>
+      <form onSubmit={submitReset}>
         <main className="mt-10 w-full px-2">
           <InputVeriNum
             email={email}
