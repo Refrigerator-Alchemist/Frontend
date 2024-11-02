@@ -1,7 +1,7 @@
-import axios from 'axios';
 import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
+import axios from 'axios';
 import RecipeCard from '../../components/board/RecipeCard';
 import SearchBar from '../../components/board/SearchBar';
 import WriteButton from '../../components/board/WriteButton';
@@ -9,8 +9,6 @@ import RankingBoard from '../../components/board/RankingBoard';
 import Navigation from '../../components/common/Navbar';
 import ScrollToTopButton from '../../components/common/ScrollToTopButton';
 import useScrollToTop from '../../components/common/useScrollToTop';
-const accessToken = localStorage.getItem('accessToken');
-const email = localStorage.getItem('email');
 
 const Board = () => {
   const [recipes, setRecipes] = useState([]);
@@ -21,11 +19,18 @@ const Board = () => {
   const [likedPosts, setLikedPosts] = useState([]);
   const [searchResultCount, setSearchResultCount] = useState(0);
   const [loading, setLoading] = useState(false);
-  const location = useLocation();
+
   const recipesPerPage = 6;
-  const { handleError } = useUserApi();
+
+  const location = useLocation();
   const observer = useRef();
+
   const { showScrollToTop, scrollToTop } = useScrollToTop();
+
+  const { handleError } = useUserApi();
+
+  const accessToken = localStorage.getItem('accessToken');
+  const email = localStorage.getItem('email');
 
   useEffect(() => {
     fetchLikedPosts();

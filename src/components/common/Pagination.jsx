@@ -1,6 +1,9 @@
-import React from 'react';
-
-const Pagination = ({ currentPage, recipesPerPage, totalRecipes, paginate }) => {
+const Pagination = ({
+  currentPage,
+  recipesPerPage,
+  totalRecipes,
+  paginate,
+}) => {
   const pageNumbers = [];
 
   for (let i = 1; i <= Math.ceil(totalRecipes / recipesPerPage); i++) {
@@ -15,7 +18,7 @@ const Pagination = ({ currentPage, recipesPerPage, totalRecipes, paginate }) => 
             <button
               onClick={() => paginate(number)}
               className={`page-link ${
-                currentPage === number ? "bg-main text-white" : "text-black"
+                currentPage === number ? 'bg-main text-white' : 'text-black'
               }`}
             >
               {number}

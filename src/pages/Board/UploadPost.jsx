@@ -1,10 +1,10 @@
 import { useState, useRef } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
-import BackButton from '../../components/common/BackButton';
+import { toast } from 'react-toastify';
 import { Skeleton, Box } from '@mui/material';
+import BackButton from '../../components/common/BackButton';
+import axios from 'axios';
 
 export default function UploadBoard() {
   const [title, setTitle] = useState('');

@@ -1,99 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { GoEye, GoEyeClosed } from 'react-icons/go';
 import { useUserApi, IP_ADDRESS } from '../../context/UserContext';
+import { emailPattern } from '../../utils/common';
+import { toast } from 'react-toastify';
 import Logo from '../../components/common/Logo';
 import BackButton from '../../components/common/BackButton';
+import SocialLogin from '../../components/User/Signin/SocialLogin';
+import InputField from '../../components/User/Signin/InputField';
+import ErrorMessage from '../../components/User/Signin/ErrorMessage';
+import LinkText from '../../components/User/Signin/LinkText';
 import LOGO_GOOGLE from '/assets/img/logo_google.webp';
 import LOGO_KAKAO from '/assets/img/logo_kakao.webp';
 import LOGO_NAVER from '/assets/img/logo_naver.webp';
 
-/** 
- @description 소셜 로그인 버튼 
- */
-function SocialLogin({ callback, img, socialType }) {
-  return (
-    <button onClick={callback}>
-      <img
-        className="mx-3 hover:scale-110"
-        style={{ width: '45px', height: '45px' }}
-        src={img}
-        alt={socialType}
-      ></img>
-    </button>
-  );
-}
-
-/** 
- @description 인풋 박스 - 이메일, 비밀번호 
- */
-function InputField({
-  label,
-  type,
-  value,
-  onChange,
-  placeholder,
-  showPassword,
-  toggleShowPassword,
-}) {
-  return (
-    <div className="mb-4">
-      <label className="block text-gray-700 ml-3 font-score">{label}</label>
-      <div className="flex">
-        <input
-          type={type}
-          value={value}
-          onChange={onChange}
-          className="w-full px-4 py-3 mt-1 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo font-score"
-          placeholder={placeholder}
-          required
-        />
-        {toggleShowPassword && (
-          <button
-            type="button"
-            onClick={toggleShowPassword}
-            className="inline-block whitespace-nowrap h-12 ml-5 mt-2 rounded-xl font-score text-md hover:text-red-500"
-          >
-            {showPassword ? <GoEye /> : <GoEyeClosed />}
-          </button>
-        )}
-      </div>
-    </div>
-  );
-}
-
-/** 
- @description 이메일 유효성 검사 에러 메세지
- */
-function ErrorMessage({ message, isVisible }) {
-  return (
-    <p
-      className={`text-red-500 text-sm pl-3 mt-1 ${isVisible ? 'visible' : 'invisible'}`}
-    >
-      {message || 'empty'}
-    </p>
-  );
-}
-
-/** 
- @description 비밀번호 재설정 페이지 이동 링크
- */
-function LinkText({ onClick, children }) {
-  return (
-    <p
-      onClick={onClick}
-      className="flex justify-start ml-2 underline font-bold hover:cursor-pointer hover:text-red-500 mb-4 font-score"
-    >
-      {children}
-    </p>
-  );
-}
-
-/**
- * @description 로그인 페이지
- * @returns {JSX.Element} 로그인 페이지 UI
- */
 export default function SignIn() {
   const [email, setEmail] = useState('');
   const [emailValid, setEmailValid] = useState(false);
@@ -101,10 +20,12 @@ export default function SignIn() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [notAllow, setNotAllow] = useState(true);
+
   const { login, handleError } = useUserApi();
+
   const navigate = useNavigate();
   const location = useLocation();
-  const LAYOUT = 'flex flex-col items-center justify-center';
+  const headerStyle = 'flex flex-col items-center justify-center';
 
   useEffect(() => {
     const socialId = localStorage.getItem('socialId');
@@ -127,11 +48,8 @@ export default function SignIn() {
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
 
-    const pattern =
-      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-
-    if (!pattern.test(e.target.value)) {
-      setEmailError('이메일 형식이 올바르지 않습니다 : .com .net .org');
+    if (!emailPattern.test(e.target.value)) {
+      setEmailError('이메일 형식이 올바르지 않습니다');
       setEmailValid(false);
     } else {
       setEmailError('');
@@ -176,9 +94,9 @@ export default function SignIn() {
   };
 
   return (
-    <section className={`relative min-h-screen ${LAYOUT}`}>
+    <section className={`relative min-h-screen ${headerStyle}`}>
       <BackButton destination={'/main'} />
-      <header className={LAYOUT}>
+      <header className={headerStyle}>
         <Logo page="login" width="250px" height="250px" />
         <h1 className="text-3xl font-jua">로그인</h1>
       </header>

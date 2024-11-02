@@ -7,10 +7,10 @@ const BackButton = React.memo(({ destination }) => {
 
   return (
     <div
-        className="absolute top-5 left-5 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
-        onClick={() => navigate(destination)}
-      >
-        <FaArrowLeft />
+      className="absolute top-5 left-5 border-2 w-10 h-10 transition ease-in-out delay-150 bg-main hover:bg-indigo hover:scale-125 hover:cursor-pointer hover:text-white rounded-full flex items-center justify-center"
+      onClick={() => navigate(destination)}
+    >
+      <FaArrowLeft />
     </div>
   );
 });

@@ -1,9 +1,9 @@
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
+import axios from 'axios';
 import Header from '../../components/boardDetail/Header';
 import BoardDetailMain from '../../components/boardDetail/BoardDetailMain';
 import Footer from '../../components/common/Footer';

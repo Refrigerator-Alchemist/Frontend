@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { toast } from 'react-toastify';
 import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 import BackButton from '../../components/common/BackButton';
 
 function FormGroup({ label, children }) {
@@ -63,7 +63,6 @@ export default function UploadBoard() {
   const { handleError } = useUserApi();
   const navigate = useNavigate();
 
-  /** 해당 게시물의 제목, 설명, 재료를 불러오는 함수 */
   useEffect(() => {
     const fetchData = async (postId) => {
       const URL = `${IP_ADDRESS}/board/updateBoard?postId=${postId}`;
@@ -89,7 +88,6 @@ export default function UploadBoard() {
     fetchData(postId);
   }, [handleError, postId, accessToken]);
 
-  /** 재료 입력 */
   const handleIngredientChange = (index, e) => {
     setIngredients((prevIngredients) =>
       prevIngredients.map((ingredient, idx) => {
@@ -101,12 +99,10 @@ export default function UploadBoard() {
     );
   };
 
-  /** 재료 추가 */
   const addIngredientField = () => {
     setIngredients([...ingredients, { name: '' }]);
   };
 
-  /** 수정 완료 */
   const handleSubmit = async (e) => {
     e.preventDefault();
     const URL = `${IP_ADDRESS}/editpost/update`;
@@ -137,7 +133,6 @@ export default function UploadBoard() {
     }
   };
 
-  /** 취소 */
   const handleCancel = () => {
     navigate(-1);
   };

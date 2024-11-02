@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import ERRORS from '../utils/customedError';
 
-export const IP_ADDRESS = 'http://localhost:8080'; // 배포시 IP 변경
+export const IP_ADDRESS = 'http://localhost:8080';
 
 axios.interceptors.response.use(
   function (response) {
@@ -24,6 +24,7 @@ axios.interceptors.response.use(
 );
 
 let isRefreshing = false;
+
 const reIssue = async () => {
   if (isRefreshing) return;
   isRefreshing = true;
@@ -73,10 +74,6 @@ export const useUserApi = () => {
   return useContext(UserContext);
 };
 
-/** 유저 Context Provider
- - 인증번호 요청, 인증 확인, 회원 가입, 로그인, 로그아웃, 비밀번호 재설정, 회원탈퇴
- - API의 Body에는 순서대로 값을 넣어야 한다
- */
 export const UserApiProvider = ({ children }) => {
   const [emailExists, setEmailExists] = useState(true);
   const [verified, setVerified] = useState(false);
@@ -84,10 +81,7 @@ export const UserApiProvider = ({ children }) => {
 
   const navigate = useNavigate();
 
-  /** 커스텀 에러 처리 
-   - errorName : 백엔드 확인용 에러명
-   - errorName.notice : 유저 확인용 메세지
-  */
+  /** 커스텀 에러 핸들링 */
   const handleError = async (error) => {
     const genericToastId = 'generic-error';
 
@@ -114,11 +108,8 @@ export const UserApiProvider = ({ children }) => {
     }
   };
 
-  /** 이메일 인증 요청 : 회원가입용
-   - 요청 Body 
-        - email 이메일
-        - emailType 회원가입 | 비밀번호 변경
-        - socialType 서비스 타입
+  /** 회원가입용 이메일 인증 요청
+    @param 이메일, 이메일 타입, 소셜 타입
    */
   const requestEmailForSignUp = async (email, emailType, socialType) => {
     try {
@@ -140,11 +131,8 @@ export const UserApiProvider = ({ children }) => {
     }
   };
 
-  /** 이메일 인증 요청 : 비밀번호 재설정용
-   - 요청 Body
-        - email 이메일
-        - emailType 회원가입 | 비밀번호 변경
-        - socialType 서비스 타입
+  /** 비밀번호 재설정용 이메일 인증 요청
+    @param 이메일, 이메일 타입, 소셜 타입
   */
   const requestEmailForReset = async (email, emailType, socialType) => {
     try {
@@ -165,12 +153,8 @@ export const UserApiProvider = ({ children }) => {
   };
 
   /** 이메일 인증 확인
-   - 요청 Body
-        - email 이메일
-        - emailType 회원가입 | 비밀번호 변경
-        - inputNum 인증번호
-        - socialType 서비스 타입
-   */
+    @params 이메일, 이메일 타입, 인증번호, 소셜 타입
+  */
   const checkCodeVerification = async (
     email,
     emailType,
@@ -204,10 +188,6 @@ export const UserApiProvider = ({ children }) => {
     }
   };
 
-  /** 닉네임 중복 확인
-   - 요청 Body
-        - nickName 닉네임 
-  */
   const checkNameDuplication = async (nickName) => {
     try {
       const response = await axios.post(
@@ -229,15 +209,11 @@ export const UserApiProvider = ({ children }) => {
   };
 
   /** 회원가입 요청
-   - 요청 Body
-        - email 이메일
-        - nickName 닉네임 
-        - password 비밀번호
-        - socialType 서비스 타입
+    @params 이메일, 닉네임, 비밀번호, 소셜 타입
   
-  - 요청 Header
-        - 'Content-Type': 'application/json;charset=UTF-8'
-        - Accept: 'application/json'
+    @header 
+    -'Content-Type': 'application/json;charset=UTF-8'
+    - Accept: 'application/json'
   */
   const signUp = async (email, password, nickName, socialType) => {
     const URL = `${IP_ADDRESS}/auth/register`;
@@ -270,9 +246,6 @@ export const UserApiProvider = ({ children }) => {
     }
   };
 
-  /** 회원 탈퇴
-   - 백엔드 구현 X, 수정 필요
-  */
   const deleteUser = async () => {
     const URL = `${IP_ADDRESS}/auth/delete`;
     try {
@@ -332,7 +305,7 @@ export const UserApiProvider = ({ children }) => {
   };
 
   /** 로그아웃
-   @params 액세스 토큰
+   @header 액세스 토큰
    */
   const logout = async () => {
     const URL = `${IP_ADDRESS}/token/logout`;
@@ -367,7 +340,7 @@ export const UserApiProvider = ({ children }) => {
   };
 
   /** 비밀번호 재설정
-   @params 이메일, 비밀번호, 새로운 비밀번호, 소셜타입 : 페이로드
+   @params 이메일, 비밀번호, 새로운 비밀번호, 소셜 타입
    */
   const resetPassword = async (email, password, newPassword, socialType) => {
     try {
@@ -379,7 +352,7 @@ export const UserApiProvider = ({ children }) => {
       });
 
       if (response.status === 204) {
-        toast.success('비밀번호가 성공적으로 재설정되었습니다');
+        toast.success('비밀번호가 재설정되었습니다');
         navigate('/login');
       }
     } catch (error) {

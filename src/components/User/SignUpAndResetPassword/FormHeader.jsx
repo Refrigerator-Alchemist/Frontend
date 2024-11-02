@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function AccountHeader({ title, mention }) {
+export default function FormHeader({ title, mention }) {
   return (
     <header className="flex flex-col items-center mt-10">
       <h1 className="font-score text-3xl">{title}</h1>

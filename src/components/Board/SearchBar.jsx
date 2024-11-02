@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
 import axios from 'axios';
 import ICON_SEARCHING from '/assets/img/search.webp';
-import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
 
 const accessToken = localStorage.getItem('accessToken');
 

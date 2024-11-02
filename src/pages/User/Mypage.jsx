@@ -1,30 +1,32 @@
-import axios from 'axios';
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useUserApi, IP_ADDRESS } from '../../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useUserApi, IP_ADDRESS } from '../../context/UserContext';
+import axios from 'axios';
 import Navigation from '../../components/common/Navbar';
 import MyRecipe from '../../components/mypage/MyRecipe';
 import LikedRecipe from '../../components/mypage/LikedRecipe';
 import ScrollToTopButton from '../../components/mypage/ScrollToTop';
-import IMG_PROFILE from '/assets/img/img_profile.webp';
+import profileImage from '/assets/img/img_profile.webp';
 
 export default function MyPage() {
-  const [imageUrl, setImageUrl] = useState(IMG_PROFILE);
+  const [imageUrl, setImageUrl] = useState(profileImage);
   const [currentPageMyRecipes, setCurrentPageMyRecipes] = useState(1);
   const [currentPageLikedRecipes, setCurrentPageLikedRecipes] = useState(1);
   const [recipesPerPage] = useState(5);
   const [totalMyRecipes, setTotalMyRecipes] = useState(0);
   const [totalLikedRecipes, setTotalLikedRecipes] = useState(0);
   const [showMyRecipes, setShowMyRecipes] = useState(true);
-  const [recipes, setRecipes] = useState([]); // 내가 저장한 레시피들
-  const [likedItems, setLikedItems] = useState([]); // 좋아요 누른 레시피들
+  const [recipes, setRecipes] = useState([]);
+  const [likedItems, setLikedItems] = useState([]);
   const [showScrollToTop, setShowScrollToTop] = useState(false);
 
   const { logout, handleError } = useUserApi();
+
   const accessToken = localStorage.getItem('accessToken');
   const nickName = localStorage.getItem('nickName');
   const email = localStorage.getItem('email');
+
   const navigate = useNavigate();
 
   const observer = useRef();
@@ -41,7 +43,7 @@ export default function MyPage() {
             },
           });
           setImageUrl(response.data.imageUrl);
-          localStorage.setItem('imageUrl', response.data.imageUrl); // 로컬스토리지에 저장
+          localStorage.setItem('imageUrl', response.data.imageUrl);
         }
       } catch (error) {
         handleError(error);
@@ -71,7 +73,7 @@ export default function MyPage() {
           setRecipes((prevRecipes) => [...prevRecipes, ...items]);
           setTotalMyRecipes(response.data.total);
         } else {
-          toast.error('데이터가 배열이 아닙니다');
+          console.error('데이터가 배열이 아닙니다');
         }
       } catch (error) {
         handleError(error);
@@ -97,7 +99,7 @@ export default function MyPage() {
           setLikedItems((prevItems) => [...prevItems, ...items]);
           setTotalLikedRecipes(response.data.total);
         } else {
-          toast.error('데이터가 배열이 아닙니다');
+          console.error('데이터가 배열이 아닙니다');
         }
       } catch (error) {
         handleError(error);

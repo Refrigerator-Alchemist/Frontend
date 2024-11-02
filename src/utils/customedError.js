@@ -1,14 +1,11 @@
 /**
-🔗
 @description 
-- 서버 status 상태코드별 메세지 전달과 유저에게 전달
-      - status, code가 리스폰스 헤더로 옴
-      - 로그에는 code를 출력하고, toast(alert)에는 notice를 보여주기
+- 에러의 status, code가 리스폰스 헤더에 담겨서 온다
+- console에는 code를 출력하고, toast에는 notice를 보여주기
 
-- 클라이언트 에러 4XX
-      - 400 Bad Request 401 Unauthorized 402 Payment Required 403 Forbiden 404 Not Found 405 Method Not Allowed
-      - 406 Not Acceptable 407 Proxy Authentication Required 408 Request Timeout 409 Conflict 410 Gone 411 Length Requiredh
-      - 412 Precondition Failed 413 Payload Too Large 414 URI Too Long 415 Unsupported Media Type 416 Requested Range Not Satifiable
+- 400 Bad Request 401 Unauthorized 402 Payment Required 403 Forbiden 404 Not Found 405 Method Not Allowed
+- 406 Not Acceptable 407 Proxy Authentication Required 408 Request Timeout 409 Conflict 410 Gone 411 Length Requiredh
+- 412 Precondition Failed 413 Payload Too Large 414 URI Too Long 415 Unsupported Media Type 416 Requested Range Not Satifiable
  */
 const ERRORS = {
   EXIST_USER_EMAIL_SOCIALTYPE: {

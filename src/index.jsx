@@ -1,28 +1,28 @@
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App';
 import NotFound from './pages/common/NotFound';
 import GetStarted from './pages/common/GetStarted';
 import Home from './pages/common/Home';
 import ProtectedRoute from './pages/common/ProtectedRoute';
-import SignUp from './pages/user/SignUp';
-import SignIn from './pages/user/SignIn';
-import LoginSuccess from './pages/user/LoginSuccess';
-import ResetPassword from './pages/user/ResetPassword';
-import DeleteUser from './pages/user/DeleteUser';
-import Mypage from './pages/user/Mypage';
-import EditProfile from './pages/user/EditProfile';
-import RankingDetail from './pages/ranking/RankingDetail';
-import Board from './pages/board/Board';
-import BoardDetail from './pages/board/BoardDetail';
-import UploadPost from './pages/board/UploadPost';
-import EditPost from './pages/board/EditPost';
-import GptSearch from './pages/gpts/GptSearch';
-import GptResult from './pages/gpts/GptResult';
-import GptSavedList from './pages/gpts/GptSavedList';
-import GptSavedDetail from './pages/gpts/GptSavedDetail';
+import SignUp from './pages/User/SignUp';
+import SignIn from './pages/User/SignIn';
+import LoginSuccess from './pages/User/LoginSuccess';
+import ResetPassword from './pages/User/ResetPassword';
+import DeleteUser from './pages/User/DeleteUser';
+import Mypage from './pages/User/Mypage';
+import EditProfile from './pages/User/EditProfile';
+import RankingDetail from './pages/Ranking/RankingDetail';
+import Board from './pages/Board/Board';
+import BoardDetail from './pages/Board/BoardDetail';
+import UploadPost from './pages/Board/UploadPost';
+import EditPost from './pages/Board/EditPost';
+import GptSearch from './pages/GPTs/GptSearch';
+import GptResult from './pages/GPTs/GptResult';
+import GptSavedList from './pages/GPTs/GptSavedList';
+import GptSavedDetail from './pages/GPTs/GptSavedDetail';
 
 const router = createBrowserRouter([
   {
@@ -30,23 +30,22 @@ const router = createBrowserRouter([
     element: <App />,
     errorElement: <NotFound />,
     children: [
-      // 초기화면
       {
         index: true,
         element: <GetStarted />,
       },
-      { path: '/main', element: <Home /> }, // 메인
+      { path: '/main', element: <Home /> },
 
       // 회원정보 관리 -----------------
-      { path: '/signup', element: <SignUp /> }, // 회원가입 [로그인 상태에서 접속 불가]
-      { path: '/login', element: <SignIn /> }, // 로그인 [로그인 상태에서 접속 불가]
-      { path: '/login-success', element: <LoginSuccess /> }, // SNS 로그인 성공시 데이터 저장
+      { path: '/signup', element: <SignUp /> },
+      { path: '/login', element: <SignIn /> },
+      { path: '/login-success', element: <LoginSuccess /> },
       {
-        path: '/reset-password', // 비밀번호 재설정
+        path: '/reset-password',
         element: <ResetPassword />,
       },
       {
-        path: '/delete-user', // 회원탈퇴
+        path: '/delete-user',
         element: (
           <ProtectedRoute>
             <DeleteUser />
@@ -56,7 +55,7 @@ const router = createBrowserRouter([
 
       // 프로필 관리 ------------------
       {
-        path: '/mypage', // 마이페이지 : 내 프로필 + 저장한 레시피, 내가 쓴 레시피
+        path: '/mypage',
         element: (
           <ProtectedRoute>
             <Mypage />
@@ -64,7 +63,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: '/mypage/edit/profile', // 프로필 수정
+        path: '/mypage/edit/profile',
         element: (
           <ProtectedRoute>
             <EditProfile />
@@ -73,11 +72,11 @@ const router = createBrowserRouter([
       },
 
       // 게시판 ----------------------
-      { path: '/ranking', element: <RankingDetail /> }, // Top 3 랭킹
-      { path: '/board', element: <Board /> }, // 게시판
-      { path: '/board/:postId', element: <BoardDetail /> }, // 게시물 상세
+      { path: '/ranking', element: <RankingDetail /> },
+      { path: '/board', element: <Board /> },
+      { path: '/board/:postId', element: <BoardDetail /> },
       {
-        path: '/board/upload', // 게시물 작성
+        path: '/board/upload',
         element: (
           <ProtectedRoute>
             <UploadPost />
@@ -85,7 +84,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: '/editpost/:postId', // 내가 쓴 레시피 수정
+        path: '/editpost/:postId',
         element: (
           <ProtectedRoute>
             <EditPost />
@@ -94,10 +93,10 @@ const router = createBrowserRouter([
       },
 
       // 냉장고 연금술 -----------------
-      { path: '/recipe/recommend', element: <GptSearch /> }, // 재료 입력
-      { path: '/recipe/recommend/:recommendId', element: <GptResult /> }, // 결과
+      { path: '/recipe/recommend', element: <GptSearch /> },
+      { path: '/recipe/recommend/:recommendId', element: <GptResult /> },
       {
-        path: '/recipe/myRecipe', // 결과 저장 리스트
+        path: '/recipe/myRecipe',
         element: (
           <ProtectedRoute>
             <GptSavedList />
@@ -105,7 +104,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: '/recipe/myRecipe/:recipeId', // 저장된 레시피 상세페이지
+        path: '/recipe/myRecipe/:recipeId',
         element: (
           <ProtectedRoute>
             <GptSavedDetail />
