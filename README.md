@@ -1,17 +1,18 @@
-# 🧙 냉장고 연금술사
+# 냉장고 연금술사
 
-![프로젝트 썸네일](./public/assets/img/thumbnail.webp)
+![리드미 포스터](https://github.com/user-attachments/assets/ebf104eb-d7fa-4d28-9d91-bd47e1b9b98e)
 
 ## 📋 목차
 
-- [📝 기간](#📝-기간)
+- [📝 제작 기간 / 배포](#📝-제작-기간-/-배포)
+- [🎙️ 커뮤니케이션 방식](#🎙️-커뮤니케이션-방식)
 - [✅ 사용한 도구들](#✅-사용한-도구들)
 - [🧱 아키텍처](#🧱-아키텍처)
 - [🧑‍🤝‍🧑 팀원 & 역할](#🧑‍🤝‍🧑-팀원--역할)
-- [🧚🏻 냉장고 연금술사 사용법](#🧚🏻-냉장고-연금술사-사용법)
-- [🥞 프로젝트 회고록](#🥞-프로젝트-회고록)
+- [페이지별 기능 설명](#페이지별-기능-설명)
+- [프로젝트 회고](#프로젝트-회고)
 
-### 👉 서비스 소개
+### 서비스 소개
 
 마땅히 먹고 싶은 건 없는데 배달비는 비싸고, 냉장고에 남은 재료들은 있는데
 뭘 만들면 좋을지 아이디어는 안 떠오르고...
@@ -21,7 +22,7 @@
 연금술을 사용해서 레시피를 만들어 내고, 커뮤니티에서 사람들과 레시피를 서로 공유 해주세요!
 인기만점 랭킹 Top3 게시물은 명예의 전당에도 오른답니다😀
 
-## 📝 기간
+## 제작 기간 / 배포
 
 - 기능 구현 및 테스트 : 2024.01.31 ~ 2024.04.31
 - EC2 배포 : 2024.07.17 ~ 08.01 (Expired)
@@ -34,80 +35,74 @@
 - 같은 파트를 구현하는 백-프론트 팀원간 상시 통화와 화면 공유를 통한 기능 구현
 - Github 브랜치의 코드 pull과 push를 통한 지속적인 동기화
 
-## ✅ 사용한 도구들
+## ✅ 스택
 
 <div>
-  <p style='font-weight: bold'>IDE</p>
   <img src="https://img.shields.io/badge/VSC-007ACC?style=flat-square&logo=visualstudiocode&logoColor=white">
   <img src="https://img.shields.io/badge/IntelliJ-000000?style=flat-square&logo=intellijidea&logoColor=white">
-</div><br/>
+</div>
 
 <div>
-  <p style='font-weight: bold;'>디자인</p>
   <img src="https://img.shields.io/badge/Figma-F24E1E?style=flat-square&logo=figma&logoColor=black">
-</div><br/>
+</div>
 
 <div>
-  <p style='font-weight: bold;'>협업</p>
   <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white">
   <img src="https://img.shields.io/badge/Notion-000000?style=flat-square&logo=notion&logoColor=white">
   <img src="https://img.shields.io/badge/Discord-5865F2?style=flat-square&logo=discord&logoColor=white">
   <img src="https://img.shields.io/badge/Kakaotalk-FFCD00?style=flat-square&logo=kakaotalk&logoColor=black">
-</div><br/>
+</div>
 
 <div>
-  <p style='font-weight: bold'>FE Stack</p>
   <img src="https://img.shields.io/badge/React.js-61DAFB?style=flat-square&logo=react&logoColor=black">
   <img src="https://img.shields.io/badge/React Query-FF4154?style=flat-square&logo=reactquery&logoColor=white">
   <img src="https://img.shields.io/badge/tailwindcss-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white">
   <img src="https://img.shields.io/badge/Prettier-F7B93E?style=flat-square&logo=prettier&logoColor=black">
-</div><br/>
+</div>
 
 <div>
-  <p style='font-weight: bold'>BE Stack</p>
-
   <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat-square&logo=springboot&logoColor=white">
   <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white">
   <img src="https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=redis&logoColor=white">
   <img src="https://img.shields.io/badge/S3-f0463a?style=flat-square&logo=amazons3&logoColor=white">
-</div><br/>
+</div>
 
 <div>
-  <p style='font-weight: bold'>APIs</p>
   <img src="https://img.shields.io/badge/GPT 3.5-412991?style=flat-square&logo=openai&logoColor=white">
   <img src="https://img.shields.io/badge/Kakao Oauth-FFCD00?style=flat-square&logo=kakao&logoColor=white">
   <img src="https://img.shields.io/badge/Naver Oauth-03C75A?style=flat-square&logo=naver&logoColor=white">
-</div><br/>
+</div>
 
 <div>
-  <p style='font-weight: bold'>배포</p>
   <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white">
   <img src="https://img.shields.io/badge/Amazon EC2-FF9900?style=flat-square&logo=amazonec2&logoColor=black">
 </div>
 
 ## 🧱 아키텍처
 
-![아키텍처](./public/assets/img/readme/refrigerator_architecture.webp)
+![아키텍처](https://github.com/user-attachments/assets/0ce64ab1-c87d-4092-8097-7797c673adc2)
 
 ### ✨ 프론트엔드
 
 ### 👉 React
 
 냉장고 연금술사는 CSR 방식의 렌더링을 하는 것이 적합하다고 생각했습니다.<br/>
-CSR은 초기 로딩시간이 길 수 있지만 서비스 접속시 초기화면을 보는 데에는 오래 걸리지 않습니다.<br/>
-또한 서비스의 메인 활동은 레시피를 생성하는 연금술과 게시판에 레시피를 올리는 것입니다.<br/>
-이는 유저가 직접 재료를 입력하고 생성하는 상호작용 SSR보다는 CSR이 더 적합하다고 생각했습니다.
+CSR은 초기 로딩시간이 길 수 있지만 서비스 접속시 초기화면을 보는 데에 오래 걸리지 않습니다.<br/>
+냉장고 연금술사는 레시피를 생성하는 연금술과 게시판이 주요 콘텐츠입니다.<br/>
+페이지를 미리 렌더링하는 것보다 클라이언트 측에서 사용자 요청에 따라 필요한 데이터만 가져와 동적으로 렌더링하는 CSR 방식이 더 적합하다고 판단했습니다.<br/>
+CSR 방식은 클라이언트에서 필요한 데이터만을 요청하여 필요할 때만 렌더링하므로 서버 부하를 줄이고, 효율적으로 최신 데이터를 반영할 수 있습니다.<br/>
 
 ### 👉 Tailwindcss
 
-프론트 팀이 공통적으로 사용해 본 CSS 라이브러리가 tailwindcss였기에 러닝커브 회피 및 개발기간 단축을 위해 사용했습니다.
+프론트 팀이 공통적으로 사용해 본 CSS 프레임워크이자 개발 속도가 빠르기에 선택하였습니다.<br/>
 
 ### 👉 React Query
 
 리액트 쿼리는 데이터를 캐시해뒀다가 staleTime 동안 언마운트 후 다시 마운트가 발생해도<br/>
-서버로 데이터를 요청하지 않고 캐시된 데이터를 사용합니다. <br/>
-그래서 게시판(Board)에서 게시물 데이터의 경우, mutation을 사용하여 새로 업데이트 되는 정보가 없다면<br/>
-캐시되어있는 데이터를 그대로 쓰고 업데이트 정보가 있을 시 게시물 데이터를 다시 서버로부터 받을 수 있도록 구현했습니다.
+서버로 데이터를 요청하지 않고 캐시된 데이터를 사용합니다.<br/>
+그래서 게시판(Board)에서 게시물 데이터의 경우, useMutation을 사용하여<br/>
+새로 업데이트 되는 정보가 없다면 캐시되어있는 데이터를 그대로 쓰고<br/>
+업데이트 정보가 있을 시 게시물 데이터를 다시 서버로부터 받을 수 있도록 구현했습니다.<br/>
 
 ### 👉 Prettier
 
@@ -116,13 +111,13 @@ VSC의 강력한 코드 포맷팅 확장프로그램인 Prettier를 사용하여
 ### 👉 Vite
 
 Vite는 HMR이 빠르고, Esbuild를 사용함으로써 기존의 번들러보다 10배에서 100배에 가깝게 속도가 향상되었습니다.<br/>
-그리고 설정 파일이 간단하고, 별도의 번거로운 설정이 필요하지 않습니다.
+설정 파일이 간단하고, 별도의 번거로운 설정이 필요하지 않습니다.
 
-### 👉 yarn
+### 👉 yarn berry
 
 yarn은 npm에 비해 성능(속도)과 보안이 향상되었습니다.<br/>
 패키지를 순서대로 설치하는 npm과 달리 패키지를 병렬로 설치하므로 설치 속도가 빠릅니다.<br/>
-또한 yarn은 캐싱을 이용합니다. yarn은 설치한 패키지를 사용자의 디렉토리에 저장해서 캐싱합니다.
+yarn은 설치한 패키지를 사용자의 디렉토리에 저장해서 캐싱합니다.
 
 ### ✨ 백엔드
 
@@ -405,13 +400,11 @@ TTL=(유효시간-경과시간)만큼 설정하여, 재발급하기 전 사용�
   </div>
 </form>
 
-## 🧚🏻 냉장고 연금술사 사용법
+## 페이지별 기능 설명
 
 ### 1. 접속
 
-<img src="./public/assets/img/readme/초기화면.gif" width="300" height="650"/>
-
-<br/><span>👉 시작하기</span>
+<img width="344" alt="스크린샷 2024-11-02 오후 2 59 42" src="https://github.com/user-attachments/assets/6ba205a4-a976-4e0a-9fb4-058a37982a61">
 
 <ul>
   <li>처음 들어오면 귀여운 냉장고가 웃으면서 반겨줍니다</li>
@@ -421,10 +414,10 @@ TTL=(유효시간-경과시간)만큼 설정하여, 재발급하기 전 사용�
 
 ### 2. 회원가입
 
-<img src="./public/assets/img/readme/회원가입 인증요청.gif" width="300" height="650"/>
-<img src="./public/assets/img/readme/회원가입.gif" width="300" height="650"/>
+![회원가입 인증요청](https://github.com/user-attachments/assets/db9b4c16-5e58-41aa-ab94-b5c1b4ba016f)
+![회원가입](https://github.com/user-attachments/assets/a72d9c5b-f8a0-4e2e-8ca8-ac73bbad532b)
 
-<br/><span>👉 이메일 계정</span>
+**이메일 계정**
 
 <ul>
   <li>가입에 사용할 이메일을 입력하고 인증번호를 요청합니다</li>
@@ -433,7 +426,7 @@ TTL=(유효시간-경과시간)만큼 설정하여, 재발급하기 전 사용�
   <li>닉네임을 정하고 비밀번호를 조건에 맞게 정했다면 회원가입을 완료합니다</li>
 </ul><br/>
 
-<span>👉 SNS 계정</span>
+**SNS 계정**
 
 <ul>
   <li>로그인 페이지에서 사용할 SNS의 아이콘을 누르면 각 SNS에서 제공하는 회원가입 페이지로 이동합니다</li>
@@ -444,26 +437,26 @@ TTL=(유효시간-경과시간)만큼 설정하여, 재발급하기 전 사용�
 
 ### 3. 로그인
 
-<img src="./public/assets/img/readme/이메일-로그인.gif" width="300" height="650"/>
-<img src="./public/assets/img/readme/SNS-로그인.gif" width="300" height="650"/>
+![이메일-로그인](https://github.com/user-attachments/assets/05cdbdc9-751a-4dcc-a31a-f69c841569a5)
+![SNS-로그인](https://github.com/user-attachments/assets/57338d97-8b20-4920-a620-c1af26bb5b5d)
 
-<br/><span>👉 이메일 계정</span>
+**이메일 계정**
 
 <ul>
   <li>가입했던 이메일과 비밀번호를 입력하여 로그인 해줍니다</li>
 </ul>
 
-<span>👉 SNS 계정</span>
+**SNS 계정**
 
 <ul>
   <li>해당 SNS 아이콘을 클릭하여 로그인 해줍니다</li>
 </ul>
 
-### 4. 비로그인 접속 차단
+### 4. 비로그인 유저 차단
 
-<img src="./public/assets/img/readme/비로그인-유저-차단.gif" width="300" height="650"/><br/>
+![비로그인-유저-차단](https://github.com/user-attachments/assets/85fe03da-1915-47a6-9399-f8dce178ed1d)
 
-<span>👉 액세스 토큰으로 로그인 확인</span>
+**액세스 토큰으로 로그인 확인**
 
 <ul>
   <li>게시판의 게시물 작성, 좋아요 누르기 기능, 연금술로 만든 레시피 저장과 같은 활동은 로그인을 해야 가능합니다</li>
@@ -474,9 +467,9 @@ TTL=(유효시간-경과시간)만큼 설정하여, 재발급하기 전 사용�
 
 ### 5. 레시피 연금술
 
-<img src="./public/assets/img/readme/레시피 연금술.gif" width="300" height="550"/><br/>
+![레시피 연금술](https://github.com/user-attachments/assets/7b5cd24e-8b1e-4b75-8d1c-c1c358d41e6d)
 
-<span>👉 연금술로 레시피 만들기</span>
+**연금술로 레시피 만들기**
 
 <ul>
   <li>홈에서 '냉장고 연금술 시작'을 누르면 연금술 페이지로 이동합니다</li>
@@ -487,9 +480,9 @@ TTL=(유효시간-경과시간)만큼 설정하여, 재발급하기 전 사용�
 
 ### 6. 저장된 레시피 확인하기
 
-<img src="./public/assets/img/readme/저장된 레시피 확인.gif" width="300" height="650"/><br/>
+![저장된 레시피 확인](https://github.com/user-attachments/assets/af2c65f4-6b0e-4b69-87b9-efa3f5751e29)
 
-<span>👉 연금술 시작 페이지에서 확인</span>
+**연금술 시작 페이지에서 확인**
 
 <ul>
   <li>연금술을 시작하는 페이지에서 '레시피 기록 열기' 버튼을 누르면 과거에 연금술로 만들고 저장했던 레시피들을 모두 확인할 수 있습니다</li>
@@ -497,9 +490,9 @@ TTL=(유효시간-경과시간)만큼 설정하여, 재발급하기 전 사용�
 
 ### 7. 게시물 올리기
 
-<img src="./public/assets/img/readme/게시물 올리기.gif" width="300" height="650"/><br/>
+![게시물 올리기](https://github.com/user-attachments/assets/098714a9-8f78-4cf1-8f5a-9c1e1dcc9394)
 
-<span>👉 내가 만든 레시피 공유</span>
+**내가 만든 레시피 공유**
 
 <ul>
   <li>로그인을 한 상태에서 게시판 페이지로 온 다음 검색바 오른쪽의 작성 버튼을 누르면 이동합니다</li>
@@ -508,10 +501,10 @@ TTL=(유효시간-경과시간)만큼 설정하여, 재발급하기 전 사용�
 
 ### 8. 랭킹 탑3 명예의 전당
 
-<img src="./public/assets/img/readme/랭킹-반영.gif" width="300" height="650"/>
-<img src="./public/assets/img/readme/랭킹-페이지.gif" width="300" height="650"/>
+![랭킹-반영](https://github.com/user-attachments/assets/1f4c1309-feb0-4723-8a39-667c964a4b30)
+![랭킹-페이지](https://github.com/user-attachments/assets/e96c9119-743e-4027-91f7-8d7c4de1d67f)
 
-<br/><span>👉 가장 좋아요를 많이 받은 게시물</span>
+**가장 좋아요를 많이 받은 게시물**
 
 <ul>
   <li>좋아요를 가장 많이 받은 순서대로 1~3위의 게시물을 홈과 게시판 페이지에서 보여줍니다</li>
@@ -520,10 +513,10 @@ TTL=(유효시간-경과시간)만큼 설정하여, 재발급하기 전 사용�
 
 ### 9. 게시물 신고하기
 
-<img src="./public/assets/img/readme/신고 1.gif" width="300" height="650"/>
-<img src="./public/assets/img/readme/신고 2.gif" width="300" height="650"/>
+![신고 1](https://github.com/user-attachments/assets/52eda0f4-dc34-4e28-9d9f-c2187281838e)
+![신고 2](https://github.com/user-attachments/assets/54b8b882-9257-471c-822f-d93bca2a69ed)
 
-<br/><span>👉 광고, 비방글, 음란물 신고를 위한 기능</span>
+**광고, 비방글, 음란물 신고를 위한 기능**
 
 <ul>
   <li>게시물 상세 페이지에서 해당 게시물을 신고할 수 있습니다</li>
@@ -532,9 +525,9 @@ TTL=(유효시간-경과시간)만큼 설정하여, 재발급하기 전 사용�
 
 ### 10. 게시물 수정하기
 
-<img src="./public/assets/img/readme/게시물 수정.gif" width="300" height="650"/><br/>
+![게시물 수정](https://github.com/user-attachments/assets/11ab0028-be8c-4e7c-a072-c844ee570f2d)
 
-<span>👉 내용 수정하기</span>
+**내용 수정하기**
 
 <ul>
   <li>음식 이름, 설명을 변경할 수 있습니다</li>
@@ -543,16 +536,16 @@ TTL=(유효시간-경과시간)만큼 설정하여, 재발급하기 전 사용�
 
 ### 11. 마이페이지
 
-<img src="./public/assets/img/readme/마이페이지.gif" width="300" height="650"/><br/>
+![마이페이지](https://github.com/user-attachments/assets/9cd968bd-8ef2-4990-990c-2cb65376f00a)
 
-<span>👉 내가 작성한 레시피, 좋아요 누른 레시피 확인</span>
+**내가 작성한 레시피, 좋아요 누른 레시피 확인**
 
 <ul>
   <li>내가 작성한 레시피 목록을 확인할 수 있습니다</li>
   <li>좋아요 누른 게시물 목록을 확인할 수 있습니다</li>
 </ul><br/>
 
-<span>👉 로그아웃</span>
+**로그아웃**
 
 <ul>
   <li>로그아웃을 할 수 있습니다</li>
@@ -560,9 +553,7 @@ TTL=(유효시간-경과시간)만큼 설정하여, 재발급하기 전 사용�
 
 ### 12. 닉네임 수정하기
 
-<img src="./public/assets/img/readme/닉네임 수정.gif" width="300" height="650"/><br/>
-
-<span>👉 닉네임 바꾸기</span>
+![닉네임 수정](https://github.com/user-attachments/assets/35d75ce0-bb09-4c06-9431-7d478bec4fce)
 
 <ul>
   <li>원하는 닉네임으로 변경할 수 있습니다</li>
@@ -570,15 +561,15 @@ TTL=(유효시간-경과시간)만큼 설정하여, 재발급하기 전 사용�
 
 ### 13. 비밀번호 재설정(초기화)
 
-<img src="./public/assets/img/readme/비밀번호 재설정.gif" width="300" height="650"/><br/>
+![비밀번호 재설정](https://github.com/user-attachments/assets/81ecfcab-b74a-41ab-8bec-cfa548ac742f)
 
-<span>👉 비밀번호를 까먹어도 걱정 X</span>
+**비밀번호를 까먹어도 걱정 X**
 
 <ul>
   <li>비밀번호를 잊어버려도 다시 이메일 인증을 하고 재설정할 수 있습니다</li>
 </ul>
 
-## 팀원 회고
+## 프로젝트 회고
 
 ### 😃 이창욱
 
