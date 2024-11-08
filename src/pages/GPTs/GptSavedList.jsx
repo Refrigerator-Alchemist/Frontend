@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
+import { IP_ADDRESS } from '../../context/UserContext';
+import { handleError } from '../../utils/customedError';
 import axios from 'axios';
 import Navigation from '../../components/common/Navbar';
 import SavedListCard from '../../components/gpts/SavedListCard';
@@ -10,8 +11,6 @@ import Error from '../../components/common/Error';
 export default function GptSavedList() {
   const nickName = localStorage.getItem('nickName') || '';
   const accessToken = localStorage.getItem('accessToken');
-
-  const { handleError } = useUserApi();
 
   const fetchRecipes = async () => {
     const response = await axios.get(`${IP_ADDRESS}/recipe/myRecipe`, {
@@ -37,31 +36,26 @@ export default function GptSavedList() {
   if (error) return <Error />;
 
   return (
-    <section className="history">
-      <BackButton destination="/main" />
-      <div className="my-2 mt-20 mb-4">
+    <section className="relative">
+      <BackButton destination={-1} />
+      <div className="py-20">
         <div className="titlebox mb-6 mt-2">
           <span className="font-score font-extrabold ml-8 text-2xl">
             {accessToken ? `${nickName}의 연금술 기록` : '연금술 기록'}
           </span>
         </div>
-        {recipes?.map((recipe) => (
-          <SavedListCard
-            key={recipe.recipeId}
-            recipeId={recipe.recipeId}
-            foodName={recipe.foodName}
-            ingredientList={recipe.ingredientList}
-          />
-        ))}
+        <div className="flex flex-col gap-2">
+          {recipes?.map((recipe) => (
+            <SavedListCard
+              key={recipe.recipeId}
+              recipeId={recipe.recipeId}
+              foodName={recipe.foodName}
+              ingredientList={recipe.ingredientList}
+            />
+          ))}
+        </div>
       </div>
-      <footer
-        style={{
-          position: 'fixed',
-          bottom: '0',
-          width: '100%',
-          maxWidth: '31rem',
-        }}
-      >
+      <footer className="fixed bottom-0 w-[31rem]">
         <Navigation />
       </footer>
     </section>

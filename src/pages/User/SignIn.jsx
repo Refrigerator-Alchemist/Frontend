@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useUserApi, IP_ADDRESS } from '../../context/UserContext';
+import { handleError } from '../../utils/customedError';
 import { emailPattern } from '../../utils/common';
 import { toast } from 'react-toastify';
 import Logo from '../../components/common/Logo';
@@ -21,7 +22,7 @@ export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [notAllow, setNotAllow] = useState(true);
 
-  const { login, handleError } = useUserApi();
+  const { login } = useUserApi();
 
   const navigate = useNavigate();
   const location = useLocation();

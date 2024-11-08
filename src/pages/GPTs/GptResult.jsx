@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
+import { IP_ADDRESS } from '../../context/UserContext';
+import { handleError } from '../../utils/customedError';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import Loading from '../../components/common/Loading';
@@ -12,12 +13,10 @@ const GptResult = () => {
   const [title, setTitle] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const { recommendId } = useParams();
-  const { handleError } = useUserApi();
   const navigate = useNavigate();
   const accessToken = localStorage.getItem('accessToken');
 
   useEffect(() => {
-    /** 🤖 GPT 레시피 결과 불러오는 함수 */
     const fetchData = async () => {
       setIsLoading(true);
       try {
@@ -140,7 +139,7 @@ const GptResult = () => {
             onClick={handleSaveButtonClick}
             aria-label="Save this recipe"
           >
-            저장할꼬얌 💛
+            저장할래요 💛
           </button>
         </div>
       </footer>

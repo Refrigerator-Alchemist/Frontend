@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useUserApi, IP_ADDRESS } from '../../context/UserContext';
 import { useNavigate } from 'react-router-dom';
+import { handleError } from '../../utils/customedError';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import Navigation from '../../components/common/Navbar';
@@ -21,7 +22,7 @@ export default function MyPage() {
   const [likedItems, setLikedItems] = useState([]);
   const [showScrollToTop, setShowScrollToTop] = useState(false);
 
-  const { logout, handleError } = useUserApi();
+  const { logout } = useUserApi();
 
   const accessToken = localStorage.getItem('accessToken');
   const nickName = localStorage.getItem('nickName');
@@ -281,7 +282,7 @@ export default function MyPage() {
           <div className="recipe-card-container w-full flex flex-wrap">
             {recipes.map((recipe, index) => (
               <MyRecipe
-                key={recipe.postId}
+                key={`recipe-${recipe.postId}-${index}`}
                 postId={recipe.postId}
                 title={recipe.title}
                 description={recipe.description}

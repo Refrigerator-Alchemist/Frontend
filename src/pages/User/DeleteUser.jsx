@@ -1,12 +1,10 @@
 import { useState } from 'react';
-import { useUserApi } from '../../context/UserContext';
+import { handleError } from '../../utils/customedError';
 import { toast } from 'react-toastify';
 import BackButton from '../../components/common/BackButton';
 
 export default function DeleteUser() {
   const [password, setPassword] = useState('');
-
-  const user = useUserApi();
 
   const handlePasswordChange = (e) => setPassword(e.target.value);
 
@@ -18,7 +16,7 @@ export default function DeleteUser() {
         toast.info('개발자에게 문의해주세요!');
       }
     } catch (error) {
-      user.handleError(error);
+      handleError(error);
     }
   };
 

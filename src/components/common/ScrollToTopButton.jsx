@@ -1,5 +1,5 @@
-import React from 'react';
 import { FaArrowUp } from 'react-icons/fa';
+import React from 'react';
 
 const ScrollToTopButton = ({ showScrollToTop, scrollToTop }) => {
   return (
