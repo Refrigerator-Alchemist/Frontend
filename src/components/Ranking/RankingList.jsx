@@ -2,7 +2,8 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { FaHeart } from 'react-icons/fa';
-import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
+import { IP_ADDRESS } from '../../context/UserContext';
+import { handleError } from '../../utils/customedError';
 import axios from 'axios';
 import Loading from '../common/Loading';
 import Error from '../common/Error';
@@ -57,7 +58,6 @@ function RankingCard({
 /** 🏆 Top3 게시물
   - 리액트 쿼리 사용 : 실시간 업데이트하지 않아도 됨 */
 export default function RankingList() {
-  const { handleError } = useUserApi();
   const navigate = useNavigate();
   const fetchRanking = async () => {
     try {

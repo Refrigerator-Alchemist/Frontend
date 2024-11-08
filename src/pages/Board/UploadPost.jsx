@@ -1,8 +1,9 @@
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
+import { IP_ADDRESS } from '../../context/UserContext';
 import { toast } from 'react-toastify';
 import { Skeleton, Box } from '@mui/material';
+import { handleError } from '../../utils/customedError';
 import BackButton from '../../components/common/BackButton';
 import axios from 'axios';
 
@@ -17,7 +18,6 @@ export default function UploadBoard() {
   const accessToken = localStorage.getItem('accessToken');
   const fileInput = useRef(null);
   const navigate = useNavigate();
-  const { handleError } = useUserApi();
 
   const handleIngredientChange = (index, event) => {
     const newIngredients = [...ingredients];

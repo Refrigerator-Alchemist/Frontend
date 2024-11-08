@@ -1,10 +1,8 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUserApi } from '../../context/UserContext.jsx';
+import { handleError } from '../../utils/customedError';
 
 export default function LoginSuccess() {
-  const { handleError } = useUserApi();
-
   const navigate = useNavigate();
 
   useEffect(() => {

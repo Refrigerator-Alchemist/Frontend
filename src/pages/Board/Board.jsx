@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
+import { IP_ADDRESS } from '../../context/UserContext';
+import { handleError } from '../../utils/customedError';
 import axios from 'axios';
 import RecipeCard from '../../components/board/RecipeCard';
 import SearchBar from '../../components/board/SearchBar';
@@ -26,8 +27,6 @@ const Board = () => {
   const observer = useRef();
 
   const { showScrollToTop, scrollToTop } = useScrollToTop();
-
-  const { handleError } = useUserApi();
 
   const accessToken = localStorage.getItem('accessToken');
   const email = localStorage.getItem('email');

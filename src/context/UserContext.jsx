@@ -1,8 +1,8 @@
 import { useState, createContext, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { handleError } from '../utils/customedError';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import ERRORS from '../utils/customedError';
 
 export const IP_ADDRESS = 'http://localhost:8080';
 
@@ -80,33 +80,6 @@ export const UserApiProvider = ({ children }) => {
   const [nameAvailable, setNameAvailable] = useState(false);
 
   const navigate = useNavigate();
-
-  /** 커스텀 에러 핸들링 */
-  const handleError = async (error) => {
-    const genericToastId = 'generic-error';
-
-    if (error.response && error.response.data && error.response.data.code) {
-      const errorName = Object.values(ERRORS).find(
-        (obj) => obj.code === error.response.data.code
-      );
-      const userNotice = errorName ? errorName.notice : '확인되지 않은 에러';
-      console.log(`에러 내용: ${JSON.stringify(errorName)}`);
-      toast.error(userNotice, {
-        toastId: error.response.data.code,
-      });
-      return error.response.data.code;
-    } else if (!error.response) {
-      console.log('서버로부터 응답이 없습니다');
-      toast.error('서버로부터 응답이 없습니다', {
-        toastId: 'no-server-connection',
-      });
-    } else {
-      console.log(`확인되지 않은 에러, ${error}`);
-      toast.error('알 수 없는 에러가 발생했습니다', {
-        toastId: genericToastId,
-      });
-    }
-  };
 
   /** 회원가입용 이메일 인증 요청
     @param 이메일, 이메일 타입, 소셜 타입

@@ -2,6 +2,7 @@ import React, { useState, useEffect, forwardRef } from 'react';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
+import { handleError } from '../../utils/customedError';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import Box from '@mui/material/Box';
@@ -17,7 +18,6 @@ const RecipeCard = forwardRef(
   ) => {
     const [Liked, setLiked] = useState(isLiked);
     const [likeCount, setLikeCount] = useState(parseInt(initialLikeCount));
-    const { handleError } = useUserApi();
     const textStyle = 'text-lg font-score font-semibold';
 
     useEffect(() => {

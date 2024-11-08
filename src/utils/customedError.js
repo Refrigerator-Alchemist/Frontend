@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 /**
 @description 
 - 에러의 status, code가 리스폰스 헤더에 담겨서 온다
@@ -7,7 +8,7 @@
 - 406 Not Acceptable 407 Proxy Authentication Required 408 Request Timeout 409 Conflict 410 Gone 411 Length Requiredh
 - 412 Precondition Failed 413 Payload Too Large 414 URI Too Long 415 Unsupported Media Type 416 Requested Range Not Satifiable
  */
-const ERRORS = {
+export const ERRORS = {
   EXIST_USER_EMAIL_SOCIALTYPE: {
     status: 409,
     code: 'RAU1',
@@ -330,4 +331,28 @@ const ERRORS = {
   },
 };
 
-export default ERRORS;
+export const handleError = async (error) => {
+  const genericToastId = 'generic-error';
+
+  if (error.response && error.response.data && error.response.data.code) {
+    const errorName = Object.values(ERRORS).find(
+      (obj) => obj.code === error.response.data.code
+    );
+    const userNotice = errorName ? errorName.notice : '확인되지 않은 에러';
+    console.log(`에러 내용: ${JSON.stringify(errorName)}`);
+    toast.error(userNotice, {
+      toastId: error.response.data.code,
+    });
+    return error.response.data.code;
+  } else if (!error.response) {
+    console.log('서버로부터 응답이 없습니다');
+    toast.error('서버로부터 응답이 없습니다', {
+      toastId: 'no-server-connection',
+    });
+  } else {
+    console.log(`확인되지 않은 에러, ${error}`);
+    toast.error('알 수 없는 에러가 발생했습니다', {
+      toastId: genericToastId,
+    });
+  }
+};

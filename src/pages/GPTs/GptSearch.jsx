@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
+import { IP_ADDRESS } from '../../context/UserContext';
+import { handleError } from '../../utils/customedError';
 import { toast } from 'react-toastify';
 import { CiSaveDown2 } from 'react-icons/ci';
 import axios from 'axios';
@@ -9,20 +10,18 @@ import Loading from '../../components/common/Loading';
 import BackButton from '../../components/common/BackButton';
 
 const GptSearch = () => {
-  const { handleError } = useUserApi();
   const [tags, setTags] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const accessToken = localStorage.getItem('accessToken');
   const nickName = localStorage.getItem('nickName') || '';
 
-  /** 레시피 검색 요청하는 함수 */
   const handleNextButtonClick = async () => {
     setIsLoading(true);
 
     try {
       const response = await axios.post(
-        `${IP_ADDRESS}/recipe/recommend`,
+        당`${IP_ADDRESS}/recipe/recommend`,
         {
           ingredients: tags,
         },

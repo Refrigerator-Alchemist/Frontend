@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
+import { IP_ADDRESS } from '../../context/UserContext';
 import { toast } from 'react-toastify';
+import { handleError } from '../../utils/customedError';
 import axios from 'axios';
 import BackButton from '../../components/common/BackButton';
 
@@ -60,7 +61,6 @@ export default function UploadBoard() {
   const [description, setDescription] = useState('');
   const [ingredients, setIngredients] = useState([]);
   const accessToken = localStorage.getItem('accessToken');
-  const { handleError } = useUserApi();
   const navigate = useNavigate();
 
   useEffect(() => {

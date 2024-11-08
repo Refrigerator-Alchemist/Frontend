@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
+import { IP_ADDRESS } from '../../context/UserContext';
+import { handleError } from '../../utils/customedError';
 import axios from 'axios';
 import ICON_SEARCHING from '/assets/img/search.webp';
 
@@ -7,7 +8,6 @@ const accessToken = localStorage.getItem('accessToken');
 
 const SearchBar = ({ onSearch }) => {
   const [query, setQuery] = useState('');
-  const { handleError } = useUserApi();
 
   const handleInputChange = (e) => {
     setQuery(e.target.value);

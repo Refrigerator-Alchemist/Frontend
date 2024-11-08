@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
+import { IP_ADDRESS } from '../../context/UserContext';
+import { handleError } from '../../utils/customedError';
 import { toast } from 'react-toastify';
 import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
 import axios from 'axios';
@@ -19,7 +20,6 @@ export default function EditProfile() {
   const [imageUrl, setImageUrl] = useState(profileImage);
   const [nameError, setNameError] = useState(false);
   const [changeNickName, setChangeNickName] = useState(nickName);
-  const { handleError } = useUserApi();
 
   const navigate = useNavigate();
 

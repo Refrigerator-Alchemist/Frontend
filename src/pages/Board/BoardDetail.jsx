@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
+import { IP_ADDRESS } from '../../context/UserContext';
+import { handleError } from '../../utils/customedError';
 import axios from 'axios';
 import Header from '../../components/boardDetail/Header';
 import BoardDetailMain from '../../components/boardDetail/BoardDetailMain';
@@ -13,7 +14,6 @@ import Error from '../../components/common/Error';
 const BoardDetail = () => {
   const [Liked, setLiked] = useState(false);
   const { postId } = useParams();
-  const { handleError } = useUserApi();
   const queryClient = useQueryClient();
   const accessToken = localStorage.getItem('accessToken');
   const myEmail = localStorage.getItem('email');
