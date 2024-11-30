@@ -1,8 +1,8 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PiPencilSimpleLine } from 'react-icons/pi';
+import React from 'react';
 
-const WriteButton = () => {
+export default function WriteButton() {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -20,6 +20,4 @@ const WriteButton = () => {
       <PiPencilSimpleLine style={{ fontSize: '26px' }} />
     </button>
   );
-};
-
-export default WriteButton;
+}

@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useUserApi, IP_ADDRESS } from '../../context/UserContext';
 import { useNavigate } from 'react-router-dom';
-import { handleError } from '../../utils/customedError';
+import { handleError } from '../../utils/common';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import Navigation from '../../components/common/Navbar';
-import MyRecipe from '../../components/mypage/MyRecipe';
-import LikedRecipe from '../../components/mypage/LikedRecipe';
-import ScrollToTopButton from '../../components/mypage/ScrollToTop';
+import Navbar from '../../components/Layout/Navbar';
+import MyRecipe from '../../components/User/MyPage/MyRecipe';
+import LikedRecipe from '../../components/User/MyPage/LikedRecipe';
+import ScrollToTopButton from '../../components/Global/ScrollToTopButton';
 import profileImage from '/assets/img/img_profile.webp';
 
 export default function MyPage() {
@@ -323,7 +323,7 @@ export default function MyPage() {
           maxWidth: '31rem',
         }}
       >
-        <Navigation />
+        <Navbar />
       </footer>
     </section>
   );

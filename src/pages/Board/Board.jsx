@@ -1,17 +1,17 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { IP_ADDRESS } from '../../context/UserContext';
-import { handleError } from '../../utils/customedError';
+import { handleError } from '../../utils/common';
 import axios from 'axios';
-import RecipeCard from '../../components/board/RecipeCard';
-import SearchBar from '../../components/board/SearchBar';
-import WriteButton from '../../components/board/WriteButton';
-import RankingBoard from '../../components/board/RankingBoard';
-import Navigation from '../../components/common/Navbar';
-import ScrollToTopButton from '../../components/common/ScrollToTopButton';
-import useScrollToTop from '../../components/common/useScrollToTop';
+import RecipeCard from '../../components/Board/RecipeCard';
+import SearchBar from '../../components/Board/SearchBar';
+import WriteButton from '../../components/Board/WriteButton';
+import RankingContainer from '../../components/Board/RankingContainer';
+import Navigation from '../../components/Layout/Navbar';
+import ScrollToTopButton from '../../components/Global/ScrollToTopButton';
+import useScrollToTop from '../../hooks/useScrollToTop';
 
-const Board = () => {
+export default function Board() {
   const [recipes, setRecipes] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -21,12 +21,12 @@ const Board = () => {
   const [searchResultCount, setSearchResultCount] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  const recipesPerPage = 6;
+  const { showScrollToTop, scrollToTop } = useScrollToTop();
 
   const location = useLocation();
   const observer = useRef();
 
-  const { showScrollToTop, scrollToTop } = useScrollToTop();
+  const recipesPerPage = 6;
 
   const accessToken = localStorage.getItem('accessToken');
   const email = localStorage.getItem('email');
@@ -166,7 +166,7 @@ const Board = () => {
           </div>
         ) : (
           <>
-            <RankingBoard />
+            <RankingContainer />
             <div className="my-2">
               <h2 className="font-scoreExtrabold font-extrabold ml-6 text-2xl">
                 레시피
@@ -205,6 +205,4 @@ const Board = () => {
       </footer>
     </main>
   );
-};
-
-export default Board;
+}

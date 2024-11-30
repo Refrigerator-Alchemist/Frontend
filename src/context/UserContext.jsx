@@ -1,10 +1,10 @@
 import { useState, createContext, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { handleError } from '../utils/customedError';
+import { handleError } from '../utils/common';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
-export const IP_ADDRESS = 'http://localhost:8080';
+export const IP_ADDRESS = 'http://localhost:8080'; // 환경변수로 빼기
 
 axios.interceptors.response.use(
   function (response) {
