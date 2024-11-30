@@ -77,7 +77,7 @@
 
 ## 🧱 아키텍처
 
-![아키텍처](https://github.com/user-attachments/assets/0ce64ab1-c87d-4092-8097-7797c673adc2)
+![image](https://github.com/user-attachments/assets/99b41f46-8d02-4b5d-8323-0ed1aa2d3359)
 
 ### ✨ 프론트엔드
 
