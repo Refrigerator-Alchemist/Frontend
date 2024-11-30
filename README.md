@@ -67,9 +67,7 @@
 </div>
 
 <div>
-  <img src="https://img.shields.io/badge/GPT 3.5-412991?style=flat-square&logo=openai&logoColor=white">
-  <img src="https://img.shields.io/badge/Kakao Oauth-FFCD00?style=flat-square&logo=kakao&logoColor=white">
-  <img src="https://img.shields.io/badge/Naver Oauth-03C75A?style=flat-square&logo=naver&logoColor=white">
+  <img src="https://img.shields.io/badge/Open AI GPT 3.5 API-412991?style=flat-square&logo=openai&logoColor=white">
 </div>
 
 <div>
