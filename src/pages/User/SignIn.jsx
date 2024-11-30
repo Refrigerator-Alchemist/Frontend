@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useUserApi, IP_ADDRESS } from '../../context/UserContext';
-import { handleError } from '../../utils/customedError';
+import { handleError } from '../../utils/common';
 import { emailPattern } from '../../utils/common';
 import { toast } from 'react-toastify';
-import Logo from '../../components/common/Logo';
-import BackButton from '../../components/common/BackButton';
-import SocialLogin from '../../components/User/Signin/SocialLogin';
-import InputField from '../../components/User/Signin/InputField';
-import ErrorMessage from '../../components/User/Signin/ErrorMessage';
-import LinkText from '../../components/User/Signin/LinkText';
+import Logo from '../../components/Global/Logo';
+import BackButton from '../../components/Global/BackButton';
+import SocialLoginButton from '../../components/User/SignIn/SocialLoginButton';
+import InputField from '../../components/User/SignIn/InputField';
+import ErrorMessage from '../../components/User/SignIn/ErrorMessage';
+import TextLink from '../../components/User/SignIn/TextLink';
 import LOGO_GOOGLE from '/assets/img/logo_google.webp';
 import LOGO_KAKAO from '/assets/img/logo_kakao.webp';
 import LOGO_NAVER from '/assets/img/logo_naver.webp';
@@ -120,9 +120,9 @@ export default function SignIn() {
             showPassword={showPassword}
             toggleShowPassword={toggleShowPassword}
           />
-          <LinkText onClick={() => navigate('/reset-password')}>
+          <TextLink onClick={() => navigate('/reset-password')}>
             비밀번호 재설정
-          </LinkText>
+          </TextLink>
           <button
             type="submit"
             disabled={notAllow}
@@ -139,17 +139,17 @@ export default function SignIn() {
       <footer className="flex flex-col items-center mb-4">
         <p className="my-4 text-gray-400 font-score">SNS 간편 로그인</p>
         <figure className="flex mb-4">
-          <SocialLogin
+          <SocialLoginButton
             callback={goolgleLogin}
             img={LOGO_GOOGLE}
             socialType={'Google'}
           />
-          <SocialLogin
+          <SocialLoginButton
             callback={kakaoLogin}
             img={LOGO_KAKAO}
             socialType={'Kakao'}
           />
-          <SocialLogin
+          <SocialLoginButton
             callback={naverLogin}
             img={LOGO_NAVER}
             socialType={'Naver'}

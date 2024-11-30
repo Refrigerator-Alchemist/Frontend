@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { IP_ADDRESS } from '../../context/UserContext';
-import { handleError } from '../../utils/customedError';
+import { handleError } from '../../utils/common';
 import axios from 'axios';
 import ICON_SEARCHING from '/assets/img/search.webp';
 
-const accessToken = localStorage.getItem('accessToken');
-
-const SearchBar = ({ onSearch }) => {
+export default function SearchBar({ onSearch }) {
   const [query, setQuery] = useState('');
+
+  const accessToken = localStorage.getItem('accessToken');
 
   const handleInputChange = (e) => {
     setQuery(e.target.value);
@@ -77,6 +77,4 @@ const SearchBar = ({ onSearch }) => {
       </button>
     </div>
   );
-};
-
-export default SearchBar;
+}

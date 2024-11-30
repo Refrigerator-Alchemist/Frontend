@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { IP_ADDRESS } from '../../context/UserContext';
 import { toast } from 'react-toastify';
 import { Skeleton, Box } from '@mui/material';
-import { handleError } from '../../utils/customedError';
-import BackButton from '../../components/common/BackButton';
+import { handleError } from '../../utils/common';
+import BackButton from '../../components/Global/BackButton';
 import axios from 'axios';
 
-export default function UploadBoard() {
+export default function UploadPost() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [ingredients, setIngredients] = useState(['']);

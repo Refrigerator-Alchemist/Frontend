@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        main: '#F8BB01',
+        main: '#f8bb01',
         emerald: '#15ed79',
         indigo: '#6366f1',
       },
@@ -13,9 +13,6 @@ module.exports = {
         jua: ['Jua', 'sans-serif'],
         score: ['S-CoreDream-3Light'],
         scoreExtrabold: ['S-CoreDream-7ExtraBold'],
-        ansung: ['Ansungtangmyun-Bold'],
-        bagle: ['BagelFatOne-Regular'],
-        sam: ['establishRoomNo703OTF'],
         seoyun: ['LeeSeoyun'],
       },
 

@@ -3,26 +3,26 @@ import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import NotFound from './pages/common/NotFound';
-import GetStarted from './pages/common/GetStarted';
-import Home from './pages/common/Home';
-import ProtectedRoute from './pages/common/ProtectedRoute';
+import NotFound from './pages/NotFound';
+import GetStarted from './pages/GetStarted';
+import ProtectedRoute from './components/Global/ProtectedRoute';
 import SignUp from './pages/User/SignUp';
 import SignIn from './pages/User/SignIn';
-import LoginSuccess from './pages/User/LoginSuccess';
+import SignInSuccess from './pages/User/SignInSuccess';
 import ResetPassword from './pages/User/ResetPassword';
-import DeleteUser from './pages/User/DeleteUser';
+import DeleteAccount from './pages/User/DeleteAccount';
 import Mypage from './pages/User/Mypage';
-import EditProfile from './pages/User/EditProfile';
-import RankingDetail from './pages/Ranking/RankingDetail';
+import EditUserProfile from './pages/User/EditUserProfile';
+import RankingPage from './pages/RankingPage/RankingPage';
 import Board from './pages/Board/Board';
 import BoardDetail from './pages/Board/BoardDetail';
 import UploadPost from './pages/Board/UploadPost';
 import EditPost from './pages/Board/EditPost';
-import GptSearch from './pages/GPTs/GptSearch';
-import GptResult from './pages/GPTs/GptResult';
-import GptSavedList from './pages/GPTs/GptSavedList';
-import GptSavedDetail from './pages/GPTs/GptSavedDetail';
+import RecipeAlchemy from './pages/Recipe/RecipeAlchemy';
+import RecipeResult from './pages/Recipe/RecipeResult';
+import RecipeSavedList from './pages/Recipe/RecipeSavedList';
+import RecipeDetail from './pages/Recipe/RecipeDetail';
+import MainPage from './pages/Home';
 
 const router = createBrowserRouter([
   {
@@ -34,12 +34,12 @@ const router = createBrowserRouter([
         index: true,
         element: <GetStarted />,
       },
-      { path: '/main', element: <Home /> },
+      { path: '/main', element: <MainPage /> },
 
       // 회원정보 관리 -----------------
       { path: '/signup', element: <SignUp /> },
       { path: '/login', element: <SignIn /> },
-      { path: '/login-success', element: <LoginSuccess /> },
+      { path: '/login-success', element: <SignInSuccess /> },
       {
         path: '/reset-password',
         element: <ResetPassword />,
@@ -48,12 +48,10 @@ const router = createBrowserRouter([
         path: '/delete-user',
         element: (
           <ProtectedRoute>
-            <DeleteUser />
+            <DeleteAccount />
           </ProtectedRoute>
         ),
       },
-
-      // 프로필 관리 ------------------
       {
         path: '/mypage',
         element: (
@@ -66,13 +64,13 @@ const router = createBrowserRouter([
         path: '/mypage/edit/profile',
         element: (
           <ProtectedRoute>
-            <EditProfile />
+            <EditUserProfile />
           </ProtectedRoute>
         ),
       },
 
       // 게시판 ----------------------
-      { path: '/ranking', element: <RankingDetail /> },
+      { path: '/ranking', element: <RankingPage /> },
       { path: '/board', element: <Board /> },
       { path: '/board/:postId', element: <BoardDetail /> },
       {
@@ -92,14 +90,14 @@ const router = createBrowserRouter([
         ),
       },
 
-      // 냉장고 연금술 -----------------
-      { path: '/recipe/recommend', element: <GptSearch /> },
-      { path: '/recipe/recommend/:recommendId', element: <GptResult /> },
+      // 연금술 -----------------
+      { path: '/recipe/recommend', element: <RecipeAlchemy /> },
+      { path: '/recipe/recommend/:recommendId', element: <RecipeResult /> },
       {
         path: '/recipe/myRecipe',
         element: (
           <ProtectedRoute>
-            <GptSavedList />
+            <RecipeSavedList />
           </ProtectedRoute>
         ),
       },
@@ -107,7 +105,7 @@ const router = createBrowserRouter([
         path: '/recipe/myRecipe/:recipeId',
         element: (
           <ProtectedRoute>
-            <GptSavedDetail />
+            <RecipeDetail />
           </ProtectedRoute>
         ),
       },

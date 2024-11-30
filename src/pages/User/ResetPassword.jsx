@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react';
 import { useUserApi } from '../../context/UserContext';
 import { isPasswordValid } from '../../utils/common';
 import { toast } from 'react-toastify';
-import BackButton from '../../components/common/BackButton';
-import InputPassword from '../../components/User/SignUpAndResetPassword/InputPassword';
-import FormHeader from '../../components/User/SignUpAndResetPassword/FormHeader';
-import CheckedList from '../../components/User/SignUpAndResetPassword/CheckedList';
-import PasswordMatch from '../../components/User/SignUpAndResetPassword/PasswordMatch';
-import InputVeriNum from '../../components/User/SignUpAndResetPassword/InputVeriNum';
-import SubmitButton from '../../components/User/SignUpAndResetPassword/SubmitButton';
+import BackButton from '../../components/Global/BackButton';
+import InputPassword from '../../components/User/Shared/InputPassword';
+import FormHeader from '../../components/User/Shared/FormHeader';
+import CheckedList from '../../components/User/Shared/CheckedList';
+import PasswordMatch from '../../components/User/Shared/PasswordMatch';
+import InputVeriNum from '../../components/User/Shared/InputVeriNum';
+import SubmitButton from '../../components/User/Shared/SubmitButton';
 
 export default function ResetPassword() {
   const [email, setEmail] = useState('');
