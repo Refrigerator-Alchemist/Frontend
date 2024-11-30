@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { IP_ADDRESS } from '../../context/UserContext';
 import { toast } from 'react-toastify';
-import { handleError } from '../../utils/customedError';
+import { handleError } from '../../utils/common';
 import axios from 'axios';
-import BackButton from '../../components/common/BackButton';
+import BackButton from '../../components/Global/BackButton';
 
 function FormGroup({ label, children }) {
   return (

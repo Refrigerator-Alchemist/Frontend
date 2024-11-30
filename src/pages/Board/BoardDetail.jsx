@@ -3,15 +3,15 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { IP_ADDRESS } from '../../context/UserContext';
-import { handleError } from '../../utils/customedError';
+import { handleError } from '../../utils/common';
 import axios from 'axios';
-import Header from '../../components/boardDetail/Header';
-import BoardDetailMain from '../../components/boardDetail/BoardDetailMain';
-import Footer from '../../components/common/Footer';
-import Loading from '../../components/common/Loading';
-import Error from '../../components/common/Error';
+import Header from '../../components/Board/BoardDetail/Header';
+import BoardDetailCard from '../../components/Board/BoardDetail/BoardDetailCard';
+import Footer from '../../components/Global/Footer';
+import Loading from '../../components/Global/Loading';
+import Error from '../../components/Global/Error';
 
-const BoardDetail = () => {
+export default function BoardDetail() {
   const [Liked, setLiked] = useState(false);
   const { postId } = useParams();
   const queryClient = useQueryClient();
@@ -155,7 +155,7 @@ const BoardDetail = () => {
   return (
     <section style={{ marginBottom: '90px' }}>
       <Header reportPost={reportPost} />
-      <BoardDetailMain
+      <BoardDetailCard
         imageUrl={postQuery.data.imageUrl}
         title={postQuery.data.title}
         description={postQuery.data.description}
@@ -169,6 +169,4 @@ const BoardDetail = () => {
       <Footer />
     </section>
   );
-};
-
-export default BoardDetail;
+}

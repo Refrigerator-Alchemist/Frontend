@@ -1,15 +1,12 @@
 import React, { useState, useEffect, forwardRef } from 'react';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { IP_ADDRESS, useUserApi } from '../../context/UserContext';
-import { handleError } from '../../utils/customedError';
+import { IP_ADDRESS } from '../../context/UserContext';
+import { handleError } from '../../utils/common';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
-
-const accessToken = localStorage.getItem('accessToken');
-const email = localStorage.getItem('email');
 
 const RecipeCard = forwardRef(
   (
@@ -18,6 +15,8 @@ const RecipeCard = forwardRef(
   ) => {
     const [Liked, setLiked] = useState(isLiked);
     const [likeCount, setLikeCount] = useState(parseInt(initialLikeCount));
+    const accessToken = localStorage.getItem('accessToken');
+    const email = localStorage.getItem('email');
     const textStyle = 'text-lg font-score font-semibold';
 
     useEffect(() => {
