@@ -37,7 +37,7 @@ export default function RecipeSavedList() {
 
   return (
     <section className="relative">
-      <BackButton destination={-1} />
+      <BackButton destination={'/recipe/recommend'} />
       <div className="py-20">
         <div className="titlebox mb-6 mt-2">
           <span className="font-score font-extrabold ml-8 text-2xl">

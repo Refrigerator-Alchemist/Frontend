@@ -7,12 +7,13 @@ import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
 import axios from 'axios';
 import profileImage from '/assets/img/img_profile.webp';
 import BackButton from '../../components/Global/BackButton';
-import FormGroup from '../../components/User/EditUserProfile/FormGroup';
-import ProfileImage from '../../components/User/EditUserProfile/ProfileImage';
-import FormButton from '../../components/User/EditUserProfile/FormButton';
-import ErrorMessage from '../../components/User/EditUserProfile/ErrorMessage';
+import FormGroup from '../../components/User/EditUserNickname/FormGroup';
+import ProfileImage from '../../components/User/EditUserNickname/ProfileImage';
+import FormButton from '../../components/User/EditUserNickname/FormButton';
+import ErrorMessage from '../../components/User/EditUserNickname/ErrorMessage';
+import useThrottle from '../../hooks/useThrottle';
 
-export default function EditUserProfile() {
+export default function EditUserNickname() {
   const nickName = localStorage.getItem('nickName') || '';
   const email = localStorage.getItem('email') || '';
   const accessToken = localStorage.getItem('accessToken');
@@ -52,9 +53,15 @@ export default function EditUserProfile() {
     }
   };
 
-  const handleSubmitNickname = async (e) => {
+  const handleSubmitNickname = useThrottle(async (e) => {
     e.preventDefault();
-    if (nameError === false) {
+
+    if (nickName === changeNickName) {
+      toast.warning('기존 닉네임과 동일합니다');
+      return;
+    }
+
+    if (nameError === false && nickName !== changeNickName) {
       try {
         const response = await axios.post(
           `${IP_ADDRESS}/reset/nickname`,
@@ -71,8 +78,8 @@ export default function EditUserProfile() {
             },
           }
         );
+
         if (response) {
-          console.log(`닉네임 재설정 성공`);
           localStorage.setItem('nickName', changeNickName);
           toast.success('닉네임을 재설정 했습니다');
           navigate('/mypage');
@@ -81,7 +88,7 @@ export default function EditUserProfile() {
         handleError(error);
       }
     }
-  };
+  }, 3000);
 
   return (
     <section className="relative w-full h-screen flex flex-col justify-center bg-white">

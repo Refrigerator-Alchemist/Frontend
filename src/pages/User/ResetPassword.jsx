@@ -9,6 +9,7 @@ import CheckedList from '../../components/User/Shared/CheckedList';
 import PasswordMatch from '../../components/User/Shared/PasswordMatch';
 import InputVeriNum from '../../components/User/Shared/InputVeriNum';
 import SubmitButton from '../../components/User/Shared/SubmitButton';
+import useThrottle from '../../hooks/useThrottle';
 
 export default function ResetPassword() {
   const [email, setEmail] = useState('');
@@ -20,6 +21,8 @@ export default function ResetPassword() {
 
   const userApi = useUserApi();
 
+  const throttle = useThrottle();
+
   const emailType = 'reset-password';
   const socialType = 'Refrigerator-Alchemist';
 
@@ -27,12 +30,16 @@ export default function ResetPassword() {
 
   const handleRequest = async (e) => {
     e.preventDefault();
+    console.log('호출');
     if (!email) {
       toast.error('이메일을 입력해주세요');
       return;
+    } else {
+      userApi.requestEmailForReset(email, emailType, socialType);
     }
-    userApi.requestEmailForReset(email, emailType, socialType);
   };
+
+  const RequestWithThrottle = throttle(handleRequest, 3000);
 
   const isVerified = async (e) => {
     e.preventDefault();
@@ -68,14 +75,14 @@ export default function ResetPassword() {
       <BackButton destination={'/login'} />
       <FormHeader
         title={'비밀번호 재설정'}
-        mention={'인증을 완료하고, 새로운 비밀번호를 설정하세요'}
+        mention={'이메일 인증 후 새로운 비밀번호를 설정하세요'}
       />
       <form onSubmit={submitReset}>
         <main className="mt-10 w-full px-2">
           <InputVeriNum
             email={email}
             handleEmailChange={handleEmailChange}
-            handleRequest={handleRequest}
+            handleRequest={RequestWithThrottle}
             selectOption={userApi.emailExists}
             inputNum={inputNum}
             setInputNum={setInputNum}
