@@ -153,7 +153,7 @@ export default function BoardDetail() {
   if (postQuery.isError || likedPostsQuery.isError) return <Error />;
 
   return (
-    <section style={{ marginBottom: '90px' }}>
+    <section className="mb-[5.625rem]">
       <Header reportPost={reportPost} />
       <BoardDetailCard
         imageUrl={postQuery.data.imageUrl}

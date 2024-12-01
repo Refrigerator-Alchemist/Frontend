@@ -8,20 +8,23 @@ import axios from 'axios';
 import TagInput from '../../components/Recipe/TagInput';
 import Loading from '../../components/Global/Loading';
 import BackButton from '../../components/Global/BackButton';
+import useThrottle from '../../hooks/useThrottle';
 
 export default function RecipeAlchemy() {
   const [tags, setTags] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
+
   const accessToken = localStorage.getItem('accessToken');
   const nickName = localStorage.getItem('nickName') || '';
 
-  const handleNextButton = async () => {
+  const handleNextButton = useThrottle(async () => {
     setIsLoading(true);
 
     try {
       const response = await axios.post(
-        당`${IP_ADDRESS}/recipe/recommend`,
+        `${IP_ADDRESS}/recipe/recommend`,
         {
           ingredients: tags,
         },
@@ -32,28 +35,23 @@ export default function RecipeAlchemy() {
         }
       );
 
-      console.log('서버 응답:', response.data);
       const recommendId = response.data;
-      if (recommendId) {
-        navigate(`/recipe/recommend/${recommendId}`);
-      }
+      if (recommendId) navigate(`/recipe/recommend/${recommendId}`);
     } catch (error) {
       handleError(error);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, 3000);
 
-  if (isLoading) {
-    return <Loading />;
-  }
+  if (isLoading) return <Loading />;
 
   return (
     <section className="bg-white min-h-screen px-4 py-8 flex flex-col relative">
       <BackButton destination="/main" />
       <main className="max-w-lg mx-auto flex-1">
         <h2 className="font-jua text-xl md:text-2xl font-bold mb-12 mt-32 text-center">
-          냉장고에서 꺼내 넣어주세요!
+          재료를 입력해주세요
         </h2>
         <TagInput tags={tags} setTags={setTags} />
       </main>
@@ -70,14 +68,14 @@ export default function RecipeAlchemy() {
           }}
         >
           <CiSaveDown2 className="mr-1 w-6 h-6" />
-          {accessToken ? `${nickName}의 레시피 기록 열기` : '레시피 기록 열기'}
+          {accessToken ? `${nickName}의 연금술 내역 열기` : '연금술 내역 열기'}
         </button>
         <button
           className="font-jua text-xl transition ease-in-out bg-main hover:bg-emerald hover:scale-110 hover:cursor-pointer hover:text-black text-white font-bold py-3 px-4 rounded-md w-full"
           type="button"
           onClick={handleNextButton}
         >
-          레시피 나와라 얍!
+          연금술 실행
         </button>
       </footer>
     </section>

@@ -91,7 +91,7 @@ export const UserApiProvider = ({ children }) => {
         emailType,
         socialType,
       });
-      console.log(`이메일: ${email} 회원가입 유형: ${socialType}`);
+
       if (response.status === 204) {
         setEmailExists(false);
         toast.success('인증번호가 발송되었습니다');
@@ -114,7 +114,7 @@ export const UserApiProvider = ({ children }) => {
         emailType,
         socialType,
       });
-      console.log(`이메일: ${email} 회원가입 유형: ${socialType}`);
+
       if (response.status === 204) {
         toast.success('인증번호가 발송되었습니다');
       } else {

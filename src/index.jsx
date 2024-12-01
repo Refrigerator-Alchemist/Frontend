@@ -12,7 +12,7 @@ import SignInSuccess from './pages/User/SignInSuccess';
 import ResetPassword from './pages/User/ResetPassword';
 import DeleteAccount from './pages/User/DeleteAccount';
 import Mypage from './pages/User/Mypage';
-import EditUserProfile from './pages/User/EditUserProfile';
+import EditUserNickname from './pages/User/EditUserNickname';
 import RankingPage from './pages/RankingPage/RankingPage';
 import Board from './pages/Board/Board';
 import BoardDetail from './pages/Board/BoardDetail';
@@ -64,7 +64,7 @@ const router = createBrowserRouter([
         path: '/mypage/edit/profile',
         element: (
           <ProtectedRoute>
-            <EditUserProfile />
+            <EditUserNickname />
           </ProtectedRoute>
         ),
       },
