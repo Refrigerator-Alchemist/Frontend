@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { IP_ADDRESS } from '../../context/UserContext';
 import { handleError } from '../../utils/common';
 import axios from 'axios';
 import Navigation from '../../components/Layout/Navbar';
@@ -13,7 +12,7 @@ export default function RecipeSavedList() {
   const accessToken = localStorage.getItem('accessToken');
 
   const fetchRecipes = async () => {
-    const response = await axios.get(`${IP_ADDRESS}/recipe/myRecipe`, {
+    const response = await axios.get(`/recipe/myRecipe`, {
       headers: { 'Authorization-Access': accessToken },
     });
     return response.data;

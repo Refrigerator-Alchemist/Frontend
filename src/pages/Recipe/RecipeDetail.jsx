@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
-import { IP_ADDRESS } from '../../context/UserContext';
 import { handleError } from '../../utils/common';
 import axios from 'axios';
 import Navigation from '../../components/Layout/Navbar';
@@ -13,12 +12,9 @@ export default function RecipeDetail() {
 
   const fetchRecipeData = async () => {
     if (!recipeId) throw new Error('Recipe ID가 존재하지 않습니다.');
-    const response = await axios.get(
-      `${IP_ADDRESS}/recipe/myRecipe/${recipeId}`,
-      {
-        headers: { 'Authorization-Access': accessToken },
-      }
-    );
+    const response = await axios.get(`/recipe/myRecipe/${recipeId}`, {
+      headers: { 'Authorization-Access': accessToken },
+    });
     return response.data;
   };
 

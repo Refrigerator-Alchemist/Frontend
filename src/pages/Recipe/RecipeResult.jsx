@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { IP_ADDRESS } from '../../context/UserContext';
 import { handleError } from '../../utils/common';
 import { toast } from 'react-toastify';
 import axios from 'axios';
@@ -20,14 +19,11 @@ export default function RecipeResult() {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(
-          `${IP_ADDRESS}/recipe/recommend/${recommendId}`,
-          {
-            headers: {
-              'Authorization-Access': accessToken,
-            },
-          }
-        );
+        const response = await axios.get(`/recipe/recommend/${recommendId}`, {
+          headers: {
+            'Authorization-Access': accessToken,
+          },
+        });
 
         if (response.data) {
           setTitle(response.data.foodName);
@@ -48,7 +44,7 @@ export default function RecipeResult() {
   const handleSaveButton = async () => {
     try {
       await axios.post(
-        `${IP_ADDRESS}/recipe/save`,
+        `/recipe/save`,
         {
           foodName: title,
           ingredients: ingredients,

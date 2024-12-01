@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { IP_ADDRESS } from '../../context/UserContext';
 import { handleError } from '../../utils/common';
 import axios from 'axios';
 import Header from '../../components/Board/BoardDetail/Header';
@@ -19,9 +18,7 @@ export default function BoardDetail() {
   const myEmail = localStorage.getItem('email');
 
   const fetchPostData = async () => {
-    const response = await axios.get(
-      `${IP_ADDRESS}/board/specific?postId=${postId}`
-    );
+    const response = await axios.get(`/board/specific?postId=${postId}`);
     if (response.data && Array.isArray(response.data.items)) {
       const item = response.data.items[0];
       return {
@@ -40,7 +37,7 @@ export default function BoardDetail() {
 
   const fetchLikedPosts = async () => {
     if (!accessToken) return [];
-    const URL = `${IP_ADDRESS}/board/islike?id=${myEmail}`;
+    const URL = `/board/islike?id=${myEmail}`;
     const response = await axios.get(URL, {
       headers: {
         'Authorization-Access': accessToken,
@@ -70,7 +67,7 @@ export default function BoardDetail() {
   const likeMutation = useMutation({
     mutationFn: async () => {
       const response = await axios.post(
-        `${IP_ADDRESS}/board/like`,
+        `/board/like`,
         { email: myEmail, postId: postId },
         {
           headers: {
@@ -95,7 +92,7 @@ export default function BoardDetail() {
   const dislikeMutation = useMutation({
     mutationFn: async () => {
       const response = await axios.post(
-        `${IP_ADDRESS}/board/dislike`,
+        `board/dislike`,
         { email: myEmail, postId: postId },
         {
           headers: {
@@ -126,7 +123,7 @@ export default function BoardDetail() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${IP_ADDRESS}/board/report`,
+        `/board/report`,
         { email: myEmail, postId: postId },
         {
           headers: {

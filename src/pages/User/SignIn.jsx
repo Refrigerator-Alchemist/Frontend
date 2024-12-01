@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useUserApi, IP_ADDRESS } from '../../context/UserContext';
+import { useUserApi } from '../../context/UserContext';
 import { handleError } from '../../utils/common';
 import { emailPattern } from '../../utils/common';
 import { toast } from 'react-toastify';
@@ -72,7 +72,7 @@ export default function SignIn() {
 
   const goolgleLogin = () => {
     try {
-      window.location.href = `${IP_ADDRESS}/oauth2/authorization/google`;
+      window.location.href = `/oauth2/authorization/google`;
     } catch (error) {
       handleError(error);
     }
@@ -80,7 +80,7 @@ export default function SignIn() {
 
   const kakaoLogin = () => {
     try {
-      window.location.href = `${IP_ADDRESS}/oauth2/authorization/kakao`;
+      window.location.href = `/oauth2/authorization/kakao`;
     } catch (error) {
       handleError(error);
     }
@@ -88,7 +88,7 @@ export default function SignIn() {
 
   const naverLogin = () => {
     try {
-      window.location.href = `${IP_ADDRESS}/oauth2/authorization/naver`;
+      window.location.href = `/oauth2/authorization/naver`;
     } catch (error) {
       handleError(error);
     }

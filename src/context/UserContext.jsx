@@ -4,8 +4,7 @@ import { handleError } from '../utils/common';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
-export const IP_ADDRESS = 'http://localhost:8080'; // 환경변수로 빼기
-
+axios.defaults.baseURL = import.meta.env.VITE_REQUEST_URI;
 axios.interceptors.response.use(
   function (response) {
     return response;
@@ -28,7 +27,7 @@ let isRefreshing = false;
 const reIssue = async () => {
   if (isRefreshing) return;
   isRefreshing = true;
-  const URL = `${IP_ADDRESS}/token/reissue`;
+  const URL = `/token/reissue`;
   const accessToken = localStorage.getItem('accessToken');
   const refreshToken = localStorage.getItem('refreshToken');
   const socialType = localStorage.getItem('socialType');
@@ -86,7 +85,7 @@ export const UserApiProvider = ({ children }) => {
    */
   const requestEmailForSignUp = async (email, emailType, socialType) => {
     try {
-      const response = await axios.post(`${IP_ADDRESS}/auth/email`, {
+      const response = await axios.post(`/auth/email`, {
         email,
         emailType,
         socialType,
@@ -109,7 +108,7 @@ export const UserApiProvider = ({ children }) => {
   */
   const requestEmailForReset = async (email, emailType, socialType) => {
     try {
-      const response = await axios.post(`${IP_ADDRESS}/auth/email`, {
+      const response = await axios.post(`/auth/email`, {
         email,
         emailType,
         socialType,
@@ -141,7 +140,7 @@ export const UserApiProvider = ({ children }) => {
     }
     try {
       const response = await axios.post(
-        `${IP_ADDRESS}/auth/register/authentication/number`,
+        `/auth/register/authentication/number`,
         {
           email,
           emailType,
@@ -164,7 +163,7 @@ export const UserApiProvider = ({ children }) => {
   const checkNameDuplication = async (nickName) => {
     try {
       const response = await axios.post(
-        `${IP_ADDRESS}/auth/register/authentication/nickname`,
+        `/auth/register/authentication/nickname`,
         {
           nickName,
         }
@@ -189,7 +188,7 @@ export const UserApiProvider = ({ children }) => {
     - Accept: 'application/json'
   */
   const signUp = async (email, password, nickName, socialType) => {
-    const URL = `${IP_ADDRESS}/auth/register`;
+    const URL = `/auth/register`;
     try {
       const response = await axios.post(
         URL,
@@ -220,7 +219,7 @@ export const UserApiProvider = ({ children }) => {
   };
 
   const deleteUser = async () => {
-    const URL = `${IP_ADDRESS}/auth/delete`;
+    const URL = `/auth/delete`;
     try {
       await axios.delete(URL, {
         data: localStorage.getItem('socialId'),
@@ -236,7 +235,7 @@ export const UserApiProvider = ({ children }) => {
    @params 이메일, 비밀번호, 서비스 타입
   */
   const login = async (email, password, socialType) => {
-    const URL = `${IP_ADDRESS}/token/login`;
+    const URL = `/token/login`;
     try {
       const response = await axios.post(
         URL,
@@ -281,7 +280,7 @@ export const UserApiProvider = ({ children }) => {
    @header 액세스 토큰
    */
   const logout = async () => {
-    const URL = `${IP_ADDRESS}/token/logout`;
+    const URL = `/token/logout`;
     const accessToken = localStorage.getItem('accessToken');
 
     try {
@@ -317,7 +316,7 @@ export const UserApiProvider = ({ children }) => {
    */
   const resetPassword = async (email, password, newPassword, socialType) => {
     try {
-      const response = await axios.post(`${IP_ADDRESS}/auth/reset/password`, {
+      const response = await axios.post(`/auth/reset/password`, {
         email,
         password,
         rePassword: newPassword,

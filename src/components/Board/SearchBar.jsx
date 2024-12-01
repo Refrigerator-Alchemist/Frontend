@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { IP_ADDRESS } from '../../context/UserContext';
 import { handleError } from '../../utils/common';
 import axios from 'axios';
 import ICON_SEARCHING from '/assets/img/search.webp';
@@ -23,7 +22,7 @@ export default function SearchBar({ onSearch }) {
     if (query.trim() !== '') {
       try {
         const response = await axios.get(
-          `${IP_ADDRESS}/board/searchTitle?title=${query.trim()}`,
+          `/board/searchTitle?title=${query.trim()}`,
           {
             headers: {
               'Content-Type': 'application/json;charset=UTF-8',

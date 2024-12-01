@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useUserApi, IP_ADDRESS } from '../../context/UserContext';
+import { useUserApi } from '../../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 import { handleError } from '../../utils/common';
 import { toast } from 'react-toastify';
@@ -34,7 +34,7 @@ export default function MyPage() {
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const URL = `${IP_ADDRESS}/userinfo`;
+      const URL = `/userinfo`;
       try {
         if (accessToken) {
           const response = await axios.get(URL, {
@@ -56,7 +56,7 @@ export default function MyPage() {
 
   useEffect(() => {
     const fetchMyPage = async (page) => {
-      const URL = `${IP_ADDRESS}/mypost?page=${page}&size=${recipesPerPage}`;
+      const URL = `/mypost?page=${page}&size=${recipesPerPage}`;
       try {
         const response = await axios.get(URL, {
           headers: {
@@ -82,7 +82,7 @@ export default function MyPage() {
     };
 
     const fetchLikeData = async (page) => {
-      const URL = `${IP_ADDRESS}/likedpost?page=${page}&size=${recipesPerPage}`;
+      const URL = `/likedpost?page=${page}&size=${recipesPerPage}`;
       try {
         const response = await axios.get(URL, {
           headers: {
@@ -172,7 +172,7 @@ export default function MyPage() {
 
   const deleteRecipe = async (postId) => {
     try {
-      await axios.post(`${IP_ADDRESS}/mypost/delete`, postId, {
+      await axios.post(`/mypost/delete`, postId, {
         headers: {
           'Authorization-Access': accessToken,
         },

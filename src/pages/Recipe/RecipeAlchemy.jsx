@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IP_ADDRESS } from '../../context/UserContext';
 import { handleError } from '../../utils/common';
 import { toast } from 'react-toastify';
 import { CiSaveDown2 } from 'react-icons/ci';
 import axios from 'axios';
+import useThrottle from '../../hooks/useThrottle';
 import TagInput from '../../components/Recipe/TagInput';
 import Loading from '../../components/Global/Loading';
 import BackButton from '../../components/Global/BackButton';
-import useThrottle from '../../hooks/useThrottle';
 
 export default function RecipeAlchemy() {
   const [tags, setTags] = useState([]);
@@ -19,12 +18,12 @@ export default function RecipeAlchemy() {
   const accessToken = localStorage.getItem('accessToken');
   const nickName = localStorage.getItem('nickName') || '';
 
-  const handleNextButton = useThrottle(async () => {
+  const handleAlchemy = useThrottle(async () => {
     setIsLoading(true);
 
     try {
       const response = await axios.post(
-        `${IP_ADDRESS}/recipe/recommend`,
+        `/recipe/recommend`,
         {
           ingredients: tags,
         },
@@ -73,7 +72,7 @@ export default function RecipeAlchemy() {
         <button
           className="font-jua text-xl transition ease-in-out bg-main hover:bg-emerald hover:scale-110 hover:cursor-pointer hover:text-black text-white font-bold py-3 px-4 rounded-md w-full"
           type="button"
-          onClick={handleNextButton}
+          onClick={handleAlchemy}
         >
           연금술 실행
         </button>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, forwardRef } from 'react';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { IP_ADDRESS } from '../../context/UserContext';
 import { handleError } from '../../utils/common';
 import { toast } from 'react-toastify';
 import axios from 'axios';
@@ -26,7 +25,7 @@ const RecipeCard = (
     try {
       if (Liked) {
         const response = await axios.post(
-          `${IP_ADDRESS}/board/dislike`,
+          `/board/dislike`,
           { email, postId },
           {
             headers: {
@@ -42,7 +41,7 @@ const RecipeCard = (
         }
       } else {
         const response = await axios.post(
-          `${IP_ADDRESS}/board/like`,
+          `/board/like`,
           { email, postId },
           {
             headers: {

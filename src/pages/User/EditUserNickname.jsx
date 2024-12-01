@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IP_ADDRESS } from '../../context/UserContext';
 import { handleError } from '../../utils/common';
 import { toast } from 'react-toastify';
 import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
@@ -31,7 +30,7 @@ export default function EditUserNickname() {
   useEffect(() => {
     const checkTokenExpired = async () => {
       try {
-        await axios.get(`${IP_ADDRESS}/reset/info`, {
+        await axios.get(`/reset/info`, {
           headers: {
             'Authorization-Access': accessToken,
           },
@@ -64,7 +63,7 @@ export default function EditUserNickname() {
     if (nameError === false && nickName !== changeNickName) {
       try {
         const response = await axios.post(
-          `${IP_ADDRESS}/reset/nickname`,
+          `/reset/nickname`,
           {
             presentNickName: nickName,
             changeNickName: changeNickName,
