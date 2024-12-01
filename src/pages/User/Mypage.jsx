@@ -211,10 +211,7 @@ export default function MyPage() {
   };
 
   return (
-    <section
-      className="Board flex flex-col items-center justify-center w-full"
-      style={{ marginBottom: '100px' }}
-    >
+    <section className="Board flex flex-col items-center justify-center w-full mb-[6.25rem]">
       <header className="flex justify-end w-full mt-2 space-x-2 mr-12">
         <button
           className="font-score text-gray-300"

@@ -150,7 +150,7 @@ export const UserApiProvider = ({ children }) => {
       );
       if (response.status === 204) {
         setVerified(true);
-        toast.success('인증 완료!');
+        toast.success('인증 완료되었습니다');
       } else {
         return;
       }
@@ -268,7 +268,7 @@ export const UserApiProvider = ({ children }) => {
         localStorage.setItem('email', email);
         localStorage.setItem('socialId', response.headers.get('socialId'));
         localStorage.setItem('socialType', socialType);
-        toast.success('로그인 되었습니다!');
+        toast.success('로그인 되었습니다');
         navigate('/main');
       }
     } catch (error) {
@@ -303,7 +303,7 @@ export const UserApiProvider = ({ children }) => {
         localStorage.removeItem('socialType');
         localStorage.removeItem('imageUrl');
 
-        toast.success('로그아웃 되었습니다!');
+        toast.success('로그아웃 되었습니다');
         navigate('/main');
       }
     } catch (error) {

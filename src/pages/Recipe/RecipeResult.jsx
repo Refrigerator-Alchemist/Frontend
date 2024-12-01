@@ -42,6 +42,9 @@ export default function RecipeResult() {
   }, [recommendId, accessToken, handleError]);
 
   const handleSaveButton = async () => {
+    if (!accessToken) {
+      toast.error('로그인이 필요합니다');
+    }
     try {
       await axios.post(
         `/recipe/save`,
@@ -118,10 +121,7 @@ export default function RecipeResult() {
         </div>
       </main>
       <footer className="fixed bottom-5 left-0 right-0 px-6 text-sm md:text-lg">
-        <div
-          className="mx-auto flex justify-between mb-4"
-          style={{ maxWidth: '400px' }}
-        >
+        <div className="mx-auto flex justify-between mb-4 max-w-[25rem]">
           <button
             className="font-score transition ease-in-out bg-gray-400 hover:bg-gray-600 text-white font-bold py-3 px-9 rounded-full"
             onClick={() => navigate('/recipe/recommend')}

@@ -14,7 +14,7 @@ export default function DeleteAccount() {
     const confirm = window.confirm('정말 회원탈퇴를 진행할까요?');
 
     if (confirm) {
-      toast.info('개발자에게 문의해주세요!');
+      toast.info('개발자에게 문의해주세요');
       setPassword('');
     }
   }, 3000);

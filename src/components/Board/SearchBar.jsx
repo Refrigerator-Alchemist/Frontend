@@ -63,9 +63,8 @@ export default function SearchBar({ onSearch }) {
         onKeyPress={handleKeyPress}
       />
       <button
-        className="flex items-center justify-center hover:bg-gray-200 px-3 py-2 rounded-full"
+        className="flex items-center min-w-[2.5rem] h-[2.5rem] rounded-full justify-center hover:bg-gray-200 px-3 py-2"
         onClick={handleSearchClick}
-        style={{ minWidth: '40px', height: '40px', borderRadius: '30px' }}
       >
         <img
           src={ICON_SEARCHING}

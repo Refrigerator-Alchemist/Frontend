@@ -103,7 +103,7 @@ export default function SignUp() {
       <BackButton destination={'/login'} />
       <FormHeader
         title={'신규 회원가입'}
-        mention={'환영합니다! 냉장고 연금술과 레시피 나눔을 해보세요'}
+        mention={'환영합니다🤗 냉장고 연금술과 레시피 나눔을 해보세요'}
       />
       <form onSubmit={submitSignup}>
         <main className="mt-10 w-full px-2">

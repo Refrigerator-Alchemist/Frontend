@@ -63,7 +63,7 @@ const RecipeCard = (
 
   if (loading) {
     return (
-      <Box ref={ref} sx={{ margin: '0 6px' }}>
+      <Box ref={ref}>
         <Skeleton variant="rectangular" width="100%" height={200} />
         <Skeleton variant="text" />
         <Skeleton variant="text" width="60%" />

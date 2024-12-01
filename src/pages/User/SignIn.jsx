@@ -98,7 +98,7 @@ export default function SignIn() {
     <section className={`relative min-h-screen ${headerStyle}`}>
       <BackButton destination={'/main'} />
       <header className={headerStyle}>
-        <Logo page="login" width="250px" height="250px" />
+        <Logo page="login" width="100rem" height="100rem" />
         <h1 className="text-3xl font-jua">로그인</h1>
       </header>
       <main>

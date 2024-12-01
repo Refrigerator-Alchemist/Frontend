@@ -7,7 +7,7 @@ export default function ProtectedRoute({ children }) {
   const navigate = useNavigate();
 
   if (!accessToken && !refreshToken) {
-    toast.error('로그인 후 이용할 수 있습니다');
+    toast.error('로그인이 필요합니다');
     setTimeout(() => {
       navigate('/login');
     }, 1000);

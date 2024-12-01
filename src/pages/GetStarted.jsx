@@ -19,7 +19,7 @@ export default function GetStarted() {
             ))}
           </h1>
         </div>
-        <Logo page="start" width="300px" height="300px" />
+        <Logo page="start" width="200rem" height="200rem" />
         <Link
           className="text-3xl p-5 font-bold font-jua transition ease-in-out rounded-md bg-transparent text-white hover:-translate-y-1 hover:scale-110 hover:bg-emerald hover:text-black duration-300 ..."
           to={'/main'}

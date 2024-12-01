@@ -32,7 +32,7 @@ export default memo(function Navbar() {
   }, [location.pathname, setSelected]);
 
   return (
-    <div className="sticky bottom-0 flex justify-center items-center bg-white p-5 rounded-t-3xl shadow-[0px_-10px_15px_rgba(0,0,0,0.1)]">
+    <div className="sticky bottom-0 p-5 rounded-t-3xl shadow-[0px_-0.625rem_0.938rem_rgba(0,0,0,0.1)] bg-white flex justify-center items-center">
       <NavbarIcon
         iconStyle={iconStyle}
         selected={selected}

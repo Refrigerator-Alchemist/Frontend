@@ -67,7 +67,7 @@ export default function RecipeAlchemy() {
           }}
         >
           <CiSaveDown2 className="mr-1 w-6 h-6" />
-          {accessToken ? `${nickName}의 연금술 내역 열기` : '연금술 내역 열기'}
+          {accessToken ? `${nickName}의 저장한 연금술` : '저장한 연금술'}
         </button>
         <button
           className="font-jua text-xl transition ease-in-out bg-main hover:bg-emerald hover:scale-110 hover:cursor-pointer hover:text-black text-white font-bold py-3 px-4 rounded-md w-full"

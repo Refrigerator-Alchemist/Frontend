@@ -1,14 +1,11 @@
-import Logo from '../components/Global/Logo';
 import BackButton from '../components/Global/BackButton';
 
 export default function NotFound() {
   return (
     <section className="relative flex flex-col items-center justify-center h-screen">
       <BackButton destination={'/main'} />
-      <h1 className="text-xl font-score">
-        올바르지 않은 경로입니다 뒤로가기를 눌러주세요😊
-      </h1>
-      <Logo page="start" width="550px" height="550px" />
+      <span className="text-xl font-score">올바르지 않은 경로입니다</span>
+      <span className="text-xl font-score">뒤로가기 버튼을 눌러주세요</span>
     </section>
   );
 }
