@@ -2,9 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { handleError } from '../../utils/common';
 import axios from 'axios';
-import Navigation from '../../components/Layout/Navbar';
 import BackButton from '../../components/Global/BackButton';
 import Loading from '../../components/Global/Loading';
+import Footer from '../../components/Global/Footer';
 
 export default function RecipeDetail() {
   const { recipeId } = useParams();
@@ -57,9 +57,7 @@ export default function RecipeDetail() {
           </section>
         </main>
       </div>
-      <footer className="fixed bottom-0 w-[31rem]">
-        <Navigation />
-      </footer>
+      <Footer />
     </div>
   );
 }
