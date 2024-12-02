@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthProvider';
 import { toast } from 'react-toastify';
 import BackButton from '../../components/Global/BackButton';
-import InputPassword from '../../components/User/Shared/InputPassword';
-import FormHeader from '../../components/User/Shared/FormHeader';
-import CheckedList from '../../components/User/Shared/CheckedList';
-import PasswordMatch from '../../components/User/Shared/PasswordMatch';
-import InputVeriNum from '../../components/User/Shared/InputVeriNum';
-import SubmitButton from '../../components/User/Shared/SubmitButton';
-import CheckNicknameDuplication from '../../components/User/Shared/CheckNicknameDuplication';
+import InputPassword from '../../components/Auth/Shared/InputPassword';
+import FormHeader from '../../components/Auth/Shared/FormHeader';
+import CheckedList from '../../components/Auth/Shared/CheckedList';
+import PasswordMatch from '../../components/Auth/Shared/PasswordMatch';
+import InputVeriNum from '../../components/Auth/Shared/InputVeriNum';
+import SubmitButton from '../../components/Auth/Shared/SubmitButton';
+import CheckNicknameDuplication from '../../components/Auth/Shared/CheckNicknameDuplication';
 import useThrottle from '../../hooks/useThrottle';
 
 export default function SignUp() {

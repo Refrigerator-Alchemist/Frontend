@@ -5,8 +5,8 @@ import { handleError } from '../../utils/common';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import Navbar from '../../components/Layout/Navbar';
-import MyRecipe from '../../components/User/MyPage/MyRecipe';
-import LikedRecipe from '../../components/User/MyPage/LikedRecipe';
+import MyRecipe from '../../components/Auth/MyPage/MyRecipe';
+import LikedRecipe from '../../components/Auth/MyPage/LikedRecipe';
 import ScrollToTopButton from '../../components/Global/ScrollToTopButton';
 import PROFILE_IMAGE from '/assets/img/img_profile.webp';
 

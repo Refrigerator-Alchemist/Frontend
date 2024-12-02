@@ -6,10 +6,10 @@ import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
 import axios from 'axios';
 import profileImage from '/assets/img/img_profile.webp';
 import BackButton from '../../components/Global/BackButton';
-import FormGroup from '../../components/User/EditUserNickname/FormGroup';
-import ProfileImage from '../../components/User/EditUserNickname/ProfileImage';
-import FormButton from '../../components/User/EditUserNickname/FormButton';
-import ErrorMessage from '../../components/User/EditUserNickname/ErrorMessage';
+import FormGroup from '../../components/Auth/EditUserNickname/FormGroup';
+import ProfileImage from '../../components/Auth/EditUserNickname/ProfileImage';
+import FormButton from '../../components/Auth/EditUserNickname/FormButton';
+import ErrorMessage from '../../components/Auth/EditUserNickname/ErrorMessage';
 import useThrottle from '../../hooks/useThrottle';
 
 export default function EditUserNickname() {

@@ -3,26 +3,26 @@ import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import NotFound from './pages/NotFound';
 import GetStarted from './pages/GetStarted';
+import Main from './pages/Main';
+import NotFound from './pages/NotFound';
 import ProtectedRoute from './components/Global/ProtectedRoute';
-import SignUp from './pages/User/SignUp';
-import SignIn from './pages/User/SignIn';
-import SignInSuccess from './pages/User/SignInSuccess';
-import ResetPassword from './pages/User/ResetPassword';
-import DeleteAccount from './pages/User/DeleteAccount';
-import Mypage from './pages/User/Mypage';
-import EditUserNickname from './pages/User/EditUserNickname';
-import RankingPage from './pages/RankingPage/RankingPage';
+import SignUp from './pages/Auth/SignUp';
+import SignIn from './pages/Auth/SignIn';
+import SignInSuccess from './pages/Auth/SignInSuccess';
+import ResetPassword from './pages/Auth/ResetPassword';
+import DeleteAccount from './pages/Auth/DeleteAccount';
+import Mypage from './pages/Auth/Mypage';
+import EditUserNickname from './pages/Auth/EditUserNickname';
 import Board from './pages/Board/Board';
 import BoardDetail from './pages/Board/BoardDetail';
 import UploadPost from './pages/Board/UploadPost';
 import EditPost from './pages/Board/EditPost';
+import RankingPage from './pages/RankingPage/RankingPage';
 import RecipeAlchemy from './pages/Recipe/RecipeAlchemy';
 import RecipeResult from './pages/Recipe/RecipeResult';
 import RecipeSavedList from './pages/Recipe/RecipeSavedList';
 import RecipeDetail from './pages/Recipe/RecipeDetail';
-import MainPage from './pages/Home';
 
 const router = createBrowserRouter([
   {
@@ -34,7 +34,7 @@ const router = createBrowserRouter([
         index: true,
         element: <GetStarted />,
       },
-      { path: '/main', element: <MainPage /> },
+      { path: '/main', element: <Main /> },
 
       // 회원정보 관리 -----------------
       { path: '/signup', element: <SignUp /> },
