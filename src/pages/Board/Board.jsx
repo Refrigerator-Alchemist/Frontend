@@ -6,9 +6,10 @@ import RecipeCard from '../../components/Board/RecipeCard';
 import SearchBar from '../../components/Board/SearchBar';
 import WriteButton from '../../components/Board/WriteButton';
 import RankingContainer from '../../components/Board/RankingContainer';
-import Navigation from '../../components/Layout/Navbar';
+import Navbar from '../../components/Layout/Navbar';
 import ScrollToTopButton from '../../components/Global/ScrollToTopButton';
 import useScrollToTop from '../../hooks/useScrollToTop';
+import Footer from '../../components/Global/Footer';
 
 export default function Board() {
   const [recipes, setRecipes] = useState([]);
@@ -192,16 +193,7 @@ export default function Board() {
         showScrollToTop={showScrollToTop}
         scrollToTop={scrollToTop}
       />
-      <footer
-        style={{
-          position: 'fixed',
-          bottom: '0',
-          width: '100%',
-          maxWidth: '31rem',
-        }}
-      >
-        <Navigation />
-      </footer>
+      <Footer />
     </main>
   );
 }

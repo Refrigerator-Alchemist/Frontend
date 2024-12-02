@@ -1,11 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { handleError } from '../../utils/common';
 import axios from 'axios';
-import Navigation from '../../components/Layout/Navbar';
+import Navbar from '../../components/Layout/Navbar';
 import SavedListCard from '../../components/Recipe/SavedListCard';
 import BackButton from '../../components/Global/BackButton';
 import Loading from '../../components/Global/Loading';
 import Error from '../../components/Global/Error';
+import Footer from '../../components/Global/Footer';
 
 export default function RecipeSavedList() {
   const nickName = localStorage.getItem('nickName') || '';
@@ -54,9 +55,7 @@ export default function RecipeSavedList() {
           ))}
         </div>
       </div>
-      <footer className="fixed bottom-0 w-[31rem]">
-        <Navigation />
-      </footer>
+      <Footer />
     </section>
   );
 }

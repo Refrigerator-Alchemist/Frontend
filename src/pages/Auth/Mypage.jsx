@@ -9,6 +9,7 @@ import MyRecipe from '../../components/Auth/MyPage/MyRecipe';
 import LikedRecipe from '../../components/Auth/MyPage/LikedRecipe';
 import ScrollToTopButton from '../../components/Global/ScrollToTopButton';
 import PROFILE_IMAGE from '/assets/img/img_profile.webp';
+import Footer from '../../components/Global/Footer';
 
 export default function MyPage() {
   const [imageUrl, setImageUrl] = useState(PROFILE_IMAGE);
@@ -311,16 +312,7 @@ export default function MyPage() {
         showScrollToTop={showScrollToTop}
         scrollToTop={scrollToTop}
       />
-      <footer
-        style={{
-          position: 'fixed',
-          bottom: '0',
-          width: '100%',
-          maxWidth: '31rem',
-        }}
-      >
-        <Navbar />
-      </footer>
+      <Footer />
     </section>
   );
 }
