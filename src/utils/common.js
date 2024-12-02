@@ -20,7 +20,7 @@ export const handleError = async (error) => {
       (val) => val.code === error.response.data.code
     );
 
-    console.log(`에러: ${JSON.stringify(errorCode)}`);
+    console.log(`에러: ${errorCode.code}`);
     toast.error(errorCode.notice, {
       toastId: error.response.data.code,
     });
