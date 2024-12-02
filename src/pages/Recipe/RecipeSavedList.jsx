@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { IP_ADDRESS } from '../../context/UserContext';
 import { handleError } from '../../utils/common';
 import axios from 'axios';
 import Navigation from '../../components/Layout/Navbar';
@@ -13,7 +12,7 @@ export default function RecipeSavedList() {
   const accessToken = localStorage.getItem('accessToken');
 
   const fetchRecipes = async () => {
-    const response = await axios.get(`${IP_ADDRESS}/recipe/myRecipe`, {
+    const response = await axios.get(`/recipe/myRecipe`, {
       headers: { 'Authorization-Access': accessToken },
     });
     return response.data;
@@ -37,11 +36,11 @@ export default function RecipeSavedList() {
 
   return (
     <section className="relative">
-      <BackButton destination={-1} />
+      <BackButton destination={'/recipe/recommend'} />
       <div className="py-20">
         <div className="titlebox mb-6 mt-2">
           <span className="font-score font-extrabold ml-8 text-2xl">
-            {accessToken ? `${nickName}의 연금술 기록` : '연금술 기록'}
+            저장한 연금술
           </span>
         </div>
         <div className="flex flex-col gap-2">

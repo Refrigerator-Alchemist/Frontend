@@ -1,33 +1,29 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { IP_ADDRESS } from '../../context/UserContext';
 import { handleError } from '../../utils/common';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import Loading from '../../components/Global/Loading';
 import BackButton from '../../components/Global/BackButton';
+import useThrottle from '../../hooks/useThrottle';
 
 export default function RecipeResult() {
   const [ingredients, setIngredients] = useState([]);
   const [steps, setSteps] = useState([]);
   const [title, setTitle] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+
   const { recommendId } = useParams();
+
   const navigate = useNavigate();
+
   const accessToken = localStorage.getItem('accessToken');
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(
-          `${IP_ADDRESS}/recipe/recommend/${recommendId}`,
-          {
-            headers: {
-              'Authorization-Access': accessToken,
-            },
-          }
-        );
+        const response = await axios.get(`/recipe/recommend/${recommendId}`);
 
         if (response.data) {
           setTitle(response.data.foodName);
@@ -48,7 +44,7 @@ export default function RecipeResult() {
   const handleSaveButton = async () => {
     try {
       await axios.post(
-        `${IP_ADDRESS}/recipe/save`,
+        `/recipe/save`,
         {
           foodName: title,
           ingredients: ingredients,
@@ -67,13 +63,18 @@ export default function RecipeResult() {
     }
   };
 
-  if (isLoading) {
-    return <Loading />;
-  }
+  const throttledHandleSaveButton = useThrottle(() => {
+    if (!accessToken) {
+      toast.error('로그인이 필요합니다');
+    }
+
+    handleSaveButton();
+  }, 3000);
+
+  if (isLoading) return <Loading paddingTop={'pt-10'} height={'h-screen'} />;
 
   return (
-    <section className="bg-white min-h-screen px-4 py-6 relative">
-      <BackButton destination="/main" />
+    <section className="bg-white min-h-screen px-4 pb-10 relative">
       <main className="max-w-md mx-auto bg-white rounded-lg overflow-hidden md:max-w-lg">
         <div className="md:flex">
           <div className="w-full p-4 pt-12">
@@ -122,23 +123,23 @@ export default function RecipeResult() {
         </div>
       </main>
       <footer className="fixed bottom-5 left-0 right-0 px-6 text-sm md:text-lg">
-        <div
-          className="mx-auto flex justify-between mb-4"
-          style={{ maxWidth: '400px' }}
-        >
+        <div className="mx-auto flex justify-between mb-4 max-w-[25rem]">
           <button
-            className="font-score transition ease-in-out bg-gray-400 hover:bg-gray-600 text-white font-bold py-3 px-9 rounded-full"
+            className="py-3 px-9 rounded-full flex gap-2 font-score font-bold transition ease-in-out bg-gray-400 hover:bg-gray-600 text-white"
             onClick={() => navigate('/recipe/recommend')}
             aria-label="Recommend another recipe"
           >
-            다시 할래요 👎🏿
+            <span>다시 할래요</span>
+            <span className="text-red-500">❌</span>
           </button>
           <button
-            className="font-score py-3 px-9 rounded-full transition ease-in-out bg-main hover:bg-emerald hover:cursor-pointer text-white hover:text-black"
-            onClick={handleSaveButton}
+            type="button"
+            className="py-3 px-9 rounded-full flex gap-2 font-score transition ease-in-out bg-main hover:bg-emerald hover:cursor-pointer text-white hover:text-black"
+            onClick={throttledHandleSaveButton}
             aria-label="Save this recipe"
           >
-            저장할래요 💛
+            <span>저장할래요</span>
+            <span>💛</span>
           </button>
         </div>
       </footer>

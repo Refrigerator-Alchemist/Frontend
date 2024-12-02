@@ -43,7 +43,7 @@ function AlchemyButton({ event }) {
       className="flex items-center justify-center text-2xl space-x-4 p-5 mb-4 font-bold font-jua transition ease-in-out rounded-md bg-main text-white hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-[#15ed79] hover:text-black duration-300"
       onClick={event}
     >
-      <span>냉장고 연금술 시작</span>{' '}
+      <span>연금술 하러 가기</span>{' '}
       <span>
         <FaReact />
       </span>
@@ -51,7 +51,7 @@ function AlchemyButton({ event }) {
   );
 }
 
-export default function MainPage() {
+export default function Main() {
   const navigate = useNavigate();
   const handleStart = () => {
     navigate('/recipe/recommend');

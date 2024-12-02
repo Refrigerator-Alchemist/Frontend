@@ -1,17 +1,17 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useUserApi, IP_ADDRESS } from '../../context/UserContext';
+import { useAuth } from '../../context/AuthProvider';
 import { useNavigate } from 'react-router-dom';
 import { handleError } from '../../utils/common';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import Navbar from '../../components/Layout/Navbar';
-import MyRecipe from '../../components/User/MyPage/MyRecipe';
-import LikedRecipe from '../../components/User/MyPage/LikedRecipe';
+import MyRecipe from '../../components/Auth/MyPage/MyRecipe';
+import LikedRecipe from '../../components/Auth/MyPage/LikedRecipe';
 import ScrollToTopButton from '../../components/Global/ScrollToTopButton';
-import profileImage from '/assets/img/img_profile.webp';
+import PROFILE_IMAGE from '/assets/img/img_profile.webp';
 
 export default function MyPage() {
-  const [imageUrl, setImageUrl] = useState(profileImage);
+  const [imageUrl, setImageUrl] = useState(PROFILE_IMAGE);
   const [currentPageMyRecipes, setCurrentPageMyRecipes] = useState(1);
   const [currentPageLikedRecipes, setCurrentPageLikedRecipes] = useState(1);
   const [recipesPerPage] = useState(5);
@@ -22,7 +22,7 @@ export default function MyPage() {
   const [likedItems, setLikedItems] = useState([]);
   const [showScrollToTop, setShowScrollToTop] = useState(false);
 
-  const { logout } = useUserApi();
+  const { signout } = useAuth();
 
   const accessToken = localStorage.getItem('accessToken');
   const nickName = localStorage.getItem('nickName');
@@ -32,31 +32,31 @@ export default function MyPage() {
 
   const observer = useRef();
 
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      const URL = `${IP_ADDRESS}/userinfo`;
-      try {
-        if (accessToken) {
-          const response = await axios.get(URL, {
-            headers: {
-              'Authorization-Access': accessToken,
-              email: email,
-            },
-          });
-          setImageUrl(response.data.imageUrl);
-          localStorage.setItem('imageUrl', response.data.imageUrl);
-        }
-      } catch (error) {
-        handleError(error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchUserProfileImage = async () => {
+  //     const URL = `/userinfo`;
+  //     try {
+  //       if (accessToken) {
+  //         const response = await axios.get(URL, {
+  //           headers: {
+  //             'Authorization-Access': accessToken,
+  //             email: email,
+  //           },
+  //         });
+  //           setImageUrl(response.data.imageUrl);
+  //           localStorage.setItem('imageUrl', response.data.imageUrl);
+  //       }
+  //     } catch (error) {
+  //       handleError(error);
+  //     }
+  //   };
 
-    fetchUserInfo();
-  }, [accessToken, email, handleError]);
+  //   fetchUserProfileImage();
+  // }, [accessToken, email, handleError]);
 
   useEffect(() => {
-    const fetchMyPage = async (page) => {
-      const URL = `${IP_ADDRESS}/mypost?page=${page}&size=${recipesPerPage}`;
+    const fetchMyRecipes = async (page) => {
+      const URL = `/mypost?page=${page}&size=${recipesPerPage}`;
       try {
         const response = await axios.get(URL, {
           headers: {
@@ -74,15 +74,15 @@ export default function MyPage() {
           setRecipes((prevRecipes) => [...prevRecipes, ...items]);
           setTotalMyRecipes(response.data.total);
         } else {
-          console.error('데이터가 배열이 아닙니다');
+          console.log('배열이 아닙니다', response.data);
         }
       } catch (error) {
         handleError(error);
       }
     };
 
-    const fetchLikeData = async (page) => {
-      const URL = `${IP_ADDRESS}/likedpost?page=${page}&size=${recipesPerPage}`;
+    const fetchLikedRecipes = async (page) => {
+      const URL = `/likedpost?page=${page}&size=${recipesPerPage}`;
       try {
         const response = await axios.get(URL, {
           headers: {
@@ -100,7 +100,7 @@ export default function MyPage() {
           setLikedItems((prevItems) => [...prevItems, ...items]);
           setTotalLikedRecipes(response.data.total);
         } else {
-          console.error('데이터가 배열이 아닙니다');
+          console.log('배열이 아닙니다', response.data);
         }
       } catch (error) {
         handleError(error);
@@ -108,9 +108,9 @@ export default function MyPage() {
     };
 
     if (showMyRecipes) {
-      fetchMyPage(currentPageMyRecipes);
+      fetchMyRecipes(currentPageMyRecipes);
     } else {
-      fetchLikeData(currentPageLikedRecipes);
+      fetchLikedRecipes(currentPageLikedRecipes);
     }
   }, [
     showMyRecipes,
@@ -172,7 +172,7 @@ export default function MyPage() {
 
   const deleteRecipe = async (postId) => {
     try {
-      await axios.post(`${IP_ADDRESS}/mypost/delete`, postId, {
+      await axios.post(`/mypost/delete`, postId, {
         headers: {
           'Authorization-Access': accessToken,
         },
@@ -191,7 +191,7 @@ export default function MyPage() {
     if (confirmDelete) {
       try {
         await deleteRecipe(postId);
-        toast.success('레시피 삭제 성공');
+        toast.success('레시피를 삭제 했습니다');
       } catch (error) {
         handleError(error);
       }
@@ -211,27 +211,21 @@ export default function MyPage() {
   };
 
   return (
-    <section
-      className="Board flex flex-col items-center justify-center w-full"
-      style={{ marginBottom: '100px' }}
-    >
+    <section className="Board flex flex-col items-center justify-center w-full mb-[6.25rem]">
       <header className="flex justify-end w-full mt-2 space-x-2 mr-12">
         <button
+          type="button"
           className="font-score text-gray-300"
-          onClick={(e) => {
-            e.preventDefault();
-            navigate('/delete-user');
-          }}
+          onClick={() => navigate('/delete-user')}
         >
           회원 탈퇴
         </button>
         <button
+          type="button"
           name="로그아웃"
           aria-label="로그아웃"
           className="font-score outline-none font-semibold underline underline-offset-2 hover:text-red-500"
-          onClick={() => {
-            logout();
-          }}
+          onClick={() => signout()}
         >
           로그아웃
         </button>
@@ -244,20 +238,21 @@ export default function MyPage() {
             className="rounded-full h-32 w-32 object-cover"
           />
         </div>
-        <h1 className="font-score mt-5 text-xl font-semibold text-center">
+        <span className="font-score mt-5 text-xl font-semibold text-center">
           {nickName}
-        </h1>
+        </span>
         <button
-          name="내 프로필 수정"
-          aria-label="내 프로필 수정"
+          type="button"
+          name="닉네임 변경하기"
+          aria-label="닉네임 변경하기"
           onClick={() => navigate('/mypage/edit/profile')}
           className="font-score my-2 bg-white py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-opacity-50 underline hover:text-red-500"
         >
-          내 프로필 수정
+          닉네임 변경하기
         </button>
-
         <div className="flex">
           <button
+            type="button"
             name="내가 작성한 레시피"
             aria-label="내가 작성한 레시피"
             onClick={() => toggleRecipeView(true)}
@@ -268,6 +263,7 @@ export default function MyPage() {
             내가 작성한 레시피
           </button>
           <button
+            type="button"
             name="좋아요 누른 레시피"
             aria-label="좋아요 누른 레시피"
             onClick={() => toggleRecipeView(false)}

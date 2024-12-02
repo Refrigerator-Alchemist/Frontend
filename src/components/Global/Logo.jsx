@@ -1,13 +1,13 @@
 import React from 'react';
-import logo from '/assets/img/logo.webp';
-import logo_transparent from '/assets/img/logo_transparent.webp';
+import LOGO from '/assets/img/logo.webp';
+import LOGO_TRANS from '/assets/img/logo_transparent.webp';
 
 export default function Logo({ page, width, height }) {
   if (page === 'start') {
     return (
       <>
         <img
-          src={logo}
+          src={LOGO}
           alt="logo"
           width={width}
           height={height}
@@ -22,7 +22,7 @@ export default function Logo({ page, width, height }) {
     return (
       <>
         <img
-          src={logo_transparent}
+          src={LOGO_TRANS}
           alt="logo"
           width={width}
           height={height}

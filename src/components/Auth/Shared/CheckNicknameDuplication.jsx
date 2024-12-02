@@ -1,9 +1,9 @@
 import React from 'react';
 
-export default function CheckNickname({
+export default function CheckNicknameDuplication({
   nickName,
   setNickName,
-  isDuplicated,
+  handleCheckNicknameDuplication,
   nameError,
 }) {
   return (
@@ -21,7 +21,8 @@ export default function CheckNickname({
             className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo"
           />
           <button
-            onClick={isDuplicated}
+            type="button"
+            onClick={handleCheckNicknameDuplication}
             className="inline-block h-12 px-6 ml-5 mt-2 whitespace-nowrap text-white font-scoreExtrabold font-extrabold text-xl bg-main rounded-3xl transition ease-in-out hover:cursor-pointer hover:scale-110 hover:bg-indigo duration-300"
           >
             중복 확인

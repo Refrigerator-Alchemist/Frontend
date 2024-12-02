@@ -1,35 +1,38 @@
 .loading-dots {
-    display: inline-block;
-    position: relative;
-    width: 60px;
-    height: 8px;
+  display: inline-block;
+  position: relative;
+  width: 3.75rem;
+  height: 0.5rem;
 }
 
-.loading-dots::before, .loading-dots::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: black;
-    animation: loadingDots 1.5s infinite ease-in-out both;
+.loading-dots::before,
+.loading-dots::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: black;
+  animation: loadingDots 1.5s infinite ease-in-out both;
 }
 
 .loading-dots::before {
-    left: 0;
-    animation-delay: -0.3s;
+  left: 0;
+  animation-delay: -0.3s;
 }
 
 .loading-dots::after {
-    left: 16px;
+  left: 1rem;
 }
 
 @keyframes loadingDots {
-    0%, 80%, 100% {
-        transform: scale(0);
-    }
-    40% {
-        transform: scale(1.0);
-    }
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
 }

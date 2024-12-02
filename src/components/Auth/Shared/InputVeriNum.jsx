@@ -7,12 +7,11 @@ export default function InputVeriNum({
   selectOption,
   inputNum,
   setInputNum,
-  isVerified,
+  handleVerification,
 }) {
   const labelStyle = 'mb-4 text-lg font-bold font-undong text-center';
   return (
     <>
-      {/* 이메일 인증 요청*/}
       <div>
         <label className={labelStyle}>이메일</label>
         <div className="flex">
@@ -23,7 +22,7 @@ export default function InputVeriNum({
             className="w-full px-4 py-3 mt-2 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo"
             placeholder="이메일"
           />
-          <button onClick={handleRequest} className="btn">
+          <button type="button" onClick={handleRequest} className="btn">
             인증 요청
           </button>
         </div>
@@ -35,7 +34,6 @@ export default function InputVeriNum({
           {selectOption || 'empty'}
         </p>
       </div>
-      {/* 인증 확인 */}
       <div className="mt-6">
         <label className={labelStyle}>인증번호</label>
         <div className="flex items-center justify-between">
@@ -57,7 +55,7 @@ export default function InputVeriNum({
               className="w-40 h-12 mx-1 text-center border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo"
             />
           </div>
-          <button onClick={isVerified} className="btn">
+          <button type="button" onClick={handleVerification} className="btn">
             인증 확인
           </button>
         </div>
