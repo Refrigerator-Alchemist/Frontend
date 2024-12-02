@@ -1,33 +1,27 @@
-import { useContext, useEffect, memo } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { NavigationContext } from '../../context/NavbarContext';
 import { PiCookingPot, PiCookingPotFill } from 'react-icons/pi';
 import { GoHome, GoHomeFill } from 'react-icons/go';
 import { IoAccessibilityOutline, IoAccessibility } from 'react-icons/io5';
 import NavbarIcon from './NavbarIcon';
 
-export default memo(function Navbar() {
-  const { selected, setSelected } = useContext(NavigationContext);
+export default function Navbar() {
+  const [selected, setSelected] = useState();
   const navigate = useNavigate();
   const location = useLocation();
   const iconStyle = `relative mx-12 text-4xl text-main cursor-pointer hover:text-main-dark hover:scale-110 transition-all duration-300`;
 
   useEffect(() => {
     const currentPath = location.pathname;
-    if (
-      currentPath === '/board' ||
-      currentPath.startsWith('/board/') ||
-      currentPath === '/GptSavedList' ||
-      currentPath.startsWith('/GptSavedList/')
-    ) {
-      setSelected('food');
+    if (currentPath.startsWith('/board')) {
+      setSelected('board');
     } else if (
       currentPath === '/main' ||
       currentPath.startsWith('/recipe/myRecipe')
     ) {
-      setSelected('home');
+      setSelected('main');
     } else if (currentPath === '/login' || currentPath.startsWith('/mypage')) {
-      setSelected('profile');
+      setSelected('mypage');
     }
   }, [location.pathname, setSelected]);
 
@@ -37,10 +31,10 @@ export default memo(function Navbar() {
         iconStyle={iconStyle}
         selected={selected}
         onClick={() => {
-          setSelected('food');
+          setSelected('board');
           navigate('/board');
         }}
-        type="food"
+        type="board"
         icon={<PiCookingPot />}
         activeIcon={<PiCookingPotFill />}
       />
@@ -48,10 +42,10 @@ export default memo(function Navbar() {
         iconStyle={iconStyle}
         selected={selected}
         onClick={() => {
-          setSelected('home');
+          setSelected('main');
           navigate('/main');
         }}
-        type="home"
+        type="main"
         icon={<GoHome />}
         activeIcon={<GoHomeFill />}
       />
@@ -59,13 +53,13 @@ export default memo(function Navbar() {
         iconStyle={iconStyle}
         selected={selected}
         onClick={() => {
-          setSelected('profile');
+          setSelected('mypage');
           navigate(localStorage.getItem('accessToken') ? '/mypage' : '/login');
         }}
-        type="profile"
+        type="mypage"
         icon={<IoAccessibilityOutline />}
         activeIcon={<IoAccessibility />}
       />
     </div>
   );
-});
+}

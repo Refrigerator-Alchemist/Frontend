@@ -35,7 +35,7 @@ module.exports = {
     require('tailwindcss-textshadow'),
     function ({ addComponents }) {
       const newComponents = {
-        // Navbar 아이콘 액티브 인디케이터 '▲'
+        // 네브바 인디케이터 ▲ 스타일
         '.selected-icon::before': {
           content: '""',
           position: 'absolute',
@@ -58,6 +58,7 @@ module.exports = {
           borderBottom: '10px solid #f8bb01',
           zIndex: '2',
         },
+
         // 전역 버튼 스타일
         '.btn': {
           display: 'inline-block',
