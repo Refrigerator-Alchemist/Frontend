@@ -18,21 +18,21 @@ export default function RecipeAlchemy() {
   const accessToken = localStorage.getItem('accessToken');
   const nickName = localStorage.getItem('nickName') || '';
 
-  const handleAlchemy = useThrottle(async () => {
+  const handleFetchSavedRecipe = async () => {
+    if (!accessToken) {
+      toast.error('로그인이 필요합니다.');
+    } else {
+      navigate('/recipe/myRecipe');
+    }
+  };
+
+  const handleAlchemy = async () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post(
-        `/recipe/recommend`,
-        {
-          ingredients: tags,
-        },
-        {
-          headers: {
-            'Authorization-Access': accessToken,
-          },
-        }
-      );
+      const response = await axios.post(`/recipe/recommend`, {
+        ingredients: tags,
+      });
 
       const recommendId = response.data;
       if (recommendId) navigate(`/recipe/recommend/${recommendId}`);
@@ -41,9 +41,23 @@ export default function RecipeAlchemy() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const throttledHandleFetchSavedRecipe = useThrottle(
+    () => handleFetchSavedRecipe(),
+    3000
+  );
+
+  const throttledHandleAlchemy = useThrottle(() => {
+    if (!tags || tags.length === 0) {
+      toast.error('재료를 입력하세요');
+      return;
+    }
+
+    handleAlchemy();
   }, 3000);
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <Loading paddingTop={'pt-10'} height={'h-screen'} />;
 
   return (
     <section className="bg-white min-h-screen px-4 py-8 flex flex-col relative">
@@ -56,23 +70,17 @@ export default function RecipeAlchemy() {
       </main>
       <footer className="w-full max-w-xs mx-auto pb-8">
         <button
-          className="flex justify-center items-center font-jua transition ease-in-out delay-150 text-black text-md md:text-2xl bg-white hover:bg-white hover:scale-125 hover:cursor-pointer font-bold py-2 px-4 rounded w-full mb-4"
           type="button"
-          onClick={() => {
-            if (!accessToken) {
-              toast.error('로그인이 필요합니다.');
-            } else {
-              navigate('/recipe/myRecipe');
-            }
-          }}
+          className="py-2 px-4 rounded w-full mb-4 flex justify-center items-center transition ease-in-out delay-150 bg-white hover:bg-white hover:scale-125 hover:cursor-pointer font-jua font-bold text-black text-md md:text-2xl"
+          onClick={throttledHandleFetchSavedRecipe}
         >
           <CiSaveDown2 className="mr-1 w-6 h-6" />
-          {accessToken ? `${nickName}의 저장한 연금술` : '저장한 연금술'}
+          {accessToken ? `${nickName}'s 저장한 연금술` : '저장한 연금술'}
         </button>
         <button
-          className="font-jua text-xl transition ease-in-out bg-main hover:bg-emerald hover:scale-110 hover:cursor-pointer hover:text-black text-white font-bold py-3 px-4 rounded-md w-full"
           type="button"
-          onClick={handleAlchemy}
+          className="py-3 px-4 rounded-md w-full transition ease-in-out bg-main hover:bg-emerald hover:scale-110 hover:cursor-pointer hover:text-black text-white font-bold font-jua text-xl"
+          onClick={throttledHandleAlchemy}
         >
           연금술 실행
         </button>

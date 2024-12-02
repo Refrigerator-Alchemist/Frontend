@@ -9,6 +9,7 @@ import BoardDetailCard from '../../components/Board/BoardDetail/BoardDetailCard'
 import Footer from '../../components/Global/Footer';
 import Loading from '../../components/Global/Loading';
 import Error from '../../components/Global/Error';
+import useThrottle from '../../hooks/useThrottle';
 
 export default function BoardDetail() {
   const [Liked, setLiked] = useState(false);
@@ -119,8 +120,7 @@ export default function BoardDetail() {
     }
   };
 
-  const reportPost = async (e) => {
-    e.preventDefault();
+  const reportPost = async () => {
     try {
       const response = await axios.post(
         `/board/report`,
@@ -133,8 +133,6 @@ export default function BoardDetail() {
           },
         }
       );
-      if (response) console.log(response.data);
-
       if (response && response.data === 'ok') {
         toast.success('해당 게시물을 신고했습니다');
       }
@@ -146,12 +144,16 @@ export default function BoardDetail() {
     }
   };
 
+  const throttledReportPost = useThrottle(() => {
+    reportPost();
+  }, 3000);
+
   if (postQuery.isLoading || likedPostsQuery.isLoading) return <Loading />;
   if (postQuery.isError || likedPostsQuery.isError) return <Error />;
 
   return (
     <section className="mb-[5.625rem]">
-      <Header reportPost={reportPost} />
+      <Header reportPost={throttledReportPost} />
       <BoardDetailCard
         imageUrl={postQuery.data.imageUrl}
         title={postQuery.data.title}

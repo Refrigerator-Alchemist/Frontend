@@ -10,7 +10,8 @@ import CheckedList from '../../components/User/Shared/CheckedList';
 import PasswordMatch from '../../components/User/Shared/PasswordMatch';
 import InputVeriNum from '../../components/User/Shared/InputVeriNum';
 import SubmitButton from '../../components/User/Shared/SubmitButton';
-import CheckNickname from '../../components/User/Shared/CheckNickname';
+import CheckNicknameDuplication from '../../components/User/Shared/CheckNicknameDuplication';
+import useThrottle from '../../hooks/useThrottle';
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
@@ -26,8 +27,7 @@ export default function SignUp() {
   const userApi = useUserApi();
   const navigate = useNavigate();
 
-  const emailType = 'sign-up';
-  const socialType = 'Refrigerator-Alchemist';
+  const [emailType, socialType] = ['sign-up', 'Refrigerator-Alchemist'];
 
   useEffect(() => {
     const socialId = localStorage.getItem('socialId');
@@ -38,41 +38,6 @@ export default function SignUp() {
   }, [navigate]);
 
   const handleEmailChange = (e) => setEmail(e.target.value);
-
-  const handleRequest = async (e) => {
-    e.preventDefault();
-
-    if (!email) {
-      toast.error('이메일을 입력해주세요');
-      return;
-    }
-
-    if (!emailPattern.test(email)) {
-      setEmailError('이메일 형식이 올바르지 않습니다');
-      setEmail('');
-      return;
-    }
-
-    setEmailError('');
-    userApi.requestEmailForSignUp(email, emailType, socialType);
-  };
-
-  const isVerified = (e) => {
-    e.preventDefault();
-    userApi.checkCodeVerification(email, emailType, inputNum, socialType);
-  };
-
-  const isDuplicated = (e) => {
-    e.preventDefault();
-    const pattern = /^[가-힣0-9]{2,}$|^[A-Za-z0-9]{3,}$/;
-    if (!pattern.test(nickName)) {
-      setNameError('한글 2글자 이상 or 영문 3글자 이상');
-      setNickName('');
-    } else {
-      setNameError('');
-      userApi.checkNameDuplication(nickName);
-    }
-  };
 
   const isSamePassword = () => {
     if (password && checkPassword) {
@@ -88,15 +53,57 @@ export default function SignUp() {
     isSamePassword();
   });
 
-  const toggleShowPassword = (e) => {
-    e.preventDefault();
+  const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
-  const submitSignup = (e) => {
+  const handleRequest = async () => {
+    if (!email) {
+      toast.error('이메일을 입력해주세요');
+      return;
+    }
+
+    if (!emailPattern.test(email)) {
+      setEmailError('이메일 형식이 올바르지 않습니다');
+      setEmail('');
+      return;
+    }
+
+    setEmailError('');
+    userApi.requestEmailForSignUp(email, emailType, socialType);
+  };
+
+  const handleVerification = () => {
+    userApi.checkCodeVerification(email, emailType, inputNum, socialType);
+  };
+
+  const handleCheckDuplication = () => {
+    const nicknamePattern = /^[가-힣0-9]{2,}$|^[A-Za-z0-9]{3,}$/;
+    if (!nicknamePattern.test(nickName)) {
+      setNameError('한글 2글자 이상 or 영문 3글자 이상');
+      setNickName('');
+    } else {
+      setNameError('');
+      userApi.checkNameDuplication(nickName);
+    }
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     userApi.signUp(email, password, nickName, socialType);
   };
+
+  const throttledHandleRequest = useThrottle(() => handleRequest(), 3000);
+
+  const throttledHandleVerification = useThrottle(
+    () => handleVerification(),
+    3000
+  );
+
+  const throttledHandleCheckDuplication = useThrottle(
+    () => handleCheckDuplication(),
+    3000
+  );
 
   return (
     <section className="flex flex-col justify-center items-center min-h-screen px-10 relative">
@@ -105,23 +112,23 @@ export default function SignUp() {
         title={'신규 회원가입'}
         mention={'환영합니다🤗 냉장고 연금술과 레시피 나눔을 해보세요'}
       />
-      <form onSubmit={submitSignup}>
+      <form onSubmit={handleSubmit}>
         <main className="mt-10 w-full px-2">
           <InputVeriNum
             email={email}
             handleEmailChange={handleEmailChange}
-            handleRequest={handleRequest}
+            handleRequest={throttledHandleRequest}
             selectOption={emailError}
             inputNum={inputNum}
             setInputNum={setInputNum}
-            isVerified={isVerified}
+            handleVerification={throttledHandleVerification}
           />
         </main>
         <footer className="flex flex-col mt-6 w-full p-3">
-          <CheckNickname
+          <CheckNicknameDuplication
             nickName={nickName}
             setNickName={setNickName}
-            isDuplicated={isDuplicated}
+            handleCheckDuplication={throttledHandleCheckDuplication}
             nameError={nameError}
           />
           <div>

@@ -40,7 +40,7 @@ export default function RecipeSavedList() {
       <div className="py-20">
         <div className="titlebox mb-6 mt-2">
           <span className="font-score font-extrabold ml-8 text-2xl">
-            {accessToken ? `${nickName}의 연금술 기록` : '연금술 기록'}
+            저장한 연금술
           </span>
         </div>
         <div className="flex flex-col gap-2">

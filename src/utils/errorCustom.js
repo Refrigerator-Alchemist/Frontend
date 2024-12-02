@@ -1,8 +1,8 @@
 /**
 @description 
 - response header: status, code
-      - console.log(code)
-      - toast.error(notice)
+      - console.log(code) 개발자 확인용
+      - toast.error(notice) 유저 확인용
 
 - 400 Bad Request 401 Unauthorized 402 Payment Required 403 Forbiden 404 Not Found 405 Method Not Allowed
 - 406 Not Acceptable 407 Proxy Authentication Required 408 Request Timeout 409 Conflict 410 Gone 411 Length Requiredh

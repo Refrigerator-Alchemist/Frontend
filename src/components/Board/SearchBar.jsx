@@ -41,7 +41,7 @@ export default function SearchBar({ onSearch }) {
           }));
           onSearch(formattedData);
         } else {
-          console.error('검색결과가 배열이 아닙니다', response.data);
+          console.log('배열이 아닙니다', response.data);
         }
         setQuery('');
       } catch (error) {

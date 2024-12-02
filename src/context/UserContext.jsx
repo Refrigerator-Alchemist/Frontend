@@ -49,19 +49,19 @@ const reIssue = async () => {
     if (response.status === 200 && socialType === 'Refrigerator-Alchemist') {
       newAccessToken = response.headers.get('authorization-access');
       localStorage.setItem('accessToken', newAccessToken);
-      console.log(`새로운 액세스 토큰을 발급받았습니다`);
+      console.log(`New AT issued`);
     } else if (
       response.status === 200 &&
       socialType !== 'Refrigerator-Alchemist'
     ) {
       newAccessToken = 'Bearer ' + response.headers.get('authorization-access');
       localStorage.setItem('accessToken', newAccessToken);
-      console.log(`새로운 액세스 토큰을 발급받았습니다`);
+      console.log(`New AT issued`);
     } else {
       return;
     }
   } catch (error) {
-    console.error(error.response.data.code);
+    handleError(error);
   } finally {
     isRefreshing = false;
   }

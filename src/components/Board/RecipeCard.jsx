@@ -97,7 +97,7 @@ const RecipeCard = (
         aria-label="like"
         className="p-2"
         onClick={
-          accessToken ? toggleLike : () => toast.error('로그인이 필요합니다.')
+          accessToken ? toggleLike : () => toast.error('로그인이 필요합니다')
         }
       >
         {accessToken ? (
@@ -109,7 +109,7 @@ const RecipeCard = (
         ) : (
           <FaRegHeart
             className="text-2xl opacity-20 cursor-not-allowed hover:opacity-40"
-            title="로그인이 필요합니다."
+            title="로그인이 필요합니다"
           />
         )}
       </button>

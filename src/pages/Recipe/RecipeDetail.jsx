@@ -8,6 +8,7 @@ import Loading from '../../components/Global/Loading';
 
 export default function RecipeDetail() {
   const { recipeId } = useParams();
+
   const accessToken = localStorage.getItem('accessToken');
 
   const fetchRecipeData = async () => {
@@ -35,7 +36,7 @@ export default function RecipeDetail() {
   return (
     <div className="relative flex flex-col justify-between">
       <div>
-        <BackButton destination="/main" />
+        <BackButton destination="/recipe/myRecipe" />
         <main className="pt-16">
           <section className="flex flex-col items-center mt-10">
             <header className="flex items-center gap-4">

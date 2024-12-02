@@ -8,10 +8,10 @@ import Navbar from '../../components/Layout/Navbar';
 import MyRecipe from '../../components/User/MyPage/MyRecipe';
 import LikedRecipe from '../../components/User/MyPage/LikedRecipe';
 import ScrollToTopButton from '../../components/Global/ScrollToTopButton';
-import profileImage from '/assets/img/img_profile.webp';
+import PROFILE_IMAGE from '/assets/img/img_profile.webp';
 
 export default function MyPage() {
-  const [imageUrl, setImageUrl] = useState(profileImage);
+  const [imageUrl, setImageUrl] = useState(PROFILE_IMAGE);
   const [currentPageMyRecipes, setCurrentPageMyRecipes] = useState(1);
   const [currentPageLikedRecipes, setCurrentPageLikedRecipes] = useState(1);
   const [recipesPerPage] = useState(5);
@@ -32,27 +32,28 @@ export default function MyPage() {
 
   const observer = useRef();
 
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      const URL = `/userinfo`;
-      try {
-        if (accessToken) {
-          const response = await axios.get(URL, {
-            headers: {
-              'Authorization-Access': accessToken,
-              email: email,
-            },
-          });
-          setImageUrl(response.data.imageUrl);
-          localStorage.setItem('imageUrl', response.data.imageUrl);
-        }
-      } catch (error) {
-        handleError(error);
-      }
-    };
+  // S3 만료라 로컬 이미지 사용
+  // useEffect(() => {
+  //   const fetchUserProfileImage = async () => {
+  //     const URL = `/userinfo`;
+  //     try {
+  //       if (accessToken) {
+  //         const response = await axios.get(URL, {
+  //           headers: {
+  //             'Authorization-Access': accessToken,
+  //             email: email,
+  //           },
+  //         });
+  //           setImageUrl(response.data.imageUrl);
+  //           localStorage.setItem('imageUrl', response.data.imageUrl);
+  //       }
+  //     } catch (error) {
+  //       handleError(error);
+  //     }
+  //   };
 
-    fetchUserInfo();
-  }, [accessToken, email, handleError]);
+  //   fetchUserProfileImage();
+  // }, [accessToken, email, handleError]);
 
   useEffect(() => {
     const fetchMyPage = async (page) => {
@@ -74,7 +75,7 @@ export default function MyPage() {
           setRecipes((prevRecipes) => [...prevRecipes, ...items]);
           setTotalMyRecipes(response.data.total);
         } else {
-          console.error('데이터가 배열이 아닙니다');
+          console.log('배열이 아닙니다', response.data);
         }
       } catch (error) {
         handleError(error);
@@ -100,7 +101,7 @@ export default function MyPage() {
           setLikedItems((prevItems) => [...prevItems, ...items]);
           setTotalLikedRecipes(response.data.total);
         } else {
-          console.error('데이터가 배열이 아닙니다');
+          console.log('배열이 아닙니다', response.data);
         }
       } catch (error) {
         handleError(error);
@@ -191,7 +192,7 @@ export default function MyPage() {
     if (confirmDelete) {
       try {
         await deleteRecipe(postId);
-        toast.success('레시피 삭제 성공');
+        toast.success('레시피를 삭제 했습니다');
       } catch (error) {
         handleError(error);
       }
@@ -245,12 +246,12 @@ export default function MyPage() {
           {nickName}
         </h1>
         <button
-          name="내 프로필 수정"
-          aria-label="내 프로필 수정"
+          name="닉네임 변경하기"
+          aria-label="닉네임 변경하기"
           onClick={() => navigate('/mypage/edit/profile')}
           className="font-score my-2 bg-white py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-opacity-50 underline hover:text-red-500"
         >
-          내 프로필 수정
+          닉네임 변경하기
         </button>
 
         <div className="flex">

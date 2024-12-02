@@ -37,7 +37,7 @@ export default function RankingList() {
     staleTime: 1000 * 60 * 5,
   });
 
-  if (isPending) return <Loading />;
+  if (isPending) return <Loading paddingTop={'pt-28'} height={'h-20'} />;
   if (error) return <Error />;
 
   return (

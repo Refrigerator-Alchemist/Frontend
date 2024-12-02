@@ -123,7 +123,6 @@ export default function UploadBoard() {
       });
 
       if (response.status === 200) {
-        console.log('게시물 수정 완료');
         toast.success('게시물이 수정되었습니다');
         navigate(`/board/${postId}`);
       }

@@ -92,7 +92,7 @@ export default function Board() {
         }));
         setRecipes(formattedData);
       } else {
-        console.error(' error:', response.data);
+        console.log('배열이 아닙니다', response.data);
       }
     } catch (error) {
       handleError(error);

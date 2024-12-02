@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify';
+import { ERRORS } from './errorCustom';
 
 export const emailPattern =
   /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
@@ -14,15 +15,13 @@ export const isPasswordValid = (password) => {
 };
 
 export const handleError = async (error) => {
-  const genericToastId = 'generic-error';
-
-  if (error.response && error.response.data && error.response.data.code) {
-    const errorName = Object.values(ERRORS).find(
-      (obj) => obj.code === error.response.data.code
+  if (error.response && error.response.data) {
+    const errorCode = Object.values(ERRORS).find(
+      (val) => val.code === error.response.data.code
     );
-    const userNotice = errorName ? errorName.notice : '확인되지 않은 에러';
-    console.log(`에러 내용: ${JSON.stringify(errorName)}`);
-    toast.error(userNotice, {
+
+    console.log(`에러: ${JSON.stringify(errorCode)}`);
+    toast.error(errorCode.notice, {
       toastId: error.response.data.code,
     });
     return error.response.data.code;
@@ -34,7 +33,7 @@ export const handleError = async (error) => {
   } else {
     console.log(`확인되지 않은 에러, ${error}`);
     toast.error('알 수 없는 에러가 발생했습니다', {
-      toastId: genericToastId,
+      toastId: 'generic-error',
     });
   }
 };

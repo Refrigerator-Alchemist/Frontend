@@ -13,7 +13,6 @@ export default function ProtectedRoute({ children }) {
     }, 1000);
   } else if (!accessToken && refreshToken) {
     toast.error('액세스 토큰이 만료되었습니다');
-    console.log('액세스 토큰 만료. 재발급 필요');
   }
 
   return children;
