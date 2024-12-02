@@ -32,7 +32,6 @@ export default function MyPage() {
 
   const observer = useRef();
 
-  // S3 만료라 로컬 이미지 사용
   // useEffect(() => {
   //   const fetchUserProfileImage = async () => {
   //     const URL = `/userinfo`;
@@ -56,7 +55,7 @@ export default function MyPage() {
   // }, [accessToken, email, handleError]);
 
   useEffect(() => {
-    const fetchMyPage = async (page) => {
+    const fetchMyRecipes = async (page) => {
       const URL = `/mypost?page=${page}&size=${recipesPerPage}`;
       try {
         const response = await axios.get(URL, {
@@ -82,7 +81,7 @@ export default function MyPage() {
       }
     };
 
-    const fetchLikeData = async (page) => {
+    const fetchLikedRecipes = async (page) => {
       const URL = `/likedpost?page=${page}&size=${recipesPerPage}`;
       try {
         const response = await axios.get(URL, {
@@ -109,9 +108,9 @@ export default function MyPage() {
     };
 
     if (showMyRecipes) {
-      fetchMyPage(currentPageMyRecipes);
+      fetchMyRecipes(currentPageMyRecipes);
     } else {
-      fetchLikeData(currentPageLikedRecipes);
+      fetchLikedRecipes(currentPageLikedRecipes);
     }
   }, [
     showMyRecipes,
@@ -215,21 +214,18 @@ export default function MyPage() {
     <section className="Board flex flex-col items-center justify-center w-full mb-[6.25rem]">
       <header className="flex justify-end w-full mt-2 space-x-2 mr-12">
         <button
+          type="button"
           className="font-score text-gray-300"
-          onClick={(e) => {
-            e.preventDefault();
-            navigate('/delete-user');
-          }}
+          onClick={() => navigate('/delete-user')}
         >
           회원 탈퇴
         </button>
         <button
+          type="button"
           name="로그아웃"
           aria-label="로그아웃"
           className="font-score outline-none font-semibold underline underline-offset-2 hover:text-red-500"
-          onClick={() => {
-            signout();
-          }}
+          onClick={() => signout()}
         >
           로그아웃
         </button>
@@ -242,10 +238,11 @@ export default function MyPage() {
             className="rounded-full h-32 w-32 object-cover"
           />
         </div>
-        <h1 className="font-score mt-5 text-xl font-semibold text-center">
+        <span className="font-score mt-5 text-xl font-semibold text-center">
           {nickName}
-        </h1>
+        </span>
         <button
+          type="button"
           name="닉네임 변경하기"
           aria-label="닉네임 변경하기"
           onClick={() => navigate('/mypage/edit/profile')}
@@ -253,9 +250,9 @@ export default function MyPage() {
         >
           닉네임 변경하기
         </button>
-
         <div className="flex">
           <button
+            type="button"
             name="내가 작성한 레시피"
             aria-label="내가 작성한 레시피"
             onClick={() => toggleRecipeView(true)}
@@ -266,6 +263,7 @@ export default function MyPage() {
             내가 작성한 레시피
           </button>
           <button
+            type="button"
             name="좋아요 누른 레시피"
             aria-label="좋아요 누른 레시피"
             onClick={() => toggleRecipeView(false)}
