@@ -19,15 +19,15 @@ export default function RankingCard({
     >
       <figure className="flex items-center justify-between drop-shadow-xl">
         <div className="flex items-center justify-center space-x-6">
-          <div style={{ width: '30px' }}>
-            <span className="font-undong ml-4">{rank}</span>
+          <div>
+            <span className="ml-4 w-[1.875rem] font-undong">{rank}</span>
           </div>
           <div className="flex-none w-20 h-20 rounded-xl border-2 border-gray-300 overflow-hidden">
             <img
               src={imageUrl}
               alt="thumbnail"
-              width="60px"
-              height="40px"
+              width="3.75rem"
+              height="2.5rem"
               className=" w-full h-full object-cover"
             />
           </div>

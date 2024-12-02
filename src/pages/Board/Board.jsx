@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import { IP_ADDRESS } from '../../context/UserContext';
 import { handleError } from '../../utils/common';
 import axios from 'axios';
 import RecipeCard from '../../components/Board/RecipeCard';
@@ -48,7 +47,7 @@ export default function Board() {
   const fetchLikedPosts = async () => {
     if (!accessToken) return;
 
-    const URL = `${IP_ADDRESS}/board/islike?id=${email}`;
+    const URL = `/board/islike?id=${email}`;
     try {
       const response = await axios.get(URL, {
         headers: {
@@ -67,7 +66,7 @@ export default function Board() {
 
   const fetchTotalRecipes = async () => {
     try {
-      const response = await axios.get(`${IP_ADDRESS}/board/total`);
+      const response = await axios.get(`/board/total`);
       const totalRecipes = response.data;
       const totalPages = Math.ceil(totalRecipes / recipesPerPage);
       setTotalPages(totalPages);
@@ -79,7 +78,7 @@ export default function Board() {
   const fetchRecipesByPage = async (pageNumber) => {
     setLoading(true);
     try {
-      const response = await axios.get(`${IP_ADDRESS}/board/page`, {
+      const response = await axios.get(`/board/page`, {
         params: { data: pageNumber.toString() },
       });
 
@@ -93,7 +92,7 @@ export default function Board() {
         }));
         setRecipes(formattedData);
       } else {
-        console.error(' error:', response.data);
+        console.log('배열이 아닙니다', response.data);
       }
     } catch (error) {
       handleError(error);

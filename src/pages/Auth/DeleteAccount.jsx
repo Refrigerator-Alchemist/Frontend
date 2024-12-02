@@ -1,33 +1,29 @@
 import { useState } from 'react';
-import { handleError } from '../../utils/common';
 import { toast } from 'react-toastify';
 import BackButton from '../../components/Global/BackButton';
+import useThrottle from '../../hooks/useThrottle';
 
 export default function DeleteAccount() {
   const [password, setPassword] = useState('');
 
   const handlePasswordChange = (e) => setPassword(e.target.value);
 
-  const handleDeleteUser = (e) => {
-    e.preventDefault();
+  const handleDeleteUser = () => {
     const confirm = window.confirm('정말 회원탈퇴를 진행할까요?');
-    try {
-      if (confirm) {
-        toast.info('개발자에게 문의해주세요!');
-      }
-    } catch (error) {
-      handleError(error);
+
+    if (confirm) {
+      toast.info('개발자에게 문의해주세요');
+      setPassword('');
     }
   };
 
+  const throttledHandleDeleteUser = useThrottle(() => handleDeleteUser(), 3000);
+
   return (
     <section className="relative flex flex-col justify-center items-center h-screen p-8 font-score">
-      <BackButton destination={-1} />
+      <BackButton destination={'/mypage'} />
       <h1 className="text-3xl font-scoreExtrabold mb-2">회원 탈퇴</h1>
-      <form
-        className="flex flex-col items-center w-full"
-        onSubmit={handleDeleteUser}
-      >
+      <form className="flex flex-col items-center w-full">
         <label className="font-score text-lg text-gray-400">
           계정의 비밀번호를 입력해주세요
         </label>
@@ -40,7 +36,8 @@ export default function DeleteAccount() {
             className="px-4 py-3 border-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-indigo w-full"
           />
           <button
-            type="submit"
+            type="button"
+            onClick={throttledHandleDeleteUser}
             disabled={!password}
             className={`px-3 rounded-3xl font-scoreExtrabold text-md transition ease-in-out hover:cursor-pointer hover:scale-110 duration-300 w-full ${
               password

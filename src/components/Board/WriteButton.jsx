@@ -17,7 +17,7 @@ export default function WriteButton() {
       onClick={handleClick}
       className="bg-gray-50 ml-3 flex items-center justify-center rounded-full p-3 shadow write-button transition-transform duration-200 hover:scale-110 hover:bg-gray-200"
     >
-      <PiPencilSimpleLine style={{ fontSize: '26px' }} />
+      <PiPencilSimpleLine className="text-[2rem]" />
     </button>
   );
 }
