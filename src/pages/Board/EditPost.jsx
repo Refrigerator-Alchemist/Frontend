@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { IP_ADDRESS } from '../../context/UserContext';
 import { toast } from 'react-toastify';
 import { handleError } from '../../utils/common';
 import axios from 'axios';
@@ -65,7 +64,7 @@ export default function UploadBoard() {
 
   useEffect(() => {
     const fetchData = async (postId) => {
-      const URL = `${IP_ADDRESS}/board/updateBoard?postId=${postId}`;
+      const URL = `/board/updateBoard?postId=${postId}`;
       try {
         const response = await axios.get(URL, {
           headers: {
@@ -105,7 +104,7 @@ export default function UploadBoard() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const URL = `${IP_ADDRESS}/editpost/update`;
+    const URL = `/editpost/update`;
 
     const formData = new FormData();
     formData.append('postId', postId);
@@ -124,7 +123,6 @@ export default function UploadBoard() {
       });
 
       if (response.status === 200) {
-        console.log('게시물 수정 완료');
         toast.success('게시물이 수정되었습니다');
         navigate(`/board/${postId}`);
       }

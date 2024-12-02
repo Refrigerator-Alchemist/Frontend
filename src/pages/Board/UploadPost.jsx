@@ -1,6 +1,5 @@
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IP_ADDRESS } from '../../context/UserContext';
 import { toast } from 'react-toastify';
 import { Skeleton, Box } from '@mui/material';
 import { handleError } from '../../utils/common';
@@ -62,17 +61,13 @@ export default function UploadPost() {
     });
 
     try {
-      setLoading(true); // Set loading state to true
-      const response = await axios.post(
-        `${IP_ADDRESS}/board/upload/post`,
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization-Access': accessToken,
-          },
-        }
-      );
+      setLoading(true);
+      const response = await axios.post(`/board/upload/post`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization-Access': accessToken,
+        },
+      });
       if (response.status === 200) {
         const postId = response.data;
         toast.success('게시물을 업로드 했습니다');
@@ -81,7 +76,7 @@ export default function UploadPost() {
     } catch (error) {
       handleError(error);
     } finally {
-      setLoading(false); // Set loading state to false
+      setLoading(false);
     }
   };
 

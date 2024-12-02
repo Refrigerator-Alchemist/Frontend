@@ -26,6 +26,7 @@ export default function InputPassword({
           className={inputStyle}
         />
         <button
+          type="button"
           onClick={toggleShowPassword}
           className="inline-block whitespace-nowrap h-12 ml-5 mt-2 rounded-xl font-score text-md hover:text-red-500"
         >

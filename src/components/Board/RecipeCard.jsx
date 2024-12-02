@@ -1,7 +1,6 @@
 import React, { useState, useEffect, forwardRef } from 'react';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { IP_ADDRESS } from '../../context/UserContext';
 import { handleError } from '../../utils/common';
 import { toast } from 'react-toastify';
 import axios from 'axios';
@@ -26,7 +25,7 @@ const RecipeCard = (
     try {
       if (Liked) {
         const response = await axios.post(
-          `${IP_ADDRESS}/board/dislike`,
+          `/board/dislike`,
           { email, postId },
           {
             headers: {
@@ -42,7 +41,7 @@ const RecipeCard = (
         }
       } else {
         const response = await axios.post(
-          `${IP_ADDRESS}/board/like`,
+          `/board/like`,
           { email, postId },
           {
             headers: {
@@ -64,7 +63,7 @@ const RecipeCard = (
 
   if (loading) {
     return (
-      <Box ref={ref} sx={{ margin: '0 6px' }}>
+      <Box ref={ref}>
         <Skeleton variant="rectangular" width="100%" height={200} />
         <Skeleton variant="text" />
         <Skeleton variant="text" width="60%" />
@@ -98,7 +97,7 @@ const RecipeCard = (
         aria-label="like"
         className="p-2"
         onClick={
-          accessToken ? toggleLike : () => toast.error('로그인이 필요합니다.')
+          accessToken ? toggleLike : () => toast.error('로그인이 필요합니다')
         }
       >
         {accessToken ? (
@@ -110,7 +109,7 @@ const RecipeCard = (
         ) : (
           <FaRegHeart
             className="text-2xl opacity-20 cursor-not-allowed hover:opacity-40"
-            title="로그인이 필요합니다."
+            title="로그인이 필요합니다"
           />
         )}
       </button>

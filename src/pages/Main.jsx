@@ -51,7 +51,7 @@ function AlchemyButton({ event }) {
   );
 }
 
-export default function MainPage() {
+export default function Main() {
   const navigate = useNavigate();
   const handleStart = () => {
     navigate('/recipe/recommend');

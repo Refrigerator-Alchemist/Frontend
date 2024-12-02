@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { IP_ADDRESS } from '../../context/UserContext';
 import { handleError } from '../../utils/common';
 import axios from 'axios';
 import Header from '../../components/Board/BoardDetail/Header';
@@ -10,6 +9,7 @@ import BoardDetailCard from '../../components/Board/BoardDetail/BoardDetailCard'
 import Footer from '../../components/Global/Footer';
 import Loading from '../../components/Global/Loading';
 import Error from '../../components/Global/Error';
+import useThrottle from '../../hooks/useThrottle';
 
 export default function BoardDetail() {
   const [Liked, setLiked] = useState(false);
@@ -19,9 +19,7 @@ export default function BoardDetail() {
   const myEmail = localStorage.getItem('email');
 
   const fetchPostData = async () => {
-    const response = await axios.get(
-      `${IP_ADDRESS}/board/specific?postId=${postId}`
-    );
+    const response = await axios.get(`/board/specific?postId=${postId}`);
     if (response.data && Array.isArray(response.data.items)) {
       const item = response.data.items[0];
       return {
@@ -40,7 +38,7 @@ export default function BoardDetail() {
 
   const fetchLikedPosts = async () => {
     if (!accessToken) return [];
-    const URL = `${IP_ADDRESS}/board/islike?id=${myEmail}`;
+    const URL = `/board/islike?id=${myEmail}`;
     const response = await axios.get(URL, {
       headers: {
         'Authorization-Access': accessToken,
@@ -70,7 +68,7 @@ export default function BoardDetail() {
   const likeMutation = useMutation({
     mutationFn: async () => {
       const response = await axios.post(
-        `${IP_ADDRESS}/board/like`,
+        `/board/like`,
         { email: myEmail, postId: postId },
         {
           headers: {
@@ -95,7 +93,7 @@ export default function BoardDetail() {
   const dislikeMutation = useMutation({
     mutationFn: async () => {
       const response = await axios.post(
-        `${IP_ADDRESS}/board/dislike`,
+        `board/dislike`,
         { email: myEmail, postId: postId },
         {
           headers: {
@@ -122,11 +120,10 @@ export default function BoardDetail() {
     }
   };
 
-  const reportPost = async (e) => {
-    e.preventDefault();
+  const reportPost = async () => {
     try {
       const response = await axios.post(
-        `${IP_ADDRESS}/board/report`,
+        `/board/report`,
         { email: myEmail, postId: postId },
         {
           headers: {
@@ -136,8 +133,6 @@ export default function BoardDetail() {
           },
         }
       );
-      if (response) console.log(response.data);
-
       if (response && response.data === 'ok') {
         toast.success('해당 게시물을 신고했습니다');
       }
@@ -149,12 +144,16 @@ export default function BoardDetail() {
     }
   };
 
+  const throttledReportPost = useThrottle(() => {
+    reportPost();
+  }, 3000);
+
   if (postQuery.isLoading || likedPostsQuery.isLoading) return <Loading />;
   if (postQuery.isError || likedPostsQuery.isError) return <Error />;
 
   return (
     <section className="mb-[5.625rem]">
-      <Header reportPost={reportPost} />
+      <Header reportPost={throttledReportPost} />
       <BoardDetailCard
         imageUrl={postQuery.data.imageUrl}
         title={postQuery.data.title}

@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useUserApi } from '../../context/UserContext';
-import { isPasswordValid } from '../../utils/common';
+import { useAuth } from '../../context/AuthProvider';
+import { handleError } from '../../utils/common';
 import { toast } from 'react-toastify';
 import BackButton from '../../components/Global/BackButton';
-import InputPassword from '../../components/User/Shared/InputPassword';
-import FormHeader from '../../components/User/Shared/FormHeader';
-import CheckedList from '../../components/User/Shared/CheckedList';
-import PasswordMatch from '../../components/User/Shared/PasswordMatch';
-import InputVeriNum from '../../components/User/Shared/InputVeriNum';
-import SubmitButton from '../../components/User/Shared/SubmitButton';
+import InputPassword from '../../components/Auth/Shared/InputPassword';
+import FormHeader from '../../components/Auth/Shared/FormHeader';
+import CheckedList from '../../components/Auth/Shared/CheckedList';
+import PasswordMatch from '../../components/Auth/Shared/PasswordMatch';
+import InputVeriNum from '../../components/Auth/Shared/InputVeriNum';
+import SubmitButton from '../../components/Auth/Shared/SubmitButton';
 import useThrottle from '../../hooks/useThrottle';
 
 export default function ResetPassword() {
@@ -19,32 +19,15 @@ export default function ResetPassword() {
   const [passwordMessage, setPasswordMessage] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
 
-  const userApi = useUserApi();
+  const auth = useAuth();
 
-  const throttle = useThrottle();
+  const [emailType, socialType] = ['reset-password', 'Refrigerator-Alchemist'];
 
-  const emailType = 'reset-password';
-  const socialType = 'Refrigerator-Alchemist';
+  useEffect(() => {
+    isSamePassword();
+  });
 
   const handleEmailChange = (e) => setEmail(e.target.value);
-
-  const handleRequest = async (e) => {
-    e.preventDefault();
-    console.log('호출');
-    if (!email) {
-      toast.error('이메일을 입력해주세요');
-      return;
-    } else {
-      userApi.requestEmailForReset(email, emailType, socialType);
-    }
-  };
-
-  const RequestWithThrottle = throttle(handleRequest, 3000);
-
-  const isVerified = async (e) => {
-    e.preventDefault();
-    userApi.checkCodeVerification(email, emailType, inputNum, socialType);
-  };
 
   const isSamePassword = () => {
     if (password && checkPassword) {
@@ -56,19 +39,38 @@ export default function ResetPassword() {
     }
   };
 
-  useEffect(() => {
-    isSamePassword();
-  });
-
-  const toggleShowPassword = (e) => {
-    e.preventDefault();
+  const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
-  const submitReset = (e) => {
-    e.preventDefault();
-    userApi.resetPassword(email, password, checkPassword, socialType);
+  const handleRequest = () => {
+    try {
+      if (!email) {
+        toast.error('이메일을 입력해주세요');
+        return;
+      } else {
+        auth.requestEmailForResetPassword(email, emailType, socialType);
+      }
+    } catch (error) {
+      handleError(error);
+    }
   };
+
+  const handleVerification = () => {
+    auth.checkCodeVerification(email, emailType, inputNum, socialType);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    auth.resetPassword(email, password, checkPassword, socialType);
+  };
+
+  const throttledHandleRequest = useThrottle(() => handleRequest(), 3000);
+
+  const throttledHandleVerification = useThrottle(
+    () => handleVerification(),
+    3000
+  );
 
   return (
     <section className="flex flex-col justify-center items-center min-h-screen px-8 relative">
@@ -77,16 +79,16 @@ export default function ResetPassword() {
         title={'비밀번호 재설정'}
         mention={'이메일 인증 후 새로운 비밀번호를 설정하세요'}
       />
-      <form onSubmit={submitReset}>
+      <form onSubmit={handleSubmit}>
         <main className="mt-10 w-full px-2">
           <InputVeriNum
             email={email}
             handleEmailChange={handleEmailChange}
-            handleRequest={RequestWithThrottle}
-            selectOption={userApi.emailExists}
+            handleRequest={throttledHandleRequest}
+            selectOption={auth.emailExists}
             inputNum={inputNum}
             setInputNum={setInputNum}
-            isVerified={isVerified}
+            handleVerification={throttledHandleVerification}
           />
         </main>
         <footer className="flex flex-col mt-10 w-full p-3">
@@ -102,7 +104,7 @@ export default function ResetPassword() {
           <PasswordMatch passwordMessage={passwordMessage} />
           <ul className="mt-4 font-score">
             <CheckedList
-              props={userApi.verified}
+              props={auth.emailVerified}
               mention={'이메일 인증 완료'}
             />
             <CheckedList
@@ -110,16 +112,16 @@ export default function ResetPassword() {
               mention={'10자 이상 15자 이하의 비밀번호를 입력해주세요'}
             />
             <CheckedList
-              props={isPasswordValid(password)}
+              props={auth.isPasswordValid(password)}
               mention={'영문, 숫자, 특수문자 각각 1자 이상을 포함해주세요'}
             />
           </ul>
           <SubmitButton
             disabledCondition={
-              userApi.verified === false ||
+              auth.verified === false ||
               password.length < 10 ||
               password.length > 15 ||
-              isPasswordValid(password) === false ||
+              auth.isPasswordValid(password) === false ||
               !passwordMessage
             }
             passwordMessage={passwordMessage}

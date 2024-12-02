@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useUserApi, IP_ADDRESS } from '../../context/UserContext';
+import { useAuth } from '../../context/AuthProvider';
 import { handleError } from '../../utils/common';
-import { emailPattern } from '../../utils/common';
 import { toast } from 'react-toastify';
 import Logo from '../../components/Global/Logo';
 import BackButton from '../../components/Global/BackButton';
-import SocialLoginButton from '../../components/User/SignIn/SocialLoginButton';
-import InputField from '../../components/User/SignIn/InputField';
-import ErrorMessage from '../../components/User/SignIn/ErrorMessage';
-import TextLink from '../../components/User/SignIn/TextLink';
+import SocialLoginButton from '../../components/Auth/SignIn/SocialLoginButton';
+import InputField from '../../components/Auth/SignIn/InputField';
+import ErrorMessage from '../../components/Auth/SignIn/ErrorMessage';
+import TextLink from '../../components/Auth/SignIn/TextLink';
 import LOGO_GOOGLE from '/assets/img/logo_google.webp';
 import LOGO_KAKAO from '/assets/img/logo_kakao.webp';
 import LOGO_NAVER from '/assets/img/logo_naver.webp';
@@ -22,7 +21,7 @@ export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [notAllow, setNotAllow] = useState(true);
 
-  const { login } = useUserApi();
+  const { emailPattern, signin } = useAuth();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -67,12 +66,12 @@ export default function SignIn() {
 
   const onLogin = (e) => {
     e.preventDefault();
-    login(email, password, 'Refrigerator-Alchemist');
+    signin(email, password, 'Refrigerator-Alchemist');
   };
 
   const goolgleLogin = () => {
     try {
-      window.location.href = `${IP_ADDRESS}/oauth2/authorization/google`;
+      window.location.href = `/oauth2/authorization/google`;
     } catch (error) {
       handleError(error);
     }
@@ -80,7 +79,7 @@ export default function SignIn() {
 
   const kakaoLogin = () => {
     try {
-      window.location.href = `${IP_ADDRESS}/oauth2/authorization/kakao`;
+      window.location.href = `/oauth2/authorization/kakao`;
     } catch (error) {
       handleError(error);
     }
@@ -88,7 +87,7 @@ export default function SignIn() {
 
   const naverLogin = () => {
     try {
-      window.location.href = `${IP_ADDRESS}/oauth2/authorization/naver`;
+      window.location.href = `/oauth2/authorization/naver`;
     } catch (error) {
       handleError(error);
     }
@@ -98,7 +97,7 @@ export default function SignIn() {
     <section className={`relative min-h-screen ${headerStyle}`}>
       <BackButton destination={'/main'} />
       <header className={headerStyle}>
-        <Logo page="login" width="250px" height="250px" />
+        <Logo page="login" width="100rem" height="100rem" />
         <h1 className="text-3xl font-jua">로그인</h1>
       </header>
       <main>

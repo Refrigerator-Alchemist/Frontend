@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { IP_ADDRESS } from '../../context/UserContext';
 import { handleError } from '../../utils/common';
 import axios from 'axios';
 import ICON_SEARCHING from '/assets/img/search.webp';
@@ -23,7 +22,7 @@ export default function SearchBar({ onSearch }) {
     if (query.trim() !== '') {
       try {
         const response = await axios.get(
-          `${IP_ADDRESS}/board/searchTitle?title=${query.trim()}`,
+          `/board/searchTitle?title=${query.trim()}`,
           {
             headers: {
               'Content-Type': 'application/json;charset=UTF-8',
@@ -42,7 +41,7 @@ export default function SearchBar({ onSearch }) {
           }));
           onSearch(formattedData);
         } else {
-          console.error('검색결과가 배열이 아닙니다', response.data);
+          console.log('배열이 아닙니다', response.data);
         }
         setQuery('');
       } catch (error) {
@@ -64,9 +63,8 @@ export default function SearchBar({ onSearch }) {
         onKeyPress={handleKeyPress}
       />
       <button
-        className="flex items-center justify-center hover:bg-gray-200 px-3 py-2 rounded-full"
+        className="flex items-center min-w-[2.5rem] h-[2.5rem] rounded-full justify-center hover:bg-gray-200 px-3 py-2"
         onClick={handleSearchClick}
-        style={{ minWidth: '40px', height: '40px', borderRadius: '30px' }}
       >
         <img
           src={ICON_SEARCHING}

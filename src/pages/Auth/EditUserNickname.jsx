@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IP_ADDRESS } from '../../context/UserContext';
 import { handleError } from '../../utils/common';
 import { toast } from 'react-toastify';
 import { GoCheckCircle, GoCheckCircleFill } from 'react-icons/go';
 import axios from 'axios';
 import profileImage from '/assets/img/img_profile.webp';
 import BackButton from '../../components/Global/BackButton';
-import FormGroup from '../../components/User/EditUserNickname/FormGroup';
-import ProfileImage from '../../components/User/EditUserNickname/ProfileImage';
-import FormButton from '../../components/User/EditUserNickname/FormButton';
-import ErrorMessage from '../../components/User/EditUserNickname/ErrorMessage';
+import FormGroup from '../../components/Auth/EditUserNickname/FormGroup';
+import ProfileImage from '../../components/Auth/EditUserNickname/ProfileImage';
+import FormButton from '../../components/Auth/EditUserNickname/FormButton';
+import ErrorMessage from '../../components/Auth/EditUserNickname/ErrorMessage';
 import useThrottle from '../../hooks/useThrottle';
 
 export default function EditUserNickname() {
@@ -31,7 +30,7 @@ export default function EditUserNickname() {
   useEffect(() => {
     const checkTokenExpired = async () => {
       try {
-        await axios.get(`${IP_ADDRESS}/reset/info`, {
+        await axios.get(`/reset/info`, {
           headers: {
             'Authorization-Access': accessToken,
           },
@@ -53,18 +52,11 @@ export default function EditUserNickname() {
     }
   };
 
-  const handleSubmitNickname = useThrottle(async (e) => {
-    e.preventDefault();
-
-    if (nickName === changeNickName) {
-      toast.warning('기존 닉네임과 동일합니다');
-      return;
-    }
-
+  const handleSubmitNickname = async () => {
     if (nameError === false && nickName !== changeNickName) {
       try {
         const response = await axios.post(
-          `${IP_ADDRESS}/reset/nickname`,
+          `/reset/nickname`,
           {
             presentNickName: nickName,
             changeNickName: changeNickName,
@@ -88,6 +80,15 @@ export default function EditUserNickname() {
         handleError(error);
       }
     }
+  };
+
+  const throttledHandleSubmitNickname = useThrottle(() => {
+    if (nickName === changeNickName) {
+      toast.warning('기존 닉네임과 동일합니다');
+      return;
+    }
+
+    handleSubmitNickname();
   }, 3000);
 
   return (
@@ -98,10 +99,7 @@ export default function EditUserNickname() {
       </header>
       <main className="mt-6 text-center">
         <ProfileImage imageUrl={imageUrl} />
-        <form
-          className="flex flex-col mt-8 mx-10"
-          onSubmit={handleSubmitNickname}
-        >
+        <form className="flex flex-col mt-8 mx-10">
           <FormGroup
             label="연결된 이메일"
             htmlFor="email"
@@ -139,8 +137,9 @@ export default function EditUserNickname() {
           </p>
           <div className="flex mt-2 mr-3 gap-3">
             <FormButton
-              type="submit"
+              type="button"
               className="text-white bg-main transition ease-in-out hover:cursor-pointer hover:-translate-y-1 hover:scale-110 hover:bg-emerald hover:text-black"
+              onClick={throttledHandleSubmitNickname}
             >
               닉네임 변경
             </FormButton>

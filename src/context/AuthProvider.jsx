@@ -4,8 +4,7 @@ import { handleError } from '../utils/common';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
-export const IP_ADDRESS = 'http://localhost:8080'; // 환경변수로 빼기
-
+axios.defaults.baseURL = import.meta.env.VITE_REQUEST_URI;
 axios.interceptors.response.use(
   function (response) {
     return response;
@@ -14,7 +13,7 @@ axios.interceptors.response.use(
     const originalRequest = error.config;
     const isLoginRequest = originalRequest.url.includes('/token/login');
     if (!isLoginRequest && error.response.data.code === 'RAT8') {
-      const newAccessToken = await reIssue();
+      const newAccessToken = await reissueAccessToken();
       originalRequest.headers['Authorization-Access'] = newAccessToken;
       return axios(originalRequest);
     }
@@ -25,10 +24,10 @@ axios.interceptors.response.use(
 
 let isRefreshing = false;
 
-const reIssue = async () => {
+const reissueAccessToken = async () => {
   if (isRefreshing) return;
   isRefreshing = true;
-  const URL = `${IP_ADDRESS}/token/reissue`;
+  const URL = `/token/reissue`;
   const accessToken = localStorage.getItem('accessToken');
   const refreshToken = localStorage.getItem('refreshToken');
   const socialType = localStorage.getItem('socialType');
@@ -50,43 +49,61 @@ const reIssue = async () => {
     if (response.status === 200 && socialType === 'Refrigerator-Alchemist') {
       newAccessToken = response.headers.get('authorization-access');
       localStorage.setItem('accessToken', newAccessToken);
-      console.log(`새로운 액세스 토큰을 발급받았습니다`);
+      console.log(`New AT issued`);
     } else if (
       response.status === 200 &&
       socialType !== 'Refrigerator-Alchemist'
     ) {
       newAccessToken = 'Bearer ' + response.headers.get('authorization-access');
       localStorage.setItem('accessToken', newAccessToken);
-      console.log(`새로운 액세스 토큰을 발급받았습니다`);
+      console.log(`New AT issued`);
     } else {
       return;
     }
   } catch (error) {
-    console.error(error.response.data.code);
+    handleError(error);
   } finally {
     isRefreshing = false;
   }
   return newAccessToken;
 };
 
-const UserContext = createContext();
-export const useUserApi = () => {
-  return useContext(UserContext);
+const AuthContext = createContext();
+
+export const useAuth = () => {
+  return useContext(AuthContext);
 };
 
-export const UserApiProvider = ({ children }) => {
+export const AuthProvider = ({ children }) => {
   const [emailExists, setEmailExists] = useState(true);
-  const [verified, setVerified] = useState(false);
-  const [nameAvailable, setNameAvailable] = useState(false);
+  const [emailVerified, setEmailVerified] = useState(false);
+  const [nicknameAvailable, setNicknameAvailable] = useState(false);
 
   const navigate = useNavigate();
+
+  /** 이메일 유효성 검사 */
+  const emailPattern =
+    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+
+  /** 비밀번호 유효성 검사
+    @param 비밀번호
+   */
+  const isPasswordValid = (password) => {
+    return (
+      password.length >= 10 &&
+      password.length <= 15 &&
+      /\d/.test(password) &&
+      /[!@#$%^&*]/.test(password) &&
+      /[a-zA-Z]/.test(password)
+    );
+  };
 
   /** 회원가입용 이메일 인증 요청
     @param 이메일, 이메일 타입, 소셜 타입
    */
   const requestEmailForSignUp = async (email, emailType, socialType) => {
     try {
-      const response = await axios.post(`${IP_ADDRESS}/auth/email`, {
+      const response = await axios.post(`/auth/email`, {
         email,
         emailType,
         socialType,
@@ -107,9 +124,9 @@ export const UserApiProvider = ({ children }) => {
   /** 비밀번호 재설정용 이메일 인증 요청
     @param 이메일, 이메일 타입, 소셜 타입
   */
-  const requestEmailForReset = async (email, emailType, socialType) => {
+  const requestEmailForResetPassword = async (email, emailType, socialType) => {
     try {
-      const response = await axios.post(`${IP_ADDRESS}/auth/email`, {
+      const response = await axios.post(`/auth/email`, {
         email,
         emailType,
         socialType,
@@ -141,7 +158,7 @@ export const UserApiProvider = ({ children }) => {
     }
     try {
       const response = await axios.post(
-        `${IP_ADDRESS}/auth/register/authentication/number`,
+        `/auth/register/authentication/number`,
         {
           email,
           emailType,
@@ -150,46 +167,45 @@ export const UserApiProvider = ({ children }) => {
         }
       );
       if (response.status === 204) {
-        setVerified(true);
-        toast.success('인증 완료!');
+        setEmailVerified(true);
+        toast.success('인증 완료되었습니다');
       } else {
         return;
       }
     } catch (error) {
-      setVerified(false);
+      setEmailVerified(false);
       handleError(error);
     }
   };
 
-  const checkNameDuplication = async (nickName) => {
+  /** 닉네임 중복 확인
+    @params 닉네임
+  */
+  const checkNicknameDuplication = async (nickName) => {
     try {
       const response = await axios.post(
-        `${IP_ADDRESS}/auth/register/authentication/nickname`,
+        `/auth/register/authentication/nickname`,
         {
           nickName,
         }
       );
       if (response.status === 204) {
-        setNameAvailable(true);
+        setNicknameAvailable(true);
         toast.success('사용 가능한 닉네임입니다');
       } else {
         return;
       }
     } catch (error) {
-      setNameAvailable(false);
+      setNicknameAvailable(false);
       handleError(error);
     }
   };
 
   /** 회원가입 요청
     @params 이메일, 닉네임, 비밀번호, 소셜 타입
-  
-    @header 
-    -'Content-Type': 'application/json;charset=UTF-8'
-    - Accept: 'application/json'
   */
-  const signUp = async (email, password, nickName, socialType) => {
-    const URL = `${IP_ADDRESS}/auth/register`;
+  const signup = async (email, password, nickName, socialType) => {
+    const URL = `/auth/register`;
     try {
       const response = await axios.post(
         URL,
@@ -219,8 +235,9 @@ export const UserApiProvider = ({ children }) => {
     }
   };
 
-  const deleteUser = async () => {
-    const URL = `${IP_ADDRESS}/auth/delete`;
+  /** 회원탈퇴 */
+  const deleteAccount = async () => {
+    const URL = `/auth/delete`;
     try {
       await axios.delete(URL, {
         data: localStorage.getItem('socialId'),
@@ -235,8 +252,8 @@ export const UserApiProvider = ({ children }) => {
   /** 로그인
    @params 이메일, 비밀번호, 서비스 타입
   */
-  const login = async (email, password, socialType) => {
-    const URL = `${IP_ADDRESS}/token/login`;
+  const signin = async (email, password, socialType) => {
+    const URL = `/token/login`;
     try {
       const response = await axios.post(
         URL,
@@ -269,7 +286,7 @@ export const UserApiProvider = ({ children }) => {
         localStorage.setItem('email', email);
         localStorage.setItem('socialId', response.headers.get('socialId'));
         localStorage.setItem('socialType', socialType);
-        toast.success('로그인 되었습니다!');
+        toast.success('로그인 되었습니다');
         navigate('/main');
       }
     } catch (error) {
@@ -280,8 +297,8 @@ export const UserApiProvider = ({ children }) => {
   /** 로그아웃
    @header 액세스 토큰
    */
-  const logout = async () => {
-    const URL = `${IP_ADDRESS}/token/logout`;
+  const signout = async () => {
+    const URL = `/token/logout`;
     const accessToken = localStorage.getItem('accessToken');
 
     try {
@@ -304,7 +321,7 @@ export const UserApiProvider = ({ children }) => {
         localStorage.removeItem('socialType');
         localStorage.removeItem('imageUrl');
 
-        toast.success('로그아웃 되었습니다!');
+        toast.success('로그아웃 되었습니다');
         navigate('/main');
       }
     } catch (error) {
@@ -317,7 +334,7 @@ export const UserApiProvider = ({ children }) => {
    */
   const resetPassword = async (email, password, newPassword, socialType) => {
     try {
-      const response = await axios.post(`${IP_ADDRESS}/auth/reset/password`, {
+      const response = await axios.post(`/auth/reset/password`, {
         email,
         password,
         rePassword: newPassword,
@@ -335,22 +352,24 @@ export const UserApiProvider = ({ children }) => {
 
   const value = {
     handleError,
-    login,
-    logout,
-    signUp,
-    deleteUser,
+    signin,
+    signout,
+    signup,
+    deleteAccount,
     resetPassword,
     requestEmailForSignUp,
-    requestEmailForReset,
-    setEmailExists,
+    requestEmailForResetPassword,
+    emailPattern,
     emailExists,
+    setEmailExists,
     checkCodeVerification,
-    verified,
-    setVerified,
-    checkNameDuplication,
-    nameAvailable,
-    setNameAvailable,
+    emailVerified,
+    setEmailVerified,
+    checkNicknameDuplication,
+    nicknameAvailable,
+    setNicknameAvailable,
+    isPasswordValid,
   };
 
-  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

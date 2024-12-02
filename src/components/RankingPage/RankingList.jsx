@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { IP_ADDRESS } from '../../context/UserContext';
 import { handleError } from '../../utils/common';
 import React from 'react';
 import axios from 'axios';
@@ -12,7 +11,7 @@ export default function RankingList() {
   const navigate = useNavigate();
   const fetchRanking = async () => {
     try {
-      const response = await axios.get(`${IP_ADDRESS}/ranking/top3`);
+      const response = await axios.get(`/ranking/top3`);
       if (response.data && Array.isArray(response.data.items)) {
         return response.data.items.map((item) => ({
           id: item.ID,
@@ -38,7 +37,7 @@ export default function RankingList() {
     staleTime: 1000 * 60 * 5,
   });
 
-  if (isPending) return <Loading />;
+  if (isPending) return <Loading paddingTop={'pt-28'} height={'h-20'} />;
   if (error) return <Error />;
 
   return (
