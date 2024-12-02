@@ -57,7 +57,6 @@
   <img src="https://img.shields.io/badge/React.js-61DAFB?style=flat-square&logo=react&logoColor=black">
   <img src="https://img.shields.io/badge/React Query-FF4154?style=flat-square&logo=reactquery&logoColor=white">
   <img src="https://img.shields.io/badge/tailwindcss-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white">
-  <img src="https://img.shields.io/badge/Prettier-F7B93E?style=flat-square&logo=prettier&logoColor=black">
 </div>
 
 <div>
@@ -68,9 +67,7 @@
 </div>
 
 <div>
-  <img src="https://img.shields.io/badge/GPT 3.5-412991?style=flat-square&logo=openai&logoColor=white">
-  <img src="https://img.shields.io/badge/Kakao Oauth-FFCD00?style=flat-square&logo=kakao&logoColor=white">
-  <img src="https://img.shields.io/badge/Naver Oauth-03C75A?style=flat-square&logo=naver&logoColor=white">
+  <img src="https://img.shields.io/badge/Open AI GPT 3.5 API-412991?style=flat-square&logo=openai&logoColor=white">
 </div>
 
 <div>
@@ -80,7 +77,7 @@
 
 ## 🧱 아키텍처
 
-![아키텍처](https://github.com/user-attachments/assets/0ce64ab1-c87d-4092-8097-7797c673adc2)
+![image](https://github.com/user-attachments/assets/99b41f46-8d02-4b5d-8323-0ed1aa2d3359)
 
 ### ✨ 프론트엔드
 
