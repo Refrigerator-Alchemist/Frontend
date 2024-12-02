@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUserApi } from '../../context/UserContext';
-import { emailPattern, isPasswordValid } from '../../utils/common';
+import { useAuth } from '../../context/AuthProvider';
 import { toast } from 'react-toastify';
 import BackButton from '../../components/Global/BackButton';
 import InputPassword from '../../components/User/Shared/InputPassword';
@@ -24,7 +23,7 @@ export default function SignUp() {
   const [passwordMessage, setPasswordMessage] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
 
-  const userApi = useUserApi();
+  const auth = useAuth();
   const navigate = useNavigate();
 
   const [emailType, socialType] = ['sign-up', 'Refrigerator-Alchemist'];
@@ -63,34 +62,34 @@ export default function SignUp() {
       return;
     }
 
-    if (!emailPattern.test(email)) {
+    if (!auth.emailPattern.test(email)) {
       setEmailError('이메일 형식이 올바르지 않습니다');
       setEmail('');
       return;
     }
 
     setEmailError('');
-    userApi.requestEmailForSignUp(email, emailType, socialType);
+    auth.requestEmailForSignUp(email, emailType, socialType);
   };
 
   const handleVerification = () => {
-    userApi.checkCodeVerification(email, emailType, inputNum, socialType);
+    auth.checkCodeVerification(email, emailType, inputNum, socialType);
   };
 
-  const handleCheckDuplication = () => {
+  const handleCheckNicknameDuplication = () => {
     const nicknamePattern = /^[가-힣0-9]{2,}$|^[A-Za-z0-9]{3,}$/;
     if (!nicknamePattern.test(nickName)) {
       setNameError('한글 2글자 이상 or 영문 3글자 이상');
       setNickName('');
     } else {
       setNameError('');
-      userApi.checkNameDuplication(nickName);
+      auth.checkNicknameDuplication(nickName);
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    userApi.signUp(email, password, nickName, socialType);
+    auth.signup(email, password, nickName, socialType);
   };
 
   const throttledHandleRequest = useThrottle(() => handleRequest(), 3000);
@@ -100,8 +99,8 @@ export default function SignUp() {
     3000
   );
 
-  const throttledHandleCheckDuplication = useThrottle(
-    () => handleCheckDuplication(),
+  const throttledHandleCheckNicknameDuplication = useThrottle(
+    () => handleCheckNicknameDuplication(),
     3000
   );
 
@@ -128,7 +127,9 @@ export default function SignUp() {
           <CheckNicknameDuplication
             nickName={nickName}
             setNickName={setNickName}
-            handleCheckDuplication={throttledHandleCheckDuplication}
+            handleCheckNicknameDuplication={
+              throttledHandleCheckNicknameDuplication
+            }
             nameError={nameError}
           />
           <div>
@@ -145,15 +146,15 @@ export default function SignUp() {
               <PasswordMatch passwordMessage={passwordMessage} />
               <ul className="mt-4 mb-4 font-score">
                 <CheckedList
-                  props={userApi.emailExists === false}
+                  props={auth.emailExists === false}
                   mention={'이메일 사용 가능'}
                 />
                 <CheckedList
-                  props={userApi.verified}
+                  props={auth.emailVerified}
                   mention={'이메일 인증 완료'}
                 />
                 <CheckedList
-                  props={userApi.nameAvailable}
+                  props={auth.nicknameAvailable}
                   mention={'닉네임 사용 가능'}
                 />
                 <CheckedList
@@ -161,18 +162,18 @@ export default function SignUp() {
                   mention={'10자 이상 15자 이하의 비밀번호를 입력해주세요'}
                 />
                 <CheckedList
-                  props={isPasswordValid(password)}
+                  props={auth.isPasswordValid(password)}
                   mention={'영문, 숫자, 특수문자 각각 1자 이상을 포함해주세요'}
                 />
               </ul>
               <SubmitButton
                 disabledCondition={
-                  userApi.emailExists === true ||
-                  userApi.verified === false ||
-                  userApi.nameAvailable === false ||
+                  auth.emailExists === true ||
+                  auth.verified === false ||
+                  auth.nameAvailable === false ||
                   password.length < 10 ||
                   password.length > 15 ||
-                  isPasswordValid(password) === false ||
+                  auth.isPasswordValid(password) === false ||
                   !passwordMessage
                 }
                 passwordMessage={passwordMessage}

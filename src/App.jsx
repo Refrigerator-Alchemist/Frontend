@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import { UserApiProvider } from './context/UserContext';
+import { AuthProvider } from './context/AuthProvider';
 import { ToastContainer } from 'react-toastify';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
@@ -10,7 +10,7 @@ const queryClient = new QueryClient();
 export default function App() {
   return (
     <section className="relative">
-      <UserApiProvider>
+      <AuthProvider>
         <QueryClientProvider client={queryClient}>
           <Outlet />
           <ToastContainer
@@ -22,7 +22,7 @@ export default function App() {
             limit={1}
           />
         </QueryClientProvider>
-      </UserApiProvider>
+      </AuthProvider>
     </section>
   );
 }

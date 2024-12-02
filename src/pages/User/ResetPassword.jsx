@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useUserApi } from '../../context/UserContext';
-import { handleError, isPasswordValid } from '../../utils/common';
+import { useAuth } from '../../context/AuthProvider';
+import { handleError } from '../../utils/common';
 import { toast } from 'react-toastify';
 import BackButton from '../../components/Global/BackButton';
 import InputPassword from '../../components/User/Shared/InputPassword';
@@ -19,7 +19,7 @@ export default function ResetPassword() {
   const [passwordMessage, setPasswordMessage] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
 
-  const userApi = useUserApi();
+  const auth = useAuth();
 
   const [emailType, socialType] = ['reset-password', 'Refrigerator-Alchemist'];
 
@@ -49,7 +49,7 @@ export default function ResetPassword() {
         toast.error('이메일을 입력해주세요');
         return;
       } else {
-        userApi.requestEmailForReset(email, emailType, socialType);
+        auth.requestEmailForResetPassword(email, emailType, socialType);
       }
     } catch (error) {
       handleError(error);
@@ -57,12 +57,12 @@ export default function ResetPassword() {
   };
 
   const handleVerification = () => {
-    userApi.checkCodeVerification(email, emailType, inputNum, socialType);
+    auth.checkCodeVerification(email, emailType, inputNum, socialType);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    userApi.resetPassword(email, password, checkPassword, socialType);
+    auth.resetPassword(email, password, checkPassword, socialType);
   };
 
   const throttledHandleRequest = useThrottle(() => handleRequest(), 3000);
@@ -85,7 +85,7 @@ export default function ResetPassword() {
             email={email}
             handleEmailChange={handleEmailChange}
             handleRequest={throttledHandleRequest}
-            selectOption={userApi.emailExists}
+            selectOption={auth.emailExists}
             inputNum={inputNum}
             setInputNum={setInputNum}
             handleVerification={throttledHandleVerification}
@@ -104,7 +104,7 @@ export default function ResetPassword() {
           <PasswordMatch passwordMessage={passwordMessage} />
           <ul className="mt-4 font-score">
             <CheckedList
-              props={userApi.verified}
+              props={auth.emailVerified}
               mention={'이메일 인증 완료'}
             />
             <CheckedList
@@ -112,16 +112,16 @@ export default function ResetPassword() {
               mention={'10자 이상 15자 이하의 비밀번호를 입력해주세요'}
             />
             <CheckedList
-              props={isPasswordValid(password)}
+              props={auth.isPasswordValid(password)}
               mention={'영문, 숫자, 특수문자 각각 1자 이상을 포함해주세요'}
             />
           </ul>
           <SubmitButton
             disabledCondition={
-              userApi.verified === false ||
+              auth.verified === false ||
               password.length < 10 ||
               password.length > 15 ||
-              isPasswordValid(password) === false ||
+              auth.isPasswordValid(password) === false ||
               !passwordMessage
             }
             passwordMessage={passwordMessage}

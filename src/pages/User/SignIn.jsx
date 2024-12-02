@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useUserApi } from '../../context/UserContext';
+import { useAuth } from '../../context/AuthProvider';
 import { handleError } from '../../utils/common';
-import { emailPattern } from '../../utils/common';
 import { toast } from 'react-toastify';
 import Logo from '../../components/Global/Logo';
 import BackButton from '../../components/Global/BackButton';
@@ -22,7 +21,7 @@ export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [notAllow, setNotAllow] = useState(true);
 
-  const { login } = useUserApi();
+  const { emailPattern, signin } = useAuth();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -67,7 +66,7 @@ export default function SignIn() {
 
   const onLogin = (e) => {
     e.preventDefault();
-    login(email, password, 'Refrigerator-Alchemist');
+    signin(email, password, 'Refrigerator-Alchemist');
   };
 
   const goolgleLogin = () => {

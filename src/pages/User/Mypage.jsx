@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useUserApi } from '../../context/UserContext';
+import { useAuth } from '../../context/AuthProvider';
 import { useNavigate } from 'react-router-dom';
 import { handleError } from '../../utils/common';
 import { toast } from 'react-toastify';
@@ -22,7 +22,7 @@ export default function MyPage() {
   const [likedItems, setLikedItems] = useState([]);
   const [showScrollToTop, setShowScrollToTop] = useState(false);
 
-  const { logout } = useUserApi();
+  const { signout } = useAuth();
 
   const accessToken = localStorage.getItem('accessToken');
   const nickName = localStorage.getItem('nickName');
@@ -228,7 +228,7 @@ export default function MyPage() {
           aria-label="로그아웃"
           className="font-score outline-none font-semibold underline underline-offset-2 hover:text-red-500"
           onClick={() => {
-            logout();
+            signout();
           }}
         >
           로그아웃
