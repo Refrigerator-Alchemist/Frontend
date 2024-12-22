@@ -17,15 +17,10 @@ export default function EditUserNickname() {
   const email = localStorage.getItem('email') || '';
   const accessToken = localStorage.getItem('accessToken');
 
-  const [imageUrl, setImageUrl] = useState(profileImage);
   const [nameError, setNameError] = useState(false);
   const [changeNickName, setChangeNickName] = useState(nickName);
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    setImageUrl(localStorage.getItem('imageUrl'));
-  });
 
   useEffect(() => {
     const checkTokenExpired = async () => {
@@ -98,7 +93,7 @@ export default function EditUserNickname() {
         프로필 수정
       </header>
       <main className="mt-6 text-center">
-        <ProfileImage imageUrl={imageUrl} />
+        <ProfileImage imageUrl={profileImage} />
         <form className="flex flex-col mt-8 mx-10">
           <FormGroup
             label="연결된 이메일"

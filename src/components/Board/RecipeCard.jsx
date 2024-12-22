@@ -86,7 +86,9 @@ const RecipeCard = (
         </div>
         <div className="px-4 py-4">
           <h3 className={textStyle}>{title}</h3>
-          <p className="text-gray-500 text-sm font-score">{description}</p>
+          <p className="text-gray-500 text-sm font-score">
+            {description.slice(0, 40) + '...'}
+          </p>
         </div>
       </Link>
       <div className="mr-2">
