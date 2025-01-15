@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { handleError } from '../../utils/common';
 import axios from 'axios';
-import Navbar from '../../components/Layout/Navbar';
 import SavedListCard from '../../components/Recipe/SavedListCard';
 import BackButton from '../../components/Global/BackButton';
 import Loading from '../../components/Global/Loading';

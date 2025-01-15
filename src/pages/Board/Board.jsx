@@ -6,7 +6,6 @@ import RecipeCard from '../../components/Board/RecipeCard';
 import SearchBar from '../../components/Board/SearchBar';
 import WriteButton from '../../components/Board/WriteButton';
 import RankingContainer from '../../components/Board/RankingContainer';
-import Navbar from '../../components/Layout/Navbar';
 import ScrollToTopButton from '../../components/Global/ScrollToTopButton';
 import useScrollToTop from '../../hooks/useScrollToTop';
 import Footer from '../../components/Global/Footer';
