@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { handleError } from '../../utils/common';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import Navbar from '../../components/Layout/Navbar';
 import MyRecipe from '../../components/Auth/MyPage/MyRecipe';
 import LikedRecipe from '../../components/Auth/MyPage/LikedRecipe';
 import ScrollToTopButton from '../../components/Global/ScrollToTopButton';

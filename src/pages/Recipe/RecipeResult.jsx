@@ -4,7 +4,6 @@ import { handleError } from '../../utils/common';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import Loading from '../../components/Global/Loading';
-import BackButton from '../../components/Global/BackButton';
 import useThrottle from '../../hooks/useThrottle';
 
 export default function RecipeResult() {
