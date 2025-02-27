@@ -55,12 +55,13 @@ function FormButton({ type, onClick, children, className }) {
 }
 
 export default function UploadBoard() {
-  const { postId } = useParams();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [ingredients, setIngredients] = useState([]);
-  const accessToken = localStorage.getItem('accessToken');
+  const { postId } = useParams();
   const navigate = useNavigate();
+
+  const accessToken = localStorage.getItem('accessToken');
 
   useEffect(() => {
     const fetchData = async (postId) => {

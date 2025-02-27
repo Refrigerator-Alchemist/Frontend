@@ -33,7 +33,6 @@ export default function RecipeAlchemy() {
       const response = await axios.post(`/recipe/recommend`, {
         ingredients: tags,
       });
-
       const recommendId = response.data;
       if (recommendId) navigate(`/recipe/recommend/${recommendId}`);
     } catch (error) {

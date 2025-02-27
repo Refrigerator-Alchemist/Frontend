@@ -12,11 +12,13 @@ export default function UploadPost() {
   const [ingredients, setIngredients] = useState(['']);
   const [imagePreviewUrl, setImagePreviewUrl] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const fileInput = useRef(null);
+  const navigate = useNavigate();
+
   const nickName = localStorage.getItem('nickName');
   const email = localStorage.getItem('email');
   const accessToken = localStorage.getItem('accessToken');
-  const fileInput = useRef(null);
-  const navigate = useNavigate();
 
   const handleIngredientChange = (index, event) => {
     const newIngredients = [...ingredients];

@@ -8,7 +8,6 @@ import Error from '../../components/Global/Error';
 import Footer from '../../components/Global/Footer';
 
 export default function RecipeSavedList() {
-  const nickName = localStorage.getItem('nickName') || '';
   const accessToken = localStorage.getItem('accessToken');
 
   const fetchRecipes = async () => {

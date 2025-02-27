@@ -43,15 +43,15 @@ export default function RankingList() {
   return (
     <article
       className="hover:cursor-pointer w-full my-2"
-      onClick={() => {
-        navigate('/ranking');
-      }}
+      onClick={() => navigate('/ranking')}
     >
       <div className="flex justify-end">
         <span className="relative flex flex-col justify-end font-score text-sm hover:text-indigo mr-4 group">
           가장 많은 좋아요를 받은 레시피는?
-          <div className="absolute bottom-full right-2 mb-1 hidden group-hover:block z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-2 font-score text-xs font-normal text-white opacity-50">
-            랭킹보드 이동
+          <div className="absolute bottom-full right-2 mb-1 hidden group-hover:block z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-2 opacity-50">
+            <span className="font-score text-xs font-normal text-white">
+              랭킹보드 이동
+            </span>
           </div>
         </span>
       </div>
@@ -61,9 +61,7 @@ export default function RankingList() {
             key={index + 1}
             rank={index + 1}
             {...topItem}
-            onClick={() => {
-              navigate(`/board/${topItem.id}`);
-            }}
+            onClick={() => navigate(`/board/${topItem.id}`)}
           />
         ))}
       </ul>
