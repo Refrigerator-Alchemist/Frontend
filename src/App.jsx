@@ -3,6 +3,7 @@ import { AuthProvider } from './context/AuthProvider';
 import { ToastContainer } from 'react-toastify';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
+import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
 
 axios.defaults.baseURL = import.meta.env.VITE_REQUEST_URI;
